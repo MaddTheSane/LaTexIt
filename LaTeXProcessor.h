@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -81,10 +81,11 @@ extern NSNotificationName const LatexizationDidEndNotification;
 //! returns a file icon to represent the given PDF data; if not specified (nil), the backcground color will be half-transparent
 -(NSImage*) makeIconForData:(NSData*)pdfData backgroundColor:(NSColor*)backgroundColor;
 
+-(void) displayAlertError:(id)object;
+
 -(NSData*) dataForType:(export_format_t)format pdfData:(NSData*)pdfData
              exportOptions:(NSDictionary<NSString*,id>*)exportOptions
              compositionConfiguration:(NSDictionary<CompositionConfigurationKey,id>*)compositionConfiguration
              uniqueIdentifier:(NSString*)uniqueIdentifier;
 
--(void) displayAlertError:(id)object;
 @end

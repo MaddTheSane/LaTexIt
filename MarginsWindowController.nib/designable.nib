@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -131,9 +131,9 @@
                 <outlet property="delegate" destination="-2" id="117"/>
                 <outlet property="initialFirstResponder" destination="81" id="111"/>
             </connections>
-            <point key="canvasLocation" x="139" y="150"/>
+            <point key="canvasLocation" x="132" y="150"/>
         </window>
-        <numberFormatter formatterBehavior="custom10_4" positiveFormat="#,##0.00 pt" negativeFormat="-#,##0.00 pt" alwaysShowsDecimalSeparator="YES" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" minimumFractionDigits="1" maximumFractionDigits="1" decimalSeparator="," groupingSeparator=" " id="104" userLabel="pointSizeFormatter">
+        <numberFormatter formatterBehavior="custom10_4" positiveFormat="#,##0.00 pt" negativeFormat="-#,##0.00 pt" alwaysShowsDecimalSeparator="YES" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" minimumFractionDigits="1" maximumFractionDigits="1" decimalSeparator="," groupingSeparator=" " id="104" userLabel="pointSizeFormatter">
             <nil key="negativeInfinitySymbol"/>
             <nil key="positiveInfinitySymbol"/>
             <real key="minimum" value="-1000"/>

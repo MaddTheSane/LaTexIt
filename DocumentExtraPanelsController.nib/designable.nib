@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -38,11 +38,11 @@
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="55">
                         <rect key="frame" x="0.0" y="-1" width="556" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" ambiguous="YES" id="S9x-AV-sAA">
+                        <clipView key="contentView" ambiguous="YES" id="4gE-dX-oUK">
                             <rect key="frame" x="1" y="1" width="554" height="618"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView ambiguous="YES" editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="58">
+                                <textView ambiguous="YES" editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="58">
                                     <rect key="frame" x="0.0" y="0.0" width="554" height="618"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -65,7 +65,7 @@
                     </scrollView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="139" y="148"/>
+            <point key="canvasLocation" x="132" y="148"/>
         </window>
         <window title="Baseline" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="93" userLabel="baselineWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
@@ -180,16 +180,15 @@
                     </buttonCell>
                 </button>
             </subviews>
-            <point key="canvasLocation" x="139" y="154"/>
         </customView>
-        <numberFormatter formatterBehavior="10_0" positiveFormat="0%" negativeFormat="-0%" hasThousandSeparators="NO" thousandSeparator="," id="7" userLabel="scaleAsPercentFormatter">
+        <numberFormatter formatterBehavior="10_0" positiveFormat="0%" negativeFormat="-0%" hasThousandSeparators="NO" thousandSeparator=" " id="7" userLabel="scaleAsPercentFormatter">
             <attributedString key="attributedStringForZero">
                 <fragment content="0%"/>
             </attributedString>
             <decimal key="minimum" value="0"/>
             <decimal key="maximum" value="NaN"/>
         </numberFormatter>
-        <numberFormatter formatterBehavior="custom10_4" positiveFormat="#,##0.00 pt" negativeFormat="-#,##0.00 pt" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" minimumFractionDigits="2" maximumFractionDigits="2" decimalSeparator="." groupingSeparator="," id="101" userLabel="pointSizeFormatter">
+        <numberFormatter formatterBehavior="custom10_4" positiveFormat="#,##0.00 pt" negativeFormat="-#,##0.00 pt" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" minimumFractionDigits="2" maximumFractionDigits="2" decimalSeparator="." groupingSeparator="," id="101" userLabel="pointSizeFormatter">
             <nil key="negativeInfinitySymbol"/>
             <nil key="positiveInfinitySymbol"/>
             <decimal key="minimum" value="0"/>

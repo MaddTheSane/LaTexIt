@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 06/05/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "MutableTransformer.h"
@@ -59,10 +59,18 @@
 -(id) transformedValue:(id)value
 {
   id result = value;
-  if ([result respondsToSelector:@selector(deepMutableCopy)])
-    result = [result deepMutableCopy];
-  else if ([result respondsToSelector:@selector(mutableCopy)])
+  if ([result respondsToSelector:@selector(mutableCopyDeep)])
+    #ifdef ARC_ENABLED
+    result = [result mutableCopyDeep];
+    #else
+    result = [[result mutableCopyDeep] autorelease];
+    #endif
+  else if ([result respondsToSelector:@selector(mutableCopy)])    
+    #ifdef ARC_ENABLED
     result = [result mutableCopy];
+    #else
+    result = [[result mutableCopy] autorelease];
+    #endif
   else if ([result respondsToSelector:@selector(copy)])
     result = [result copy];
   return result;

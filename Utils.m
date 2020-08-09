@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 15/03/06.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "Utils.h"
@@ -22,9 +22,6 @@ int DebugLogLevel = 0;
 
 NSString* NSAppearanceDidChangeNotification = @"NSAppearanceDidChangeNotification";
 
-static NSString* MyPNGPboardType = nil;
-extern NSString* NSPNGPboardType __attribute__((weak_import));
-static NSString* MyJPEGPboardType = nil;
 static NSString* MyWebURLsWithTitlesPboardType = nil;
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
@@ -101,25 +98,23 @@ BOOL isMacOS10_14OrAbove(void)
 }
 //end isMacOS10_14OrAbove()
 
+BOOL isMacOS10_15OrAbove(void)
+{
+  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_14);
+  return result;
+}
+//end isMacOS10_15OrAbove()
+
 NSString* GetMySVGPboardType(void)
 {
-  return @"public.svg-image";
+  NSString* result = nil;
+  if (!result && isMacOS10_10OrAbove())
+    result = (NSString*)kUTTypeScalableVectorGraphics;
+  if (!result)
+    result = @"public.svg-image";
+  return result;
 }
 //end GetMySVGPboardType()
-
-NSString* GetMyPNGPboardType(void)
-{
-  if (!MyPNGPboardType && isMacOS10_5OrAbove())
-    MyPNGPboardType = (NSString*)kUTTypePNG;
-  if (!MyPNGPboardType)
-    MyPNGPboardType = CFBridgingRelease(UTTypeCopyPreferredTagWithClass(kUTTypePNG, kUTTagClassNSPboardType));//retain count is 1
-  if (!MyPNGPboardType && (NSPNGPboardType != 0))
-    MyPNGPboardType = [[NSString alloc] initWithString:NSPNGPboardType];
-  if (!MyPNGPboardType)
-    MyPNGPboardType = NSTIFFPboardType;
-  return MyPNGPboardType;
-}
-//end GetMyPNGPboardType()
 
 NSString* GetWebURLsWithTitlesPboardType(void)
 {
@@ -129,19 +124,7 @@ NSString* GetWebURLsWithTitlesPboardType(void)
 }
 //end GetWebURLsWithTitlesPboardType()
 
-NSString* GetMyJPEGPboardType(void)
-{
-  if (!MyJPEGPboardType && isMacOS10_5OrAbove())
-    MyJPEGPboardType = (NSString*)kUTTypeJPEG;
-  if (!MyJPEGPboardType)
-    MyJPEGPboardType = CFBridgingRelease(UTTypeCopyPreferredTagWithClass(kUTTypeJPEG, kUTTagClassNSPboardType));//retain count is 1
-  if (!MyJPEGPboardType)
-    MyJPEGPboardType = NSTIFFPboardType;
-  return MyJPEGPboardType;
-}
-//end GetMyPNGPboardType()
-
-latex_mode_t validateLatexMode(int mode)
+latex_mode_t validateLatexMode(latex_mode_t mode)
 {
   latex_mode_t result = (mode != LATEX_MODE_ALIGN) &&
                         (mode != LATEX_MODE_DISPLAY) &&
@@ -151,6 +134,76 @@ latex_mode_t validateLatexMode(int mode)
   return result;
 }
 //end validateLatexMode()
+
+NSString* getUTIForExportFormat(export_format_t exportFormat)
+{
+  NSString* result = nil;
+  switch(exportFormat)
+  {
+    case EXPORT_FORMAT_PDF:
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+      result = (NSString*)kUTTypePDF;
+      break;
+    case EXPORT_FORMAT_EPS:
+      result = @"com.adobe.encapsulated-​postscript";
+      break;
+    case EXPORT_FORMAT_TIFF:
+      result = (NSString*)kUTTypeTIFF;
+      break;
+    case EXPORT_FORMAT_PNG:
+      result = (NSString*)kUTTypePNG;
+      break;
+    case EXPORT_FORMAT_JPEG:
+      result = (NSString*)kUTTypeJPEG;
+      break;
+    case EXPORT_FORMAT_MATHML:
+      result = (NSString*)kUTTypeHTML;
+      break;
+    case EXPORT_FORMAT_SVG:
+      result = GetMySVGPboardType();
+      break;
+    case EXPORT_FORMAT_TEXT:
+      result = (NSString*)kUTTypeText;
+      break;
+  }//end switch(exportFormat)
+  return result;
+}
+//end getUTIForExportFormat()
+
+NSString* getFileExtensionForExportFormat(export_format_t exportFormat)
+{
+  NSString* result = nil;
+  switch(exportFormat)
+  {
+    case EXPORT_FORMAT_PDF:
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+      result = @"pdf";
+      break;
+    case EXPORT_FORMAT_EPS:
+      result = @"eps";
+      break;
+    case EXPORT_FORMAT_TIFF:
+      result = @"tiff";
+      break;
+    case EXPORT_FORMAT_PNG:
+      result = @"png";
+      break;
+    case EXPORT_FORMAT_JPEG:
+      result = @"jpeg";
+      break;
+    case EXPORT_FORMAT_MATHML:
+      result = @"html";
+      break;
+    case EXPORT_FORMAT_SVG:
+      result = @"svg";
+      break;
+    case EXPORT_FORMAT_TEXT:
+      result = @"tex";
+      break;
+  }//end switch(exportFormat)
+  return result;
+}
+//end getFileExtensionForExportFormat()
 
 NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* pDidChange)
 {

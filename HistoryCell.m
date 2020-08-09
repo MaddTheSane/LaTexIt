@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 24/03/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //This class is the kind of cell used to display history items in the history drawer
 //It may take in account the different fields of an history item (image, date...)

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 10/03/18.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "TeXItemWrapper.h"
@@ -20,7 +20,7 @@
 
 -(instancetype) initWithItem:(NSDictionary*)aData
 {
-  if (!(([super init])))
+  if (!((self = [super init])))
     return nil;
   self->data = [aData copy];
   self->enabled = YES;

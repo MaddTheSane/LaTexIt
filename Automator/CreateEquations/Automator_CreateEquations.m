@@ -3,7 +3,7 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "Automator_CreateEquations.h"
@@ -62,8 +62,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         if (DebugLogLevel >= 1){
           NSLog(@"Launching with DebugLogLevel = %d", DebugLogLevel);
         }
-        
-        
+
         if (!freeIds)
           freeIds = [[NSMutableIndexSet alloc] initWithIndexesInRange:NSMakeRange(1, NSNotFound-2)];
         [KeyedUnarchiveFromDataTransformer initialize];//seems needed on Tiger
@@ -145,15 +144,15 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     latex_mode_t equationMode = preferencesController.latexisationLaTeXMode;
     if (equationMode == LATEX_MODE_AUTO)
       equationMode = LATEX_MODE_ALIGN;
-    [self->exportFormatPopupButton selectItemWithTag:preferencesController.exportFormatPersistent];
-    CGFloat      fontSize       = preferencesController.latexisationFontSize;
-    NSData*      fontColorData  = preferencesController.latexisationFontColorData;
+    [self->exportFormatPopupButton selectItemWithTag:[preferencesController exportFormatPersistent]];
+    CGFloat      fontSize       = [preferencesController latexisationFontSize];
+    NSData*      fontColorData  = [preferencesController latexisationFontColorData];
     CGFloat exportJpegQualityPercent = preferencesController.exportJpegQualityPercent;
-    NSData* exportJpegBackgroundColorAsData = preferencesController.exportJpegBackgroundColorData;
-    NSString* exportSvgPdfToSvgPath = preferencesController.exportSvgPdfToSvgPath;
-    BOOL exportTextExportPreamble = preferencesController.exportTextExportPreamble;
-    BOOL exportTextExportEnvironment = preferencesController.exportTextExportEnvironment;
-    BOOL exportTextExportBody = preferencesController.exportTextExportBody;
+    NSData* exportJpegBackgroundColorAsData = [preferencesController exportJpegBackgroundColorData];
+    NSString* exportSvgPdfToSvgPath = [preferencesController exportSvgPdfToSvgPath];
+    BOOL exportTextExportPreamble = [preferencesController exportTextExportPreamble];
+    BOOL exportTextExportEnvironment = [preferencesController exportTextExportEnvironment];
+    BOOL exportTextExportBody = [preferencesController exportTextExportBody];
     dict[@"equationMode"] = @(equationMode);
     dict[@"fontSize"] = @(fontSize);
     dict[@"exportJpegQualityPercent"] = @(exportJpegQualityPercent);
@@ -179,15 +178,14 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 
 -(void) awakeFromNib
 {
-  [self->warningMessage setStringValue:LocalLocalizedString(@"You must run LaTeXiT once, to init the configuration",
-                                                            @"You must run LaTeXiT once, to init the configuration")];
+  [self->warningMessage setStringValue:LocalLocalizedString(@"You must run LaTeXiT once, to init the configuration", @"")];
 
-  [self->latexModeSegmentedControl.cell setTag:LATEX_MODE_ALIGN   forSegment:0];
-  [self->latexModeSegmentedControl.cell setTag:LATEX_MODE_DISPLAY forSegment:1];
-  [self->latexModeSegmentedControl.cell setTag:LATEX_MODE_INLINE  forSegment:2];
-  [self->latexModeSegmentedControl.cell setTag:LATEX_MODE_TEXT    forSegment:3];
-  [self->latexModeSegmentedControl.cell setLabel:LocalLocalizedString(@"Align", @"Align") forSegment:0];
-  [self->latexModeSegmentedControl.cell setLabel:LocalLocalizedString(@"Text", @"Text") forSegment:3];
+  [[self->latexModeSegmentedControl cell] setTag:LATEX_MODE_ALIGN   forSegment:0];
+  [[self->latexModeSegmentedControl cell] setTag:LATEX_MODE_DISPLAY forSegment:1];
+  [[self->latexModeSegmentedControl cell] setTag:LATEX_MODE_INLINE  forSegment:2];
+  [[self->latexModeSegmentedControl cell] setTag:LATEX_MODE_TEXT    forSegment:3];
+  [[self->latexModeSegmentedControl cell] setLabel:LocalLocalizedString(@"Align", @"") forSegment:0];
+  [[self->latexModeSegmentedControl cell] setLabel:LocalLocalizedString(@"Text", @"") forSegment:3];
 
   NSRect rect = NSZeroRect;
   CGFloat x = 0;
@@ -197,51 +195,47 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   rect.size.width = self->parametersView.superview.frame.size.width-2*rect.origin.x;
   self->parametersView.frame = rect;
   
-  [self->fontSizeLabel  setStringValue:LocalLocalizedString(@"Font size :", @"Font size :")];
+  [self->fontSizeLabel  setStringValue:LocalLocalizedString(@"Font size :", @"")];
   [self->fontSizeLabel sizeToFit];
-  [self->fontColorLabel setStringValue:LocalLocalizedString(@"Color :", @"Color :")];
+  [self->fontColorLabel setStringValue:LocalLocalizedString(@"Color :", @"")];
   [self->fontColorLabel sizeToFit];
 
   [self->exportFormatPopupButton removeAllItems];
-/*  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"Default format", @"Default format")
+/*  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"Default format", @"")
                                               tag:-1];*/
-  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"PDF vector format", @"PDF vector format")
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"PDF vector format", @"")
                                               tag:(NSInteger)EXPORT_FORMAT_PDF];
-  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"PDF with outlined fonts", @"")
                                               tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
-  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"EPS vector format", @"EPS vector format")
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"EPS vector format", @"")
                                               tag:(NSInteger)EXPORT_FORMAT_EPS];
-  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"SVG vector format", @"SVG vector format")
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"SVG vector format", @"")
                                               tag:(NSInteger)EXPORT_FORMAT_SVG];
-  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"TIFF bitmap format", @"TIFF bitmap format")
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"TIFF bitmap format", @"")
                                               tag:(NSInteger)EXPORT_FORMAT_PNG];
-  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"PNG bitmap format", @"PNG bitmap format")
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"PNG bitmap format", @"")
                                               tag:(NSInteger)EXPORT_FORMAT_TIFF];
-  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"JPEG bitmap format", @"JPEG bitmap format")
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"JPEG bitmap format", @"")
                                               tag:(NSInteger)EXPORT_FORMAT_JPEG];
-  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"MathML text format", @"MathML text format")
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"MathML text format", @"")
                                               tag:(NSInteger)EXPORT_FORMAT_MATHML];
-  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"Text format", @"Text format")
+  [self->exportFormatPopupButton addItemWithTitle:LocalLocalizedString(@"Text format", @"")
                                               tag:(NSInteger)EXPORT_FORMAT_TEXT];
   self->exportFormatPopupButton.target = self;
   self->exportFormatPopupButton.action = @selector(nilAction:);
   [self->exportFormatPopupButton sizeToFit];
 
-  self->exportFormatOptionsButton.title = [NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"Options")];
+  [self->exportFormatOptionsButton setTitle:[NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"")]];
   [self->exportFormatOptionsButton sizeToFit];
   [self->exportFormatOptionsButton bind:NSEnabledBinding toObject:self withKeyPath:@"parameters.exportFormat" options:
-    [NSDictionary dictionaryWithObjectsAndKeys:
-      [IsInTransformer transformerWithReferences:
-        [NSArray arrayWithObjects:[NSNumber numberWithInteger:EXPORT_FORMAT_JPEG], [NSNumber numberWithInteger:EXPORT_FORMAT_SVG], nil]],
-      NSValueTransformerBindingOption,
-      nil]];
+    @{NSValueTransformerBindingOption:[IsInTransformer transformerWithReferences:@[@(EXPORT_FORMAT_JPEG), @(EXPORT_FORMAT_SVG)]]}];
 
-  [self->createEquationsOptionsLabel setStringValue:LocalLocalizedString(@"Create equations :", @"Create equations :")];
+  [self->createEquationsOptionsLabel setStringValue:LocalLocalizedString(@"Create equations :", @"")];
   [self->createEquationsOptionsLabel sizeToFit];
   [self->createEquationsOptionsPopUpButton removeAllItems];
-  [self->createEquationsOptionsPopUpButton addItemWithTitle:LocalLocalizedString(@"alongside input files", @"alongside input files")
+  [self->createEquationsOptionsPopUpButton addItemWithTitle:LocalLocalizedString(@"alongside input files", @"")
                                                         tag:EQUATION_DESTINATION_ALONGSIDE_INPUT];
-  [self->createEquationsOptionsPopUpButton addItemWithTitle:LocalLocalizedString(@"in a temporary folder", @"in a temporary folder")
+  [self->createEquationsOptionsPopUpButton addItemWithTitle:LocalLocalizedString(@"in a temporary folder", @"")
                                                         tag:EQUATION_DESTINATION_TEMPORARY_FOLDER];
   [self->createEquationsOptionsPopUpButton sizeToFit];
   
@@ -402,11 +396,11 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     while ([uniqueIdentifiers containsObject:uniqueIdentifier])
       uniqueIdentifier = [NSString stringWithFormat:@"%@-%lu", uniqueIdentifierPrefix, (unsigned long)++index];
     [uniqueIdentifiers addObject:uniqueIdentifier];
-    if (!body && errorInfo)
+    if (!body && errorInfo && error)
     {
       *errorInfo = error;
       didEncounterError = YES;
-    }//end if (!body && errorInfo)
+    }//end if (!body && errorInfo && error)
     else if (body)
     {
       latex_mode_t latexMode = preamble ? LATEX_MODE_TEXT : equationMode;
@@ -516,9 +510,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
             DebugLog(1, @"moved = %d, outFilePath = %@", moved, outFilePath);
           }//end if (![outFilePath isEqualToString:newPath])
         }
-        [fileManager setAttributes:
-          @{NSFileHFSCreatorCode: @((OSType)'LTXt')}
-                                ofItemAtPath:outFilePath error:0];
+        [fileManager setAttributes:@{NSFileHFSCreatorCode:@((OSType)'LTXt')} ofItemAtPath:outFilePath error:0];
         if ((exportFormat != EXPORT_FORMAT_PNG) &&
             (exportFormat != EXPORT_FORMAT_TIFF) &&
             (exportFormat != EXPORT_FORMAT_JPEG))
@@ -531,9 +523,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         NSArray* latexErrors = 
           [[LaTeXProcessor sharedLaTeXProcessor] filterLatexErrors:outFullLog shiftLinesBy:[preamble componentsSeparatedByString:@"\n"].count+1];
         didEncounterError = YES;
-        NSString* errorMessage = latexErrors.count ? [latexErrors componentsJoinedByString:@"\n"] :
-          LocalLocalizedString(@"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.",
-                               @"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.");
+        NSString* errorMessage = [latexErrors count] ? [latexErrors componentsJoinedByString:@"\n"] :
+          LocalLocalizedString(@"Unknown error. Please make sure that LaTeXiT has been run once and is fully functional.", @"");
         [errorStrings safeAddObject:errorMessage];
       }
     }//end if (!body)
@@ -684,7 +675,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   self->generalExportFormatOptionsPanes.pdfWofGSPDFCompatibilityLevel = [self.parameters[@"pdfWofGSPDFCompatibilityLevel"] dynamicCastToClass:[NSString class]];
   self->generalExportFormatOptionsPanes.pdfWofMetaDataInvisibleGraphicsEnabled = [[self.parameters[@"pdfWofMetaDataInvisibleGraphicsEnabled"] dynamicCastToClass:[NSNumber class]] boolValue];
   NSPanel* panelToOpen = nil;
-  export_format_t exportFormat = (export_format_t)self->exportFormatPopupButton.selectedTag;
+  export_format_t exportFormat = (export_format_t)[self->exportFormatPopupButton selectedTag];
   if (exportFormat == EXPORT_FORMAT_JPEG)
     panelToOpen = self->generalExportFormatOptionsPanes.exportFormatOptionsJpegPanel;
   else if (exportFormat == EXPORT_FORMAT_SVG)

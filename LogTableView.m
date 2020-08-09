@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/03/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //This NSTableView reports errors at certain lines of the latex source code
 
@@ -38,8 +38,8 @@ NSString* const ClickErrorLineNotification = @"ClickErrorLineNotification";
     NSArray* components = [line componentsSeparatedByString:@":"];
     if (components.count >= 3)
     {
-      NSNumber* lineNumber = @([components[1] integerValue]);
-      NSString* message    = [[components subarrayWithRange:NSMakeRange(2, components.count-2)]
+      NSNumber* lineNumber = @([[components objectAtIndex:1] integerValue]);
+      NSString* message    = [[components subarrayWithRange:NSMakeRange(2, [components count]-2)]
                                     componentsJoinedByString:@""];
       NSDictionary* dictionary =
         @{@"line": lineNumber, @"message": message};

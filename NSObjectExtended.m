@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 16/03/07.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSObjectExtended.h"
@@ -42,22 +42,14 @@
     static NSString*const _NSAppearanceNameAqua = @"NSAppearanceNameAqua";
     static NSString*const _NSAppearanceNameDarkAqua = @"NSAppearanceNameDarkAqua";
     SEL effectiveAppearanceSelector = @selector(effectiveAppearance);
-    DebugLog(1, @"<%@> supports <%@> : %d", self, NSStringFromSelector(effectiveAppearanceSelector),
-            [self respondsToSelector:effectiveAppearanceSelector]);
     id effectiveAppearance = ![self respondsToSelector:effectiveAppearanceSelector] ? nil :
     [self performSelector:effectiveAppearanceSelector];
-    DebugLog(1, @"isDarkMode: effectiveAppearance = <%@>", effectiveAppearance);
     SEL bestMatchFromAppearancesWithNamesSelector = @selector(bestMatchFromAppearancesWithNames:);
-    NSArray* modes = @[_NSAppearanceNameAqua, _NSAppearanceNameDarkAqua];
-    DebugLog(1, @"isDarkMode: modes = <%@>", modes);
-    DebugLog(1, @"<%@> supports <%@> : %d", effectiveAppearance, NSStringFromSelector(bestMatchFromAppearancesWithNamesSelector),
-                   [effectiveAppearance respondsToSelector:bestMatchFromAppearancesWithNamesSelector]);
+    NSArray* modes = [NSArray arrayWithObjects:_NSAppearanceNameAqua, _NSAppearanceNameDarkAqua, nil];
     id mode = ![effectiveAppearance respondsToSelector:bestMatchFromAppearancesWithNamesSelector] ? nil :
     [effectiveAppearance performSelector:bestMatchFromAppearancesWithNamesSelector withObject:modes];
-    DebugLog(1, @"isDarkMode: mode = <%@>", mode);
     NSString* modeAsString = [mode dynamicCastToClass:[NSString class]];
     result = [modeAsString isEqualToString:_NSAppearanceNameDarkAqua];
-    DebugLog(1, @"isDarkMode: result = <%d>", result);
   }//end if (isMacOS10_14OrAbove())
   return result;
 }

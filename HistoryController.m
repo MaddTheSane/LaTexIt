@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryController.h"
@@ -25,7 +25,7 @@
   if ((!(self = [super initWithContent:content])))
     return nil;
   /*if ([self respondsToSelector:@selector(setAutomaticallyRearrangesObjects:)])
-    [self setValue:[NSNumber numberWithBool:YES] forKey:@"automaticallyRearrangesObjects"];*/
+    [self setValue:@(YES) forKey:@"automaticallyRearrangesObjects"];*/
   [self addObserver:self forKeyPath:NSContentBinding options:0 context:0];
   return self;
 }

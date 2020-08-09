@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 11/11/13.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "CHProtoBuffers.h"
@@ -29,24 +29,24 @@ void parseFields(const google::protobuf::UnknownFieldSet& unknown_fields, NSMuta
       case google::protobuf::UnknownField::TYPE_VARINT: {
         uint64 value = field.varint();
         [outputPlist addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-          [NSNumber numberWithUnsignedLongLong:value],
-          [NSNumber numberWithInteger:fieldNumber],
+          @(value),
+          @(fieldNumber),
           nil]];
         }
         break;
       case google::protobuf::UnknownField::TYPE_FIXED32: {
         uint32 value = field.fixed32();
         [outputPlist addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-          [NSNumber numberWithUnsignedInteger:value],
-          [NSNumber numberWithInteger:fieldNumber],
+          @(value),
+          @(fieldNumber),
           nil]];
         }
         break;
       case google::protobuf::UnknownField::TYPE_FIXED64: {
         uint64 value = field.fixed64();
         [outputPlist addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-          [NSNumber numberWithUnsignedLongLong:value],
-          [NSNumber numberWithInteger:fieldNumber],
+          @(value),
+          @(fieldNumber),
           nil]];
         }
         break;
@@ -58,7 +58,7 @@ void parseFields(const google::protobuf::UnknownFieldSet& unknown_fields, NSMuta
           NSMutableArray* subFields = [NSMutableArray array];
           [outputPlist addObject:[NSDictionary dictionaryWithObjectsAndKeys:
             subFields,
-            [NSNumber numberWithInteger:fieldNumber],
+            @(fieldNumber),
             nil]];
           parseFields(embedded_unknown_fields, subFields);
         }
@@ -67,7 +67,7 @@ void parseFields(const google::protobuf::UnknownFieldSet& unknown_fields, NSMuta
           NSString* s = [[[NSString alloc] initWithUTF8String:value.c_str()] autorelease];
           [outputPlist addObject:[NSDictionary dictionaryWithObjectsAndKeys:
             s,
-            [NSNumber numberWithInteger:fieldNumber],
+            @(fieldNumber),
             nil]];
         }
         }
@@ -76,7 +76,7 @@ void parseFields(const google::protobuf::UnknownFieldSet& unknown_fields, NSMuta
           NSMutableArray* subFields = [NSMutableArray array];
           [outputPlist addObject:[NSDictionary dictionaryWithObjectsAndKeys:
             subFields,
-            [NSNumber numberWithInteger:fieldNumber],
+            @(fieldNumber),
             nil]];
           parseFields(field.group(), subFields);
         }

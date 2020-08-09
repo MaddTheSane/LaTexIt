@@ -1,7 +1,7 @@
 //  NSArrayExtended.h
 //  LaTeXiT
 //  Created by Pierre Chatelier on 4/05/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 // This file is an extension of the NSArray class
 
@@ -25,10 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSArray<ObjectType>*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
 
-@property (readonly, strong) id _Nonnull deepCopy;
--(id) deepCopyWithZone:(nullable NSZone*)zone;
-@property (readonly, strong) id _Nonnull deepMutableCopy;
--(id) deepMutableCopyWithZone:(nullable NSZone*)zone;
+-(id) copyDeep;
+-(id) copyDeepWithZone:(nullable NSZone*)zone;
+-(id) mutableCopyDeep;
+-(id) mutableCopyDeepWithZone:(nullable NSZone*)zone;
 
 @end
 

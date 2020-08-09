@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -188,8 +188,8 @@ extern NSString *const SynchronizationAdditionalScriptsKey;
 -(void)            setExportJpegBackgroundColorData:(NSData*)value;
 -(NSColor*)        exportJpegBackgroundColor;
 -(void)            setExportJpegBackgroundColor:(NSColor*)value;
--(CGFloat)         exportJpegQualityPercent;
--(void)            setExportJpegQualityPercent:(CGFloat)value;
+-(float)           exportJpegQualityPercent;
+-(void)            setExportJpegQualityPercent:(float)value;
 -(NSString*)       exportSvgPdfToSvgPath;
 -(void)            setExportSvgPdfToSvgPath:(NSString*)value;
 -(BOOL)            exportTextExportPreamble;

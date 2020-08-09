@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 12/10/06.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "ImageAndTextCell.h"
@@ -23,7 +23,10 @@
 {
   ImageAndTextCell* clone = (ImageAndTextCell*) [super copyWithZone:zone];
   if (clone)
+  {
     clone->image = self->image;
+    clone->imageBackgroundColor = [self->imageBackgroundColor copy];
+  }//end if (clone)
   return clone;
 }
 //end copyWithZone:
@@ -116,7 +119,7 @@
     {
       [self->imageBackgroundColor set];
       NSRectFill(imageFrame);
-    }
+    }//end if (self->imageBackgroundColor)
     [NSGraphicsContext saveGraphicsState];
     [NSGraphicsContext currentContext].imageInterpolation = NSImageInterpolationHigh;
     NSAffineTransform* transform = [NSAffineTransform transform];

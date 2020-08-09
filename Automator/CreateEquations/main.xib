@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
+        <deployment version="1090" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,11 +19,11 @@
             <rect key="frame" x="0.0" y="0.0" width="372" height="128"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100035">
+                <customView hidden="YES" id="100035">
                     <rect key="frame" x="0.0" y="0.0" width="370" height="128"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="336" translatesAutoresizingMaskIntoConstraints="NO" id="100038">
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="336" id="100038">
                             <rect key="frame" x="16" y="47" width="340" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="LaTeXiT muss zuvor einmal gestartet werden um die Konfiguration zu initialisieren" id="100039">
@@ -34,15 +34,15 @@
                         </textField>
                     </subviews>
                 </customView>
-                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100041">
+                <customView id="100041">
                     <rect key="frame" x="0.0" y="0.0" width="372" height="128"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <segmentedControl toolTip="Display math mode: \[...\], inline math mode : $...$" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100049">
+                        <segmentedControl toolTip="Display math mode: \[...\], inline math mode : $...$" verticalHuggingPriority="750" id="100049">
                             <rect key="frame" x="18" y="100" width="336" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fill" style="rounded" trackingMode="selectOne" id="100050">
-                                <font key="font" metaFont="smallSystem"/>
+                                <font key="font" metaFont="message" size="11"/>
                                 <segments>
                                     <segment label="Align" imageScaling="none" width="81.75" selected="YES" tag="4"/>
                                     <segment label="Display" imageScaling="none" width="81.75"/>
@@ -60,7 +60,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="69" translatesAutoresizingMaskIntoConstraints="NO" id="100047">
-                                    <rect key="frame" x="36" y="62" width="73" height="14"/>
+                                    <rect key="frame" x="24" y="62" width="80" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Schriftgröße:" id="100052">
                                         <font key="font" metaFont="smallSystem"/>
@@ -68,11 +68,11 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100046">
+                                <textField verticalHuggingPriority="750" ambiguous="YES" id="100046">
                                     <rect key="frame" x="114" y="60" width="69" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="36.00 pt" drawsBackground="YES" id="100053">
-                                        <numberFormatter key="formatter" formatterBehavior="10_0" positiveFormat="#,##0.00 pt" negativeFormat="-#,##0.00 pt" thousandSeparator="," id="100054">
+                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="36,00 pt" drawsBackground="YES" id="100053">
+                                        <numberFormatter key="formatter" formatterBehavior="10_0" positiveFormat="#,##0.00 pt" negativeFormat="-#,##0.00 pt" thousandSeparator=" " id="100054">
                                             <attributedString key="attributedStringForNil"/>
                                             <attributedString key="attributedStringForNotANumber">
                                                 <fragment content="NaN"/>
@@ -92,7 +92,7 @@
                                         <outlet property="nextKeyView" destination="100045" id="100055"/>
                                     </connections>
                                 </textField>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100078">
+                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" id="100078">
                                     <rect key="frame" x="185" y="58" width="15" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="1000" id="100079">
@@ -111,7 +111,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100045">
+                                <colorWell ambiguous="YES" id="100045">
                                     <rect key="frame" x="254" y="59" width="39" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -123,7 +123,7 @@
                                         </binding>
                                     </connections>
                                 </colorWell>
-                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100085">
+                                <popUpButton verticalHuggingPriority="750" ambiguous="YES" imageHugsTitle="YES" id="100085">
                                     <rect key="frame" x="91" y="29" width="150" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" id="100086">
@@ -135,16 +135,16 @@
                                         <binding destination="6" name="selectedTag" keyPath="selection.exportFormat" id="100092"/>
                                     </connections>
                                 </popUpButton>
-                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100071">
+                                <textField verticalHuggingPriority="750" ambiguous="YES" id="100071">
                                     <rect key="frame" x="12" y="9" width="120" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Erstelle Gleichungen :" id="100072">
-                                        <font key="font" metaFont="smallSystem"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100070">
+                                <popUpButton verticalHuggingPriority="750" ambiguous="YES" imageHugsTitle="YES" id="100070">
                                     <rect key="frame" x="134" y="4" width="186" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="in einen temporären Ordner" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" inset="2" selectedItem="100075" id="100073">
@@ -182,6 +182,6 @@
                 <binding destination="-2" name="contentObject" keyPath="parameters" id="12"/>
             </connections>
         </objectController>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
     </objects>
 </document>

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 15/03/06.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #include <tgmath.h>
@@ -44,6 +44,7 @@ extern int DebugLogLevel;
 #define NSAppKitVersionNumber10_11 1404
 #define NSAppKitVersionNumber10_12 1504
 #define NSAppKitVersionNumber10_13 1561
+#define NSAppKitVersionNumber10_14 1671
 
 #define isMacOS10_5OrAbove() (YES)
 #define isMacOS10_6OrAbove() (YES)
@@ -79,6 +80,7 @@ BOOL isMacOS10_12OrAbove(void);
 #endif
 BOOL isMacOS10_13OrAbove(void);
 BOOL isMacOS10_14OrAbove(void);
+BOOL isMacOS10_15OrAbove(void);
 
 extern NSString* NSAppearanceDidChangeNotification;
 
@@ -207,10 +209,10 @@ __tg_IsBetween_N(double inf, double x, double sup) {return IsBetween_d(inf, x, s
 
 
 NSPasteboardType GetMySVGPboardType(void);
-NSPasteboardType GetMyPNGPboardType(void);
-NSPasteboardType GetMyJPEGPboardType(void);
 NSPasteboardType GetWebURLsWithTitlesPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
+NSString* getUTIForExportFormat(export_format_t exportFormat);
+NSString* getFileExtensionForExportFormat(export_format_t exportFormat);
 
 FOUNDATION_EXTERN int EndianI_BtoN(int x);
 FOUNDATION_EXTERN int EndianI_NtoB(int x);

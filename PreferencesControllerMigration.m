@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/07/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesControllerMigration.h"
@@ -289,7 +289,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
         CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) ];
       #else
       servicesItems = [NSMutableArray arrayWithArray:
-        [(NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) autorelease]];
+        [NSMakeCollectable((id)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease]];
       #endif
     NSUInteger count = [servicesItems count];
     while(count--)
@@ -301,7 +301,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
           [NSDictionary dictionaryWithObjectsAndKeys:
             [serviceItem objectForKey:ServiceShortcutEnabledKey], ServiceShortcutEnabledKey,
             [serviceItem objectForKey:ServiceShortcutStringKey], ServiceShortcutStringKey,
-            [NSNumber numberWithInteger:SERVICE_LATEXIZE_ALIGN], ServiceShortcutIdentifierKey,
+            @(SERVICE_LATEXIZE_ALIGN), ServiceShortcutIdentifierKey,
             [serviceItem objectForKey:ServiceShortcutClipBoardOptionKey], ServiceShortcutClipBoardOptionKey,
             nil]];
       }
@@ -383,7 +383,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
                        CFPreferencesGetAppBooleanValue((CHBRIDGE CFStringRef)Old_UseLoginShellKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, 0);
   [self replaceKey:Old_CompositionConfigurationsKey withKey:CompositionConfigurationsKey];
   [self replaceKey:Old_CurrentCompositionConfigurationIndexKey withKey:CompositionConfigurationDocumentIndexKey];
-  NSMutableArray* newCompositionConfigurations = [self.compositionConfigurations deepMutableCopy];
+  NSMutableArray* newCompositionConfigurations = [self.compositionConfigurations mutableCopyDeep];
   for(NSMutableDictionary* compositionConfiguration in newCompositionConfigurations)
   {
     [compositionConfiguration replaceKey:Old_CompositionConfigurationCompositionModeKey withKey:CompositionConfigurationCompositionModeKey];

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 22/03/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //This is the table view displaying the history in the history drawer
 //Its delegate and datasource are the HistoryManager, the history being shared by all documents
@@ -150,7 +150,7 @@
     {
       NSUndoManager* documentUndoManager = document.undoManager;
       [document applyLatexitEquation:equation isRecentLatexisation:NO];
-      [documentUndoManager setActionName:NSLocalizedString(@"Apply History item", @"Apply History item")];
+      [documentUndoManager setActionName:NSLocalizedString(@"Apply History item", @"")];
     }
     [document.windowForSheet makeKeyAndOrderFront:nil];
   }//end if (document)
@@ -353,15 +353,24 @@
 
 #pragma mark drag'n drop
 
--(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+-(void) draggingSession:(NSDraggingSession*)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
 {
-  if (!self->shouldRedrag)
+  if (isMacOS10_15OrAbove() || !self->shouldRedrag)
   {
     [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
     [[[AppController appController] dragFilterWindowController] setDelegate:nil];
-  }//end if (self->shouldRedrag)
+  }//end if (isMacOS10_15OrAbove() || !self->shouldRedrag)
   if (self->shouldRedrag)
-    [self performSelector:@selector(performProgrammaticRedrag:) withObject:nil afterDelay:0];
+  {
+    NSPasteboard* pboard = session.draggingPasteboard;
+    [self performSelector:@selector(performProgrammaticRedrag:) withObject:(!pboard ? [NSPasteboard pasteboardWithName:NSDragPboard] : pboard) afterDelay:0];
+  }//end if (self->shouldRedrag)
+}
+//end draggingSession:endedAtPoint:operation:
+
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  [self draggingSession:nil endedAtPoint:aPoint operation:operation];
 }
 //end draggedImage:endedAt:operation:
 
@@ -373,8 +382,10 @@
   if (!self->shouldRedrag)
   {
     self->lastDragStartPointSelfBased = [self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:nil];
-    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-      [self.window convertBaseToScreen:event.locationInWindow]];
+    NSPoint eventLocation =
+      isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[event locationInWindow]] :
+      [[self window] convertBaseToScreen:[event locationInWindow]];
+    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:eventLocation];
     [[[AppController appController] dragFilterWindowController] setDelegate:self];
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
@@ -416,9 +427,16 @@
 }
 //end performDragOperation:
 
+-(NSDragOperation) draggingSession:(NSDraggingSession*)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
+{
+  NSDragOperation result = (context == NSDraggingContextWithinApplication) ? NSDragOperationEvery : NSDragOperationCopy;
+  return result;
+}
+//end draggingSession:sourceOperationMaskForDraggingContext:
+
 -(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
-  NSDragOperation result = isLocal ? NSDragOperationEvery : NSDragOperationCopy;
+  NSDragOperation result = [self draggingSession:nil sourceOperationMaskForDraggingContext:(isLocal ? NSDraggingContextWithinApplication : NSDraggingContextOutsideApplication)];
   return result;
 }
 //end draggingSourceOperationMaskForLocal:
@@ -436,7 +454,7 @@
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGEventRef cgEvent0 =
     CGEventCreateMouseEvent(0, kCGEventLeftMouseUp, cgMouseLocation1, kCGMouseButtonLeft);
-    CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
+  CGEventSetLocation(cgEvent0, CGEventGetUnflippedLocation(cgEvent0));
   CGEventPost(kCGHIDEventTap, cgEvent0);
   CFRelease(cgEvent0);
 }//end performProgrammaticDragCancellation:
@@ -447,11 +465,9 @@
   [[[AppController appController] dragFilterWindowController].window setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSRect bleh = NSZeroRect;
-  bleh.origin = [self convertPoint:center toView:nil];
-  bleh.size = NSMakeSize(1, 1);
-  bleh = [self.window convertRectToScreen:bleh];
-  NSPoint mouseLocation2 = bleh.origin;
+  NSPoint mouseLocation2 =
+    isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[self convertPoint:center toView:nil]] :
+    [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =
@@ -581,7 +597,7 @@
                                      @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
                                      @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
                                      @(preferencesController.exportTextExportBody), @"textExportBody",
-                                     preferencesController.exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
+                                     [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                      nil];
       NSData* data = nil;
       if (!data)
@@ -590,10 +606,9 @@
                compositionConfiguration:preferencesController.compositionConfigurationDocument
                        uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
       [fileManager createFileAtPath:filePath contents:data attributes:nil];
-      [fileManager setAttributes:@{NSFileHFSCreatorCode: @((OSType)'LTXt')}
-                           ofItemAtPath:filePath error:0];
-      NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? exportOptions[@"jpegColor"] : nil;
-      NSColor* autoBackgroundColor = equation.backgroundColor;
+      [fileManager setAttributes:@{NSFileHFSCreatorCode:@((OSType)'LTXt')} ofItemAtPath:filePath error:0];
+      NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
+      NSColor* autoBackgroundColor = [equation backgroundColor];
       NSColor* iconBackgroundColor =
         (jpegBackgroundColor != nil) ? jpegBackgroundColor :
         (autoBackgroundColor != nil) ? autoBackgroundColor :
@@ -603,7 +618,8 @@
           (exportFormat != EXPORT_FORMAT_JPEG))
         [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:[historyItem equation].pdfData backgroundColor:iconBackgroundColor]
                                        forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
-      [names addObject:fileName];
+      if (fileName)
+        [names addObject:fileName];
     }//end if (![fileManager fileExistsAtPath:filePath])
     index = [indexSet indexGreaterThanIndex:index]; //now, let's do the same for the next item
   }//end while (index != NSNotFound) 
@@ -638,9 +654,9 @@
   {
     NSUndoManager* undoManager = [[HistoryManager sharedManager] undoManager];
     NSColor* color = [NSColor colorFromPasteboard:pboard];
-    HistoryItem* historyItem = self->historyItemsController.arrangedObjects[row];
+    HistoryItem* historyItem = [[self->historyItemsController arrangedObjects] objectAtIndex:row];
     [historyItem equation].backgroundColor = color;
-    [undoManager setActionName:NSLocalizedString(@"Change History item background color", @"Change History item background color")];
+    [undoManager setActionName:NSLocalizedString(@"Change History item background color", @"")];
   }//end if (ok)
   return ok;
 }

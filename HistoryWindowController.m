@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryWindowController.h"
@@ -63,8 +63,8 @@
   [window setHidesOnDeactivate:NO];//prevents from disappearing when LaTeXiT is not active
   [window setFloatingPanel:NO];//prevents from floating always above
   [window setFrameAutosaveName:@"history"];
-  [window setTitle:NSLocalizedString(@"History", @"History")];
-  [self->clearHistoryButton setTitle:NSLocalizedString(@"Remove all", @"Remove all")];
+  [window setTitle:NSLocalizedString(@"History", @"")];
+  [self->clearHistoryButton setTitle:NSLocalizedString(@"Remove all", @"")];
   //[window setBecomesKeyOnlyIfNeeded:YES];//we could try that to enable item selecting without activating the window first
   //but this prevents keyDown events
   
@@ -78,18 +78,18 @@
   self->historyLockButton.state = [HistoryManager sharedManager].locked ? NSOnState : NSOffState;
   [self->historyLockButton bind:NSValueBinding toObject:[[HistoryManager sharedManager] bindController] withKeyPath:@"content.locked"
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
       NSValueTransformerBindingOption, nil]];
 
   [self->importOptionPopUpButton removeAllItems];
-  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current history", @"Add to current history")];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current history", @"")];
   [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)HISTORY_IMPORT_MERGE];
-  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current history", @"Overwrite current history")];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current history", @"")];
   [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)HISTORY_IMPORT_OVERWRITE];
 
-  [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"Export the selection only")];
-  [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"Format :")];
-  NSPoint point = self->exportFormatPopUpButton.frame.origin;
+  [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"")];
+  [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"")];
+  NSPoint point = [self->exportFormatPopUpButton frame].origin;
   [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX(self->exportFormatLabel.frame)+6, point.y)];
   
   [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:HistoryDisplayPreviewPanelKey options:NSKeyValueObservingOptionNew context:nil];
@@ -121,7 +121,7 @@
     BOOL isKeyWindow = [[self window] isKeyWindow];
     NSInteger nbItems = [self->historyView numberOfRows];
     [self->clearHistoryButton setEnabled:(isKeyWindow && nbItems)];
-    [[self window] setTitle:[NSString stringWithFormat:@"%@ (%@)", NSLocalizedString(@"History", @"History"), [NSNumber numberWithInteger:nbItems]]];
+    [[self window] setTitle:[NSString stringWithFormat:@"%@ (%@)", NSLocalizedString(@"History", @""), @(nbItems)]];
   }//end if ([keyPath isEqualToString:@"arrangedObjects"])
   else if ([keyPath isEqualToString:HistoryDisplayPreviewPanelKey])
     [self->historyPreviewPanelSegmentedControl.cell setSelected:
@@ -184,20 +184,19 @@
 -(IBAction) saveAs:(id)sender
 {
   self->savePanel = [NSSavePanel savePanel];
-  [self->savePanel setTitle:NSLocalizedString(@"Export history...", @"Export history...")];
+  [self->savePanel setTitle:NSLocalizedString(@"Export history...", @"")];
   [self changeHistoryExportFormat:self->exportFormatPopUpButton];
   [self->savePanel setCanSelectHiddenExtension:YES];
-  self->savePanel.accessoryView = self->exportAccessoryView;
-  self->exportOnlySelectedButton.state = NSOffState;
-  self->exportOnlySelectedButton.enabled = (self->historyView.selectedRow >= 0);
-  if (self.window.visible) {
-    savePanel.nameFieldStringValue = NSLocalizedString(@"Untitled", @"Untitled");
-    [savePanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
-      [self _savePanelDidEnd:self->savePanel returnCode:result contextInfo:NULL];
+  [self->savePanel setAccessoryView:self->exportAccessoryView];
+  [self->exportOnlySelectedButton setState:NSOffState];
+  [self->exportOnlySelectedButton setEnabled:([self->historyView selectedRow] >= 0)];
+  [self->savePanel setNameFieldStringValue:NSLocalizedString(@"Untitled", @"")];
+  if ([[self window] isVisible])
+    [self->savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
+      [self _savePanelDidEnd:self->savePanel returnCode:result contextInfo:0];
     }];
-  } else {
+  else
     [self _savePanelDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:NULL];
-  }
 }
 
 -(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
@@ -225,10 +224,10 @@
   switch((history_export_format_t)[sender selectedTag])
   {
     case HISTORY_EXPORT_FORMAT_INTERNAL:
-      savePanel.allowedFileTypes = @[@"latexhist"];
+      [self->savePanel setAllowedFileTypes:@[@"latexhist"]];
       break;
     case HISTORY_EXPORT_FORMAT_PLIST:
-      savePanel.allowedFileTypes = @[@"plist"];
+      [self->savePanel setAllowedFileTypes:@[@"plist"]];
       break;
   }
 }

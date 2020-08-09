@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -296,9 +296,9 @@ static LibraryManager* sharedManagerInstance = nil;
         LibraryItem* libraryItem = nil;
         while((libraryItem = [enumerator nextObject]))
           [descriptions addObject:[libraryItem plistDescription]];
-        NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"library",
-          applicationVersion, @"version", nil];
+        NSDictionary* library = !descriptions ? nil : @{
+          @"library":[NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil],
+          @"version":applicationVersion};
         NSError* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
           [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListXMLFormat_v1_0 options:0 error:&errorDescription];
@@ -307,9 +307,7 @@ static LibraryManager* sharedManagerInstance = nil;
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
         {
-          [[NSFileManager defaultManager]
-             setAttributes:@{NSFileHFSCreatorCode: @((OSType)'LTXt')}
-                     ofItemAtPath:path error:0];
+          [[NSFileManager defaultManager] setAttributes:@{NSFileHFSCreatorCode:@((OSType)'LTXt')} ofItemAtPath:path error:0];
           [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
       }//end case LIBRARY_EXPORT_FORMAT_PLIST
@@ -758,23 +756,15 @@ static LibraryManager* sharedManagerInstance = nil;
       initWithManagedObjectModel:[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel]];
   id persistentStore = nil;
   @try{
-    NSURL* storeURL = [NSURL fileURLWithPath:path];
+    NSURL* storeURL = !path ? nil : [NSURL fileURLWithPath:path];
     NSError* error = nil;
     NSMutableDictionary* options = [NSMutableDictionary dictionary];
     if (DebugLogLevel >= 1)
-    {
-      if (isMacOS10_6OrAbove())
-        [options setObject:[NSNumber numberWithBool:YES] forKey:NSSQLiteManualVacuumOption];
-    }//end if (DebugLogLevel >= 1)
+      [options setObject:@(YES) forKey:NSSQLiteManualVacuumOption];
 
-    if (isMacOS10_5OrAbove())
-    {
-      [options setValue:@YES forKey:NSMigratePersistentStoresAutomaticallyOption];
-      NSDictionary* journalMode = @{@"journal_mode": @"DELETE"};
-      [options setValue:journalMode forKey:NSSQLitePragmasOption];
-    }//end if (isMacOS10_5OrAbove())
-    if (isMacOS10_6OrAbove())
-      [options setValue:@YES forKey:NSInferMappingModelAutomaticallyOption];
+    [options setValue:@YES forKey:NSMigratePersistentStoresAutomaticallyOption];
+    [options setValue:@{@"journal_mode":@"DELETE"} forKey:NSSQLitePragmasOption];
+    [options setValue:@YES forKey:NSInferMappingModelAutomaticallyOption];
     persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                         configuration:nil URL:storeURL options:options error:&error];
     if (error)
@@ -887,7 +877,7 @@ static LibraryManager* sharedManagerInstance = nil;
     {
       libraryPath = [self defaultLibraryPath];
       if (![fileManager isReadableFileAtPath:libraryPath])
-        [fileManager createDirectoryAtPath:libraryPath.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:0];
+        [fileManager createDirectoryAtPath:[libraryPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
     }//end if (!exists)
     
     self->managedObjectContext = [[self managedObjectContextAtPath:libraryPath setVersion:NO] retain];
@@ -989,12 +979,12 @@ static LibraryManager* sharedManagerInstance = nil;
   {
     NSString* oldManagedObjectModelPath =
       [[NSBundle bundleForClass:[self class]] pathForResource:oldDataModelName ofType:@"mom"];
-    NSURL* oldManagedObjectModelURL  = [NSURL fileURLWithPath:oldManagedObjectModelPath];
+    NSURL* oldManagedObjectModelURL = !oldManagedObjectModelPath ? nil : [NSURL fileURLWithPath:oldManagedObjectModelPath];
     oldManagedObjectModel =
       [[NSManagedObjectModel alloc] initWithContentsOfURL:oldManagedObjectModelURL];
     oldPersistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:oldManagedObjectModel];
     oldPath = [[path copy] autorelease];
-    NSURL* oldStoreURL = [NSURL fileURLWithPath:oldPath];
+    NSURL* oldStoreURL = !oldPath ? nil : [NSURL fileURLWithPath:oldPath];
     @try{
       NSError* error = nil;
       oldPersistentStore = !oldStoreURL ? nil :

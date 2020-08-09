@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -148,7 +148,7 @@
     [document setLinkedLibraryEquation:newLinkedLibraryEquation];
     [[documentUndoManager prepareWithInvocationTarget:document] applyLatexitEquation:previousDocumentState isRecentLatexisation:NO];
     [document applyLibraryEquation:equation];
-    [documentUndoManager setActionName:NSLocalizedString(@"Apply Library item", @"Apply Library item")];
+    [documentUndoManager setActionName:NSLocalizedString(@"Apply Library item", @"")];
     [documentUndoManager endUndoGrouping];
     [document.windowForSheet makeKeyAndOrderFront:nil];
   }//end if (equation)
@@ -418,9 +418,9 @@
   [undoManager beginUndoGrouping];
   NSArray* selectedItems = [LibraryItem minimumNodeCoverFromItemsInArray:[self selectedItems] parentSelector:@selector(parent)];
   NSArray* rootNodes = [self->libraryController rootItems:[self->libraryController filterPredicate]];
-  id nextSelectedItem = [[selectedItems lastObject] nextBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:rootNodes];
+  id nextSelectedItem = [[selectedItems lastObject] nextBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered:) withObject:nil rootNodes:rootNodes];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem :
-    [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered) rootNodes:rootNodes];
+    [[selectedItems lastObject] prevBrotherWithParentSelector:@selector(parent) childrenSelector:@selector(childrenOrdered:) withObject:nil rootNodes:rootNodes];
   nextSelectedItem = nextSelectedItem ? nextSelectedItem : [[selectedItems lastObject] parent];
   NSUInteger nbSelectedItems = selectedItems.count;
   NSMutableSet* parentOfSelectedItems = [NSMutableSet setWithCapacity:selectedItems.count];
@@ -441,9 +441,9 @@
       [self->libraryController fixChildrenSortIndexesForParent:(LibraryGroupItem*)libraryItem recursively:NO];
   }
   if (nbSelectedItems > 1)
-    [undoManager setActionName:NSLocalizedString(@"Delete Library items", @"Delete Library items")];
+    [undoManager setActionName:NSLocalizedString(@"Delete Library items", @"")];
   else if (nbSelectedItems)
-    [undoManager setActionName:NSLocalizedString(@"Delete Library item", @"Delete Library item")];
+    [undoManager setActionName:NSLocalizedString(@"Delete Library item", @"")];
   [undoManager endUndoGrouping];
   [[self->libraryController managedObjectContext] processPendingChanges];
   [self reloadData];
@@ -465,7 +465,7 @@
     {
       selectedItem.title = newTitle;
       [[self->libraryController undoManager]
-        setActionName:NSLocalizedString(@"Change Library item name", @"Change Library item name")];
+        setActionName:NSLocalizedString(@"Change Library item name", @"")];
     }//end if (![newTitle isEqualToString:oldTitle])
     [super textDidEndEditing:notification];
     if (selectedItem)
@@ -566,7 +566,7 @@
     [self->libraryController removeItems:selectedItems];
     [[self->libraryController managedObjectContext] processPendingChanges];
     [self reloadData];
-    [[self->libraryController undoManager] setActionName:NSLocalizedString(@"Delete Library items", @"Delete Library items")];
+    [[self->libraryController undoManager] setActionName:NSLocalizedString(@"Delete Library items", @"")];
   }//end if ([selectedItems count])
 }
 //end cut:
@@ -685,8 +685,8 @@
     [self reloadData];
     [self sizeLastColumnToFit];
     [undoManager setActionName:(count > 1) ?
-      NSLocalizedString(@"Add Library items", @"Add Library items") :
-      NSLocalizedString(@"Add Library item", @"Add Library item")];
+      NSLocalizedString(@"Add Library items", @"") :
+      NSLocalizedString(@"Add Library item", @"")];
     [self selectItems:libraryItems byExtendingSelection:NO];
     result = YES;
   }//end if (count)
@@ -699,15 +699,24 @@
 
 #pragma mark drag'n drop
 
--(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+-(void) draggingSession:(NSDraggingSession*)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
 {
-  if (!self->shouldRedrag)
+  if (isMacOS10_15OrAbove() || !self->shouldRedrag)
   {
     [[[AppController appController] dragFilterWindowController] setWindowVisible:NO withAnimation:YES];
     [[[AppController appController] dragFilterWindowController] setDelegate:nil];
-  }//end if (self->shouldRedrag)
+  }//end if (isMacOS10_15OrAbove() || !self->shouldRedrag)
   if (self->shouldRedrag)
+  {
+    NSPasteboard* pboard = session.draggingPasteboard;
     [self performSelector:@selector(performProgrammaticRedrag:) withObject:nil afterDelay:0];
+  }//end if (self->shouldRedrag)
+}
+//end draggingSession:endedAtPoint:operation:
+
+-(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
+{
+  [self draggingSession:nil endedAtPoint:aPoint operation:operation];
 }
 //end draggedImage:endedAt:operation:
 
@@ -721,7 +730,9 @@
                                 NSMaxY(libraryViewWindowFrame));
   NSPoint pointDown = NSMakePoint(libraryViewWindowFrame.origin.x+(libraryViewWindowFrame.size.width-dragWindowFrame.size.width)/2,
                                   NSMinY(libraryViewWindowFrame)-dragWindowFrame.size.height);
-  NSPoint eventLocation = [self.window convertBaseToScreen:event.locationInWindow];
+  NSPoint eventLocation = isMacOS10_12OrAbove() ?
+    [[self window] convertPointToScreen:[event locationInWindow]] :
+    [[self window] convertBaseToScreen:[event locationInWindow]];
   CGFloat distanceUp2 = (eventLocation.x-pointUp.x)*(eventLocation.x-pointUp.x)+
                         (eventLocation.y-pointUp.y)*(eventLocation.y-pointUp.y);
   CGFloat distanceDown2 = (eventLocation.x-pointDown.x)*(eventLocation.x-pointDown.x)+
@@ -738,9 +749,11 @@
     [[[AppController appController] dragFilterWindowController].window setIgnoresMouseEvents:NO];
   if (!self->shouldRedrag)
   {
-    self->lastDragStartPointSelfBased = [self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:nil];
-    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:
-      [self.window convertBaseToScreen:event.locationInWindow]];
+    self->lastDragStartPointSelfBased = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
+    NSPoint eventLocation =
+      isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[event locationInWindow]] :
+      [[self window] convertBaseToScreen:[event locationInWindow]];
+    [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:eventLocation];
     [[[AppController appController] dragFilterWindowController] setDelegate:self];
   }//end if (!self->shouldRedrag)
   self->shouldRedrag = NO;
@@ -775,7 +788,9 @@
   [[[AppController appController] dragFilterWindowController].window setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 = [self.window convertPointToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 =
+    isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[self convertPoint:center toView:nil]] :
+    [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =
@@ -796,9 +811,16 @@
 }
 //end performProgrammaticRedrag:
 
+-(NSDragOperation) draggingSession:(NSDraggingSession*)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
+{
+  NSDragOperation result = (context == NSDraggingContextWithinApplication) ? NSDragOperationEvery : NSDragOperationCopy;
+  return result;
+}
+//end draggingSession:sourceOperationMaskForDraggingContext:
+
 -(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
-  NSDragOperation result = isLocal ? NSDragOperationEvery : NSDragOperationCopy;
+  NSDragOperation result = [self draggingSession:nil sourceOperationMaskForDraggingContext:(isLocal ? NSDraggingContextWithinApplication : NSDraggingContextOutsideApplication)];
   return result;
 }
 //end draggingSourceOperationMaskForLocal:
@@ -902,14 +924,14 @@
     }
     if ([representedObject isKindOfClass:[LibraryEquation class]])
     {
-      LatexitEquation* latexitEquation = ((LibraryEquation*)representedObject).equation;
+      LatexitEquation* latexitEquation = [[representedObject dynamicCastToClass:[LibraryEquation class]] equation];
       cellImage = (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) ? nil : [latexitEquation pdfCachedImage];
-      cellTextBackgroundColor = latexitEquation.backgroundColor;
-      NSColor* greyLevelColor  = [cellTextBackgroundColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]];
+      cellTextBackgroundColor = [latexitEquation backgroundColor];
+      NSColor* greyLevelColor = [cellTextBackgroundColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]];
       cellDrawsBackground = (cellTextBackgroundColor != nil) && ([greyLevelColor whiteComponent] != 1.0f);
       if ((currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) && ![cell isHighlighted])
-        cellTextColor = latexitEquation.color;
-    }
+        cellTextColor = [latexitEquation color];
+    }//end if ([representedObject isKindOfClass:[LibraryEquation class]])
     else if ([representedObject isKindOfClass:[LibraryGroupItem class]])
       cellImage = [self iconForRepresentedObject:representedObject];
     else

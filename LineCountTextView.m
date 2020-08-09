@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -766,13 +766,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     }//end if (latexitEquation)
   }//end NSPasteboardTypePDF
 
-  /*if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"com.apple.iWork.TSPNativeMetadata", nil]]))
-  {
-    [(id)[self nextResponder] paste:sender];
-    done = YES;
-  }//end @"com.apple.iWork.TSPNativeMetadata"*/
-
-  if (!done && (type = [pasteboard availableTypeFromArray:@[NSFilesPromisePboardType]]))
+  if (!done && (type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:NSFilesPromisePboardType, nil]]))
   {
     [(id)self.nextResponder paste:sender];
     done = YES;
@@ -816,7 +810,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSData* rtfData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
-    [attributedString setAttributes:nil range:NSMakeRange(0, attributedString.length)];
+    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
     if (attributedString)
       [self.textStorage appendAttributedString:attributedString];
     //[super paste:sender];
@@ -1159,6 +1153,13 @@ static NSArray* WellKnownLatexKeywords = nil;
   --self->disableAutoColorChangeLevel;
 }
 //end setTypingAttributes:
+
+-(void) updateFontPanel
+{
+  //disable auto attributes selection
+  //[super updateFontPanel];
+}
+//end updateFontPanel
 
 -(void) colorDidChange:(NSNotification*)notification
 {

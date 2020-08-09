@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/05/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //This file is an extension of the NSColor class
 
@@ -51,9 +51,11 @@
 
 -(NSString*) rgbaString
 {
+  NSString* result = nil;
   NSColor* colorRGB = [self colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]]; //the color must be RGB
-  return [NSString stringWithFormat:@"%f %f %f %f", [colorRGB redComponent ], [colorRGB greenComponent],
-                                                    [colorRGB blueComponent], [colorRGB alphaComponent]];
+  result = [NSString stringWithFormat:@"%f %f %f %f", [colorRGB redComponent ], [colorRGB greenComponent],
+                                                      [colorRGB blueComponent], [colorRGB alphaComponent]];
+  return result;
 }
 //end rgbaString
 

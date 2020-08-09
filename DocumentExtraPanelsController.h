@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -44,6 +44,7 @@
   BOOL            saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
   
   NSSavePanel* __weak currentSavePanel;
+  NSArray* nibTopLevelObjects;
 }
 
 -(instancetype) initWithLoadingFromNib NS_DESIGNATED_INITIALIZER;

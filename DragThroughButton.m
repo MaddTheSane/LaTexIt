@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 07/05/10.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "DragThroughButton.h"
@@ -92,11 +92,11 @@ NSString* const DragThroughButtonStateChangedNotification = @"DragThroughButtonS
     else//if (self->shouldBlink)
     {
       self->remainingSetStateWrapped += 5;
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:newState] afterDelay:0.05];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:antiState] afterDelay:0.10];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:newState] afterDelay:0.15];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:antiState] afterDelay:0.20];
-      [self performSelector:@selector(setStateWrapped:) withObject:[NSNumber numberWithInteger:newState] afterDelay:0.25];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(newState) afterDelay:0.05];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(antiState) afterDelay:0.10];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(newState) afterDelay:0.15];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(antiState) afterDelay:0.20];
+      [self performSelector:@selector(setStateWrapped:) withObject:@(newState) afterDelay:0.25];
     }//end if (self->shouldBlink)
   }//end if ([self isEnabled] && self->canTrackMouse)
 }

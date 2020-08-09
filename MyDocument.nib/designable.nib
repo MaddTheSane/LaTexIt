@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MyDocument">
             <connections>
-                <outlet property="colorWell" destination="103" id="118"/>
-                <outlet property="imageView" destination="98" id="117"/>
-                <outlet property="logTableView" destination="99" id="113"/>
                 <outlet property="lowerBox" destination="574" id="1073"/>
                 <outlet property="lowerBoxChangeBodyTemplateButton" destination="1113" id="1117"/>
                 <outlet property="lowerBoxChangePreambleButton" destination="659" id="1089"/>
@@ -27,17 +24,7 @@
                 <outlet property="lowerBoxPreambleTextView" destination="110" id="1082"/>
                 <outlet property="lowerBoxSourceTextView" destination="106" id="1081"/>
                 <outlet property="lowerBoxSplitView" destination="450" id="1090"/>
-                <outlet property="lowerControlsBox" destination="761" id="919"/>
-                <outlet property="lowerControlsColorTextField" destination="170" id="969"/>
-                <outlet property="lowerControlsSizeTextField" destination="169" id="968"/>
-                <outlet property="makeLatexButton" destination="108" id="191"/>
                 <outlet property="pointSizeFormatter" destination="1151" id="1153"/>
-                <outlet property="preambleTextView" destination="110" id="448"/>
-                <outlet property="progressIndicator" destination="189" id="190"/>
-                <outlet property="sizeText" destination="105" id="115"/>
-                <outlet property="sourceTextView" destination="106" id="449"/>
-                <outlet property="splitView" destination="450" id="455"/>
-                <outlet property="typeOfTextControl" destination="327" id="328"/>
                 <outlet property="upperBox" destination="576" id="1072"/>
                 <outlet property="upperBoxImageView" destination="98" id="1086"/>
                 <outlet property="upperBoxLogTableView" destination="99" id="1087"/>
@@ -45,8 +32,6 @@
                 <outlet property="upperBoxZoomBox" destination="759" id="1084"/>
                 <outlet property="upperBoxZoomBoxSlider" destination="336" id="1083"/>
                 <outlet property="upperImageBox" destination="758" id="1085"/>
-                <outlet property="upperZoomBox" destination="759" id="870"/>
-                <outlet property="upperZoomBoxSlider" destination="336" id="1050"/>
                 <outlet property="window" destination="1018" id="1158"/>
             </connections>
         </customObject>
@@ -65,14 +50,14 @@
                     <box fixedFrame="YES" boxType="oldStyle" borderType="none" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="576">
                         <rect key="frame" x="0.0" y="274" width="384" height="222"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
-                        <view key="contentView" ambiguous="YES" id="14X-pg-msj">
+                        <view key="contentView" ambiguous="YES" id="ZFK-Hr-IIo">
                             <rect key="frame" x="0.0" y="0.0" width="384" height="222"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <box fixedFrame="YES" borderType="none" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="758">
                                     <rect key="frame" x="20" y="0.0" width="344" height="206"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <view key="contentView" ambiguous="YES" id="s4W-WY-lZt">
+                                    <view key="contentView" ambiguous="YES" id="ExP-XV-XhD">
                                         <rect key="frame" x="0.0" y="0.0" width="344" height="206"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
@@ -84,14 +69,14 @@
                                                     <outlet property="document" destination="-2" id="316"/>
                                                 </connections>
                                             </imageView>
-                                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="189">
+                                            <progressIndicator hidden="YES" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" maxValue="100" bezeled="NO" indeterminate="YES" style="spinning" id="189">
                                                 <rect key="frame" x="156" y="83" width="32" height="32"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             </progressIndicator>
                                             <scrollView hidden="YES" fixedFrame="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="104">
                                                 <rect key="frame" x="0.0" y="0.0" width="344" height="206"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <clipView key="contentView" ambiguous="YES" id="wW6-Hk-YqC">
+                                                <clipView key="contentView" ambiguous="YES" id="uPd-wc-9TN">
                                                     <rect key="frame" x="1" y="0.0" width="342" height="205"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
@@ -154,7 +139,7 @@
                                 <box fixedFrame="YES" borderType="none" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="759">
                                     <rect key="frame" x="364" y="0.0" width="20" height="206"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
-                                    <view key="contentView" ambiguous="YES" id="fKy-5y-Qui">
+                                    <view key="contentView" ambiguous="YES" id="MiX-0P-nSS">
                                         <rect key="frame" x="0.0" y="0.0" width="20" height="206"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
@@ -180,7 +165,7 @@
                                                 <rect key="frame" x="0.0" y="6" width="17" height="188"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                                 <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="2" doubleValue="1" tickMarkPosition="left" numberOfTickMarks="1" sliderType="linear" id="1101">
-                                                    <font key="font" size="12" name="Helvetica"/>
+                                                    <font key="font" metaFont="user"/>
                                                 </sliderCell>
                                                 <connections>
                                                     <outlet property="nextKeyView" destination="104" id="362"/>
@@ -192,25 +177,25 @@
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" borderType="none" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="574">
+                    <box borderType="none" titlePosition="noTitle" id="574">
                         <rect key="frame" x="0.0" y="0.0" width="384" height="270"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                        <view key="contentView" ambiguous="YES" id="K7y-Kd-Bwe">
+                        <view key="contentView" id="2rV-p4-PBF">
                             <rect key="frame" x="0.0" y="0.0" width="384" height="270"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <splitView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="450" customClass="MySplitView">
+                                <splitView id="450" customClass="MySplitView">
                                     <rect key="frame" x="21" y="80" width="342" height="190"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="101" customClass="NotifyingScrollView">
                                             <rect key="frame" x="0.0" y="0.0" width="342" height="0.0"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <clipView key="contentView" ambiguous="YES" id="fDj-CG-mfd">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <clipView key="contentView" id="WOn-9q-fvf">
                                                 <rect key="frame" x="1" y="1" width="340" height="1"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textView ambiguous="YES" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="110" customClass="LineCountTextView">
+                                                    <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="110" customClass="LineCountTextView">
                                                         <rect key="frame" x="0.0" y="-112" width="340" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -236,12 +221,12 @@
                                         </scrollView>
                                         <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="109" customClass="NotifyingScrollView">
                                             <rect key="frame" x="0.0" y="9" width="342" height="181"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <clipView key="contentView" ambiguous="YES" id="hTi-le-hpK">
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <clipView key="contentView" id="TKa-gX-wX5">
                                                 <rect key="frame" x="1" y="1" width="340" height="179"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textView ambiguous="YES" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="106" customClass="LineCountTextView">
+                                                    <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="106" customClass="LineCountTextView">
                                                         <rect key="frame" x="0.0" y="0.0" width="340" height="179"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -301,7 +286,7 @@
                                 <box fixedFrame="YES" borderType="none" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="761">
                                     <rect key="frame" x="0.0" y="0.0" width="384" height="80"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <view key="contentView" ambiguous="YES" id="5Gj-da-3Wa">
+                                    <view key="contentView" ambiguous="YES" id="3K1-2P-TeM">
                                         <rect key="frame" x="0.0" y="0.0" width="384" height="80"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
@@ -409,7 +394,7 @@
             </view>
             <point key="canvasLocation" x="139" y="147"/>
         </window>
-        <numberFormatter formatterBehavior="custom10_4" positiveFormat="#,##0.00 pt" negativeFormat="-#,##0.00 pt" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" minimumFractionDigits="2" maximumFractionDigits="2" decimalSeparator="." groupingSeparator="," id="1151" userLabel="pointSizeFormatter">
+        <numberFormatter formatterBehavior="custom10_4" positiveFormat="#,##0.00 pt" negativeFormat="-#,##0.00 pt" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" minimumFractionDigits="2" maximumFractionDigits="2" decimalSeparator="." groupingSeparator="," id="1151" userLabel="pointSizeFormatter">
             <nil key="negativeInfinitySymbol"/>
             <nil key="positiveInfinitySymbol"/>
             <decimal key="minimum" value="0"/>

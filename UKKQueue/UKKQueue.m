@@ -240,8 +240,8 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 		
         AT_SYNCHRONIZED( self )
         {
-            [watchedPaths addObject: path];
-            [watchedFDs addObject: @(fd)];
+            [watchedPaths addObject:path];
+            [watchedFDs addObject:@(fd)];
             kevent( queueFD, &ev, 1, NULL, 0, &nullts );
         }
     }

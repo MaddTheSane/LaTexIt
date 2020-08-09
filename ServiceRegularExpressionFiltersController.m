@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/01/13.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "ServiceRegularExpressionFiltersController.h"
@@ -26,9 +26,11 @@
   id modelObject = (selectedObjects && selectedObjects.count) ? selectedObjects[0] :
                    (objects && objects.count) ? objects[0] : nil;
   result = modelObject ? [modelObject mutableCopy] :
-    @{ServiceRegularExpressionFilterEnabledKey: @NO,
-      ServiceRegularExpressionFilterInputPatternKey: @"(\\(.*\\))",
-      ServiceRegularExpressionFilterOutputPatternKey: @"\\1"};
+    [[NSDictionary alloc] initWithObjectsAndKeys:
+      @NO, ServiceRegularExpressionFilterEnabledKey,
+      @"(\\(.*\\))", ServiceRegularExpressionFilterInputPatternKey,
+      @"\\1", ServiceRegularExpressionFilterOutputPatternKey,
+      nil];
   return result;
 }
 //end newObject

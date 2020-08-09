@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "IsNotInTransformer.h"
@@ -53,7 +53,7 @@
 
 -(id) transformedValue:(id)value
 {
-  id result = [NSNumber numberWithBool:![self->references containsObject:value]];
+  id result = @(![self->references containsObject:value]);
   return result;
 }
 //end transformedValue:

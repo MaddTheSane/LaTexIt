@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "DragFilterWindowController.h"
@@ -40,7 +40,7 @@
 
 -(void) awakeFromNib
 {
-  [self->dragFilterViewLabel setStringValue:NSLocalizedString(@"Drag through areas to change export type", @"Drag through areas to change export type")];
+  [self->dragFilterViewLabel setStringValue:NSLocalizedString(@"Drag through areas to change export type", @"")];
   self->buttonPalette = [[NSButtonPalette alloc] init];
   [self->buttonPalette setExclusive:YES];
   NSEnumerator* enumerator = [self->dragFilterButtonsView.subviews objectEnumerator];
@@ -54,19 +54,19 @@
   self->closeButton.delay = .05;
 
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS] setTitle:
-    NSLocalizedString(@"PDF w.o.f.", @"PDF w.o.f.")];
+    NSLocalizedString(@"PDF w.o.f.", @"")];
 
-  BOOL isPdfToSvgAvailable = [AppController appController].pdfToSvgAvailable;
-  [self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG].enabled = isPdfToSvgAvailable;
-  [self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG].toolTip = isPdfToSvgAvailable ? nil :
-    [NSString stringWithFormat:NSLocalizedString(@"%@ is required", @"%@ is required"), @"pdf2svg"];
+  BOOL isPdfToSvgAvailable = [[AppController appController] isPdfToSvgAvailable];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setEnabled:isPdfToSvgAvailable];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setToolTip:isPdfToSvgAvailable ? nil :
+    [NSString stringWithFormat:NSLocalizedString(@"%@ is required", @""), @"pdf2svg"]];
   
-  BOOL isPerlWithLibXMLAvailable = [AppController appController].perlWithLibXMLAvailable;
-  [self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML].enabled = isPerlWithLibXMLAvailable;
-  [self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML].toolTip = isPerlWithLibXMLAvailable ? nil :
-    NSLocalizedString(@"The XML::LibXML perl module must be installed", @"The XML::LibXML perl module must be installed");
+  BOOL isPerlWithLibXMLAvailable = [[AppController appController] isPerlWithLibXMLAvailable];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML] setEnabled:isPerlWithLibXMLAvailable];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML] setToolTip:isPerlWithLibXMLAvailable ? nil :
+    NSLocalizedString(@"The XML::LibXML perl module must be installed", @"")];
 
-  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_TEXT] setTitle:NSLocalizedString(@"Text", @"Text")];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_TEXT] setTitle:NSLocalizedString(@"Text", @"")];
   
   [self setExportFormat:[PreferencesController sharedController].exportFormatCurrentSession];
   
@@ -196,7 +196,7 @@
       [[PreferencesController sharedController] setExportAddTempFilePersistent:([dragThroughButton state] == NSOnState)];
       [[PreferencesController sharedController] setExportAddTempFileCurrentSession:([dragThroughButton state] == NSOnState)];
       [self dragFilterWindowController:self exportFormatDidChange:[[PreferencesController sharedController] exportFormatCurrentSession]];
-      [dragThroughButton performSelector:@selector(setCanTrackMouse:) withObject:[NSNumber numberWithBool:YES] afterDelay:2];
+      [dragThroughButton performSelector:@selector(setCanTrackMouse:) withObject:@(YES) afterDelay:2];
     }//end if (dragThroughButton == self->addTempFileButton)
     else if ([dragThroughButton state] == NSOnState)
     {

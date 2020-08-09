@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -263,7 +263,8 @@
                                     <action selector="showOrHidePreamble:" target="210" id="1243"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Afficher le dernier rapport d'exécution..." id="217">
+                            <menuItem title="Afficher le dernier rapport d'exécution..." allowsKeyEquivalentWhenHidden="YES" id="217">
+                                <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="displayLog:" target="210" id="218"/>
                                 </connections>
@@ -645,7 +646,7 @@ CA
             <connections>
                 <outlet property="delegate" destination="210" id="221"/>
             </connections>
-            <point key="canvasLocation" x="139" y="153"/>
+            <point key="canvasLocation" x="139" y="154"/>
         </menu>
         <customObject id="210" userLabel="AppController" customClass="AppController">
             <connections>
@@ -660,7 +661,6 @@ CA
         </customObject>
         <window title="Lisez-moi" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1117" userLabel="readmeWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="472" y="197" width="552" height="542"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <value key="minSize" type="size" width="213" height="107"/>
@@ -668,14 +668,14 @@ CA
                 <rect key="frame" x="0.0" y="0.0" width="552" height="542"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1116">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1116">
                         <rect key="frame" x="0.0" y="0.0" width="552" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" ambiguous="YES" id="FxI-nZ-V2g">
+                        <clipView key="contentView" id="0AC-ri-Cok">
                             <rect key="frame" x="1" y="1" width="550" height="549"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <textView ambiguous="YES" editable="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1118">
+                                <textView editable="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="1118">
                                     <rect key="frame" x="0.0" y="0.0" width="550" height="549"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -687,6 +687,7 @@ CA
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
+                        <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="1655">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
@@ -698,6 +699,7 @@ CA
                     </scrollView>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="139" y="-211"/>
         </window>
         <customObject id="1216" userLabel="Font Manager" customClass="NSFontManager"/>
         <window title="Faire un don…" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1409" userLabel="donationPanel" customClass="NSPanel">
@@ -710,9 +712,9 @@ CA
                 <rect key="frame" x="0.0" y="0.0" width="388" height="162"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="350" translatesAutoresizingMaskIntoConstraints="NO" id="1411">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="350" id="1411">
                         <rect key="frame" x="17" y="20" width="354" height="122"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" id="1646">
                             <font key="font" metaFont="system"/>
                             <string key="title">Si vous voulez faire un don pour LaTeXiT, vous pouvez accéder à mon compte Paypal depuis mon site web.
@@ -724,9 +726,9 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="1412">
+                    <button tag="1" id="1412">
                         <rect key="frame" x="72" y="69" width="244" height="29"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="bevel" title=" Aller sur le site Web de LaTeXiT…" bezelStyle="regularSquare" alignment="center" borderStyle="border" tag="1" inset="2" id="1647">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -737,6 +739,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                     </button>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="139" y="-671"/>
         </window>
         <window title="Pense-bête" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1461" userLabel="ColorWarningWindow">
             <windowStyleMask key="styleMask" titled="YES"/>
@@ -748,17 +751,17 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                 <rect key="frame" x="0.0" y="0.0" width="448" height="195"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1464">
+                    <button id="1464">
                         <rect key="frame" x="99" y="58" width="250" height="18"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Ne plus afficher cette mise en garde" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="1649">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="410" translatesAutoresizingMaskIntoConstraints="NO" id="1463">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="410" id="1463">
                         <rect key="frame" x="17" y="90" width="414" height="85"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="justified" id="1648">
                             <font key="font" metaFont="system"/>
                             <string key="title">Vous avez sélectionné le Blanc pour l'équation. Veuillez noter qu'un dysfonctionnement de Ghoscript peut empêcher le résultat d'être découpé correctement. Pour corriger cela, vous pouvez soit agrandir les marges (avec le menu Palettes &gt; Marges) soit choisir une couleur « presque blanche ».</string>
@@ -766,9 +769,9 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="1465">
+                    <button verticalHuggingPriority="750" tag="1" id="1465">
                         <rect key="frame" x="352" y="12" width="82" height="32"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="1650">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -777,9 +780,9 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                             <action selector="returnFromWhiteColorWarningWindow:" target="210" id="1472"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1466">
+                    <button verticalHuggingPriority="750" id="1466">
                         <rect key="frame" x="262" y="12" width="90" height="32"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Annuler" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1651">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -790,6 +793,7 @@ Vous n'avez absolument aucune obligation, LaTeXiT est un graticiel et vous pouve
                     </button>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="139" y="-958"/>
         </window>
         <userDefaultsController id="1467" userLabel="User Defaults Controller">
             <declaredKeys>

@@ -4,7 +4,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -79,38 +79,38 @@ static int kExportContext = 0;
 
 -(void) awakeFromNib
 {
-  NSPanel* window = (NSPanel*)self.window;
-  [window setTitle:NSLocalizedString(@"Library", @"Library")];
+  NSPanel* window = (NSPanel*)[self window];
+  [window setTitle:NSLocalizedString(@"Library", @"")];
   [window setHidesOnDeactivate:NO];//prevents from disappearing when LaTeXiT is not active
   [window setFloatingPanel:NO];//prevents from floating always above
   [window setFrameAutosaveName:@"library"];
   //[window setBecomesKeyOnlyIfNeeded:YES];//we could try that to enable item selecting without activating the window first
   //but this prevents keyDown events
 
-  [self->importHomeButton setToolTip:NSLocalizedString(@"Reach default library", @"Reach default library")];
+  [self->importHomeButton setToolTip:NSLocalizedString(@"Reach default library", @"")];
   [self->importOptionPopUpButton removeAllItems];
-  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current library", @"Add to current library")];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current library", @"")];
   [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_MERGE];
-  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current library", @"Overwrite current library")];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current library", @"")];
   [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_OVERWRITE];
-  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Change library in use", @"Change library in use")];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Change library in use", @"")];
   [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_OPEN];
 
-  [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"Export the selection only")];
-  [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"Format :")];
-  NSPoint point = self->exportFormatPopUpButton.frame.origin;
-  [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX(self->exportFormatLabel.frame)+6, point.y)];
+  [self->exportOnlySelectedButton setTitle:NSLocalizedString(@"Export the selection only", @"")];
+  [self->exportFormatLabel setStringValue:NSLocalizedString(@"Format :", @"")];
+  NSPoint point = [self->exportFormatPopUpButton frame].origin;
+  [self->exportFormatPopUpButton setFrameOrigin:NSMakePoint(NSMaxX([self->exportFormatLabel frame])+6, point.y)];
   [self->exportFormatPopUpButton removeAllItems];
-  [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"LaTeXiT", @"LaTeXiT")];
+  [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"LaTeXiT", @"")];
   [[self->exportFormatPopUpButton lastItem] setTag:(NSInteger)LIBRARY_EXPORT_FORMAT_INTERNAL];
-  [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"XML (Property list)", @"XML (Property list)")];
+  [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"XML (Property list)", @"")];
   [[self->exportFormatPopUpButton lastItem] setTag:(NSInteger)LIBRARY_EXPORT_FORMAT_PLIST];
-  [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"TeX Source", @"TeX Source")];
+  [self->exportFormatPopUpButton addItemWithTitle:NSLocalizedString(@"TeX Source", @"")];
   [[self->exportFormatPopUpButton lastItem] setTag:(NSInteger)LIBRARY_EXPORT_FORMAT_TEX_SOURCE];
   
-  [self->exportOptionCommentedPreamblesButton setTitle:NSLocalizedString(@"Export commented preambles", @"Export commented preambles")];
-  [self->exportOptionUserCommentsButton setTitle:NSLocalizedString(@"Export user comments", @"Export user comments")];
-  [self->exportOptionIgnoreTitleHierarchyButton setTitle:NSLocalizedString(@"Ignore title hierarchy", @"Ignore title hierarchy")];
+  [self->exportOptionCommentedPreamblesButton setTitle:NSLocalizedString(@"Export commented preambles", @"")];
+  [self->exportOptionUserCommentsButton setTitle:NSLocalizedString(@"Export user comments", @"")];
+  [self->exportOptionIgnoreTitleHierarchyButton setTitle:NSLocalizedString(@"Ignore title hierarchy", @"")];
   [self->exportOptionCommentedPreamblesButton sizeToFit];
   [self->exportOptionUserCommentsButton sizeToFit];
   [self->exportOptionIgnoreTitleHierarchyButton sizeToFit];
@@ -118,30 +118,30 @@ static int kExportContext = 0;
   NSMenu* actionMenu = [[NSMenu alloc] init];
   NSMenuItem* menuItem = nil;  
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a document", @"Open the equation in a document") action:@selector(openEquation:) keyEquivalent:@""].target = self;
-  menuItem = [actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a linked document", @"Open the equation in a linked document") action:@selector(openLinkedEquation:) keyEquivalent:@""];
-  menuItem.target = self;
-  menuItem.keyEquivalentModifierMask = NSAlternateKeyMask;
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a document", @"") action:@selector(openEquation:) keyEquivalent:@""] setTarget:self];
+  menuItem = [actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a linked document", @"") action:@selector(openLinkedEquation:) keyEquivalent:@""];
+  [menuItem setTarget:self];
+  [menuItem setKeyEquivalentModifierMask:NSAlternateKeyMask];
   [menuItem setAlternate:YES];
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [actionMenu addItemWithTitle:NSLocalizedString(@"Add a folder", @"Add a folder") action:@selector(newFolder:) keyEquivalent:@""].target = self;
-  [actionMenu addItemWithTitle:NSLocalizedString(@"Add current equation", @"Add current equation") action:@selector(importCurrent:) keyEquivalent:@""].target = self;
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Add a folder", @"") action:@selector(newFolder:) keyEquivalent:@""] setTarget:self];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Add current equation", @"") action:@selector(importCurrent:) keyEquivalent:@""] setTarget:self];
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [actionMenu addItemWithTitle:NSLocalizedString(@"Rename selection", @"Rename selection") action:@selector(renameItem:) keyEquivalent:@""].target = self;
-  [actionMenu addItemWithTitle:NSLocalizedString(@"Remove selection", @"Remove selection") action:@selector(removeSelectedItems:) keyEquivalent:@""].target = self;
-  [actionMenu addItemWithTitle:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation") action:@selector(refreshItems:) keyEquivalent:@""].target = self;
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Rename selection", @"") action:@selector(renameItem:) keyEquivalent:@""] setTarget:self];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Remove selection", @"") action:@selector(removeSelectedItems:) keyEquivalent:@""] setTarget:self];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Replace selection by current equation", @"") action:@selector(refreshItems:) keyEquivalent:@""] setTarget:self];
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [actionMenu addItemWithTitle:NSLocalizedString(@"Show comments pane", @"Show comments pane") action:@selector(toggleCommentsPane:) keyEquivalent:@""].target = self;
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Show comments pane", @"") action:@selector(toggleCommentsPane:) keyEquivalent:@""] setTarget:self];
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"latexize selection again", @"latexize selection again") action:@selector(relatexizeSelectedItems:) keyEquivalent:@""] setTarget:self];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"latexize selection again", @"") action:@selector(relatexizeSelectedItems:) keyEquivalent:@""] setTarget:self];
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"Import...") action:@selector(open:) keyEquivalent:@""] setTarget:self];
-  [[actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"Export...") action:@selector(saveAs:) keyEquivalent:@""] setTarget:self];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Import...", @"") action:@selector(open:) keyEquivalent:@""] setTarget:self];
+  [[actionMenu addItemWithTitle:NSLocalizedString(@"Export...", @"") action:@selector(saveAs:) keyEquivalent:@""] setTarget:self];
   [self->actionButton setMenu:actionMenu];
   actionMenu.delegate = self;
   [self->actionButton setToolTip:NSLocalizedString(@"Add to current library", @"Add to current library")];
   
-  [self->libraryPreviewPanelSegmentedControl setToolTip:NSLocalizedString(@"Display the equations in real size on mouse over", @"Display the equations in real size on mouse over")];
+  [self->libraryPreviewPanelSegmentedControl setToolTip:NSLocalizedString(@"Display the equations in real size on mouse over", @"")];
   
   [self->libraryPreviewPanel setFloatingPanel:YES];
   self->libraryPreviewPanel.backgroundColor = [NSColor clearColor];
@@ -244,10 +244,9 @@ static int kExportContext = 0;
   [self->commentTextView setEditable:(libraryEquation != nil)];
   [self->commentTextView setString:!comment ? @"" : comment];
   NSUInteger pdfDataSizeKB = ([[latexitEquation pdfData] length]+1023)/1024;
-  NSString* sizeKBAsString = !pdfDataSizeKB ? nil :
-    [self->commentSizeFormatter stringFromNumber:[NSNumber numberWithUnsignedInteger:pdfDataSizeKB]];
+  NSString* sizeKBAsString = !pdfDataSizeKB ? nil : [self->commentSizeFormatter stringFromNumber:@(pdfDataSizeKB)];
   [self->commentTextField setStringValue:!sizeKBAsString ? @"" :
-    [NSString stringWithFormat:@"%@ %@", sizeKBAsString, NSLocalizedString(@"KB", @"KB")]];
+    [NSString stringWithFormat:@"%@ %@", sizeKBAsString, NSLocalizedString(@"KB", @"")]];
 }
 //end refreshCommentsPane:
 
@@ -379,7 +378,7 @@ static int kExportContext = 0;
     newLibraryEquation.sortIndex = nbBrothers;
     [newLibraryEquation setBestTitle];
     [managedObjectContext processPendingChanges];
-    [undoManager setActionName:NSLocalizedString(@"Add Library item", @"Add Library item")];
+    [undoManager setActionName:NSLocalizedString(@"Add Library item", @"")];
   }//end if (newLibraryEquation)
   [undoManager endUndoGrouping];
   [self->libraryView reloadData];
@@ -445,7 +444,7 @@ static int kExportContext = 0;
     newLibraryGroupItem.sortIndex = nbBrothers;
     [newLibraryGroupItem setTitle:NSLocalizedString(@"Untitled", @"Untitled")];
     [managedObjectContext processPendingChanges];
-    [undoManager setActionName:NSLocalizedString(@"Add Library folder", @"Add Library folder")];
+    [undoManager setActionName:NSLocalizedString(@"Add Library folder", @"")];
   }//end if (newLibraryGroupItem)
   [undoManager endUndoGrouping];
   [self->libraryView reloadData];
@@ -644,7 +643,7 @@ static int kExportContext = 0;
           NSDate* next = [now dateByAddingTimeInterval:1./30.];
           [NSThread sleepUntilDate:next];
         }
-        [undoManager setActionName:NSLocalizedString(@"Replace selection by current equation", @"Replace selection by current equation")];
+        [undoManager setActionName:NSLocalizedString(@"Replace selection by current equation", @"")];
         [undoManager endUndoGrouping];
         [self->libraryView selectRowIndexes:itemIndexes byExtendingSelection:NO];
         //we restore the delegate notification receiving
@@ -675,20 +674,16 @@ static int kExportContext = 0;
 -(IBAction) open:(id)sender
 {
   NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  openPanel.delegate = self;
-  [openPanel setTitle:NSLocalizedString(@"Import library...", @"Import library...")];
+  [openPanel setDelegate:(id)self];
+  [openPanel setTitle:NSLocalizedString(@"Import library...", @"")];
   openPanel.accessoryView = importAccessoryView;
-  openPanel.allowedFileTypes = @[@"latexlib", @"latexhist", @"library", @"plist", @"tex"];
-  if ([[self window] isVisible]) {
-    [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
+  [openPanel setAllowedFileTypes:@[@"latexlib", @"latexhist", @"library", @"plist", @"tex"]];
+  if ([[self window] isVisible])
+    [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
       [self sheetDidEnd:openPanel returnCode:result contextInfo:&kImportContext];
     }];
-  }
-  else//if (isMacOS10_6OrAbove())
-  {
-    NSInteger returnCode = [openPanel runModal];
-    [self sheetDidEnd:openPanel returnCode:returnCode contextInfo:&kImportContext];
-  }//end if (isMacOS10_6OrAbove())
+  else
+    [self sheetDidEnd:openPanel returnCode:[openPanel runModal] contextInfo:&kImportContext];
 }
 //end open:
 
@@ -698,13 +693,13 @@ static int kExportContext = 0;
   BOOL isLaTeXiTLibrary = [[selectedFileName pathExtension] isEqualToString:@"latexlib"];
   NSUInteger selectedIndex = [self->importOptionPopUpButton indexOfSelectedItem];
   [self->importOptionPopUpButton removeAllItems];
-  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current library", @"Add to current library")];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Add to current library", @"")];
   [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_MERGE];
-  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current library", @"Overwrite current library")];
+  [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Overwrite current library", @"")];
   [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_OVERWRITE];
   if (isLaTeXiTLibrary)
   {
-    [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Change library in use", @"Change library in use")];
+    [self->importOptionPopUpButton addItemWithTitle:NSLocalizedString(@"Change library in use", @"")];
     [[self->importOptionPopUpButton lastItem] setTag:(NSInteger)LIBRARY_IMPORT_OPEN];
   }//end if (isLaTeXiTLibrary)
   if (selectedIndex >= self->importOptionPopUpButton.itemArray.count)
@@ -715,7 +710,8 @@ static int kExportContext = 0;
 
 -(IBAction) openDefaultLibraryPath:(id)sender
 {
-  ((NSOpenPanel*)importAccessoryView.window).directoryURL = [NSURL fileURLWithPath:[[LibraryManager sharedManager] defaultLibraryPath].stringByDeletingLastPathComponent];
+  NSString* filePath = [[[LibraryManager sharedManager] defaultLibraryPath] stringByDeletingLastPathComponent];
+  [(NSOpenPanel*)[importAccessoryView window] setDirectoryURL:(!filePath ? nil : [NSURL fileURLWithPath:filePath])];
 }
 //end openDefaultLibraryPath:
 
@@ -728,11 +724,12 @@ static int kExportContext = 0;
   [self->savePanel setAccessoryView:self->exportAccessoryView];
   [self->exportOnlySelectedButton setState:NSOffState];
   [self->exportOnlySelectedButton setEnabled:([self->libraryView selectedRow] >= 0)];
-  if ([[self window] isVisible]) {
-    [self->savePanel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
+  [self->savePanel setNameFieldStringValue:NSLocalizedString(@"Untitled", @"")];
+  if ([[self window] isVisible])
+    [self->savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
       [self sheetDidEnd:self->savePanel returnCode:result contextInfo:&kExportContext];
     }];
-  } else
+  else
     [self sheetDidEnd:self->savePanel returnCode:[self->savePanel runModal] contextInfo:&kExportContext];
 }
 //end saveAs:
@@ -744,12 +741,11 @@ static int kExportContext = 0;
     case LIBRARY_EXPORT_FORMAT_INTERNAL:
       [self->exportAccessoryView setFrame:
         NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"latexlib", nil]];
+      [self->savePanel setAllowedFileTypes:@[@"latexlib"]];
       break;
     case LIBRARY_EXPORT_FORMAT_PLIST:
-      [self->exportAccessoryView setFrame:
-       NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
-      [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"plist", nil]];
+      [self->exportAccessoryView setFrame:NSMakeRect(0, 0, NSMaxX([self->exportFormatPopUpButton frame])+20, 82)];
+      [self->savePanel setAllowedFileTypes:@[@"plist"]];
       break;
     case LIBRARY_EXPORT_FORMAT_TEX_SOURCE:
       self->exportAccessoryView.frame = NSMakeRect(0, 0, 
@@ -758,7 +754,7 @@ static int kExportContext = 0;
                  MAX(NSMaxX([self->exportOptionUserCommentsButton frame]),
                      NSMaxX([self->exportOptionIgnoreTitleHierarchyButton frame])))),
                   156);
-      [self->savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"tex", nil]];
+      [self->savePanel setAllowedFileTypes:@[@"tex"]];
       break;
   }
 }
@@ -896,8 +892,8 @@ static int kExportContext = 0;
     [tableColumnImportButton bind:NSEnabled2Binding toObject:self->importTeXArrayController
       withKeyPath:@"arrangedObjects.checked" options:nil];
     [tableColumnImportButton bind:NSEnabled3Binding toObject:self->importTeXArrayController
-                      withKeyPath:@"arrangedObjects.importState" options:
-       @{NSValueTransformerBindingOption: [IsNotEqualToTransformer transformerWithReference:@1]}];
+                      withKeyPath:[NSString stringWithFormat:@"arrangedObjects.importState"] options:
+       @{NSValueTransformerBindingOption:[IsNotEqualToTransformer transformerWithReference:@1]}];
     [tableColumnImportState bind:NSEnabledBinding toObject:self->importTeXArrayController
       withKeyPath:@"arrangedObjects.enabled" options:nil];
     [tableColumnImportState bind:NSValueBinding toObject:self->importTeXArrayController
@@ -974,15 +970,15 @@ static int kExportContext = 0;
   if (contextInfo == &kImportContext)
   {
     NSOpenPanel* openPanel = [sheet dynamicCastToClass:[NSOpenPanel class]];
-    library_import_option_t import_option = [importOptionPopUpButton selectedTag];
+    library_import_option_t import_option = (library_import_option_t)[importOptionPopUpButton selectedTag];
     if (returnCode == NSModalResponseOK)
     {
       BOOL ok = [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option parent:nil];
       if (!ok)
       {
         NSAlert* alert = [NSAlert
-          alertWithMessageText:NSLocalizedString(@"Loading error", @"Loading error")
-                 defaultButton:NSLocalizedString(@"OK", @"OK")
+          alertWithMessageText:NSLocalizedString(@"Loading error", @"")
+                 defaultButton:NSLocalizedString(@"OK", @"")
                alternateButton:nil otherButton:nil
      informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"The file does not appear to be a valid format")];
        [alert runModal];
@@ -1002,19 +998,19 @@ static int kExportContext = 0;
     {
       BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
       NSArray* selectedLibraryItems = [self->libraryView selectedItems];
-      NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:
-        [NSNumber numberWithBool:([self->exportOptionCommentedPreamblesButton state] == NSOnState)], @"exportCommentedPreambles",
-        [NSNumber numberWithBool:([self->exportOptionUserCommentsButton state] == NSOnState)], @"exportUserComments",
-        [NSNumber numberWithBool:([self->exportOptionIgnoreTitleHierarchyButton state] == NSOnState)], @"ignoreTitleHierarchy",
-        nil];
+      NSDictionary* options = @{
+        @"exportCommentedPreambles":@([self->exportOptionCommentedPreamblesButton state] == NSOnState),
+        @"exportUserComments":@([self->exportOptionUserCommentsButton state] == NSOnState),
+        @"ignoreTitleHierarchy":@([self->exportOptionIgnoreTitleHierarchyButton state] == NSOnState),
+      };
       BOOL ok = [[LibraryManager sharedManager] saveAs:[[theSavePanel URL] path] onlySelection:onlySelection selection:selectedLibraryItems
-                                                format:[exportFormatPopUpButton selectedTag]
+                                                format:(library_export_format_t)[exportFormatPopUpButton selectedTag]
                                                options:options];
       if (!ok)
       {
         NSAlert* alert = [NSAlert
-          alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"An error occured while saving.")
-                 defaultButton:NSLocalizedString(@"OK", @"OK")
+          alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"")
+                 defaultButton:NSLocalizedString(@"OK", @"")
                alternateButton:nil otherButton:nil
      informativeTextWithFormat:nil];
        [alert runModal];

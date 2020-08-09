@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -264,6 +264,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem title="Display last log..." id="217">
+                                <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="displayLog:" target="210" id="218"/>
                                 </connections>
@@ -674,11 +675,11 @@ CA
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1116">
                         <rect key="frame" x="0.0" y="0.0" width="586" height="577"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" ambiguous="YES" id="Gia-5M-de7">
+                        <clipView key="contentView" ambiguous="YES" id="K5r-Tz-ecf">
                             <rect key="frame" x="1" y="1" width="584" height="575"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <textView ambiguous="YES" editable="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1118">
+                                <textView ambiguous="YES" editable="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="1118">
                                     <rect key="frame" x="0.0" y="0.0" width="584" height="575"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -713,7 +714,7 @@ CA
                 <rect key="frame" x="0.0" y="0.0" width="354" height="167"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="316" translatesAutoresizingMaskIntoConstraints="NO" id="1353">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="316" id="1353">
                         <rect key="frame" x="17" y="20" width="320" height="127"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" id="1581">
@@ -727,7 +728,7 @@ You have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it th
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="1358">
+                    <button tag="1" id="1358">
                         <rect key="frame" x="82" y="71" width="190" height="29"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="bevel" title=" Go to LaTeXiT web site…" bezelStyle="regularSquare" alignment="center" borderStyle="border" tag="1" inset="2" id="1582">
@@ -743,6 +744,7 @@ You have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it th
             <connections>
                 <outlet property="initialFirstResponder" destination="1358" id="1362"/>
             </connections>
+            <point key="canvasLocation" x="139" y="-24"/>
         </window>
         <window title="Reminder" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1404" userLabel="ColorWarningWindow">
             <windowStyleMask key="styleMask" titled="YES"/>
@@ -754,7 +756,7 @@ You have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it th
                 <rect key="frame" x="0.0" y="0.0" width="448" height="178"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1406">
+                    <button id="1406">
                         <rect key="frame" x="112" y="58" width="224" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Do not show that warning again" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="1583">
@@ -762,7 +764,7 @@ You have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it th
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="410" translatesAutoresizingMaskIntoConstraints="NO" id="1407">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="410" id="1407">
                         <rect key="frame" x="17" y="90" width="414" height="68"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="justified" id="1584">
@@ -772,7 +774,7 @@ You have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it th
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="1408">
+                    <button verticalHuggingPriority="750" tag="1" id="1408">
                         <rect key="frame" x="352" y="12" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="1585">
@@ -783,7 +785,7 @@ You have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it th
                             <action selector="returnFromWhiteColorWarningWindow:" target="210" id="1417"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1409">
+                    <button verticalHuggingPriority="750" id="1409">
                         <rect key="frame" x="270" y="12" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1586">
@@ -796,6 +798,7 @@ You have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it th
                     </button>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="778" y="147"/>
         </window>
         <userDefaultsController id="1410" userLabel="User Defaults Controller">
             <declaredKeys>

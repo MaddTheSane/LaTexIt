@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 04/11/13.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "CHDragFileWrapper.h"
@@ -41,7 +41,7 @@
 
 -(id) pasteboardPropertyListForType:(NSString*)type
 {
-  NSURL* result = [NSURL fileURLWithPath:self->fileName];
+  NSURL* result = !self->fileName ? nil : [NSURL fileURLWithPath:self->fileName];
   return result;
 }
 //end pasteboardPropertyListForType:

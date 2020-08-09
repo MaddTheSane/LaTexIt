@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 24/03/06.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "CompositionConfigurationsWindowController.h"
@@ -68,7 +68,7 @@
   {
     NSInteger index = [[PreferencesController sharedController] compositionConfigurationsDocumentIndex];
     //for some reason, this GUI modification must be delayed
-    [self performSelector:@selector(compositionConfigurationsCurrentPopUpButtonSetSelectedIndex:) withObject:[NSNumber numberWithInteger:index] afterDelay:0.];
+    [self performSelector:@selector(compositionConfigurationsCurrentPopUpButtonSetSelectedIndex:) withObject:@(index) afterDelay:0.];
   }
 }
 //end observeValueForKeyPath:ofObject:change:context:
@@ -83,7 +83,7 @@
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
   NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
-  if (!IsBetween_N(1, selectedIndex+1, [compositionConfigurations count]))
+  if (!IsBetween_N(1, selectedIndex+1, (signed)[compositionConfigurations count]))
   {
     [[AppController appController] showPreferencesPaneWithItemIdentifier:CompositionToolbarItemIdentifier options:nil];
     [[[AppController appController] preferencesWindowController] compositionConfigurationsManagerOpen:sender];

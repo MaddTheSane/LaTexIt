@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "DocumentExtraPanelsController.h"
@@ -50,11 +50,13 @@
   self->saveAccessoryViewExportScalePercent         = preferencesController.exportScalePercent;
   self->saveAccessoryViewOptionsJpegQualityPercent  = preferencesController.exportJpegQualityPercent;
   self->saveAccessoryViewOptionsJpegBackgroundColor = preferencesController.exportJpegBackgroundColor;
-  self->saveAccessoryViewOptionsSvgPdfToSvgPath     = preferencesController.exportSvgPdfToSvgPath;
-  self->saveAccessoryViewOptionsTextExportPreamble         = preferencesController.exportTextExportPreamble;
-  self->saveAccessoryViewOptionsTextExportEnvironment      = preferencesController.exportTextExportEnvironment;
+  self->saveAccessoryViewOptionsSvgPdfToSvgPath     = [preferencesController exportSvgPdfToSvgPath];
+  self->saveAccessoryViewOptionsTextExportPreamble         = [preferencesController exportTextExportPreamble];
+  self->saveAccessoryViewOptionsTextExportEnvironment      = [preferencesController exportTextExportEnvironment];
   self->saveAccessoryViewOptionsTextExportBody             = preferencesController.exportTextExportBody;
-  [self instantiateWithOwner:self topLevelObjects:nil];
+  NSArray *tmpNibs;
+  [self instantiateWithOwner:self topLevelObjects:&tmpNibs];
+  self->nibTopLevelObjects = tmpNibs;
   return self;
 }
 //end initWithLoadingFromNib
@@ -71,39 +73,39 @@
 
 -(void) awakeFromNib
 {
-  //[self->saveAccessoryView retain]; //to avoid unwanted deallocation when save panel is closed
-  [self->logWindow setTitle:NSLocalizedString(@"Execution log", @"Execution log")];
-  self->saveAccessoryViewFormatLabel.stringValue = [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Format", @"Format")];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF vector format", @"PDF vector format")
+  [self->logWindow setTitle:LocalLocalizedString(@"Execution log", @"")];
+  [self->saveAccessoryViewFormatLabel setStringValue:
+    [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Format", @"")]];
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF vector format", @"")
     tag:(NSInteger)EXPORT_FORMAT_PDF];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PDF with outlined fonts", @"")
     tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"EPS vector format", @"EPS vector format")
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"EPS vector format", @"")
     tag:(NSInteger)EXPORT_FORMAT_EPS];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"SVG vector format", @"SVG vector format")
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"SVG vector format", @"")
     tag:(NSInteger)EXPORT_FORMAT_SVG];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"TIFF bitmap format", @"TIFF bitmap format")
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"TIFF bitmap format", @"")
     tag:(NSInteger)EXPORT_FORMAT_TIFF];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PNG bitmap format", @"PNG bitmap format")
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"PNG bitmap format", @"")
     tag:(NSInteger)EXPORT_FORMAT_PNG];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"JPEG bitmap format", @"JPEG bitmap format")
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"JPEG bitmap format", @"")
     tag:(NSInteger)EXPORT_FORMAT_JPEG];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"MathML text format", @"MathML text format")
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"MathML text format", @"")
     tag:(NSInteger)EXPORT_FORMAT_MATHML];
-  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"Text format", @"Text format")
+  [self->saveAccessoryViewPopupFormat addItemWithTitle:LocalLocalizedString(@"Text format", @"")
     tag:(NSInteger)EXPORT_FORMAT_TEXT];
   [self->saveAccessoryViewOptionsButton setStringValue:
-    [NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"Options")]];
+    [NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Options", @"")]];
   [self->saveAccessoryViewScaleLabel setStringValue:
-    [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Scale", @"Scale")]];
+    [NSString stringWithFormat:@"%@ : ", LocalLocalizedString(@"Scale", @"")]];
   [self->saveAccessoryViewJpegWarning setTitle:
-    LocalLocalizedString(@"Warning : jpeg does not manage transparency", @"Warning : jpeg does not manage transparency")];
+    LocalLocalizedString(@"Warning : jpeg does not manage transparency", @"")];
   [self->saveAccessoryViewSvgWarning setTitle:
-    LocalLocalizedString(@"Warning : pdf2svg was not found", @"Warning : pdf2svg was not found")];
-  self->saveAccessoryViewSvgWarning.textColor = [NSColor redColor];
+    LocalLocalizedString(@"Warning : pdf2svg was not found", @"")];
+  [self->saveAccessoryViewSvgWarning setTextColor:[NSColor redColor]];
   [self->saveAccessoryViewMathMLWarning setTitle:
-   LocalLocalizedString(@"Warning : the XML::LibXML perl module was not found", @"Warning : the XML::LibXML perl module was not found")];
-  self->saveAccessoryViewMathMLWarning.textColor = [NSColor redColor];
+   LocalLocalizedString(@"Warning : the XML::LibXML perl module was not found", @"")];
+  [self->saveAccessoryViewMathMLWarning setTextColor:[NSColor redColor]];
   
   [self->saveAccessoryViewFormatLabel sizeToFit];
   [self->saveAccessoryViewPopupFormat sizeToFit];
@@ -259,8 +261,7 @@
     self->saveAccessoryViewMathMLWarning.hidden = (!isMathMLFormat || [AppController appController].perlWithLibXMLAvailable);
     if (isJpegFormat)
       self->currentSavePanel.allowedFileTypes = @[@"jpg", @"jpeg", (id)kUTTypeJPEG];
-    else
-      self->currentSavePanel.allowedFileTypes = @[extension];
+    [self->currentSavePanel setAllowedFileTypes:[NSArray arrayWithObjects:extension, nil]];
   }//end if ([keyPath isEqualToString:@"saveAccessoryViewExportFormat"])
   else if ([keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToSvgPath"])
   {
@@ -300,7 +301,7 @@
   self->saveAccessoryViewExportFormatOptionsPanes.pdfWofGSPDFCompatibilityLevel = self->saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
   self->saveAccessoryViewExportFormatOptionsPanes.pdfWofMetaDataInvisibleGraphicsEnabled = self->saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
   NSPanel* panelToOpen = nil;
-  export_format_t exportFormat = (export_format_t)self->saveAccessoryViewPopupFormat.selectedTag;
+  export_format_t exportFormat = (export_format_t)[self->saveAccessoryViewPopupFormat selectedTag];
   if (exportFormat == EXPORT_FORMAT_JPEG)
     panelToOpen = self->saveAccessoryViewExportFormatOptionsPanes.exportFormatOptionsJpegPanel;
   else if (exportFormat == EXPORT_FORMAT_SVG)

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "BodyTemplatesController.h"
@@ -29,6 +29,8 @@ static NSDictionary* noneBodyTemplate = nil;
   NSSet* result = nil;
   if ([key isEqualToString:@"arrangedObjectsNamesWithNone"])
     result = [NSSet setWithObjects:@"arrangedObjects", nil];
+  else
+    result = [NSSet set];
   return result;
 }
 //end keyPathsForValuesAffectingValueForKey:
@@ -180,10 +182,10 @@ static NSDictionary* noneBodyTemplate = nil;
   id modelObject = (selectedObjects && selectedObjects.count) ? selectedObjects[0] :
                    (objects && objects.count) ? objects[0] : nil;
   if (!modelObject)
-    result = [[[self class] defaultLocalizedBodyTemplateDictionaryEncoded] deepMutableCopy];
+    result = [[[self class] defaultLocalizedBodyTemplateDictionaryEncoded] mutableCopyDeep];
   else
   {
-    result = [modelObject deepMutableCopy];
+    result = [modelObject mutableCopyDeep];
     result[@"name"] = [NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", "Copy of %@"), result[@"name"]];
   }
   return result;
@@ -194,7 +196,7 @@ static NSDictionary* noneBodyTemplate = nil;
 {
   id newObject = [self newObject];
   [self addObject:newObject];
-  [self setSelectedObjects:@[newObject]];
+  [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
 }
 //end add:
 
@@ -203,10 +205,10 @@ static NSDictionary* noneBodyTemplate = nil;
 {
   NSInteger bodyTemplateLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedBodyTemplateIndexKey];
   NSInteger bodyTemplateServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedBodyTemplateIndexKey];
-  id bodyTemplateLaTeXisation = !IsBetween_N(1, bodyTemplateLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
-    self.arrangedObjects[bodyTemplateLaTeXisationIndex];
-  id bodyTemplateService = !IsBetween_N(1, bodyTemplateServiceIndex+1, [[self arrangedObjects] count]) ? nil :
-    self.arrangedObjects[bodyTemplateServiceIndex];
+  id bodyTemplateLaTeXisation = !IsBetween_N(1, bodyTemplateLaTeXisationIndex+1, (signed)[[self arrangedObjects] count]) ? nil :
+    [[self arrangedObjects] objectAtIndex:bodyTemplateLaTeXisationIndex];
+  id bodyTemplateService = !IsBetween_N(1, bodyTemplateServiceIndex+1, (signed)[[self arrangedObjects] count]) ? nil :
+    [[self arrangedObjects] objectAtIndex:bodyTemplateServiceIndex];
   [super moveObjectsAtIndices:indices toIndex:index];
   NSUInteger newBodyTemplateLaTeXisationIndex = [self.arrangedObjects indexOfObject:bodyTemplateLaTeXisation];
   NSUInteger newBodyTemplateServiceIndex      = [self.arrangedObjects indexOfObject:bodyTemplateService];

@@ -15,14 +15,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>v 2.13.5 (2019)
--The 2.13.* series will be the last one to support MacOS 10.6/10.7/10.8. The MacOS 10.9+ compatibility and application notarization will be available starting from LaTeXiT 2.14.0. The 2.13.* series will still be maintained as long as possible for minor fixes;
--equation colors were not restored correctly according to the screen color profile.
-2.13.5</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>LTXt</string>
 	<key>CFBundleVersion</key>
-	<string>2.13.5</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>LinkBackApplicationURL</key>

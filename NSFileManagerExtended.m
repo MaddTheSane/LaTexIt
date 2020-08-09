@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 29/03/08.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSFileManagerExtended.h"
@@ -54,7 +54,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
     NSString* tempFilenameTemplate = [workingDirectory stringByAppendingPathComponent:fileNameWithExtension];
     NSUInteger length = [tempFilenameTemplate lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
     char* tmpString = (char*)calloc(length+1, sizeof(char));
-    memcpy(tmpString, [tempFilenameTemplate fileSystemRepresentation], length); 
+    memcpy(tmpString, [tempFilenameTemplate fileSystemRepresentation], length);
     int fd = mkstemps(tmpString, (int)(fileNameWithExtension.length-templateString.length));
     if (fd != -1)
       fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd closeOnDealloc:YES];
@@ -78,7 +78,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
     result = [self createSymbolicLinkAtPath:linkPath withDestinationPath:targetPath error:nil];
   else
   {
-    NSDictionary* attributes = [self attributesOfItemAtPath:linkPath error:NULL];
+    NSDictionary* attributes = [self attributesOfItemAtPath:linkPath error:nil];
     if ([attributes[NSFileType] isEqualToString:NSFileTypeSymbolicLink])
       result = [[self destinationOfSymbolicLinkAtPath:linkPath error:nil] isEqualToString:targetPath];
     if (!result)
@@ -130,7 +130,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
     NSEnumerator* enumerator = [createdTemporaryPaths objectEnumerator];
     NSString* filePath = nil;
     while((filePath = [enumerator nextObject]))
-      [self removeItemAtPath:filePath error:0];
+      [self removeItemAtPath:filePath error:nil];
     [createdTemporaryPaths removeAllObjects];
   }//end @synchronized(self)
 }
@@ -138,15 +138,18 @@ static NSMutableSet* createdTemporaryPaths = nil;
 
 -(NSString*) UTIFromPath:(NSString*)path
 {
-  return [self UTIFromURL:[NSURL fileURLWithPath:path]];
+  NSString* result = nil;
+  if (path)
+    [[NSURL fileURLWithPath:path] getResourceValue:&result forKey:NSURLTypeIdentifierKey error:nil];
+  return result;
 };
 //end UTIFromPath:
 
 -(NSString*) UTIFromURL:(NSURL*)url
 {
-  id resVal = nil;
-  [url getResourceValue:&resVal forKey:NSURLTypeIdentifierKey error:NULL];
-  return resVal;
+  NSString* result = nil;
+  [url getResourceValue:&result forKey:NSURLTypeIdentifierKey error:nil];
+  return result;
 };
 //end UTIFromURL:
 

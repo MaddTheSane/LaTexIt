@@ -3,7 +3,7 @@
 //  LaTeXiT Helper
 //
 //  Created by Pierre Chatelier on 25/11/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXiT_HelperAppDelegate.h"
@@ -17,9 +17,9 @@
   BOOL published = [LinkBack publishServerWithName:@"LaTeXiT" delegate:self];
   if (!published)
     NSLog(@"LaTeXiT_Helper : published server failed");
-  NSArray* componentsOfSelfPath = [NSBundle mainBundle].bundlePath.pathComponents;
-  NSInteger count = componentsOfSelfPath.count;
-  NSArray* componentsOfOwnerPath = (count < 3) ? nil : [componentsOfSelfPath subarrayWithRange:NSMakeRange(0, count-3)];
+  NSArray* componentsOfSelfPath = [[[NSBundle mainBundle] bundlePath] pathComponents];
+  NSUInteger count = [componentsOfSelfPath count];
+  NSArray* componentsOfOwnerPath = (count < 4) ? nil : [componentsOfSelfPath subarrayWithRange:NSMakeRange(0, count-4)];
   NSString* ownerPath = [NSString pathWithComponents:componentsOfOwnerPath];
   if ([ownerPath.pathExtension.lowercaseString isEqualToString:@"app"])
     [[NSWorkspace sharedWorkspace] launchApplication:ownerPath];

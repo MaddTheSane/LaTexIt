@@ -2,13 +2,14 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
 #import "PreferencesWindowController.h"
 
 #import "AdditionalFilesController.h"
+#import "AdditionalFilesTableView.h"
 #import "AppController.h"
 #import "BodyTemplatesController.h"
 #import "BodyTemplatesTableView.h"
@@ -86,7 +87,6 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
 -(BOOL) validateMenuItem:(NSMenuItem*)sender;
 -(void) tableViewSelectionDidChange:(NSNotification*)notification;
 -(void) sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
--(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 -(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
 -(void) textDidChange:(NSNotification*)notification;
 -(void) historyVacuum:(id)sender;
@@ -138,8 +138,8 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     [compositionConfigurationsCurrentPopUpButton addItemsWithTitles:
       [[[PreferencesController sharedController] compositionConfigurationsController]
         valueForKeyPath:[@"arrangedObjects." stringByAppendingString:CompositionConfigurationNameKey]]];
-    [compositionConfigurationsCurrentPopUpButton.menu addItem:[NSMenuItem separatorItem]];
-    [compositionConfigurationsCurrentPopUpButton addItemWithTitle:NSLocalizedString(@"Edit the configurations...", @"Edit the configurations...")];
+    [[self->compositionConfigurationsCurrentPopUpButton menu] addItem:[NSMenuItem separatorItem]];
+    [self->compositionConfigurationsCurrentPopUpButton addItemWithTitle:NSLocalizedString(@"Edit the configurations...", @"")];
   }
   else if (object == [[PreferencesController sharedController] serviceRegularExpressionFiltersController])
     [self textDidChange:
@@ -209,23 +209,23 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
   //General
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF vector format", @"PDF vector format")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF vector format", @"")
     tag:(NSInteger)EXPORT_FORMAT_PDF];
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"PDF with outlined fonts")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"")
     tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"EPS vector format", @"EPS vector format")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"EPS vector format", @"")
     tag:(NSInteger)EXPORT_FORMAT_EPS];
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"SVG vector format", @"SVG vector format")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"SVG vector format", @"")
     tag:(NSInteger)EXPORT_FORMAT_SVG];
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"TIFF bitmap format", @"TIFF bitmap format")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"TIFF bitmap format", @"")
     tag:(NSInteger)EXPORT_FORMAT_TIFF];
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PNG bitmap format", @"PNG bitmap format")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PNG bitmap format", @"")
     tag:(NSInteger)EXPORT_FORMAT_PNG];
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"JPEG bitmap format", @"JPEG bitmap format")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"JPEG bitmap format", @"")
     tag:(NSInteger)EXPORT_FORMAT_JPEG];
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"MathML text format", @"MathML text format")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"MathML text format", @"")
     tag:(NSInteger)EXPORT_FORMAT_MATHML];
-  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"Text format", @"Text format")
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"Text format", @"")
     tag:(NSInteger)EXPORT_FORMAT_TEXT];
   [self->generalExportFormatPopupButton setTarget:self];
   [self->generalExportFormatPopupButton setAction:@selector(nilAction:)];
@@ -234,63 +234,62 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [generalExportScaleLabel bind:NSEnabledBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:EXPORT_FORMAT_MATHML]], NSValueTransformerBindingOption, nil]];
+      [IsNotEqualToTransformer transformerWithReference:@(EXPORT_FORMAT_MATHML)], NSValueTransformerBindingOption, nil]];
   [self->generalExportScalePercentTextField bind:NSEnabledBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:EXPORT_FORMAT_MATHML]], NSValueTransformerBindingOption, nil]];
-  [self->generalExportIncludeBackgroundColorCheckBox setTitle:NSLocalizedString(@"Include background color", @"Include background color")];
+      [IsNotEqualToTransformer transformerWithReference:@(EXPORT_FORMAT_MATHML)], NSValueTransformerBindingOption, nil]];
+  [self->generalExportIncludeBackgroundColorCheckBox setTitle:NSLocalizedString(@"Include background color", @"")];
   [self->generalExportIncludeBackgroundColorCheckBox bind:NSEnabledBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-                  [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:EXPORT_FORMAT_MATHML]], NSValueTransformerBindingOption, nil]];
+                  [IsNotEqualToTransformer transformerWithReference:@(EXPORT_FORMAT_MATHML)], NSValueTransformerBindingOption, nil]];
   [self->generalExportIncludeBackgroundColorCheckBox bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportIncludeBackgroundColorKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-                  [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+                  [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
                   NSValueTransformerBindingOption, nil]];
 
   [generalExportFormatOptionsButton bind:NSEnabledBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
-                                   options:@{NSValueTransformerBindingOption: [IsInTransformer transformerWithReferences:
-                                                                               @[@(EXPORT_FORMAT_JPEG),
-                                                                                 @(EXPORT_FORMAT_SVG),
-                                                                                 @(EXPORT_FORMAT_TEXT),
-                                                                                 @(EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)]]}];
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [IsInTransformer transformerWithReferences:
+        @[@(EXPORT_FORMAT_JPEG), @(EXPORT_FORMAT_SVG), @(EXPORT_FORMAT_TEXT), @(EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS), @(EXPORT_FORMAT_PDF)]],
+        NSValueTransformerBindingOption, nil]];
   [self->generalExportFormatOptionsButton setTarget:self];
   [self->generalExportFormatOptionsButton setAction:@selector(generalExportFormatOptionsOpen:)];
   [self->generalExportFormatJpegWarning setTitle:
-    NSLocalizedString(@"Warning : jpeg does not manage transparency", @"Warning : jpeg does not manage transparency")];
-  [generalExportFormatJpegWarning sizeToFit];
-  [generalExportFormatJpegWarning centerInSuperviewHorizontally:YES vertically:NO];
-  [generalExportFormatJpegWarning bind:NSHiddenBinding toObject:userDefaultsController
+    NSLocalizedString(@"Warning : jpeg does not manage transparency", @"")];
+  [self->generalExportFormatJpegWarning sizeToFit];
+  [self->generalExportFormatJpegWarning centerInSuperviewHorizontally:YES vertically:NO];
+  [self->generalExportFormatJpegWarning bind:NSHiddenBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [IsNotEqualToTransformer transformerWithReference:@(EXPORT_FORMAT_JPEG)], NSValueTransformerBindingOption, nil]];
   [self->generalExportFormatSvgWarning setTitle:
-    NSLocalizedString(@"Warning : pdf2svg was not found", @"Warning : pdf2svg was not found")];
-  [generalExportFormatSvgWarning sizeToFit];
-  [generalExportFormatSvgWarning centerInSuperviewHorizontally:YES vertically:NO];
-  generalExportFormatSvgWarning.textColor = [NSColor redColor];
-  [generalExportFormatSvgWarning bind:NSHiddenBinding toObject:userDefaultsController
+    NSLocalizedString(@"Warning : pdf2svg was not found", @"")];
+  [self->generalExportFormatSvgWarning sizeToFit];
+  [self->generalExportFormatSvgWarning centerInSuperviewHorizontally:YES vertically:NO];
+  [self->generalExportFormatSvgWarning setTextColor:[NSColor redColor]];
+  [self->generalExportFormatSvgWarning bind:NSHiddenBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:EXPORT_FORMAT_SVG]],
+      [IsNotEqualToTransformer transformerWithReference:@(EXPORT_FORMAT_SVG)],
       NSValueTransformerBindingOption, nil]];
   NSString* NSHidden2Binding = [NSHiddenBinding stringByAppendingString:@"2"];
   [generalExportFormatSvgWarning bind:NSHidden2Binding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportSvgPdfToSvgPathKey]
     options:@{NSValueTransformerBindingOption: [FileExistsTransformer transformerWithDirectoryAllowed:NO]}];
 
-  [generalExportFormatMathMLWarning setTitle:
-    NSLocalizedString(@"Warning : the XML::LibXML perl module was not found", @"Warning : the XML::LibXML perl module was not found")];
-  [generalExportFormatMathMLWarning sizeToFit];
-  [generalExportFormatMathMLWarning centerInSuperviewHorizontally:YES vertically:NO];
-  generalExportFormatMathMLWarning.textColor = [NSColor redColor];
-  [generalExportFormatMathMLWarning bind:NSHiddenBinding toObject:userDefaultsController
+  [self->generalExportFormatMathMLWarning setTitle:
+    NSLocalizedString(@"Warning : the XML::LibXML perl module was not found", @"")];
+  [self->generalExportFormatMathMLWarning sizeToFit];
+  [self->generalExportFormatMathMLWarning centerInSuperviewHorizontally:YES vertically:NO];
+  [self->generalExportFormatMathMLWarning setTextColor:[NSColor redColor]];
+  [self->generalExportFormatMathMLWarning bind:NSHiddenBinding toObject:userDefaultsController
                                 withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
                                     options:[NSDictionary dictionaryWithObjectsAndKeys:
-                                             [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:EXPORT_FORMAT_MATHML]],
+                                             [IsNotEqualToTransformer transformerWithReference:@(EXPORT_FORMAT_MATHML)],
                                              NSValueTransformerBindingOption, nil]];
   [self->generalExportFormatMathMLWarning bind:NSHidden2Binding toObject:[AppController appController]
                                    withKeyPath:@"isPerlWithLibXMLAvailable"
@@ -311,16 +310,16 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   NSUInteger segmentIndex = 0;
   NSSegmentedCell* latexModeSegmentedCell = generalLatexisationLaTeXModeSegmentedControl.cell;
   [latexModeSegmentedCell setTag:LATEX_MODE_AUTO    forSegment:segmentIndex];
-  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Auto", @"Auto") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Auto", @"") forSegment:segmentIndex++];
   [latexModeSegmentedCell setTag:LATEX_MODE_ALIGN   forSegment:segmentIndex];
-  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Align", @"Align") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Align", @"") forSegment:segmentIndex++];
   [latexModeSegmentedCell setTag:LATEX_MODE_DISPLAY forSegment:segmentIndex];
-  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Display", @"Display") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Display", @"") forSegment:segmentIndex++];
   [latexModeSegmentedCell setTag:LATEX_MODE_INLINE  forSegment:segmentIndex];
-  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Inline", @"Inline") forSegment:segmentIndex++];
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Inline", @"") forSegment:segmentIndex++];
   [latexModeSegmentedCell setTag:LATEX_MODE_TEXT    forSegment:segmentIndex];
-  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Text", @"Text") forSegment:segmentIndex++];
-  [generalLatexisationLaTeXModeSegmentedControl bind:NSSelectedTagBinding toObject:userDefaultsController
+  [latexModeSegmentedCell setLabel:NSLocalizedString(@"Text", @"") forSegment:segmentIndex++];
+  [self->generalLatexisationLaTeXModeSegmentedControl bind:NSSelectedTagBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DefaultModeKey] options:nil];
 
   [generalLatexisationFontSizeTextField bind:NSValueBinding toObject:userDefaultsController
@@ -474,7 +473,9 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     withKeyPath:@"arrangedObjectsNamesWithNone" options:nil];
   [bodyTemplatesNamesLatexisationPopUpButton bind:NSSelectedIndexBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:LatexisationSelectedBodyTemplateIndexKey] options:
-      @{NSValueTransformerBindingOption: [NSNumberIntegerShiftTransformer transformerWithShift:@1]}];
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        [NSNumberIntegerShiftTransformer transformerWithShift:@1],
+        NSValueTransformerBindingOption, nil]];
 
   //Composition configurations
   CompositionConfigurationsController* compositionConfigurationsController = [preferencesController compositionConfigurationsController];
@@ -515,10 +516,10 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     withKeyPath:@"selection" options:isNotNilBindingOptions];
   [compositionConfigurationsCurrentLoginShellUsedButton bind:NSValueBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationUseLoginShellKey] options:nil];
-  [compositionConfigurationsCurrentResetButton setTitle:NSLocalizedString(@"Reset...", @"Reset...")];
-  [compositionConfigurationsCurrentResetButton sizeToFit];
-  compositionConfigurationsCurrentResetButton.target = self;
-  compositionConfigurationsCurrentResetButton.action = @selector(compositionConfigurationsCurrentReset:);
+  [self->compositionConfigurationsCurrentResetButton setTitle:NSLocalizedString(@"Reset...", @"")];
+  [self->compositionConfigurationsCurrentResetButton sizeToFit];
+  [self->compositionConfigurationsCurrentResetButton setTarget:self];
+  [self->compositionConfigurationsCurrentResetButton setAction:@selector(compositionConfigurationsCurrentReset:)];
   
   NSDictionary* colorForFileExistsBindingOptions =
     @{NSValueTransformerBindingOption: [ComposedTransformer
@@ -549,15 +550,15 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   compositionConfigurationsCurrentPdfLaTeXPathChangeButton.target = self;
   compositionConfigurationsCurrentPdfLaTeXPathChangeButton.action = @selector(changePath:);
 
-  [compositionConfigurationsCurrentXeLaTeXPathTextField.cell setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"path to the Unix executable program")];
-  [compositionConfigurationsCurrentXeLaTeXPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
+  [[self->compositionConfigurationsCurrentXeLaTeXPathTextField cell] setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"")];
+  [self->compositionConfigurationsCurrentXeLaTeXPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationXeLatexPathKey] options:nil];
   [compositionConfigurationsCurrentXeLaTeXPathTextField bind:NSEnabledBinding toObject:compositionConfigurationsController
     withKeyPath:@"selection" options:isNotNilBindingOptions];
   [compositionConfigurationsCurrentXeLaTeXPathTextField bind:NSEnabled2Binding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_XELATEX]], NSValueTransformerBindingOption, nil]];
+          [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_XELATEX)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentXeLaTeXPathTextField bind:NSTextColorBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationXeLatexPathKey] options:colorForFileExistsBindingOptions];
 
@@ -566,7 +567,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [compositionConfigurationsCurrentXeLaTeXAdvancedButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_XELATEX]], NSValueTransformerBindingOption, nil]];
+          [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_XELATEX)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentXeLaTeXAdvancedButton setTarget:self];
   [self->compositionConfigurationsCurrentXeLaTeXAdvancedButton setAction:@selector(compositionConfigurationsProgramArgumentsOpen:)];
 
@@ -575,11 +576,11 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [compositionConfigurationsCurrentXeLaTeXPathChangeButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_XELATEX]], NSValueTransformerBindingOption, nil]];
+          [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_XELATEX)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentXeLaTeXPathChangeButton setTarget:self];
   [self->compositionConfigurationsCurrentXeLaTeXPathChangeButton setAction:@selector(changePath:)];
 
-  [self->compositionConfigurationsCurrentLuaLaTeXPathTextField.cell setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"path to the Unix executable program")];
+  [[self->compositionConfigurationsCurrentLuaLaTeXPathTextField cell] setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"")];
   [self->compositionConfigurationsCurrentLuaLaTeXPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
                                                        withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationLuaLatexPathKey] options:nil];
   [self->compositionConfigurationsCurrentLuaLaTeXPathTextField bind:NSEnabledBinding toObject:compositionConfigurationsController
@@ -587,7 +588,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [self->compositionConfigurationsCurrentLuaLaTeXPathTextField bind:NSEnabled2Binding toObject:compositionConfigurationsController
                                                        withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
                                                            options:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                    [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_LUALATEX]], NSValueTransformerBindingOption, nil]];
+                                                                    [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_LUALATEX)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentLuaLaTeXPathTextField bind:NSTextColorBinding toObject:compositionConfigurationsController
                                                        withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationLuaLatexPathKey] options:colorForFileExistsBindingOptions];
   
@@ -596,7 +597,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [self->compositionConfigurationsCurrentLuaLaTeXAdvancedButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
                                                         withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
                                                             options:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                     [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_LUALATEX]], NSValueTransformerBindingOption, nil]];
+                                                                     [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_LUALATEX)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentLuaLaTeXAdvancedButton setTarget:self];
   [self->compositionConfigurationsCurrentLuaLaTeXAdvancedButton setAction:@selector(compositionConfigurationsProgramArgumentsOpen:)];
   
@@ -605,19 +606,19 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [self->compositionConfigurationsCurrentLuaLaTeXPathChangeButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
                                                           withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
                                                               options:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                       [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_LUALATEX]], NSValueTransformerBindingOption, nil]];
+                                                                       [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_LUALATEX)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentLuaLaTeXPathChangeButton setTarget:self];
   [self->compositionConfigurationsCurrentLuaLaTeXPathChangeButton setAction:@selector(changePath:)];
 
-  [compositionConfigurationsCurrentLaTeXPathTextField.cell setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"path to the Unix executable program")];
-  [compositionConfigurationsCurrentLaTeXPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
+  [[self->compositionConfigurationsCurrentLaTeXPathTextField cell] setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"")];
+  [self->compositionConfigurationsCurrentLaTeXPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationLatexPathKey] options:nil];
   [compositionConfigurationsCurrentLaTeXPathTextField bind:NSEnabledBinding toObject:compositionConfigurationsController
     withKeyPath:@"selection" options:isNotNilBindingOptions];
   [compositionConfigurationsCurrentLaTeXPathTextField bind:NSEnabled2Binding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_LATEXDVIPDF]], NSValueTransformerBindingOption, nil]];
+          [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_LATEXDVIPDF)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentLaTeXPathTextField bind:NSTextColorBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationLatexPathKey] options:colorForFileExistsBindingOptions];
 
@@ -626,7 +627,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [compositionConfigurationsCurrentLaTeXAdvancedButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_LATEXDVIPDF]], NSValueTransformerBindingOption, nil]];
+          [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_LATEXDVIPDF)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentLaTeXAdvancedButton setTarget:self];
   [self->compositionConfigurationsCurrentLaTeXAdvancedButton setAction:@selector(compositionConfigurationsProgramArgumentsOpen:)];
 
@@ -635,19 +636,19 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [compositionConfigurationsCurrentLaTeXPathChangeButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_LATEXDVIPDF]], NSValueTransformerBindingOption, nil]];
+          [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_LATEXDVIPDF)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentLaTeXPathChangeButton setTarget:self];
   [self->compositionConfigurationsCurrentLaTeXPathChangeButton setAction:@selector(changePath:)];
 
-  [compositionConfigurationsCurrentDviPdfPathTextField.cell setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"path to the Unix executable program")];
-  [compositionConfigurationsCurrentDviPdfPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
+  [[self->compositionConfigurationsCurrentDviPdfPathTextField cell] setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"")];
+  [self->compositionConfigurationsCurrentDviPdfPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationDviPdfPathKey] options:nil];
   [compositionConfigurationsCurrentDviPdfPathTextField bind:NSEnabledBinding toObject:compositionConfigurationsController
     withKeyPath:@"selection" options:isNotNilBindingOptions];
   [compositionConfigurationsCurrentDviPdfPathTextField bind:NSEnabled2Binding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_LATEXDVIPDF]], NSValueTransformerBindingOption, nil]];
+          [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_LATEXDVIPDF)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentDviPdfPathTextField bind:NSTextColorBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationDviPdfPathKey] options:colorForFileExistsBindingOptions];
 
@@ -656,7 +657,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [compositionConfigurationsCurrentDviPdfAdvancedButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_LATEXDVIPDF]], NSValueTransformerBindingOption, nil]];
+          [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_LATEXDVIPDF)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentDviPdfAdvancedButton setTarget:self];
   [self->compositionConfigurationsCurrentDviPdfAdvancedButton setAction:@selector(compositionConfigurationsProgramArgumentsOpen:)];
 
@@ -665,12 +666,12 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [compositionConfigurationsCurrentDviPdfPathChangeButton bind:NSEnabled2Binding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationCompositionModeKey]
         options:[NSDictionary dictionaryWithObjectsAndKeys:
-          [IsEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:COMPOSITION_MODE_LATEXDVIPDF]], NSValueTransformerBindingOption, nil]];
+          [IsEqualToTransformer transformerWithReference:@(COMPOSITION_MODE_LATEXDVIPDF)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsCurrentDviPdfPathChangeButton setTarget:self];
   [self->compositionConfigurationsCurrentDviPdfPathChangeButton setAction:@selector(changePath:)];
 
-  [compositionConfigurationsCurrentGsPathTextField.cell setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"path to the Unix executable program")];
-  [compositionConfigurationsCurrentGsPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
+  [[self->compositionConfigurationsCurrentGsPathTextField cell] setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"")];
+  [self->compositionConfigurationsCurrentGsPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationGsPathKey] options:nil];
   [compositionConfigurationsCurrentGsPathTextField bind:NSEnabledBinding toObject:compositionConfigurationsController
     withKeyPath:@"selection" options:isNotNilBindingOptions];
@@ -687,8 +688,8 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   compositionConfigurationsCurrentGsPathChangeButton.target = self;
   compositionConfigurationsCurrentGsPathChangeButton.action = @selector(changePath:);
 
-  [compositionConfigurationsCurrentPsToPdfPathTextField.cell setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"path to the Unix executable program")];
-  [compositionConfigurationsCurrentPsToPdfPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
+  [[self->compositionConfigurationsCurrentPsToPdfPathTextField cell] setPlaceholderString:NSLocalizedString(@"path to the Unix executable program", @"")];
+  [self->compositionConfigurationsCurrentPsToPdfPathTextField bind:NSValueBinding toObject:compositionConfigurationsController
     withKeyPath:[@"selection." stringByAppendingString:CompositionConfigurationPsToPdfPathKey] options:nil];
   [compositionConfigurationsCurrentPsToPdfPathTextField bind:NSEnabledBinding toObject:compositionConfigurationsController
     withKeyPath:@"selection" options:isNotNilBindingOptions];
@@ -711,12 +712,12 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [historySaveServiceResultsCheckbox bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:ServiceUsesHistoryKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
       NSValueTransformerBindingOption, nil]];
   [self->historyDeleteOldEntriesCheckbox bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:HistoryDeleteOldEntriesEnabledKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
       NSValueTransformerBindingOption, nil]];
   [self->historyDeleteOldEntriesLimitTextField bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:HistoryDeleteOldEntriesLimitKey]
@@ -733,8 +734,10 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     options:nil];
   [historySmartCheckbox bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:HistorySmartEnabledKey]
-    options:@{NSValueTransformerBindingOption: [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]]}];
-  [self->historyVacuumButton setTitle:NSLocalizedString(@"Compact database", @"Compact database")];
+    options:[NSDictionary dictionaryWithObjectsAndKeys:
+      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
+      NSValueTransformerBindingOption, nil]];
+  [self->historyVacuumButton setTitle:NSLocalizedString(@"Compact database", @"")];
   [self->historyVacuumButton sizeToFit];
   [self->historyVacuumButton setTarget:self];
   [self->historyVacuumButton setAction:@selector(historyVacuum:)];
@@ -746,21 +749,21 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [ObjectTransformer transformerWithDictionary:
         [NSDictionary dictionaryWithObjectsAndKeys:
-          NSLocalizedString(@"Pre-processing", @"Pre-processing"), [[NSNumber numberWithInteger:SCRIPT_PLACE_PREPROCESSING] stringValue],
-          NSLocalizedString(@"Middle-processing", @"Middle-processing"), [[NSNumber numberWithInteger:SCRIPT_PLACE_MIDDLEPROCESSING] stringValue],
-          NSLocalizedString(@"Post-processing", @"Post-processing"), [[NSNumber numberWithInteger:SCRIPT_PLACE_POSTPROCESSING] stringValue], nil]],
+          NSLocalizedString(@"Pre-processing", @""), [@(SCRIPT_PLACE_PREPROCESSING) stringValue],
+          NSLocalizedString(@"Middle-processing", @""), [@(SCRIPT_PLACE_MIDDLEPROCESSING) stringValue],
+          NSLocalizedString(@"Post-processing", @""), [@(SCRIPT_PLACE_POSTPROCESSING) stringValue], nil]],
        NSValueTransformerBindingOption, nil]];
   [[self->compositionConfigurationsAdditionalScriptsTableView tableColumnWithIdentifier:@"enabled"] bind:NSValueBinding
     toObject:[compositionConfigurationsController currentConfigurationScriptsController]
     withKeyPath:[@"arrangedObjects.value." stringByAppendingString:CompositionConfigurationAdditionalProcessingScriptEnabledKey]
     options:nil];
 
-  [compositionConfigurationsAdditionalScriptsTypePopUpButton removeAllItems];
-  [compositionConfigurationsAdditionalScriptsTypePopUpButton.menu
-    addItemWithTitle:NSLocalizedString(@"Define a script", @"Define a script") action:nil keyEquivalent:@""].tag = SCRIPT_SOURCE_STRING;
-  [compositionConfigurationsAdditionalScriptsTypePopUpButton.menu
-    addItemWithTitle:NSLocalizedString(@"Use existing script", @"Use existing script") action:nil keyEquivalent:@""].tag = SCRIPT_SOURCE_FILE;
-  [compositionConfigurationsAdditionalScriptsTypePopUpButton bind:NSSelectedTagBinding
+  [self->compositionConfigurationsAdditionalScriptsTypePopUpButton removeAllItems];
+  [[[self->compositionConfigurationsAdditionalScriptsTypePopUpButton menu]
+    addItemWithTitle:NSLocalizedString(@"Define a script", @"") action:nil keyEquivalent:@""] setTag:SCRIPT_SOURCE_STRING];
+  [[[self->compositionConfigurationsAdditionalScriptsTypePopUpButton menu]
+    addItemWithTitle:NSLocalizedString(@"Use existing script", @"") action:nil keyEquivalent:@""] setTag:SCRIPT_SOURCE_FILE];
+  [self->compositionConfigurationsAdditionalScriptsTypePopUpButton bind:NSSelectedTagBinding
      toObject:[compositionConfigurationsController currentConfigurationScriptsController]
      withKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptTypeKey]
      options:nil];
@@ -773,12 +776,12 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     toObject:[compositionConfigurationsController currentConfigurationScriptsController]
     withKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:SCRIPT_SOURCE_STRING]], NSValueTransformerBindingOption, nil]];
+      [IsNotEqualToTransformer transformerWithReference:@(SCRIPT_SOURCE_STRING)], NSValueTransformerBindingOption, nil]];
   [self->compositionConfigurationsAdditionalScriptsExistingBox bind:NSHiddenBinding
     toObject:[compositionConfigurationsController currentConfigurationScriptsController]
     withKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:SCRIPT_SOURCE_FILE]], NSValueTransformerBindingOption, nil]];
+      [IsNotEqualToTransformer transformerWithReference:@(SCRIPT_SOURCE_FILE)], NSValueTransformerBindingOption, nil]];
 
   [compositionConfigurationsAdditionalScriptsDefiningShellTextField bind:NSValueBinding
     toObject:[compositionConfigurationsController currentConfigurationScriptsController]
@@ -820,7 +823,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [serviceRespectsPointSizeMatrix bind:NSSelectedTagBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:ServiceRespectsPointSizeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:0] trueValue:[NSNumber numberWithInteger:1]], NSValueTransformerBindingOption, nil]];
+      [BoolTransformer transformerWithFalseValue:@(0) trueValue:@(1)], NSValueTransformerBindingOption, nil]];
   [self->servicePointSizeFactorTextField bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:ServicePointSizeFactorKey] options:nil];
   [servicePointSizeFactorStepper bind:NSValueBinding toObject:userDefaultsController
@@ -833,12 +836,12 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [serviceRespectsColorMatrix bind:NSSelectedTagBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:ServiceRespectsColorKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:0] trueValue:[NSNumber numberWithInteger:1]], NSValueTransformerBindingOption, nil]];
+      [BoolTransformer transformerWithFalseValue:@(0) trueValue:@(1)], NSValueTransformerBindingOption, nil]];
 
   [serviceRespectsBaselineButton bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:ServiceRespectsBaselineKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
       NSValueTransformerBindingOption, nil]];
   [self->serviceWarningLinkBackButton bind:NSHiddenBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:ServiceRespectsBaselineKey]
@@ -847,10 +850,10 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [serviceUsesHistoryButton bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:ServiceUsesHistoryKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
       NSValueTransformerBindingOption, nil]];
-  
-  [serviceRelaunchWarning setHidden:YES/*isMacOS10_5OrAbove()*/];
+      
+  [self->serviceRelaunchWarning setHidden:YES];
   
   //service regular expression filters
   NSArrayController* serviceRegularExpressionFiltersController = [preferencesController serviceRegularExpressionFiltersController];
@@ -858,27 +861,27 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [serviceRegularExpressionFiltersController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceRegularExpressionFilterEnabledKey] options:0 context:nil];
   [serviceRegularExpressionFiltersController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceRegularExpressionFilterInputPatternKey] options:0 context:nil];
   [serviceRegularExpressionFiltersController addObserver:self forKeyPath:[NSString stringWithFormat:@"arrangedObjects.%@", ServiceRegularExpressionFilterOutputPatternKey] options:0 context:nil];
-  [serviceRegularExpressionsAddButton bind:NSEnabledBinding toObject:serviceRegularExpressionFiltersController withKeyPath:@"canAdd" options:nil];
-  serviceRegularExpressionsAddButton.target = serviceRegularExpressionFiltersController;
-  serviceRegularExpressionsAddButton.action = @selector(add:);
+  [self->serviceRegularExpressionsAddButton bind:NSEnabledBinding toObject:serviceRegularExpressionFiltersController withKeyPath:@"canAdd" options:nil];
+  [self->serviceRegularExpressionsAddButton setTarget:serviceRegularExpressionFiltersController];
+  [self->serviceRegularExpressionsAddButton setAction:@selector(add:)];
 
-  [serviceRegularExpressionsRemoveButton bind:NSEnabledBinding toObject:serviceRegularExpressionFiltersController withKeyPath:@"canRemove" options:nil];
-  serviceRegularExpressionsRemoveButton.target = serviceRegularExpressionFiltersController;
-  serviceRegularExpressionsRemoveButton.action = @selector(remove:);
+  [self->serviceRegularExpressionsRemoveButton bind:NSEnabledBinding toObject:serviceRegularExpressionFiltersController withKeyPath:@"canRemove" options:nil];
+  [self->serviceRegularExpressionsRemoveButton setTarget:serviceRegularExpressionFiltersController];
+  [self->serviceRegularExpressionsRemoveButton setAction:@selector(remove:)];
 
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:NSTextDidChangeNotification object:serviceRegularExpressionsTestInputTextView];
-  serviceRegularExpressionsTestInputTextView.delegate = (id)self;
-  serviceRegularExpressionsTestInputTextView.font = [NSFont controlContentFontOfSize:0];
-  [serviceRegularExpressionsTestInputTextView setPlaceHolder:NSLocalizedString(@"Text to test", @"Text to test")];
-  if ([serviceRegularExpressionsTestInputTextView respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
-    [serviceRegularExpressionsTestInputTextView setAutomaticTextReplacementEnabled:NO];
-  serviceRegularExpressionsTestOutputTextView.font = [NSFont controlContentFontOfSize:0];
-  [serviceRegularExpressionsTestOutputTextView setPlaceHolder:NSLocalizedString(@"Result of text filtering", @"Result of text filtering")];
-  if ([serviceRegularExpressionsTestOutputTextView respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
-    [serviceRegularExpressionsTestOutputTextView setAutomaticTextReplacementEnabled:NO];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:NSTextDidChangeNotification object:self->serviceRegularExpressionsTestInputTextView];
+  [self->serviceRegularExpressionsTestInputTextView setDelegate:(id)self];
+  [self->serviceRegularExpressionsTestInputTextView setFont:[NSFont controlContentFontOfSize:0]];
+  [self->serviceRegularExpressionsTestInputTextView setPlaceHolder:NSLocalizedString(@"Text to test", @"")];
+  if ([self->serviceRegularExpressionsTestInputTextView respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
+    [self->serviceRegularExpressionsTestInputTextView setAutomaticTextReplacementEnabled:NO];
+  [self->serviceRegularExpressionsTestOutputTextView setFont:[NSFont controlContentFontOfSize:0]];
+  [self->serviceRegularExpressionsTestOutputTextView setPlaceHolder:NSLocalizedString(@"Result of text filtering", @"")];
+  if ([self->serviceRegularExpressionsTestOutputTextView respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
+    [self->serviceRegularExpressionsTestOutputTextView setAutomaticTextReplacementEnabled:NO];
 
-  serviceRegularExpressionsHelpButton.target = self;
-  serviceRegularExpressionsHelpButton.action = @selector(serviceRegularExpressionsHelpOpen:);
+  [self->serviceRegularExpressionsHelpButton setTarget:self];
+  [self->serviceRegularExpressionsHelpButton setAction:@selector(serviceRegularExpressionsHelpOpen:)];
 
   //additional files
   AdditionalFilesController* additionalFilesController = [preferencesController additionalFilesController];
@@ -886,17 +889,25 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [self->additionalFilesAddButton setTarget:self->additionalFilesTableView];
   [self->additionalFilesAddButton setAction:@selector(addFiles:)];
   [self->additionalFilesRemoveButton bind:NSEnabledBinding toObject:additionalFilesController withKeyPath:@"canRemove" options:nil];
-  [self->additionalFilesRemoveButton setTarget:additionalFilesController];
-  [self->additionalFilesRemoveButton setAction:@selector(removeSelection:)];
+  [self->additionalFilesRemoveButton setTarget:self->additionalFilesTableView];
+  [self->additionalFilesRemoveButton setAction:@selector(remove:)];
   [self->additionalFilesHelpButton setTarget:self];
   [self->additionalFilesHelpButton setAction:@selector(additionalFilesHelpOpen:)];
   
+  [self->additionalFilesAddButton setTarget:self->additionalFilesTableView];
+  [self->additionalFilesAddButton setAction:@selector(addFiles:)];
+  [self->additionalFilesAddButton bind:NSEnabledBinding toObject:self->additionalFilesTableView withKeyPath:@"canAdd" options:nil];
+  [self->additionalFilesRemoveButton setTarget:self->additionalFilesTableView];
+  [self->additionalFilesRemoveButton setAction:@selector(remove:)];
+  [self->additionalFilesRemoveButton bind:NSEnabledBinding toObject:self->additionalFilesTableView withKeyPath:@"canRemove" options:nil];
+
+
   //background synchronization
   [synchronizationNewDocumentsEnabledButton bind:NSValueBinding
                                               toObject:userDefaultsController
                                            withKeyPath:[userDefaultsController adaptedKeyPath:SynchronizationNewDocumentsEnabledKey]
                                                options:nil];
-  [synchronizationNewDocumentsSynchronizePreambleCheckBox setTitle:NSLocalizedString(@"Synchronize preamble", @"Synchronize preamble")];
+  [synchronizationNewDocumentsSynchronizePreambleCheckBox setTitle:NSLocalizedString(@"Synchronize preamble", @"")];
   [synchronizationNewDocumentsSynchronizePreambleCheckBox sizeToFit];
   [synchronizationNewDocumentsSynchronizePreambleCheckBox bind:NSValueBinding
                                               toObject:userDefaultsController
@@ -906,7 +917,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
                                                             toObject:userDefaultsController
                                                          withKeyPath:[userDefaultsController adaptedKeyPath:SynchronizationNewDocumentsEnabledKey]
                                                              options:nil];
-  [synchronizationNewDocumentsSynchronizeEnvironmentCheckBox setTitle:NSLocalizedString(@"Synchronize environment", @"Synchronize environment")];
+  [synchronizationNewDocumentsSynchronizeEnvironmentCheckBox setTitle:NSLocalizedString(@"Synchronize environment", @"")];
   [synchronizationNewDocumentsSynchronizeEnvironmentCheckBox sizeToFit];
   [synchronizationNewDocumentsSynchronizeEnvironmentCheckBox bind:NSValueBinding
                                                             toObject:userDefaultsController
@@ -916,7 +927,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
                                                             toObject:userDefaultsController
                                                          withKeyPath:[userDefaultsController adaptedKeyPath:SynchronizationNewDocumentsEnabledKey]
                                                              options:nil];
-  [synchronizationNewDocumentsSynchronizeBodyCheckBox setTitle:NSLocalizedString(@"Synchronize body", @"Synchronize body")];
+  [synchronizationNewDocumentsSynchronizeBodyCheckBox setTitle:NSLocalizedString(@"Synchronize body", @"")];
   [synchronizationNewDocumentsSynchronizeBodyCheckBox sizeToFit];
   [synchronizationNewDocumentsSynchronizeBodyCheckBox bind:NSValueBinding
                                                                toObject:userDefaultsController
@@ -959,10 +970,10 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
                                                                                      options:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                                                [ObjectTransformer transformerWithDictionary:
                                                                                                  [NSDictionary dictionaryWithObjectsAndKeys:
-                                                                                                   NSLocalizedString(@"Pre-processing on load", @"Pre-processing on load"), [[NSNumber numberWithInteger:SYNCHRONIZATION_SCRIPT_PLACE_LOADING_PREPROCESSING] stringValue],
-                                                                                                   NSLocalizedString(@"Post-processing on load", @"Post-processing on load"), [[NSNumber numberWithInteger:SYNCHRONIZATION_SCRIPT_PLACE_LOADING_POSTPROCESSING] stringValue],
-                                                                                                   NSLocalizedString(@"Pre-processing on save", @"Pre-processing on save"), [[NSNumber numberWithInteger:SYNCHRONIZATION_SCRIPT_PLACE_SAVING_PREPROCESSING] stringValue],
-                                                                                                   NSLocalizedString(@"Post-processing on save", @"Post-processing on save"), [[NSNumber numberWithInteger:SYNCHRONIZATION_SCRIPT_PLACE_SAVING_POSTPROCESSING] stringValue],
+                                                                                                   NSLocalizedString(@"Pre-processing on load", @""), [@(SYNCHRONIZATION_SCRIPT_PLACE_LOADING_PREPROCESSING) stringValue],
+                                                                                                   NSLocalizedString(@"Post-processing on load", @""), [@(SYNCHRONIZATION_SCRIPT_PLACE_LOADING_POSTPROCESSING) stringValue],
+                                                                                                   NSLocalizedString(@"Pre-processing on save", @""), [@(SYNCHRONIZATION_SCRIPT_PLACE_SAVING_PREPROCESSING) stringValue],
+                                                                                                   NSLocalizedString(@"Post-processing on save", @""), [@(SYNCHRONIZATION_SCRIPT_PLACE_SAVING_POSTPROCESSING) stringValue],
                                                                                                    nil]], NSValueTransformerBindingOption,
                                                                                                nil]];
   [[self->synchronizationAdditionalScriptsTableView tableColumnWithIdentifier:@"enabled"] bind:NSValueBinding
@@ -970,12 +981,12 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
                                                                                    withKeyPath:[@"arrangedObjects.value." stringByAppendingString:CompositionConfigurationAdditionalProcessingScriptEnabledKey]
                                                                                        options:nil];
   
-  [synchronizationAdditionalScriptsTypePopUpButton removeAllItems];
-  [synchronizationAdditionalScriptsTypePopUpButton.menu
-    addItemWithTitle:NSLocalizedString(@"Define a script", @"Define a script") action:nil keyEquivalent:@""].tag = SCRIPT_SOURCE_STRING;
-  [synchronizationAdditionalScriptsTypePopUpButton.menu
-    addItemWithTitle:NSLocalizedString(@"Use existing script", @"Use existing script") action:nil keyEquivalent:@""].tag = SCRIPT_SOURCE_FILE;
-  [synchronizationAdditionalScriptsTypePopUpButton bind:NSSelectedTagBinding
+  [self->synchronizationAdditionalScriptsTypePopUpButton removeAllItems];
+  [[[self->synchronizationAdditionalScriptsTypePopUpButton menu]
+    addItemWithTitle:NSLocalizedString(@"Define a script", @"") action:nil keyEquivalent:@""] setTag:SCRIPT_SOURCE_STRING];
+  [[[self->synchronizationAdditionalScriptsTypePopUpButton menu]
+    addItemWithTitle:NSLocalizedString(@"Use existing script", @"") action:nil keyEquivalent:@""] setTag:SCRIPT_SOURCE_FILE];
+  [self->synchronizationAdditionalScriptsTypePopUpButton bind:NSSelectedTagBinding
                                                      toObject:synchronizationAdditionalScriptsController
                                                   withKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptTypeKey]
                                                       options:nil];
@@ -988,7 +999,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
                                                  toObject:synchronizationAdditionalScriptsController
                                               withKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptTypeKey]
                                                   options:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:SCRIPT_SOURCE_STRING]], NSValueTransformerBindingOption,
+                                                            [IsNotEqualToTransformer transformerWithReference:@(SCRIPT_SOURCE_STRING)], NSValueTransformerBindingOption,
                                                             nil]];
   [self->synchronizationAdditionalScriptsDefiningBox bind:[NSHiddenBinding stringByAppendingString:@"2"]
                                                  toObject:synchronizationAdditionalScriptsController
@@ -998,7 +1009,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
                                                  toObject:synchronizationAdditionalScriptsController
                                               withKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptTypeKey]
                                                   options:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                            [IsNotEqualToTransformer transformerWithReference:[NSNumber numberWithInteger:SCRIPT_SOURCE_FILE]], NSValueTransformerBindingOption,
+                                                            [IsNotEqualToTransformer transformerWithReference:@(SCRIPT_SOURCE_FILE)], NSValueTransformerBindingOption,
                                                             nil]];
   [self->synchronizationAdditionalScriptsExistingBox bind:[NSHiddenBinding stringByAppendingString:@"2"]
                                                  toObject:synchronizationAdditionalScriptsController
@@ -1037,7 +1048,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [encapsulationsEnabledCheckBox bind:NSValueBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:EncapsulationsEnabledKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
       NSValueTransformerBindingOption, nil]];
 
   [encapsulationsLabel1 bind:NSTextColorBinding toObject:userDefaultsController
@@ -1065,7 +1076,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [self->encapsulationsRemoveButton setTarget:encapsulationsController];
   [self->encapsulationsRemoveButton setAction:@selector(remove:)];
   
-  [self->libraryVacuumButton setTitle:NSLocalizedString(@"Compact database", @"Compact database")];
+  [self->libraryVacuumButton setTitle:NSLocalizedString(@"Compact database", @"")];
   [self->libraryVacuumButton sizeToFit];
   [self->libraryVacuumButton setTarget:self];
   [self->libraryVacuumButton setAction:@selector(libraryVacuum:)];
@@ -1074,7 +1085,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [updatesCheckUpdatesButton bind:NSValueBinding toObject:[[AppController appController] sparkleUpdater]
     withKeyPath:@"automaticallyChecksForUpdates"
     options:[NSDictionary dictionaryWithObjectsAndKeys:
-      [BoolTransformer transformerWithFalseValue:[NSNumber numberWithInteger:NSOffState] trueValue:[NSNumber numberWithInteger:NSOnState]],
+      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
       NSValueTransformerBindingOption, nil]];
   
   //plugins
@@ -1172,32 +1183,32 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     else if ([itemIdentifier isEqualToString:EditionToolbarItemIdentifier])
     {
       image = [NSImage imageNamed:@"editionToolbarItem"];
-      label = NSLocalizedString(@"Edition", @"Edition");
+      label = NSLocalizedString(@"Edition", @"");
     }
     else if ([itemIdentifier isEqualToString:TemplatesToolbarItemIdentifier])
     {
       image = [NSImage imageNamed:@"templatesToolbarItem"];
-      label = NSLocalizedString(@"Templates", @"Templates");
+      label = NSLocalizedString(@"Templates", @"");
     }
     else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
     {
       image = [NSImage imageNamed:@"compositionToolbarItem"];
-      label = NSLocalizedString(@"Composition", @"Composition");
+      label = NSLocalizedString(@"Composition", @"");
     }
     else if ([itemIdentifier isEqualToString:LibraryToolbarItemIdentifier])
     {
       image = [NSImage imageNamed:@"libraryToolbarItem"];
-      label = NSLocalizedString(@"Library", @"Library");
+      label = NSLocalizedString(@"Library", @"");
     }
     else if ([itemIdentifier isEqualToString:HistoryToolbarItemIdentifier])
     {
       image = [NSImage imageNamed:@"historyToolbarItem"];
-      label = NSLocalizedString(@"History", @"History");
+      label = NSLocalizedString(@"History", @"");
     }
     else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
     {
       image = [NSImage imageNamed:@"serviceToolbarItem"];
-      label = NSLocalizedString(@"Service", @"Service");
+      label = NSLocalizedString(@"Service", @"");
     }
     else if ([itemIdentifier isEqualToString:AdvancedToolbarItemIdentifier])
     {
@@ -1207,12 +1218,12 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     else if ([itemIdentifier isEqualToString:WebToolbarItemIdentifier])
     {
       image = [NSImage imageNamed:@"webToolbarItem"];
-      label = NSLocalizedString(@"Web", @"Web");
+      label = NSLocalizedString(@"Web", @"");
     }
     else if ([itemIdentifier isEqualToString:PluginsToolbarItemIdentifier])
     {
       image = [NSImage imageNamed:@"pluginsToolbarItem"];
-      label = NSLocalizedString(@"Plugins", @"Plugins");
+      label = NSLocalizedString(@"Plugins", @"");
     }
     item.label = label;
     item.image = image;
@@ -1251,25 +1262,23 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   else if ([itemIdentifier isEqualToString:WebToolbarItemIdentifier])
     view = webView;
 
-  NSWindow* window = self.window;
-  NSView*   contentView = window.contentView;
-  if (view != contentView)
+  NSWindow* window = [self window];
+  NSView*   oldContentView = window.contentView;
+  if (view != oldContentView)
   {
-    NSSize contentMinSize = [viewsMinSizes[itemIdentifier] sizeValue];
-    NSRect oldContentFrame = contentView ? contentView.frame : NSZeroRect;
-    NSRect newContentFrame = !view ? NSZeroRect : view.frame;
-    NSRect newFrame = window.frame;
+    NSSize contentMinSize = [[self->viewsMinSizes objectForKey:itemIdentifier] sizeValue];
+    NSRect oldContentFrame = !oldContentView ? NSZeroRect : [oldContentView frame];
+    NSRect newContentFrame = !view ? NSZeroRect : [view frame];
+    NSRect newFrame = [window frame];
     newFrame.size.width  += (newContentFrame.size.width  - oldContentFrame.size.width);
     newFrame.size.height += (newContentFrame.size.height - oldContentFrame.size.height);
     newFrame.origin.y    -= (newContentFrame.size.height - oldContentFrame.size.height);
-    //window.contentView;
-    emptyView.frame = newContentFrame;
-    window.contentView = emptyView;
+    [self->emptyView setFrame:newContentFrame];
+    [window setContentView:self->emptyView];
     [window setFrame:newFrame display:YES animate:YES];
-    //window.contentView;
-    window.contentView = view;
-    window.contentMinSize = contentMinSize;
-  }//end if (view != contentView)
+    [window setContentView:view];
+    [window setContentMinSize:contentMinSize];
+  }//end if (view != oldContentView)
   
   window.showsResizeIndicator = [itemIdentifier isEqualToString:EditionToolbarItemIdentifier] ||
     [itemIdentifier isEqualToString:ServiceToolbarItemIdentifier];
@@ -1485,15 +1494,13 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   [self.window makeFirstResponder:nil];
   if (!applyPreambleToLibraryAlert)
   {
-    applyPreambleToLibraryAlert = [[NSAlert alloc] init];
-    [applyPreambleToLibraryAlert setMessageText:NSLocalizedString(@"Do you really want to apply that preamble to the library items ?",
-                                                                        @"Do you really want to apply that preamble to the library items ?")];
-    [applyPreambleToLibraryAlert setInformativeText:
-      NSLocalizedString(@"Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.",
-                        @"Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.")];
-    applyPreambleToLibraryAlert.alertStyle = NSWarningAlertStyle;
-    [applyPreambleToLibraryAlert addButtonWithTitle:NSLocalizedString(@"Apply", @"Apply")];
-    [applyPreambleToLibraryAlert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
+    self->applyPreambleToLibraryAlert = [[NSAlert alloc] init];
+    [self->applyPreambleToLibraryAlert setMessageText:NSLocalizedString(@"Do you really want to apply that preamble to the library items ?", @"")];
+    [self->applyPreambleToLibraryAlert setInformativeText:
+      NSLocalizedString(@"Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.", @"")];
+    [self->applyPreambleToLibraryAlert setAlertStyle:NSWarningAlertStyle];
+    [self->applyPreambleToLibraryAlert addButtonWithTitle:NSLocalizedString(@"Apply", @"")];
+    [self->applyPreambleToLibraryAlert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
   }
   NSInteger choice = [applyPreambleToLibraryAlert runModal];
   if (choice == NSAlertFirstButtonReturn)
@@ -1598,7 +1605,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
   NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
-  if ((sender != self->compositionConfigurationsCurrentPopUpButton) || !IsBetween_N(1, selectedIndex+1, [compositionConfigurations count]))
+  if ((sender != self->compositionConfigurationsCurrentPopUpButton) || !IsBetween_N(1, selectedIndex+1, (NSInteger)[compositionConfigurations count]))
     [NSApp beginSheet:self->compositionConfigurationsManagerPanel modalForWindow:[self window] modalDelegate:self
       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:nil];
   else
@@ -1654,7 +1661,8 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     contextInfo = @{@"textField": compositionConfigurationsAdditionalScriptsExistingPathTextField};
   else if (sender == synchronizationNewDocumentsPathChangeButton)
   {
-    openPanel.directoryURL = [NSURL fileURLWithPath:[PreferencesController sharedController].synchronizationNewDocumentsPath];
+    NSString* directoryPath = [[PreferencesController sharedController] synchronizationNewDocumentsPath];
+    [openPanel setDirectoryURL:(!directoryPath ? nil : [NSURL fileURLWithPath:directoryPath isDirectory:YES])];
     [openPanel setCanChooseDirectories:YES];
     [openPanel setCanChooseFiles:NO];
     contextInfo = @{@"textField": synchronizationNewDocumentsPathTextField};
@@ -1663,42 +1671,34 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
     contextInfo = @{@"textField": synchronizationAdditionalScriptsExistingPathTextField};
   NSString* filename = [contextInfo[@"textField"] stringValue];
   NSString* path = filename ? filename : @"";
-  path = [[NSFileManager defaultManager] fileExistsAtPath:path] ? path.stringByDeletingLastPathComponent : nil;
-  openPanel.directoryURL = [NSURL fileURLWithPath:path];
-  openPanel.nameFieldStringValue = filename.lastPathComponent;
-  [openPanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
-    [self didEndOpenPanel:openPanel returnCode:result contextInfo:(void*)CFBridgingRetain([contextInfo copy])];
-  }];
-}
-//end changePath:
-
--(void) didEndOpenPanel:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
-{
-  if ((returnCode == NSModalResponseOK) && contextInfo)
-  {
-    NSTextField* textField = ((__bridge NSDictionary*)contextInfo)[@"textField"];
-    NSString*    pathKey   = ((__bridge NSDictionary*)contextInfo)[@"pathKey"];
-    NSArray* urls = openPanel.URLs;
-    if (urls && urls.count)
+  path = [[NSFileManager defaultManager] fileExistsAtPath:path] ? [path stringByDeletingLastPathComponent] : nil;
+  [openPanel setNameFieldStringValue:[filename lastPathComponent]];
+  [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
+    if ((result == NSOKButton) && contextInfo)
     {
-      NSString* path = [urls[0] path];
-      if (textField == compositionConfigurationsAdditionalScriptsExistingPathTextField)
-        [[[[PreferencesController sharedController] compositionConfigurationsController] currentConfigurationScriptsController]
-          setValue:path
-          forKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptPathKey]];
-      else if (textField == synchronizationNewDocumentsPathTextField)
-        [PreferencesController sharedController].synchronizationNewDocumentsPath = path;
-      else if (textField == synchronizationAdditionalScriptsExistingPathTextField)
-        [[[PreferencesController sharedController] synchronizationAdditionalScriptsController]
-          setValue:path
-          forKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptPathKey]];
-      else if (path && pathKey)
-        [[PreferencesController sharedController] setCompositionConfigurationDocumentProgramPath:path forKey:pathKey];
-      else
-        textField.stringValue = path;
-    }//end if (filenames && [filenames count])
-  }//end if ((returnCode == NSOKButton) && contextInfo)
-  CFBridgingRelease(contextInfo);
+      NSTextField* textField = [(NSDictionary*)contextInfo objectForKey:@"textField"];
+      NSString*    pathKey   = [(NSDictionary*)contextInfo objectForKey:@"pathKey"];
+      NSArray* urls = [openPanel URLs];
+      if (urls && [urls count])
+      {
+        NSString* path = [[urls objectAtIndex:0] path];
+        if (textField == self->compositionConfigurationsAdditionalScriptsExistingPathTextField)
+          [[[[PreferencesController sharedController] compositionConfigurationsController] currentConfigurationScriptsController]
+            setValue:path
+            forKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptPathKey]];
+        else if (textField == self->synchronizationNewDocumentsPathTextField)
+          [[PreferencesController sharedController] setSynchronizationNewDocumentsPath:path];
+        else if (textField == self->synchronizationAdditionalScriptsExistingPathTextField)
+          [[[PreferencesController sharedController] synchronizationAdditionalScriptsController]
+            setValue:path
+            forKeyPath:[NSString stringWithFormat:@"selection.value.%@", CompositionConfigurationAdditionalProcessingScriptPathKey]];
+        else if (path && pathKey)
+          [[PreferencesController sharedController] setCompositionConfigurationDocumentProgramPath:path forKey:pathKey];
+        else
+          [textField setStringValue:path];
+      }//end if (filenames && [filenames count])
+    }//end if ((result == NSOKButton) && contextInfo)
+  }];
 }
 //end didEndOpenPanel:returnCode:contextInfo:
 
@@ -1712,8 +1712,8 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
                                            NSMiniaturizableWindowMask | NSResizableWindowMask |
                                            NSTexturedBackgroundWindowMask
                                    backing:NSBackingStoreBuffered defer:NO];
-    [compositionConfigurationsAdditionalScriptsHelpPanel setTitle:NSLocalizedString(@"Help on scripts", @"Help on scripts")];
-    [compositionConfigurationsAdditionalScriptsHelpPanel center];
+    [self->compositionConfigurationsAdditionalScriptsHelpPanel setTitle:NSLocalizedString(@"Help on scripts", @"")];
+    [self->compositionConfigurationsAdditionalScriptsHelpPanel center];
     NSScrollView* scrollView =
       [[NSScrollView alloc] initWithFrame:compositionConfigurationsAdditionalScriptsHelpPanel.contentView.frame];
     [compositionConfigurationsAdditionalScriptsHelpPanel.contentView addSubview:scrollView];
@@ -1741,46 +1741,56 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
 
 -(IBAction) compositionConfigurationsCurrentReset:(id)sender
 {
-  NSAlert* alert = [NSAlert new];
-  alert.messageText = NSLocalizedString(@"Do you really want to reset the paths ?", @"Do you really want to reset the paths ?");
-  alert.informativeText = NSLocalizedString(@"Invalid paths will be replaced by the result of auto-detection", @"Invalid paths will be replaced by the result of auto-detection");
-  [alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
-  [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
-  [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-    if (returnCode == NSAlertFirstButtonReturn)
-    {
-      PreferencesController* preferencesController = [PreferencesController sharedController];
-      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPdfLatexPathKey];
-      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationXeLatexPathKey];
-      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationLuaLatexPathKey];
-      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationLatexPathKey];
-      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationDviPdfPathKey];
-      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationGsPathKey];
-      [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPsToPdfPathKey];
-      
-      AppController* appController = [AppController appController];
-      NSMutableDictionary* configuration =
+  NSAlert* alert =
+    [NSAlert alertWithMessageText:NSLocalizedString(@"Do you really want to reset the paths ?", @"")
+      defaultButton:NSLocalizedString(@"OK", @"")
+      alternateButton:NSLocalizedString(@"Cancel", @"")
+      otherButton:nil
+        informativeTextWithFormat:NSLocalizedString(@"Invalid paths will be replaced by the result of auto-detection", @"")];
+  [alert beginSheetModalForWindow:[self window] modalDelegate:self didEndSelector:@selector(compositionConfigurationsCurrentResetDidEnd:returnCode:contextInfo:) contextInfo:0];
+}
+//end compositionConfigurationsCurrentReset:
+
+-(void) compositionConfigurationsCurrentResetDidEnd:(NSAlert*)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+  if (returnCode == NSAlertDefaultReturn)
+  {
+    PreferencesController* preferencesController = [PreferencesController sharedController];
+    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPdfLatexPathKey];
+    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationXeLatexPathKey];
+    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationLuaLatexPathKey];
+    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationLatexPathKey];
+    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationDviPdfPathKey];
+    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationGsPathKey];
+    [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPsToPdfPathKey];
+
+    AppController* appController = [AppController appController];
+    NSMutableDictionary* configuration =
       [NSMutableDictionary dictionaryWithObjectsAndKeys:
-       @NO, @"checkOnlyIfNecessary",
-       @NO, @"allowUIAlertOnFailure",
-       @NO, @"allowUIFindOnFailure",
-       nil];
-      BOOL isPdfLaTeXAvailable = NO;
-      BOOL isXeLaTeXAvailable = NO;
-      BOOL isLuaLaTeXAvailable = NO;
-      BOOL isLaTeXAvailable = NO;
-      BOOL isDviPdfAvailable = NO;
-      BOOL isGsAvailable = NO;
-      BOOL isPsToPdfAvailable = NO;
-      BOOL isPdfToSvgAvailable = NO;
-      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
+         @NO, @"checkOnlyIfNecessary",
+         @NO, @"allowUIAlertOnFailure",
+         @NO, @"allowUIFindOnFailure",
+         nil];
+    BOOL isPdfLaTeXAvailable = NO;
+    BOOL isXeLaTeXAvailable = NO;
+    BOOL isLuaLaTeXAvailable = NO;
+    BOOL isLaTeXAvailable = NO;
+    BOOL isDviPdfAvailable = NO;
+    BOOL isGsAvailable = NO;
+    BOOL isPsToPdfAvailable = NO;
+    BOOL isPdfToSvgAvailable = NO;
+    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
+                                       @[@"pdflatex"], @"executableNames",
+                                       [NSValue valueWithPointer:&isPdfLaTeXAvailable], @"monitor", nil]];
+    if (!isPdfLaTeXAvailable)
+      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
                                                   @[@"pdflatex"], @"executableNames",
                                                   [NSValue valueWithPointer:&isPdfLaTeXAvailable], @"monitor", nil]];
-      if (!isPdfLaTeXAvailable)
-        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
-                                                   @[@"pdflatex"], @"executableNames",
-                                                   [NSValue valueWithPointer:&isPdfLaTeXAvailable], @"monitor", nil]];
-      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
+    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
+                                       @[@"xelatex"], @"executableNames",
+                                       [NSValue valueWithPointer:&isXeLaTeXAvailable], @"monitor", nil]];
+    if (!isXeLaTeXAvailable)
+      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
                                                   @[@"xelatex"], @"executableNames",
                                                   [NSValue valueWithPointer:&isXeLaTeXAvailable], @"monitor", nil]];
     [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLuaLatexPathKey, @"path",
@@ -1797,34 +1807,34 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
       [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
                                                   @[@"latex"], @"executableNames",
                                                   [NSValue valueWithPointer:&isLaTeXAvailable], @"monitor", nil]];
-      if (!isLaTeXAvailable)
-        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
-                                                   @[@"latex"], @"executableNames",
-                                                   [NSValue valueWithPointer:&isLaTeXAvailable], @"monitor", nil]];
-      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
+    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
+                                       @[@"dvipdf"], @"executableNames",
+                                       [NSValue valueWithPointer:&isDviPdfAvailable], @"monitor", nil]];
+    if (!isDviPdfAvailable)
+      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
                                                   @[@"dvipdf"], @"executableNames",
                                                   [NSValue valueWithPointer:&isDviPdfAvailable], @"monitor", nil]];
-      if (!isDviPdfAvailable)
-        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
-                                                   @[@"dvipdf"], @"executableNames",
-                                                   [NSValue valueWithPointer:&isDviPdfAvailable], @"monitor", nil]];
-      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
+    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
+                                       @[@"gs-noX11", @"gs"], @"executableNames",
+                                       @"ghostscript", @"executableDisplayName",
+                                       [NSValue valueWithPointer:&isGsAvailable], @"monitor", nil]];
+    if (!isGsAvailable)
+      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
                                                   @[@"gs-noX11", @"gs"], @"executableNames",
                                                   @"ghostscript", @"executableDisplayName",
                                                   [NSValue valueWithPointer:&isGsAvailable], @"monitor", nil]];
-      if (!isGsAvailable)
-        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
-                                                   @[@"gs-noX11", @"gs"], @"executableNames",
-                                                   @"ghostscript", @"executableDisplayName",
-                                                   [NSValue valueWithPointer:&isGsAvailable], @"monitor", nil]];
-      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
+    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
+                                       @[@"ps2pdf"], @"executableNames",
+                                       [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
+    if (!isPsToPdfAvailable)
+      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
                                                   @[@"ps2pdf"], @"executableNames",
                                                   [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
-      if (!isPsToPdfAvailable)
-        [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
-                                                   @[@"ps2pdf"], @"executableNames",
-                                                   [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
-      [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
+    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
+                                       @[@"pdf2svg"], @"executableNames",
+                                       [NSValue valueWithPointer:&isPdfToSvgAvailable], @"monitor", nil]];
+    if (!isPdfToSvgAvailable)
+      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
                                                   @[@"pdf2svg"], @"executableNames",
                                                   [NSValue valueWithPointer:&isPdfToSvgAvailable], @"monitor", nil]];
     
@@ -1853,7 +1863,6 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
                                                 @[@"ps2pdf"], @"executableNames",
                                                 [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
   }//end if (returnCode == NSAlertDefaultReturn)
-  }];
 }
 //end compositionConfigurationsCurrentReset:
 
@@ -1898,7 +1907,7 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
 
 -(IBAction) additionalFilesHelpOpen:(id)sender
 {
-  [[AppController appController] showHelp:self section:[NSString stringWithFormat:@"\"%@\"\n\n", NSLocalizedString(@"Additional files", @"Additional files")]];
+  [[AppController appController] showHelp:self section:[NSString stringWithFormat:@"\"%@\"\n\n", NSLocalizedString(@"Additional files", @"")]];
 }
 //end additionalFilesHelpOpen:
 
@@ -1914,8 +1923,8 @@ NSString* const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifie
      NSMiniaturizableWindowMask | NSResizableWindowMask |
      NSTexturedBackgroundWindowMask
                                  backing:NSBackingStoreBuffered defer:NO];
-    [synchronizationAdditionalScriptsHelpPanel setTitle:NSLocalizedString(@"Help on synchronization scripts", @"Help on synchronization scripts")];
-    [synchronizationAdditionalScriptsHelpPanel center];
+    [self->synchronizationAdditionalScriptsHelpPanel setTitle:NSLocalizedString(@"Help on synchronization scripts", @"")];
+    [self->synchronizationAdditionalScriptsHelpPanel center];
     NSScrollView* scrollView =
     [[NSScrollView alloc] initWithFrame:synchronizationAdditionalScriptsHelpPanel.contentView.frame];
     [synchronizationAdditionalScriptsHelpPanel.contentView addSubview:scrollView];

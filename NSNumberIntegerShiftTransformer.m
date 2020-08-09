@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSNumberIntegerShiftTransformer.h"
@@ -53,14 +53,14 @@
 
 -(id) transformedValue:(id)value
 {
-  id result = [NSNumber numberWithInteger:[value integerValue]+[self->shift integerValue]];
+  id result = @([value integerValue]+[self->shift integerValue]);
   return result;
 }
 //end transformedValue:
 
 -(id) reverseTransformedValue:(id)value
 {
-  id result = [NSNumber numberWithInteger:[value integerValue]-[self->shift integerValue]];
+  id result = @([value integerValue]-[self->shift integerValue]);
   return result;
 }
 //end reverseTransformedValue:

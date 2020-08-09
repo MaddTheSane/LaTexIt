@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
       NSLog(@"Shift key pressed during launch");
       debugLogLevelShift = 1;
     }
-        
+    
     int i = 0;
     for(i = 1 ; i<argc ; ++i)
     {
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     if (DebugLogLevel >= 1){
       NSLog(@"Launching with DebugLogLevel = %d", DebugLogLevel);
     }
-      
+    
     int result = NSApplicationMain(argc, (const char **) argv);
     
     

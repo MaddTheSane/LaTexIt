@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 04/05/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "EncapsulationsController.h"
@@ -30,7 +30,7 @@
 {
   id newObject = [self newObject];
   [self addObject:newObject];
-  [self setSelectedObjects:@[newObject]];
+  [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
 }
 //end add:
 

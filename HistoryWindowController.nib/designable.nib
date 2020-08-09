@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -43,13 +43,13 @@
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="102" horizontalPageScroll="10" verticalLineScroll="102" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8">
                         <rect key="frame" x="0.0" y="36" width="213" height="199"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" ambiguous="YES" id="SYe-7A-XCQ">
+                        <clipView key="contentView" ambiguous="YES" id="e7w-DU-4WE">
                             <rect key="frame" x="1" y="1" width="211" height="197"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" autosaveColumns="NO" rowHeight="100" id="9" customClass="HistoryView">
+                                <tableView focusRingType="none" verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" autosaveColumns="NO" rowHeight="100" id="9" customClass="HistoryView">
                                     <rect key="frame" x="0.0" y="0.0" width="211" height="197"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <tableViewGridLines key="gridStyleMask" vertical="YES" horizontal="YES"/>
@@ -96,7 +96,7 @@
                         <rect key="frame" x="174" y="7" width="33" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fill" style="rounded" trackingMode="selectOne" id="62">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <segments>
                                 <segment image="magnifying-glass" imageScaling="none" width="27" tag="1"/>
                             </segments>
@@ -134,7 +134,7 @@
                 <outlet property="delegate" destination="-2" id="19"/>
                 <outlet property="initialFirstResponder" destination="8" id="21"/>
             </connections>
-            <point key="canvasLocation" x="139" y="151"/>
+            <point key="canvasLocation" x="132" y="151"/>
         </window>
         <window title="Panel" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="22" userLabel="historyPreviewPanel" customClass="BorderlessPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES" nonactivatingPanel="YES"/>
@@ -153,7 +153,6 @@
                     </imageView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="139" y="429"/>
         </window>
         <customView id="66" userLabel="exportAccessoryView">
             <rect key="frame" x="0.0" y="0.0" width="269" height="82"/>
@@ -198,7 +197,6 @@
             <connections>
                 <outlet property="nextKeyView" destination="68" id="80"/>
             </connections>
-            <point key="canvasLocation" x="139" y="-105"/>
         </customView>
         <customView id="83" userLabel="importAccessoryView">
             <rect key="frame" x="0.0" y="0.0" width="298" height="60"/>
@@ -219,7 +217,6 @@
                     </popUpButtonCell>
                 </popUpButton>
             </subviews>
-            <point key="canvasLocation" x="468" y="154"/>
         </customView>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="112" userLabel="relatexizePanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES" fullSizeContentView="YES"/>

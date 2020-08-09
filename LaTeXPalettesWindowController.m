@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 4/04/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //The LaTeXPalettesWindowController controller is responsible for loading and initializing the palette
 
@@ -77,7 +77,7 @@
   NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
   NSUInteger numberOfItemsPerRow = ([numberOfItemsPerRowNumber integerValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntegerValue] == 0) ?
                                      4 : [numberOfItemsPerRowNumber unsignedIntegerValue];
-  CGFloat clipViewWidth = self->matrix.superview.superview.frame.size.width-[NSScroller scrollerWidthForControlSize:((NSScrollView*)matrix.superview.superview).horizontalScroller.controlSize scrollerStyle:((NSScrollView*)matrix.superview.superview).horizontalScroller.scrollerStyle]+1;
+  CGFloat clipViewWidth = [[[self->matrix superview] superview] frame].size.width-[NSScroller scrollerWidthForControlSize:NSControlSizeRegular scrollerStyle:NSScrollerStyleLegacy]+1;
   CGFloat cellWidth = floor(clipViewWidth/numberOfItemsPerRow);
   self->matrix.cellSize = NSMakeSize(cellWidth, cellWidth);
   self->matrix.frame = NSMakeRect(0, 0,  floor(cellWidth*[matrix numberOfColumns]), cellWidth*matrix.numberOfRows);
@@ -134,15 +134,15 @@
   [window setFrame:defaultFrame display:YES];
   detailsButton.state = defaultDetails ? NSOnState : NSOffState;
   
-  [window setTitle:NSLocalizedString(@"LaTeX Palette", @"LaTeX Palette")];
-  [self->detailsLabelTextField setStringValue:NSLocalizedString(@"Details", @"Details")];
+  [window setTitle:NSLocalizedString(@"LaTeX Palette", @"")];
+  [self->detailsLabelTextField setStringValue:NSLocalizedString(@"Details", @"")];
   [self->detailsLabelTextField sizeToFit];
 
-  [self->detailsLatexCodeLabelTextField setStringValue:NSLocalizedString(@"LaTeX Code :", @"LaTeX Code :")];
+  [self->detailsLatexCodeLabelTextField setStringValue:NSLocalizedString(@"LaTeX Code :", @"")];
   [self->detailsLatexCodeLabelTextField sizeToFit];
   self->detailsLatexCodeTextField.frame = NSRectChange(self->detailsLatexCodeLabelTextField.frame, YES, NSMaxX(self->detailsLatexCodeLabelTextField.frame)+3, NO, 0, NO, 0, NO, 0);
   
-  [self->detailsRequiresLabelTextField setStringValue:NSLocalizedString(@"Requires :", @"Requires :")];
+  [self->detailsRequiresLabelTextField setStringValue:NSLocalizedString(@"Requires :", @"")];
   [self->detailsRequiresLabelTextField sizeToFit];
   self->detailsRequiresTextField.frame = NSRectChange(self->detailsRequiresLabelTextField.frame, YES, NSMaxX(self->detailsRequiresLabelTextField.frame)+3,NO, 0, NO, 0, NO, 0);
 
@@ -166,7 +166,7 @@
     NSArray* pathComponents = @[domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"Palettes"];
     NSString* directoryPath = [NSString pathWithComponents:pathComponents];
     NSArray* palettesPaths  = [fileManager contentsOfDirectoryAtPath:directoryPath error:0];
-    NSMutableArray* palettesFullPaths = [NSMutableArray arrayWithCapacity:palettesPaths.count];
+    NSMutableArray* palettesFullPaths = [NSMutableArray arrayWithCapacity:[palettesPaths count]];
     NSEnumerator* latexPalettesEnumerator = [palettesPaths objectEnumerator];
     NSString* file = nil;
     while((file = [latexPalettesEnumerator nextObject]))
@@ -350,7 +350,7 @@
   {
     NSDictionary* palette = [orderedPalettes objectAtIndex:tag];
     NSString* author = [palette objectForKey:@"author"];
-    [authorTextField setStringValue:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @"Author"), author]];
+    [authorTextField setStringValue:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Author", @""), author]];
     NSNumber* numberOfItemsPerRowNumber = [palette objectForKey:@"numberOfItemsPerRow"];
     NSUInteger numberOfItemsPerRow = ([numberOfItemsPerRowNumber integerValue] <= 0) || ([numberOfItemsPerRowNumber unsignedIntegerValue] == 0) ?
                                        4 : [numberOfItemsPerRowNumber unsignedIntegerValue];

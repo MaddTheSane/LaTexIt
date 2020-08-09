@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //The LibraryGroupItem is a libraryItem (that can appear in the library outlineview)
 //But it represents a "folder", that is to say a parent for other library items
@@ -86,22 +86,9 @@ static NSEntityDescription* cachedEntity = nil;
 -(NSSet*) children:(NSPredicate*)predicate
 {
   NSSet* result = nil; //on Tiger, calling the primitiveKey does not work
-  if (isMacOS10_5OrAbove())
-  {
-    [self willAccessValueForKey:@"children"];
-    result = [self primitiveValueForKey:@"children"];
-    [self didAccessValueForKey:@"children"];
-  }//end if (isMacOS10_5OrAbove())
-  else//if (!isMacOS10_5OrAbove())
-  {
-    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[LibraryItem entity]];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"parent == %@", self]];
-    NSError* error = nil;
-    result = [NSSet setWithArray:[[self managedObjectContext] executeFetchRequest:fetchRequest error:&error]];
-    if (error)
-      {DebugLog(0, @"error = %@", error);}
-  }//end if (!isMacOS10_5OrAbove())
+  [self willAccessValueForKey:@"children"];
+  result = [self primitiveValueForKey:@"children"];
+  [self didAccessValueForKey:@"children"];
   return result;
 }
 //end children:
@@ -197,8 +184,10 @@ static NSEntityDescription* cachedEntity = nil;
   while((child = [enumerator nextObject]))
     [childrenPlistDescription addObject:[child plistDescription]];
   NSMutableDictionary* plist = [super plistDescription];
-    [plist addEntriesFromDictionary:@{@"expanded": @(self.expanded),
-       @"children": childrenPlistDescription}];
+    [plist addEntriesFromDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
+       @([self isExpanded]), @"expanded",
+       childrenPlistDescription, @"children",
+       nil]];
   return plist;
 }
 //end plistDescription

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -39,14 +39,14 @@
                     <box fixedFrame="YES" boxType="oldStyle" borderType="none" title="Title" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="656">
                         <rect key="frame" x="0.0" y="0.0" width="200" height="146"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <view key="contentView" ambiguous="YES" id="TeT-CV-9JP">
+                        <view key="contentView" ambiguous="YES" id="Dk1-lV-hDm">
                             <rect key="frame" x="0.0" y="0.0" width="200" height="146"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="669">
                                     <rect key="frame" x="0.0" y="25" width="200" height="87"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <clipView key="contentView" autoresizesSubviews="NO" ambiguous="YES" id="TN5-gC-RJw">
+                                    <clipView key="contentView" autoresizesSubviews="NO" ambiguous="YES" id="Wdh-fv-xmn">
                                         <rect key="frame" x="1" y="1" width="198" height="85"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
@@ -122,7 +122,7 @@
                 <box fixedFrame="YES" boxType="oldStyle" borderType="none" title="Title" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="640">
                     <rect key="frame" x="0.0" y="0.0" width="200" height="170"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                    <view key="contentView" ambiguous="YES" id="ttm-T1-FCa">
+                    <view key="contentView" ambiguous="YES" id="ONN-lo-nmv">
                         <rect key="frame" x="0.0" y="0.0" width="200" height="170"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -180,7 +180,7 @@
                     </view>
                 </box>
             </subviews>
-            <point key="canvasLocation" x="139" y="388"/>
+            <point key="canvasLocation" x="139" y="154"/>
         </customView>
     </objects>
 </document>

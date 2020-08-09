@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "IsNotEqualToTransformer.h"
@@ -53,7 +53,7 @@
 
 -(id) transformedValue:(id)value
 {
-  id result = [NSNumber numberWithBool:![value isEqualTo:self->reference]];
+  id result = @(![value isEqualTo:self->reference]);
   return result;
 }
 //end transformedValue:

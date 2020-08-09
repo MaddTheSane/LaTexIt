@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSObjectTreeNode.h"
@@ -34,29 +34,29 @@
 }
 //end isDescendantOfNode:strictly:parentSelector:
 
--(id) nextBrotherWithParentSelector:(SEL)parentSelector childrenSelector:(SEL)childrenSelector rootNodes:(NSArray*)rootNodes
+-(id) nextBrotherWithParentSelector:(SEL)parentSelector childrenSelector:(SEL)childrenSelector withObject:(id)childrenSelectorArg rootNodes:(NSArray*)rootNodes
 {
   id result = nil;
   id parent = [self performSelector:parentSelector];
-  NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector];
+  NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector withObject:childrenSelectorArg];
   NSUInteger index = [brothers indexOfObject:self];
   if (index+1 < brothers.count)
     result = brothers[index+1];
   return result;
 }
-//end nextBrotherWithParentSelector:childrenSelector:rootNodes:
+//end nextBrotherWithParentSelector:childrenSelector:withPredicate:rootNodes:
 
--(id) prevBrotherWithParentSelector:(SEL)parentSelector childrenSelector:(SEL)childrenSelector rootNodes:(NSArray*)rootNodes
+-(id) prevBrotherWithParentSelector:(SEL)parentSelector childrenSelector:(SEL)childrenSelector withObject:(id)childrenSelectorArg rootNodes:(NSArray*)rootNodes
 {
   id result = nil;
   id parent = [self performSelector:parentSelector];
-  NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector];
+  NSArray* brothers = !parent ? rootNodes : [parent performSelector:childrenSelector withObject:childrenSelectorArg];
   NSUInteger index = [brothers indexOfObject:self];
   if (index > 0)
     result = brothers[index-1];
   return result;
 }
-//end prevBrotherWithParentSelector:childrenSelector:rootNodes:
+//end prevBrotherWithParentSelector:childrenSelector:withPredicate:rootNodes:
 
 //Returns a simplified array, to be sure that no item of the array has an ancestor
 //in this array. This is useful, when several items are selected, to factorize the work in a common

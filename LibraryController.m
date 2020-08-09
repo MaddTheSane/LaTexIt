@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 10/05/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryController.h"
@@ -194,7 +194,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
         NSMutableDictionary* flattenedGroupItemsOrder = [NSMutableDictionary dictionaryWithCapacity:count];
         NSUInteger i = 0;
         for(i = 0 ; i<count ; ++i)
-          [flattenedGroupItemsOrder setObject:[NSNumber numberWithUnsignedInteger:i] forKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)([flattenedGroupItems objectAtIndex:i])]];
+          [flattenedGroupItemsOrder setObject:@(i) forKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)([flattenedGroupItems objectAtIndex:i])]];
         [filteredItems sortUsingFunction:&filteredItemSortFunction context:(__bridge void * _Nullable)(flattenedGroupItemsOrder)];
         result = [NSArray arrayWithArray:filteredItems];
       }//end if ([filteredItems count])
@@ -558,7 +558,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
       if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
       {
         [[(LibraryEquation*)proposedParentItem equation] setBackgroundColor:color];
-        [[self undoManager] setActionName:NSLocalizedString(@"Change Library item background color", @"Change Library item background color")];
+        [[self undoManager] setActionName:NSLocalizedString(@"Change Library item background color", @"")];
       }//if ([proposedParentItem isKindOfClass:[LibraryEquation class]])
       result = YES;
     }//end if (isColorDrop)
@@ -621,13 +621,13 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
   }
   
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @(preferencesController.exportJpegQualityPercent), @"jpegQuality",
-                                 @(preferencesController.exportScalePercent), @"scaleAsPercent",
-                                 @(preferencesController.exportIncludeBackgroundColor), @"exportIncludeBackgroundColor",
+                                 @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+                                 @([preferencesController exportScalePercent]), @"scaleAsPercent",
+                                 @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
                                  @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
-                                 @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
-                                 @(preferencesController.exportTextExportBody), @"textExportBody",
-                                 preferencesController.exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
+                                 @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                 @([preferencesController exportTextExportBody]), @"textExportBody",
+                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                  nil];
   
   NSString* fileName = nil;
@@ -647,7 +647,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
         if (ok)
         {
           //Recursive call to fill the folder
-          [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:[NSURL fileURLWithPath:filePath]
+          [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:(!filePath ? nil : [NSURL fileURLWithPath:filePath])
             forDraggedItems:[[libraryGroupItem children:self->filterPredicate] allObjects]];
           [names addObject:fileName];
         }
@@ -668,7 +668,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
           if (ok)
           {
             //Recursive call to fill the folder
-            [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:[NSURL fileURLWithPath:filePath]
+            [self outlineView:outlineView namesOfPromisedFilesDroppedAtDestination:(!filePath ? nil : [NSURL fileURLWithPath:filePath])
               forDraggedItems:[[libraryGroupItem children:self->filterPredicate] allObjects]];
             [names addObject:fileName];
           }
@@ -692,9 +692,8 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
                          uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
         [fileManager createFileAtPath:filePath contents:data attributes:nil];
-        [fileManager setAttributes:@{NSFileHFSCreatorCode: @((OSType)'LTXt')}
-                             ofItemAtPath:filePath error:0];
-        NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? exportOptions[@"jpegColor"] : nil;
+        [fileManager setAttributes:@{NSFileHFSCreatorCode:@((OSType)'LTXt')} ofItemAtPath:filePath error:0];
+        NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
         NSColor* autoBackgroundColor = latexitEquation.backgroundColor;
         NSColor* iconBackgroundColor =
           (jpegBackgroundColor != nil) ? jpegBackgroundColor :
@@ -726,9 +725,8 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
                            uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
           [fileManager createFileAtPath:filePath contents:data attributes:nil];
-          [fileManager setAttributes:@{NSFileHFSCreatorCode: @((OSType)'LTXt')}
-                               ofItemAtPath:filePath error:0];
-          NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? exportOptions[@"jpegColor"] : nil;
+          [fileManager setAttributes:@{NSFileHFSCreatorCode:@((OSType)'LTXt')} ofItemAtPath:filePath error:0];
+          NSColor* jpegBackgroundColor = (exportFormat == EXPORT_FORMAT_JPEG) ? [exportOptions objectForKey:@"jpegColor"] : nil;
           NSColor* autoBackgroundColor = latexitEquation.backgroundColor;
           NSColor* iconBackgroundColor =
             (jpegBackgroundColor != nil) ? jpegBackgroundColor :

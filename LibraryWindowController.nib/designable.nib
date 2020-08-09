@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -87,7 +87,7 @@
                         </connections>
                     </popUpButton>
                     <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="44">
-                        <rect key="frame" x="87" y="0.0" width="68" height="21"/>
+                        <rect key="frame" x="87" y="0.0" width="68" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" segmentDistribution="fill" style="rounded" trackingMode="selectOne" id="195">
                             <font key="font" metaFont="smallSystem"/>
@@ -118,7 +118,7 @@
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7">
                         <rect key="frame" x="0.0" y="22" width="242" height="93"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" ambiguous="YES" id="Ufc-oN-Qip">
+                        <clipView key="contentView" ambiguous="YES" id="cu8-6J-0dx">
                             <rect key="frame" x="1" y="1" width="240" height="91"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -180,7 +180,7 @@
                 <outlet property="delegate" destination="-2" id="43"/>
                 <outlet property="initialFirstResponder" destination="8" id="19"/>
             </connections>
-            <point key="canvasLocation" x="139" y="151"/>
+            <point key="canvasLocation" x="132" y="151"/>
         </window>
         <window title="Panel" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="51" userLabel="libraryPreviewPanel" customClass="BorderlessPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES" nonactivatingPanel="YES"/>
@@ -199,7 +199,6 @@
                     </imageView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="139" y="366"/>
         </window>
         <customView id="57" userLabel="importAccessoryView">
             <rect key="frame" x="0.0" y="0.0" width="298" height="60"/>
@@ -232,7 +231,6 @@
                     </popUpButtonCell>
                 </popUpButton>
             </subviews>
-            <point key="canvasLocation" x="-414" y="550"/>
         </customView>
         <customView id="296" userLabel="commentView">
             <rect key="frame" x="0.0" y="0.0" width="240" height="135"/>
@@ -241,11 +239,11 @@
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="211" userLabel="commentTextView">
                     <rect key="frame" x="0.0" y="18" width="240" height="117"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <clipView key="contentView" ambiguous="YES" id="mPe-CX-XOb">
+                    <clipView key="contentView" ambiguous="YES" id="djU-hv-640">
                         <rect key="frame" x="1" y="1" width="238" height="115"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textView ambiguous="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="214">
+                            <textView ambiguous="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="214">
                                 <rect key="frame" x="0.0" y="0.0" width="238" height="115"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -342,7 +340,6 @@
                     </buttonCell>
                 </button>
             </subviews>
-            <point key="canvasLocation" x="124" y="1315"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="160" userLabel="Shared User Defaults Controller"/>
         <drawer trailingOffset="15" id="221">
@@ -379,13 +376,13 @@ Gw
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="242">
                         <rect key="frame" x="13" y="60" width="375" height="154"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" ambiguous="YES" id="17J-mV-4PU">
+                        <clipView key="contentView" ambiguous="YES" id="pUB-rM-su3">
                             <rect key="frame" x="1" y="0.0" width="373" height="153"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" autosaveColumns="NO" headerView="246" id="245">
+                                <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" autosaveColumns="NO" headerView="246" id="245">
                                     <rect key="frame" x="0.0" y="0.0" width="373" height="128"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -518,7 +515,6 @@ DQ
                     </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="124" y="1019"/>
         </window>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="285" userLabel="relatexizePanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES" fullSizeContentView="YES"/>
@@ -553,7 +549,7 @@ DQ
             </view>
             <point key="canvasLocation" x="124" y="745.5"/>
         </window>
-        <numberFormatter formatterBehavior="custom10_4" allowsFloats="NO" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="304">
+        <numberFormatter formatterBehavior="custom10_4" allowsFloats="NO" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="304">
             <real key="minimum" value="0.0"/>
         </numberFormatter>
     </objects>

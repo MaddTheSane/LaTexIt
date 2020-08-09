@@ -24,20 +24,20 @@ static NSArray *syntaxDefinitionsArray;
   if (self == [SMLSyntaxColouring class]) {
     NSMutableArray *syntaxDefinitionsStandardArray = [[NSMutableArray alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"SyntaxDefinitions" ofType:@"plist"]];
    NSArray* libraryPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
-   NSString* libraryPath = libraryPaths.firstObject;
-    NSString *path = !libraryPaths ? nil : [[[libraryPath stringByAppendingPathComponent:@"Application Support"] stringByAppendingPathComponent:@"Smultron"] stringByAppendingPathComponent:@"SyntaxDefinitions.plist"];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-      NSArray *syntaxDefinitionsUserArray = [[NSMutableArray alloc] initWithContentsOfFile:path];
-      [syntaxDefinitionsStandardArray addObjectsFromArray:syntaxDefinitionsUserArray];
-    }
-    NSMutableArray *temporaryArray = [[NSMutableArray alloc] initWithArray:[syntaxDefinitionsStandardArray sortedArrayUsingSelector:@selector(sortByName:)]];
-    NSArray *keys = @[@"name", @"file", @"extensions"];
-    NSDictionary *standard = [NSDictionary dictionaryWithObjects:@[@"Standard", @"standard", @[[NSString string]]] forKeys:keys];
-    NSDictionary *none = [NSDictionary dictionaryWithObjects:@[@"None", @"none", @[]] forKeys:keys];
-    [temporaryArray insertObject:standard atIndex:0];
-    [temporaryArray insertObject:none atIndex:1];
-    syntaxDefinitionsArray = [[NSArray alloc] initWithArray:temporaryArray];
-  }
+   NSString* libraryPath = [libraryPaths count] ? [libraryPaths objectAtIndex:0] : nil;
+		NSString *path = !libraryPaths ? nil : [[[libraryPath stringByAppendingPathComponent:@"Application Support"] stringByAppendingPathComponent:@"Smultron"] stringByAppendingPathComponent:@"SyntaxDefinitions.plist"];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+			NSArray *syntaxDefinitionsUserArray = [[NSMutableArray alloc] initWithContentsOfFile:path];
+			[syntaxDefinitionsStandardArray addObjectsFromArray:syntaxDefinitionsUserArray];
+		}
+		NSMutableArray *temporaryArray = [[NSMutableArray alloc] initWithArray:[syntaxDefinitionsStandardArray sortedArrayUsingSelector:@selector(sortByName:)]];
+		NSArray *keys = @[@"name", @"file", @"extensions"];
+		NSDictionary *standard = [NSDictionary dictionaryWithObjects:@[@"Standard", @"standard", [NSString string]] forKeys:keys];
+		NSDictionary *none = [NSDictionary dictionaryWithObjects:@[@"None", @"none", [NSArray array]] forKeys:keys];
+		[temporaryArray insertObject:standard atIndex:0];
+		[temporaryArray insertObject:none atIndex:1];
+		syntaxDefinitionsArray = [[NSArray alloc] initWithArray:temporaryArray];
+	}
 }
 
 +(NSArray *)syntaxDefinitionsArray

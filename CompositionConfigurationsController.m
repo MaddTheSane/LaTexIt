@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "CompositionConfigurationsController.h"
@@ -33,7 +33,7 @@
 +(NSMutableDictionary*) defaultCompositionConfigurationDictionary
 {
   NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-           [NSMutableString stringWithString:NSLocalizedString(@"default", @"default")], CompositionConfigurationNameKey,
+           [NSMutableString stringWithString:NSLocalizedString(@"default", @"")], CompositionConfigurationNameKey,
            @YES, CompositionConfigurationIsDefaultKey,
            @(COMPOSITION_MODE_PDFLATEX), CompositionConfigurationCompositionModeKey,
            @YES, CompositionConfigurationUseLoginShellKey,
@@ -41,25 +41,25 @@
            [NSDictionary dictionaryWithObjectsAndKeys:
              [NSDictionary dictionaryWithObjectsAndKeys:
                @NO, CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-               [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+               @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
                @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
                @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
                @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-               nil], [[NSNumber numberWithInteger:SCRIPT_PLACE_PREPROCESSING] stringValue],
-             [NSDictionary dictionaryWithObjectsAndKeys:
-               [NSNumber numberWithBool:NO], CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-               [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
-               @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
-               @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
-               @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-               nil], [[NSNumber numberWithInteger:SCRIPT_PLACE_MIDDLEPROCESSING] stringValue],
+               nil], [@(SCRIPT_PLACE_PREPROCESSING) stringValue],
              [NSDictionary dictionaryWithObjectsAndKeys:
                @NO, CompositionConfigurationAdditionalProcessingScriptEnabledKey,
-               [NSNumber numberWithInteger:SCRIPT_SOURCE_STRING], CompositionConfigurationAdditionalProcessingScriptTypeKey,
+               @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
                @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
                @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
                @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
-               nil], [[NSNumber numberWithInteger:SCRIPT_PLACE_POSTPROCESSING] stringValue],
+               nil], [@(SCRIPT_PLACE_MIDDLEPROCESSING) stringValue],
+             [NSDictionary dictionaryWithObjectsAndKeys:
+               @NO, CompositionConfigurationAdditionalProcessingScriptEnabledKey,
+               @(SCRIPT_SOURCE_STRING), CompositionConfigurationAdditionalProcessingScriptTypeKey,
+               @"", CompositionConfigurationAdditionalProcessingScriptPathKey,
+               @"/bin/sh", CompositionConfigurationAdditionalProcessingScriptShellKey,
+               @"", CompositionConfigurationAdditionalProcessingScriptContentKey,
+               nil], [@(SCRIPT_PLACE_POSTPROCESSING) stringValue],
             nil], CompositionConfigurationAdditionalProcessingScriptsKey,
            nil];
   return result;
@@ -127,12 +127,13 @@
   id modelObject = (selectedObjects && selectedObjects.count) ? selectedObjects[0] :
                    (objects && objects.count) ? objects[0] : nil;
   if (!modelObject)
-    result = [[[self class] defaultCompositionConfigurationDictionary] deepMutableCopy];
+    result = [[[self class] defaultCompositionConfigurationDictionary] mutableCopyDeep];
   else
   {
-    result = [modelObject deepMutableCopy];
-    result[CompositionConfigurationNameKey] = [NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", "Copy of %@"), result[CompositionConfigurationNameKey]];
-    result[CompositionConfigurationIsDefaultKey] = @NO;
+    result = [modelObject mutableCopyDeep];
+    [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", @""), [result objectForKey:CompositionConfigurationNameKey]]
+      forKey:CompositionConfigurationNameKey];
+    [result setObject:@NO forKey:CompositionConfigurationIsDefaultKey];
   }
   return result;
 }
@@ -142,7 +143,7 @@
 {
   id newObject = [self newObject];
   [self addObject:newObject];
-  [self setSelectedObjects:@[newObject]];
+  [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
 }
 //end add:
 
@@ -220,8 +221,10 @@
     [controller setPreservesSelection:YES];
     [controller bind:NSContentArrayBinding toObject:self
       withKeyPath:[NSString stringWithFormat:@"selection.%@.%@", CompositionConfigurationProgramArgumentsKey, key]
-      options:@{NSValueTransformerNameBindingOption: [MutableTransformer name],
-        NSHandlesContentAsCompoundValueBindingOption: @YES}];
+      options:[NSDictionary dictionaryWithObjectsAndKeys:
+        [MutableTransformer name], NSValueTransformerNameBindingOption,
+        @YES, NSHandlesContentAsCompoundValueBindingOption,
+        nil]];
     result = controller;
     self->currentConfigurationProgramArgumentsControllerDictionary[key] = result;
   }//end if (!result)
@@ -243,9 +246,9 @@
 {
   NSInteger preambleLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedPreambleIndexKey];
   NSInteger preambleServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedPreambleIndexKey];
-  id preambleLaTeXisation = !IsBetween_N(1, preambleLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
+  id preambleLaTeXisation = !IsBetween_N(1, preambleLaTeXisationIndex+1, (signed)[[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:preambleLaTeXisationIndex];
-  id preambleService = !IsBetween_N(1, preambleServiceIndex+1, [[self arrangedObjects] count]) ? nil :
+  id preambleService = !IsBetween_N(1, preambleServiceIndex+1, (signed)[[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:preambleServiceIndex];
   [super moveObjectsAtIndices:indices toIndex:index];
   NSUInteger newPreambleLaTeXisationIndex = [self.arrangedObjects indexOfObject:preambleLaTeXisation];

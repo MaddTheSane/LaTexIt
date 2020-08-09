@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -311,7 +311,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     BOOL exists = [fileManager fileExistsAtPath:newFilePath isDirectory:&isDirectory] && !isDirectory &&
                   [fileManager isReadableFileAtPath:newFilePath];
     if (!exists)
-      [fileManager createDirectoryAtPath:newFilePath.stringByDeletingLastPathComponent withIntermediateDirectories:YES attributes:nil error:0];
+      [fileManager createDirectoryAtPath:[newFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:0];
 
     #ifdef ARC_ENABLED
     self->managedObjectContext = [self managedObjectContextAtPath:newFilePath setVersion:NO];
@@ -431,8 +431,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSEnumerator* enumerator = [persistentStores objectEnumerator];
       id persistentStore = nil;
       while((persistentStore = [enumerator nextObject]))
-        [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:applicationVersion, @"version", nil]
-                             forPersistentStore:persistentStore];
+        [persistentStoreCoordinator setMetadata:@{@"version":applicationVersion} forPersistentStore:persistentStore];
     }//end if (!migrationError)
 
   }
@@ -462,23 +461,15 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       initWithManagedObjectModel:[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel]];
   id persistentStore = nil;
   @try{
-    NSURL* storeURL = [NSURL fileURLWithPath:path];
+    NSURL* storeURL = !path ? nil : [NSURL fileURLWithPath:path];
     NSError* error = nil;
     NSMutableDictionary* options = [NSMutableDictionary dictionary];
     if (DebugLogLevel >= 1)
-    {
-      if (isMacOS10_6OrAbove())
-        [options setObject:[NSNumber numberWithBool:YES] forKey:NSSQLiteManualVacuumOption];
-    }//end if (DebugLogLevel >= 1)
+      [options setObject:@YES forKey:NSSQLiteManualVacuumOption];
     
-    if (isMacOS10_5OrAbove())
-    {
-      [options setValue:@YES forKey:NSMigratePersistentStoresAutomaticallyOption];
-      NSDictionary* journalMode = @{@"journal_mode": @"DELETE"};
-      [options setValue:journalMode forKey:NSSQLitePragmasOption];
-    }//end if (isMacOS10_5OrAbove())
-    if (isMacOS10_6OrAbove())
-      [options setValue:@YES forKey:NSInferMappingModelAutomaticallyOption];
+    [options setValue:@YES forKey:NSMigratePersistentStoresAutomaticallyOption];
+    [options setValue:@{@"journal_mode":@"DELETE"} forKey:NSSQLitePragmasOption];
+    [options setValue:@YES forKey:NSInferMappingModelAutomaticallyOption];
     persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                         configuration:nil URL:storeURL options:options error:&error];
     if (error)
@@ -505,8 +496,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   if (setVersion && persistentStore)
   {
     NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
-    [persistentStoreCoordinator setMetadata:[NSDictionary dictionaryWithObjectsAndKeys:applicationVersion, @"version", nil]
-                         forPersistentStore:persistentStore];
+    [persistentStoreCoordinator setMetadata:@{@"version":applicationVersion} forPersistentStore:persistentStore];
   }//end if (setVersion && persistentStore)
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
@@ -614,20 +604,15 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         while((equation = [enumerator nextObject]))
           [descriptions addObject:[equation plistDescription]];
         NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
-        NSDictionary* library = !descriptions ? nil : [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil], @"history",
-          applicationVersion, @"version",
-          nil];
-        NSError* errorDescription = nil;
-        NSData* dataToWrite = !library ? nil :
-          [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListBinaryFormat_v1_0 options:0 error:&errorDescription];
+        NSDictionary* history = !descriptions ? nil : @{@"history":@{@"content":descriptions}, @"version":applicationVersion};
+        NSString* errorDescription = nil;
+        NSData* dataToWrite = !history ? nil :
+          [NSPropertyListSerialization dataFromPropertyList:history format:NSPropertyListBinaryFormat_v1_0 errorDescription:&errorDescription];
         if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
         {
-          [[NSFileManager defaultManager]
-             setAttributes:@{NSFileHFSCreatorCode: @((OSType)'LTXt')}
-                     ofItemAtPath:path error:0];
+          [[NSFileManager defaultManager] setAttributes:@{NSFileHFSCreatorCode:@((OSType)'LTXt')} ofItemAtPath:path error:0];
           [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
       }//end case HISTORY_EXPORT_FORMAT_PLIST
@@ -765,7 +750,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   {
     NSString* oldManagedObjectModelPath =
       [[NSBundle bundleForClass:[self class]] pathForResource:oldDataModelName ofType:@"mom"];
-    NSURL* oldManagedObjectModelURL  = [NSURL fileURLWithPath:oldManagedObjectModelPath];
+    NSURL* oldManagedObjectModelURL = !oldManagedObjectModelPath ? nil : [NSURL fileURLWithPath:oldManagedObjectModelPath];
     oldManagedObjectModel =
       [[NSManagedObjectModel alloc] initWithContentsOfURL:oldManagedObjectModelURL];
     oldPersistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:oldManagedObjectModel];
@@ -774,7 +759,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     #else
     oldPath = [[path copy] autorelease];
     #endif
-    NSURL* oldStoreURL = [NSURL fileURLWithPath:oldPath];
+    NSURL* oldStoreURL = !oldPath ? nil : [NSURL fileURLWithPath:oldPath];
     @try{
       NSError* error = nil;
       oldPersistentStore = !oldStoreURL ? nil :
@@ -994,7 +979,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     [[[NSWindowController alloc] initWithWindow:migratingWindow] autorelease];
   #endif
   [migratingWindow center];
-  [migratingWindow setTitle:NSLocalizedString(@"Migrating history to new format", @"Migrating history to new format")];
+  [migratingWindow setTitle:NSLocalizedString(@"Migrating history to new format", @"")];
   NSRect contentView = migratingWindow.contentView.frame;
   NSProgressIndicator* progressIndicator = [[NSProgressIndicator alloc] initWithFrame:NSInsetRect(contentView, 8, 8)];
   [migratingWindow.contentView addSubview:progressIndicator];

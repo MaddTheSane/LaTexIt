@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 06/05/09.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSDictionaryCompositionConfiguration.h"
@@ -65,11 +65,11 @@
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScripts
                  {return self[CompositionConfigurationAdditionalProcessingScriptsKey];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsPreProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInteger:SCRIPT_PLACE_PREPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[@(SCRIPT_PLACE_PREPROCESSING) stringValue]];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsMiddleProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInteger:SCRIPT_PLACE_MIDDLEPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[@(SCRIPT_PLACE_MIDDLEPROCESSING) stringValue]];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsPostProcessing
-                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[[NSNumber numberWithInteger:SCRIPT_PLACE_POSTPROCESSING] stringValue]];}
+                 {return [self compositionConfigurationAdditionalProcessingScriptsForKey:[@(SCRIPT_PLACE_POSTPROCESSING) stringValue]];}
 -(NSDictionary*) compositionConfigurationAdditionalProcessingScriptsForKey:(NSString*)key
                  {return [self compositionConfigurationAdditionalProcessingScripts][key];}
 

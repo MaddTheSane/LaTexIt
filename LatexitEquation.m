@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2019 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
@@ -146,8 +146,8 @@
     NSData* uncompressedData = !compressedData ? nil : [Compressor zipuncompress:compressedData];
     NSPropertyListFormat format = 0;
     id plist = !uncompressedData ? nil :
-        [NSPropertyListSerialization propertyListWithData:uncompressedData
-                                                  options:NSPropertyListImmutable format:&format error:nil];
+      [NSPropertyListSerialization propertyListWithData:uncompressedData
+        options:NSPropertyListImmutable format:&format error:nil];
     NSDictionary* plistAsDictionary = [plist dynamicCastToClass:[NSDictionary class]];
     if (plistAsDictionary)
       [self setLatexitMetadata:plistAsDictionary];
@@ -518,7 +518,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSNumber* modeAsNumber = [embeddedInfos objectForKey:@"mode"];
       latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber integerValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
-      [result setObject:[NSNumber numberWithInteger:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
+      [result setObject:@((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode) forKey:@"mode"];
 
       NSString* sourceAsString = embeddedInfos[@"source"];
       NSAttributedString* sourceText =
@@ -537,12 +537,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       result[@"sourceText"] = sourceText;
       sourceText = nil;
       
-      NSNumber* pointSizeAsNumber = embeddedInfos[@"magnification"];
-      result[@"magnification"] = (pointSizeAsNumber ? pointSizeAsNumber :
-                         @(useDefaults ? preferencesController.latexisationFontSize : 0));
+      NSNumber* pointSizeAsNumber = [embeddedInfos objectForKey:@"magnification"];
+      [result setObject:(pointSizeAsNumber ? pointSizeAsNumber :
+                         @(useDefaults ? preferencesController.latexisationFontSize : 0))
+                 forKey:@"magnification"];
 
-      NSNumber* baselineAsNumber = embeddedInfos[@"baseline"];
-      result[@"baseline"] = (baselineAsNumber ? baselineAsNumber : @0.);
+      NSNumber* baselineAsNumber = [embeddedInfos objectForKey:@"baseline"];
+      [result setObject:(baselineAsNumber ? baselineAsNumber : @(0.))
+                 forKey:@"baseline"];
 
       NSColor* defaultColor = preferencesController.latexisationFontColor;
       NSColor* color = [NSColor colorWithData:embeddedInfos[@"color"]];
@@ -623,7 +625,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     latex_mode_t mode = modeAsString ? (latex_mode_t) [modeAsString integerValue]
                         : (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : 0);
     mode = (mode == LATEX_MODE_EQNARRAY) ? mode : validateLatexMode(mode); //Added starting from version 1.7.0
-    [result setObject:[NSNumber numberWithInteger:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
+    [result setObject:@((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode) forKey:@"mode"];
 
     NSMutableString* sourceString = [NSMutableString string];
     testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
@@ -843,7 +845,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         modeAsNumber = [latexitMetadata objectForKey:@"mode"];
       latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber integerValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
-      [result setObject:[NSNumber numberWithInteger:((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode)] forKey:@"mode"];
+      [result setObject:@((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode) forKey:@"mode"];
 
       NSString* sourceAsString = latexitMetadata[@"source"];
       NSAttributedString* sourceText =
@@ -860,12 +862,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }
       result[@"sourceText"] = sourceText;
       
-      NSNumber* pointSizeAsNumber = latexitMetadata[@"magnification"];
-      result[@"magnification"] = (pointSizeAsNumber ? pointSizeAsNumber :
-                         @(useDefaults ? preferencesController.latexisationFontSize : 0));
+      NSNumber* pointSizeAsNumber = [latexitMetadata objectForKey:@"magnification"];
+      [result setObject:(pointSizeAsNumber ? pointSizeAsNumber :
+                         @(useDefaults ? [preferencesController latexisationFontSize] : 0))
+                 forKey:@"magnification"];
 
-      NSNumber* baselineAsNumber = latexitMetadata[@"baseline"];
-      result[@"baseline"] = (baselineAsNumber ? baselineAsNumber : @0.);
+      NSNumber* baselineAsNumber = [latexitMetadata objectForKey:@"baseline"];
+      [result setObject:(baselineAsNumber ? baselineAsNumber : @0.)
+                 forKey:@"baseline"];
 
       NSColor* defaultColor = preferencesController.latexisationFontColor;
       NSColor* color = [NSColor colorWithRgbaString:latexitMetadata[@"color"]];
@@ -1937,7 +1941,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self beginUpdate];
   self->annotateDataDirtyState |= (value != [self mode]);
   [self willChangeValueForKey:@"modeAsInteger"];
-  [self setPrimitiveValue:[NSNumber numberWithInteger:(NSInteger)value] forKey:@"modeAsInteger"];
+  [self setPrimitiveValue:@(value) forKey:@"modeAsInteger"];
   [self didChangeValueForKey:@"modeAsInteger"];
   [self endUpdate];
 }
@@ -2235,41 +2239,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 {
   NSData* result = self.pdfData;
   DebugLog(1, @"annotatedPDFDataUsingPDFKeywords %p, from %llu", result, (unsigned long long)[result length]);
-   /*
-  //first, we retreive the baseline if possible
-  double baseline = 0;
-
-  NSData* pdfData = result;
-  NSString* dataAsString = [[[NSString alloc] initWithData:pdfData encoding:NSASCIIStringEncoding] autorelease];
-  NSArray* testArray = nil;
-  NSMutableString* baselineAsString = @"0";
-  testArray = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
-  if (testArray && ([testArray count] >= 2))
-  {
-    [baselineAsString setString:[testArray objectAtIndex:1]];
-    NSRange range = [baselineAsString rangeOfString:@"EEbasend"];
-    range.length = (range.location != NSNotFound) ? [baselineAsString length]-range.location : 0;
-    [baselineAsString deleteCharactersInRange:range];
-  }
-  baseline = [baselineAsString doubleValue];
-  
-  [self setBaseline:baseline];
-
-  //then, we rewrite the pdfData
-  #warning 64bits problem
-  BOOL shouldDenyDueTo64Bitsproblem = (sizeof(NSInteger) != 4);
-  if (usingPDFKeywords && !shouldDenyDueTo64Bitsproblem);
-  {
-    PDFDocument* pdfDocument = [[PDFDocument alloc] initWithData:pdfData];
-    NSDictionary* attributes =
-      [NSDictionary dictionaryWithObjectsAndKeys:
-          [[NSWorkspace sharedWorkspace] applicationName], PDFDocumentCreatorAttribute,
-         nil];
-    [pdfDocument setDocumentAttributes:attributes];
-    result = [pdfDocument dataRepresentation];
-    [pdfDocument release];
-  }
-  */
 
   //annotate in LEE format
   export_format_t exportFormat = EXPORT_FORMAT_PDF;
@@ -2323,7 +2292,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
                                  @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
                                  @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
                                  @(preferencesController.exportTextExportBody), @"textExportBody",
-                                 preferencesController.exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
+                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                  nil];
   NSData* data = lazyDataProvider ? nil :
     (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ?
@@ -2338,13 +2307,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
-  NSString* extension = nil;
-  NSString* uti = nil;
+  NSString* extension = getFileExtensionForExportFormat(exportFormat);
+  NSString* uti = getUTIForExportFormat(exportFormat);
   switch(exportFormat)
   {
     case EXPORT_FORMAT_PDF:
-      extension = @"pdf";
-      uti = (NSString*)kUTTypePDF;
       [pboard addTypes:@[NSPasteboardTypePDF, (NSString*)kUTTypePDF] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
@@ -2353,8 +2320,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }//end if (!lazyDataProvider)
       break;
     case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
-      extension = @"pdf";
-      uti = (NSString*)kUTTypePDF;
       [pboard addTypes:@[NSPasteboardTypePDF, (NSString*)kUTTypePDF]
                  owner:lazyDataProvider ? lazyDataProvider : self];
       if (data && (!lazyDataProvider || (lazyDataProvider != self)))
@@ -2364,8 +2329,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }//end if (data && (!lazyDataProvider || (lazyDataProvider != self)))
       break;
     case EXPORT_FORMAT_EPS:
-      extension = @"eps";
-      uti = @"com.adobe.encapsulated-​postscript";
       [pboard addTypes:@[NSPostScriptPboardType, @"com.adobe.encapsulated-postscript"] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
@@ -2374,26 +2337,16 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }//end if (!lazyDataProvider)
       break;
     case EXPORT_FORMAT_PNG:
-      extension = @"png";
-      uti = (NSString*)kUTTypePNG;
-      /*[pboard addTypes:[NSArray arrayWithObjects:NSTIFFPboardType, nil] owner:lazyDataProvider];
-      if (!lazyDataProvider) [pboard setData:data forType:NSTIFFPboardType];*/
-      [pboard addTypes:@[GetMyPNGPboardType()] owner:lazyDataProvider];
+      [pboard addTypes:@[(NSString*)kUTTypePNG] owner:lazyDataProvider];
       if (!lazyDataProvider)
-        [pboard setData:data forType:GetMyPNGPboardType()];
+        [pboard setData:data forType:(NSString*)kUTTypePNG];
       break;
     case EXPORT_FORMAT_JPEG:
-      extension = @"jpeg";
-      uti = (NSString*)kUTTypeJPEG;
-      /*[pboard addTypes:[NSArray arrayWithObjects:NSTIFFPboardType, nil] owner:lazyDataProvider];
-      if (!lazyDataProvider) [pboard setData:data forType:NSTIFFPboardType];*/
-      [pboard addTypes:@[GetMyJPEGPboardType()] owner:lazyDataProvider];
+      [pboard addTypes:@[(NSString*)kUTTypeJPEG] owner:lazyDataProvider];
       if (!lazyDataProvider)
-        [pboard setData:data forType:GetMyJPEGPboardType()];
+        [pboard setData:data forType:(NSString*)kUTTypeJPEG];
       break;
     case EXPORT_FORMAT_TIFF:
-      extension = @"tiff";
-      uti = (NSString*)kUTTypeTIFF;
       [pboard addTypes:@[NSPasteboardTypeTIFF, (NSString*)kUTTypeTIFF] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
@@ -2403,8 +2356,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       break;
     case EXPORT_FORMAT_MATHML:
       {
-        extension = @"mathml";
-        uti = @"public.mathml";
+        extension = @"mathml";//override default HTML
+        uti = @"public.mathml";//override default HTML
         NSString* documentString = !data ? nil : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLMultiline|RKLDotAll|RKLCaseless inRange:NSMakeRange(0, documentString.length) capture:0 error:0];
         //[pboard addTypes:[NSArray arrayWithObjects:NSHTMLPboardType, kUTTypeHTML, nil] owner:lazyDataProvider];
@@ -2432,8 +2385,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }
       break;
     case EXPORT_FORMAT_SVG:
-      extension = @"svg";
-      uti = (NSString*)kUTTypeScalableVectorGraphics;
       [pboard addTypes:@[GetMySVGPboardType(), (id)kUTTypeScalableVectorGraphics, NSPasteboardTypeString] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
@@ -2443,8 +2394,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }//end if (!lazyDataProvider)
       break;
     case EXPORT_FORMAT_TEXT:
-      extension = @"txt";
-      uti = (NSString*)kUTTypeText;
       [pboard addTypes:@[NSPasteboardTypeString, (NSString*)kUTTypeText] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
@@ -2469,11 +2418,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (filePath)
       {
         [data writeToFile:filePath atomically:YES];
-        NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-        if (isMacOS10_6OrAbove())
-          [pboard writeObjects:@[fileURL]];
-        else
-          [pboard setPropertyList:@[filePath] forType:NSFilenamesPboardType];
+        NSURL* fileURL = !filePath ? nil : [NSURL fileURLWithPath:filePath];
+        [pboard writeObjects:@[fileURL]];
         [fileURL writeToPasteboard:pboard];
         FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
         [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
@@ -2489,13 +2435,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   PreferencesController* preferencesController = [PreferencesController sharedController];
   DebugLog(1, @">pasteboard:%p provideDataForType:%@", pasteboard, type);
   NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @(preferencesController.exportJpegQualityPercent), @"jpegQuality",
-                                 @(preferencesController.exportScalePercent), @"scaleAsPercent",
-                                 @(preferencesController.exportIncludeBackgroundColor), @"exportIncludeBackgroundColor",
-                                 @(preferencesController.exportTextExportPreamble), @"textExportPreamble",
-                                 @(preferencesController.exportTextExportEnvironment), @"textExportEnvironment",
-                                 @(preferencesController.exportTextExportBody), @"textExportBody",
-                                 preferencesController.exportJpegBackgroundColor, @"jpegColor",//at the end for the case it is null
+                                 @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
+                                 @([preferencesController exportScalePercent]), @"scaleAsPercent",
+                                 @([preferencesController exportIncludeBackgroundColor]), @"exportIncludeBackgroundColor",
+                                 @([preferencesController exportTextExportPreamble]), @"textExportPreamble",
+                                 @([preferencesController exportTextExportEnvironment]), @"textExportEnvironment",
+                                 @([preferencesController exportTextExportBody]), @"textExportBody",
+                                 [preferencesController exportJpegBackgroundColor], @"jpegColor",//at the end for the case it is null
                                  nil];
   export_format_t exportFormat = preferencesController.exportFormatCurrentSession;
   NSData* data = (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) ?
@@ -2543,7 +2489,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       break;
     case EXPORT_FORMAT_SVG:
       extension = @"svg";
-      uti = (NSString*)kUTTypeScalableVectorGraphics;
+      uti = GetMySVGPboardType();
       break;
     case EXPORT_FORMAT_TEXT:
       extension = @"txt";
@@ -2589,11 +2535,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (filePath)
       {
         [data writeToFile:filePath atomically:YES];
-        /*NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-        if (isMacOS10_6OrAbove())
-          [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
-        else*/
-          [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
+        [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
         FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
         [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
       }//end if (filePath)
@@ -2609,11 +2551,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (filePath)
       {
         [data writeToFile:filePath atomically:YES];
-        NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-        if (isMacOS10_6OrAbove())
-          [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
-        else
-          [fileURL writeToPasteboard:pasteboard];
+        NSURL* fileURL = !filePath ? nil : [NSURL fileURLWithPath:filePath];
+        [pasteboard writeObjects:@[fileURL]];
         FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
         [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
       }//end if (filePath)
