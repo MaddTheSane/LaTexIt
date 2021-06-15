@@ -40,10 +40,10 @@
 
 #include <sqlite3.h>
 
-NSString* LibraryItemsArchivedPboardType = @"LibraryItemsArchivedPboardType";
-NSString* LibraryItemsWrappedPboardType  = @"LibraryItemsWrappedPboardType";
+NSString* const LibraryItemsArchivedPboardType = @"LibraryItemsArchivedPboardType";
+NSString* const LibraryItemsWrappedPboardType  = @"LibraryItemsWrappedPboardType";
 
-@interface LibraryManager (PrivateAPI)
+@interface LibraryManager ()
 -(void) _migrateLatexitManagedModel:(NSString*)path;
 -(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path setVersion:(BOOL)setVersion;
 -(void) applicationWillTerminate:(NSNotification*)aNotification; //saves library when quitting
@@ -145,11 +145,7 @@ static LibraryManager* sharedManagerInstance = nil;
 }
 //end defaultLibraryPath
 
--(NSManagedObjectContext*) managedObjectContext
-{
-  return self->managedObjectContext;
-}
-//end managedObjectContext
+@synthesize managedObjectContext;
 
 -(NSUndoManager*) undoManager
 {

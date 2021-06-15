@@ -12,25 +12,26 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString* LibraryItemsArchivedPboardType;
-extern NSString* LibraryItemsWrappedPboardType;
+extern NSPasteboardType const LibraryItemsArchivedPboardType;
+extern NSPasteboardType const LibraryItemsWrappedPboardType;
 
-typedef enum {LIBRARY_IMPORT_OVERWRITE, LIBRARY_IMPORT_MERGE, LIBRARY_IMPORT_OPEN} library_import_option_t;
-typedef enum {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST, LIBRARY_EXPORT_FORMAT_TEX_SOURCE} library_export_format_t;
+typedef NS_ENUM(int, library_import_option_t) {LIBRARY_IMPORT_OVERWRITE, LIBRARY_IMPORT_MERGE, LIBRARY_IMPORT_OPEN};
+typedef NS_ENUM(int, library_export_format_t) {LIBRARY_EXPORT_FORMAT_INTERNAL, LIBRARY_EXPORT_FORMAT_PLIST, LIBRARY_EXPORT_FORMAT_TEX_SOURCE};
 
 @class LibraryItem;
 @class LibraryGroupItem;
 
 @interface LibraryManager : NSObject {
   NSManagedObjectContext* managedObjectContext;
-  NSArray*                draggedItems; //a very volatile variable used during drag'n drop
+  NSArray*                draggedItems; //!<a very volatile variable used during drag'n drop
 }
 
-+(LibraryManager*) sharedManager; //the library manager singleton
++(LibraryManager*) sharedManager; //!<the library manager singleton
+@property (class, readonly, retain) LibraryManager *sharedManager;
 
--(NSString*) defaultLibraryPath;
+@property (readonly, nonatomic, copy) NSString *defaultLibraryPath;
 
--(NSManagedObjectContext*) managedObjectContext;
+@property (readonly, retain) NSManagedObjectContext *managedObjectContext;
 -(NSUndoManager*) undoManager;
 
 -(NSArray*) allItems;

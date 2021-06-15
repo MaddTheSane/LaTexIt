@@ -72,7 +72,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end NSRangeContains()
 
-@interface MyDocument (PrivateAPI)
+@interface MyDocument ()
 
 +(NSUInteger) _giveId; //returns a free id and marks it as used
 +(void) _releaseId:(NSUInteger)anId; //releases an id
@@ -1206,7 +1206,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     CGFloat topMargin    = [[AppController appController] marginsCurrentTopMargin];
 
     NSMutableDictionary* processConfiguration = [[[NSMutableDictionary alloc] initWithObjectsAndKeys:
-      @(YES), @"runInBackgroundThread",
+      @YES, @"runInBackgroundThread",
       self, @"document",
       preamble, @"preamble", body, @"body", color, @"color", @(mode), @"mode",
       @([self->lowerBoxControlsBoxFontSizeTextField doubleValue]), @"magnification",

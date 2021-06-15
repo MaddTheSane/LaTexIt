@@ -80,7 +80,7 @@
 }
 @end
 
-@interface AppController (PrivateAPI)
+@interface AppController ()
 
 -(void) beginCheckUpdates;
 -(void) endCheckUpdates;

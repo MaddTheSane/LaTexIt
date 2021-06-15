@@ -12,11 +12,17 @@
 				<string>latexpalette</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>latexit-latex-palette.icns</string>
+			<string>latexit-latex-palette</string>
 			<key>CFBundleTypeName</key>
 			<string>LatexPalette</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>fr.chachatelier.pierre.LaTeXiT.palette</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<true/>
 			<key>NSDocumentClass</key>
@@ -57,6 +63,10 @@
 			<string>LEELibraryType</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array/>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSDocumentClass</key>
@@ -70,11 +80,13 @@
 				<string>latexhist</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>latexit-lib.icns</string>
+			<string>latexit-lib</string>
 			<key>CFBundleTypeName</key>
 			<string>HistoryType</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSDocumentClass</key>
@@ -88,11 +100,17 @@
 				<string>latexlib</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>latexit-lib.icns</string>
+			<string>latexit-lib</string>
 			<key>CFBundleTypeName</key>
 			<string>LibraryType</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>fr.chachatelier.pierre.LaTeXiT.library</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSDocumentClass</key>
@@ -106,11 +124,17 @@
 				<string>plist</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>latexit-lib.icns</string>
+			<string>latexit-lib</string>
 			<key>CFBundleTypeName</key>
 			<string>LibraryType2</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.apple.property-list</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSDocumentClass</key>
@@ -124,11 +148,13 @@
 				<string>latexitplugin</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>latexit-plugin-icon.icns</string>
+			<string>latexit-plugin-icon</string>
 			<key>CFBundleTypeName</key>
 			<string>LaTeXiTPlugin</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
 			<key>LSTypeIsPackage</key>
 			<true/>
 			<key>NSDocumentClass</key>
@@ -721,5 +747,50 @@
 	<string>https://pierre.chachatelier.fr/latexit/downloads/latexit-sparkle-en.rss</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_sparkle_latexit_pub.pem</string>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.bundle</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>LatexPalette</string>
+			<key>UTTypeIconFile</key>
+			<string>latexit-latex-palette</string>
+			<key>UTTypeIcons</key>
+			<dict/>
+			<key>UTTypeIdentifier</key>
+			<string>fr.chachatelier.pierre.LaTeXiT.palette</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>latexpalette</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>LibraryType</string>
+			<key>UTTypeIconFile</key>
+			<string>latexit-lib</string>
+			<key>UTTypeIcons</key>
+			<dict/>
+			<key>UTTypeIdentifier</key>
+			<string>fr.chachatelier.pierre.LaTeXiT.library</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>latexlib</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>
