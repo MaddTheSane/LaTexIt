@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -58,6 +58,8 @@
 
 /* Begin PBXBuildFile section */
 		558813762678A05000CA4738 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558813752678A05000CA4738 /* Media.xcassets */; };
+		558813782678AD8B00CA4738 /* app-icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558813772678AD8B00CA4738 /* app-icon.xcassets */; };
+		558813792678AD8B00CA4738 /* app-icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558813772678AD8B00CA4738 /* app-icon.xcassets */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -197,7 +199,6 @@
 		93265F100FAEBB110060D667 /* EncapsulationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93265F0B0FAEBA370060D667 /* EncapsulationsController.m */; };
 		9326605C0FB05EA70060D667 /* AdditionalFilesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9326605B0FB05EA70060D667 /* AdditionalFilesController.m */; };
 		9326606E0FB0606B0060D667 /* AdditionalFilesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9326605B0FB05EA70060D667 /* AdditionalFilesController.m */; };
-		9328604407F4505F009BF03D /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
 		9328D1180F8FDC0C008AC6B3 /* NSObjectExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9328D1160F8FDC0C008AC6B3 /* NSObjectExtended.m */; };
 		93291FB20F57434400F47078 /* HistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 93291FB10F57434400F47078 /* HistoryItem.m */; };
 		93291FB30F57434400F47078 /* HistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 93291FB10F57434400F47078 /* HistoryItem.m */; };
@@ -261,7 +262,6 @@
 		9349514C10BDCD1600931D51 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9349514A10BDCD0D00931D51 /* InfoPlist.strings */; };
 		9349515310BDCD2800931D51 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9349515110BDCD2800931D51 /* MainMenu.xib */; };
 		9349515D10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9349515C10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m */; };
-		934951BE10BDD10B00931D51 /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
 		934951D410BDD23300931D51 /* NSWorkspaceExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9308AB92088CEAE20062A340 /* NSWorkspaceExtended.m */; };
 		934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
@@ -724,6 +724,7 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* LaTeXiT_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXiT_Prefix.pch; sourceTree = "<group>"; };
 		558813752678A05000CA4738 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		558813772678AD8B00CA4738 /* app-icon.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "app-icon.xcassets"; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		8D15AC370486D014006FF6A4 /* LaTeXiT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaTeXiT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9302547E07F0BC6A00011996 /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
@@ -2125,6 +2126,7 @@
 				9308991E0C0A586F00B08453 /* latexit-lib.icns */,
 				93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */,
 				932AE78F12606230004422CA /* latexit-plugin-icon.icns */,
+				558813772678AD8B00CA4738 /* app-icon.xcassets */,
 			);
 			path = "file-icons";
 			sourceTree = "<group>";
@@ -2356,37 +2358,19 @@
 			attributes = {
 				LastUpgradeCheck = 1200;
 				TargetAttributes = {
-					8D15AC270486D014006FF6A4 = {
-						DevelopmentTeam = 7SFX84GNR7;
-						ProvisioningStyle = Automatic;
-					};
 					931FB051252CD3C7009F8847 = {
 						CreatedOnToolsVersion = 12.0.1;
-						DevelopmentTeam = 7SFX84GNR7;
-						ProvisioningStyle = Automatic;
-					};
-					9344B98E0E8CF38700FE90A5 = {
-						DevelopmentTeam = 7SFX84GNR7;
-						ProvisioningStyle = Automatic;
 					};
 					93791EB82526485B00B1AD26 = {
 						CreatedOnToolsVersion = 12.0.1;
-						DevelopmentTeam = 7SFX84GNR7;
-						ProvisioningStyle = Automatic;
 					};
 					937920102527854000B1AD26 = {
 						CreatedOnToolsVersion = 12.0.1;
-						DevelopmentTeam = 7SFX84GNR7;
-						ProvisioningStyle = Automatic;
-					};
-					938DBD4C10BDC2E0002350CF = {
-						DevelopmentTeam = 7SFX84GNR7;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-10_9+" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -2424,7 +2408,6 @@
 				8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */,
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				930255D007F0C2A800011996 /* Localizable.strings in Resources */,
-				9328604407F4505F009BF03D /* latexit.icns in Resources */,
 				93A592CB07F46075001DF900 /* Licence.rtf in Resources */,
 				93A592CC07F46075001DF900 /* Lisez-moi.rtfd in Resources */,
 				93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */,
@@ -2433,6 +2416,7 @@
 				932417F40F9BBB0A006BA13B /* LaTeXPalettesWindowController.nib in Resources */,
 				935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */,
 				935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */,
+				558813792678AD8B00CA4738 /* app-icon.xcassets in Resources */,
 				932417F30F9BBAF7006BA13B /* MarginsWindowController.nib in Resources */,
 				932417F10F9BBAE6006BA13B /* EncapsulationsWindowController.nib in Resources */,
 				932417F20F9BBAEE006BA13B /* HistoryWindowController.nib in Resources */,
@@ -2523,9 +2507,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				558813782678AD8B00CA4738 /* app-icon.xcassets in Resources */,
 				9349514C10BDCD1600931D51 /* InfoPlist.strings in Resources */,
 				9349515310BDCD2800931D51 /* MainMenu.xib in Resources */,
-				934951BE10BDD10B00931D51 /* latexit.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3393,6 +3377,7 @@
 		932388570854FD210017F3BB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = latexit;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -3465,6 +3450,7 @@
 		932388580854FD210017F3BB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = latexit;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -3795,7 +3781,11 @@
 					Services/Common,
 				);
 				INFOPLIST_FILE = LaTeXiT_AppExtension/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MARKETING_VERSION = 2.16.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -3873,7 +3863,11 @@
 					Services/Common,
 				);
 				INFOPLIST_FILE = LaTeXiT_AppExtension/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MARKETING_VERSION = 2.16.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -4051,6 +4045,7 @@
 		938DBE1110BDC2E0002350CF /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = latexit;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -4107,6 +4102,7 @@
 		938DBE1210BDC2E0002350CF /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = latexit;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
