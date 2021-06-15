@@ -1701,8 +1701,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                            [preambles objectAtIndex:preambleDocumentIndex] : nil;
   NSData* preambleData = [[preamble objectForKey:@"value"] dynamicCastToClass:[NSData class]];
   NSError* decodingError = nil;
+  NSSet* securedClasses = [NSSet setWithArray:@[[NSAttributedString class], [NSTextTab class]]];//NSTextTab needed by a bug in High Sierra
   result = !preambleData ? nil :
-    isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:preambleData error:&decodingError] :
+    isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClasses:securedClasses fromData:preambleData error:&decodingError] :
     [[NSKeyedUnarchiver unarchiveObjectWithData:preambleData] dynamicCastToClass:[NSAttributedString class]];
   if (decodingError != nil)
     DebugLog(0, @"decoding error : %@", decodingError);
@@ -1721,8 +1722,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
                            [preambles objectAtIndex:preambleServiceIndex] : nil;
   NSData* preambleData = [[preamble objectForKey:@"value"] dynamicCastToClass:[NSData class]];
   NSError* decodingError = nil;
+  NSSet* securedClasses = [NSSet setWithArray:@[[NSAttributedString class], [NSTextTab class]]];//NSTextTab needed by a bug in High Sierra
   result = !preambleData ? nil :
-    isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:preambleData error:&decodingError] :
+    isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClasses:securedClasses fromData:preambleData error:&decodingError] :
     [[NSKeyedUnarchiver unarchiveObjectWithData:preambleData] dynamicCastToClass:[NSAttributedString class]];
   if (decodingError != nil)
     DebugLog(0, @"decoding error : %@", decodingError);

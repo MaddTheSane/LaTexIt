@@ -580,6 +580,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
           [NSData class], [NSMutableData class],
           [NSString class], [NSMutableString class],
           [NSAttributedString class], [NSMutableAttributedString class],
+          [NSTextTab class],//needed by a bug in High Sierra
           [NSNumber class],
           [NSColor class],
           [NSDate class],
@@ -719,7 +720,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       [preamble release];
       #endif
 
-      NSNumber* modeAsNumber = [embeddedInfos objectForKey:@"mode"];
+      id modeAsObject = [embeddedInfos objectForKey:@"mode"];
+      NSNumber* modeAsNumber = [modeAsObject dynamicCastToClass:[NSNumber class]];
+      NSString* modeAsString = [modeAsObject dynamicCastToClass:[NSString class]];
+      if (!modeAsNumber && modeAsString)
+        modeAsNumber = @([modeAsString integerValue]);
       latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber integerValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
       [result setObject:@((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode) forKey:@"mode"];
@@ -1097,11 +1102,15 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       [preamble release];
       #endif
 
-      NSNumber* modeAsNumber = nil;
-      if (!modeAsNumber)
-        modeAsNumber = [latexitMetadata objectForKey:@"type"];
-      if (!modeAsNumber)
-        modeAsNumber = [latexitMetadata objectForKey:@"mode"];
+      id modeAsObject = nil;
+      if (!modeAsObject)
+        modeAsObject = [latexitMetadata objectForKey:@"type"];
+      if (!modeAsObject)
+        modeAsObject = [latexitMetadata objectForKey:@"mode"];
+      NSNumber* modeAsNumber = [modeAsObject dynamicCastToClass:[NSNumber class]];
+      NSString* modeAsString = [modeAsObject dynamicCastToClass:[NSString class]];
+      if (!modeAsNumber && modeAsString)
+        modeAsNumber = @([modeAsString integerValue]);
       latex_mode_t mode = modeAsNumber ? (latex_mode_t)[modeAsNumber integerValue] :
                                          (latex_mode_t) (useDefaults ? [preferencesController latexisationLaTeXMode] : LATEX_MODE_TEXT);
       [result setObject:@((mode == LATEX_MODE_EQNARRAY) ? LATEX_MODE_TEXT : mode) forKey:@"mode"];

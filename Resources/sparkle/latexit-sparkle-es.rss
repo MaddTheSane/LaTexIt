@@ -1117,5 +1117,25 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MCwCFBEBorPS4Q7VSbkCkZjwZTvyW0dfAhQtBp4R/Ak0sRGHvWQ/cbS5ypB4DA=="
 			/>
     </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.16.1</guid>
+      <title>Version 2.16.1</title>
+      <description><![CDATA[
+        <ul>
+          <li>Minor fixes.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-es.html#version-2.16.1</sparkle:releaseNotesLink>
+			<pubDate>Fri, 12 Mar 2021 10:07:37 +0100</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_16_1.dmg"
+				sparkle:version="2.16.1"
+                   sparkle:shortVersionString="2.16.1"
+				type="application/octet-stream"
+				length="11676531"
+				sparkle:dsaSignature="MC0CFG9+QeBZQiutYEI/NuCOF4FnP74PAhUAqqU43Btpk+sEKbaQzqHoZaKW9Qc="
+			/>
+    </item>
   </channel>
 </rss>

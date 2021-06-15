@@ -86,7 +86,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 
   //strange fix for splitview
   NSRect frame = [self frame];
-  frame.origin.y = MAX(0,   frame.origin.y);
+  frame.origin.y = MAX(0, frame.origin.y);
   [self setFrame:frame];
   
   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
@@ -642,7 +642,7 @@ static NSArray* WellKnownLatexKeywords = nil;
       NSData* pboardData = [pboard dataForType:type];
       NSError* decodingError = nil;
       NSArray* libraryItemsArray = !pboardData ? nil :
-        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClass:[LibraryItem allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[LibraryItem allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
         [[NSKeyedUnarchiver unarchiveObjectWithData:pboardData] dynamicCastToClass:[NSArray class]];
       if (decodingError != nil)
         DebugLog(0, @"decoding error : %@", decodingError);
@@ -659,7 +659,7 @@ static NSArray* WellKnownLatexKeywords = nil;
       NSData* pboardData = [pboard dataForType:type];
       NSError* decodingError = nil;
       NSArray* latexitEquationsArray = !pboardData ? nil :
-        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClass:[LatexitEquation allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[LatexitEquation allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
         [[NSKeyedUnarchiver unarchiveObjectWithData:pboardData] dynamicCastToClass:[NSArray class]];
       if (decodingError != nil)
         DebugLog(0, @"decoding error : %@", decodingError);

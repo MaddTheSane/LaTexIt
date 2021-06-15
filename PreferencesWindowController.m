@@ -1160,10 +1160,12 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 //initializes the controls with default values
 -(void) windowDidLoad
 {
-  NSPoint topLeftPoint  = [[self window] frame].origin;
-  topLeftPoint.y       += [[self window] frame].size.height;
-  //[[self window] setFrameAutosaveName:@"preferences"];
+  NSWindow* window = [self window];
+  NSPoint topLeftPoint  = window.frame.origin;
+  topLeftPoint.y       += window.frame.size.height;
   [[self window] setFrameTopLeftPoint:topLeftPoint];
+  if ([window respondsToSelector:@selector(setToolbarStyle:)])
+    [window setToolbarStyle:NSWindowToolbarStyleExpanded];
 }
 //end windowDidLoad
 
