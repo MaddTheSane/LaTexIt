@@ -1853,7 +1853,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     if (value >= 0)
       [compositionsController setSelectionIndex:value];
     else
-      [compositionsController setSelectedObjects:nil];
+      [compositionsController setSelectionIndexes:[NSIndexSet indexSet]];
   }//end if (compositionsController)
   else//if (!compositionsController)
   {

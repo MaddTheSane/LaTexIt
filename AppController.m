@@ -520,7 +520,10 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(BOOL) applicationShouldOpenUntitledFile:(NSApplication*)sender
 {
-  return YES;
+  BOOL result = NO;
+  MyDocument* myDocument = (MyDocument*) [self currentDocument];
+  result = !myDocument;
+  return result;
 }
 //end applicationShouldOpenUntitledFile:
 

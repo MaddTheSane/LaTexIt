@@ -1024,11 +1024,52 @@
 			<pubDate>Tue, 21 Apr 2020 08:41:08 +0200</pubDate>
 			<enclosure
 				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_9.dmg"
-				sparkle:version="2.14.9"
-                   sparkle:shortVersionString="2.14.9"
+				sparkle:version="2.14.11"
+                   sparkle:shortVersionString="2.14.11"
 				type="application/octet-stream"
 				length="10032347"
 				sparkle:dsaSignature="MCwCFBROhkmuNWyhB47qTBbbuy0h7OnhAhRcnAHnvrlGgOHi3YZjuONm5gL/XA=="
+			/>
+    </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.14.10</guid>
+      <title>Version 2.14.10</title>
+      <description><![CDATA[
+        <ul>
+          <li>Changed a little the meta-data to circumvent a problem with Adobe Acrobat Reader;</li>
+          <li>fixed a misbehaviour when the mini-window is active.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.14.10</sparkle:releaseNotesLink>
+			<pubDate>Sat, 12 Sep 2020 11:37:13 +0200</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_10.dmg"
+				sparkle:version="2.14.11"
+                   sparkle:shortVersionString="2.14.11"
+				type="application/octet-stream"
+				length="9950530"
+				sparkle:dsaSignature="MC0CFBRHqMskrj1e2mq+YygIUzn+/hEdAhUAgZ+vGuqpO4LZ7murtD7o6tTVTAE="
+			/>
+    </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.14.11</guid>
+      <title>Version 2.14.11/title>
+      <description><![CDATA[
+        <ul>
+          <li>Changed a little the meta-data to circumvent a problem with Adobe Acrobat Reader.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.14.11</sparkle:releaseNotesLink>
+			<pubDate>Sun, 13 Sep 2020 16:17:28 +0200</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_11.dmg"
+				sparkle:version="2.14.11"
+                   sparkle:shortVersionString="2.14.11"
+				type="application/octet-stream"
+				length="9941554"
+				sparkle:dsaSignature="MCwCFDhQb+RG2NGr7FAxuq7BuSX9bUdMAhQ+D7AIc7cmmYP5E7CrO2ADyXv/3Q=="
 			/>
     </item>
   </channel>

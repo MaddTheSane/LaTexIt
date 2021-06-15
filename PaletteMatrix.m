@@ -10,6 +10,8 @@
 
 #import "PaletteCell.h"
 
+#import "LaTeXPalettesWindowController.h"
+
 @implementation PaletteMatrix
 
 -(BOOL) acceptsFirstResponder

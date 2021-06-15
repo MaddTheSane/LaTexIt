@@ -615,16 +615,21 @@ static LaTeXProcessor* sharedInstance = nil;
         if (pageDictionary && boxData)
           CFDictionarySetValue(pageDictionary, kCGPDFContextMediaBox, boxData);
         CGPDFContextBeginPage(cgPDFContext, pageDictionary);
+        //CGContextDrawPDFPage(cgPDFContext, pdfPage);
+        BOOL disableGraphicMetadata = NO;
         BOOL debugVisibleAnnotations = NO;
         BOOL debugLargeAnnotations = NO;
-        CGContextSetRGBStrokeColor(cgPDFContext, debugVisibleAnnotations ? 1. : 0., 0, 0, debugVisibleAnnotations ? 1. : 0.);
-        CGContextSetRGBFillColor(cgPDFContext, debugVisibleAnnotations ? 1. : 0., 0, 0, debugVisibleAnnotations ? 1. : 0.);
+        CGContextSetRGBStrokeColor(cgPDFContext, debugVisibleAnnotations ? 1. : 0., 0., 0., debugVisibleAnnotations ? 1. : 0.);
+        CGContextSetRGBFillColor(cgPDFContext, debugVisibleAnnotations ? 1. : 0., 0., 0., debugVisibleAnnotations ? 1. : 0.);
         CGContextSetTextDrawingMode(cgPDFContext, debugVisibleAnnotations ? kCGTextFill : kCGTextInvisible);
-        CGContextDrawPDFPage(cgPDFContext, pdfPage);
-        //CGContextFlush(cgPDFContext);
-        BOOL useFullyGraphicMetadata = (exportFormat == EXPORT_FORMAT_EPS) || (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS);
+        BOOL useFullyGraphicMetadata =
+          (exportFormat == EXPORT_FORMAT_EPS) ||
+          //(exportFormat == EXPORT_FORMAT_PDF) ||
+          (exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS);
         DebugLog(1, @"useFullyGraphicMetadata = %d", (int)useFullyGraphicMetadata);
-        if (useFullyGraphicMetadata)
+        if (disableGraphicMetadata){
+        }
+        else if (useFullyGraphicMetadata)
         {
           const unsigned char* annotationBytes = (const unsigned char*)[annotationContentBase64CompleteString UTF8String];
           size_t annotationBytesLength = [annotationContentBase64CompleteString lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
@@ -650,37 +655,36 @@ static LaTeXProcessor* sharedInstance = nil;
           }//end while(remainingBytes)
           CGPathCloseSubpath(path);
           CGContextConcatCTM(cgPDFContext, CGAffineTransformMakeTranslation(mediaBox.origin.x+mediaBox.size.width/2, mediaBox.origin.y+mediaBox.size.height/2));
-          CGContextConcatCTM(cgPDFContext, CGAffineTransformMakeScale(1e-6, 1e-6));
+          CGFloat scale = debugLargeAnnotations ? 1 : 1e-6;
+          CGContextConcatCTM(cgPDFContext, CGAffineTransformMakeScale(scale, scale));
           CGContextAddPath(cgPDFContext, path);
-          CGContextSetRGBStrokeColor(cgPDFContext, 0, 0, 0, 0);
+          CGContextSetRGBStrokeColor(cgPDFContext, debugVisibleAnnotations ? 1. : 0., 0., 0., debugVisibleAnnotations ? 1. : 0.);
           CGContextStrokePath(cgPDFContext);
           CGPathRelease(path);
           CGContextRestoreGState(cgPDFContext);
         }//end if (useFullyGraphicMetadata)
         else//if (!useFullyGraphicMetadata)
         {
-          CGFloat fontSize = debugLargeAnnotations ? 10 : 1e-6;
-          CGContextSetTextPosition(cgPDFContext, mediaBox.origin.x, mediaBox.origin.y);
+          CGFloat fontSize = debugLargeAnnotations ? 1 : 1e-6;
+          CGFloat scale = 1;
           DebugLog(1, @"mediaBox = %@", NSStringFromRect(NSRectFromCGRect(mediaBox)));
           NSFont* font = [NSFont fontWithName:@"Courier" size:fontSize];
           DebugLog(1, @"font = %@", font);
-          CGFontRef cgFont = CGFontCreateWithFontName(CFSTR("Courier"));
-          DebugLog(1, @"cgFont = %p", cgFont);
-          DebugLog(1, @"cgPDFContext = %p", cgPDFContext);
-          CGContextSetFont(cgPDFContext, cgFont);
-          CGContextSetFontSize(cgPDFContext, fontSize);
-
           DebugLog(1, @"annotationContentBase64CompleteString = %@", annotationContentBase64CompleteString);
           if (annotationContentBase64CompleteString.length)
           {
             NSAttributedString* attributedString = [[NSAttributedString alloc] initWithString:annotationContentBase64CompleteString attributes:@{NSFontAttributeName:font}];
-            CGRect drawRect = CGRectInfinite;
-            drawRect.origin = mediaBox.origin;
+            CGRect drawRect = mediaBox;
             CTFramesetterRef frameSetter = !attributedString ? 0 : CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
             CGPathRef path = CGPathCreateWithRect(drawRect, 0);
             CTFrameRef frame = !frameSetter ? 0 : CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, attributedString.length), path, 0);
             if (frame)
+            {
+              CGContextSaveGState(cgPDFContext);
+              CGContextScaleCTM(cgPDFContext, scale, scale);
               CTFrameDraw(frame, cgPDFContext);
+              CGContextRestoreGState(cgPDFContext);
+            }//end if (frame)
             CGPathRelease(path);
             if (frame)
               CFRelease(frame);
@@ -688,8 +692,9 @@ static LaTeXProcessor* sharedInstance = nil;
               CFRelease(frameSetter);
             [attributedString release];
           }//end if (annotationContentBase64CompleteString.length)
-          CGFontRelease(cgFont);
         }//end if (!useFullyGraphicMetadata)
+        CGContextFlush(cgPDFContext);
+        CGContextDrawPDFPage(cgPDFContext, pdfPage);
         CGPDFContextEndPage(cgPDFContext);
         DebugLog(1, @"boxData = %p", boxData);
         if (boxData)

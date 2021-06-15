@@ -31,7 +31,7 @@ static NSArray *syntaxDefinitionsArray;
 			[syntaxDefinitionsStandardArray addObjectsFromArray:syntaxDefinitionsUserArray];
 			[syntaxDefinitionsUserArray release];
 		}
-		NSMutableArray *temporaryArray = [[NSMutableArray alloc] initWithArray:[syntaxDefinitionsStandardArray sortedArrayUsingSelector:@selector(sortByName:)]];
+		NSMutableArray *temporaryArray = [[NSMutableArray alloc] initWithArray:[syntaxDefinitionsStandardArray sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]]];
 		NSArray *keys = @[@"name", @"file", @"extensions"];
 		NSDictionary *standard = [NSDictionary dictionaryWithObjects:@[@"Standard", @"standard", [NSString string]] forKeys:keys];
 		NSDictionary *none = [NSDictionary dictionaryWithObjects:@[@"None", @"none", [NSArray array]] forKeys:keys];
