@@ -61,7 +61,7 @@
 		558813782678AD8B00CA4738 /* app-icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558813772678AD8B00CA4738 /* app-icon.xcassets */; };
 		558813792678AD8B00CA4738 /* app-icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558813772678AD8B00CA4738 /* app-icon.xcassets */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
-		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
+		8D15AC2D0486D014006FF6A4 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.xib */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -183,12 +183,12 @@
 		931FB2B1252D0FCA009F8847 /* LaTeXMathML.js in Resources */ = {isa = PBXBuildFile; fileRef = 932BD079122BAFAE003C312C /* LaTeXMathML.js */; };
 		931FB2B8252D0FCA009F8847 /* LaTeXMathML.js in Resources */ = {isa = PBXBuildFile; fileRef = 932BD079122BAFAE003C312C /* LaTeXMathML.js */; };
 		931FB2DE252D16FD009F8847 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 931FB2E0252D16FD009F8847 /* Localizable.strings */; };
-		932417EF0F9BBAD1006BA13B /* AdditionalFilesWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.nib */; };
-		932417F00F9BBAE0006BA13B /* CompositionConfigurationsWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.nib */; };
-		932417F10F9BBAE6006BA13B /* EncapsulationsWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.nib */; };
-		932417F20F9BBAEE006BA13B /* HistoryWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93EED7D508A2197500A99BDF /* HistoryWindowController.nib */; };
-		932417F30F9BBAF7006BA13B /* MarginsWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9372A26A08781EC800A3A645 /* MarginsWindowController.nib */; };
-		932417F40F9BBB0A006BA13B /* LaTeXPalettesWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 931CB32E0801325800CF9D2B /* LaTeXPalettesWindowController.nib */; };
+		932417EF0F9BBAD1006BA13B /* AdditionalFilesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.xib */; };
+		932417F00F9BBAE0006BA13B /* CompositionConfigurationsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.xib */; };
+		932417F10F9BBAE6006BA13B /* EncapsulationsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.xib */; };
+		932417F20F9BBAEE006BA13B /* HistoryWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93EED7D508A2197500A99BDF /* HistoryWindowController.xib */; };
+		932417F30F9BBAF7006BA13B /* MarginsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9372A26A08781EC800A3A645 /* MarginsWindowController.xib */; };
+		932417F40F9BBB0A006BA13B /* LaTeXPalettesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 931CB32E0801325800CF9D2B /* LaTeXPalettesWindowController.xib */; };
 		9324182D0F9CF389006BA13B /* DocumentExtraPanelsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9324182C0F9CF389006BA13B /* DocumentExtraPanelsController.m */; };
 		9324D34F08A63E540010DB95 /* ButtonNotClickThrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */; };
 		93257A4E12366ABC006EF4E8 /* NSUserDefaultsControllerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93937E2F0FA4E05A007BEAC0 /* NSUserDefaultsControllerExtended.m */; };
@@ -280,8 +280,8 @@
 		935888EA096048A00068C698 /* ServiceShortcutsTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 935888E8096048A00068C698 /* ServiceShortcutsTextView.m */; };
 		935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */; };
 		935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */; };
-		935AD8720F9E389700B361D8 /* MyDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 935AD8710F9E389700B361D8 /* MyDocument.nib */; };
-		935ADA2B0F9EF7AD00B361D8 /* LibraryWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.nib */; };
+		935AD8720F9E389700B361D8 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 935AD8710F9E389700B361D8 /* MyDocument.xib */; };
+		935ADA2B0F9EF7AD00B361D8 /* LibraryWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */; };
 		935ADDAE0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m in Sources */ = {isa = PBXBuildFile; fileRef = 935ADDAD0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m */; };
 		935AE46A0FA1F8A700B361D8 /* NSSegmentedControlExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AE4690FA1F8A700B361D8 /* NSSegmentedControlExtended.m */; };
 		935AECEE0CB16ECC001A5067 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; };
@@ -494,7 +494,7 @@
 		93ABA88D2053D44100E60612 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; };
 		93ABA88E2053D44100E60612 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; };
 		93AFF5B91381941F00054033 /* NSButtonExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93AFF5B81381941F00054033 /* NSButtonExtended.m */; };
-		93AFF7971381D03B00054033 /* DocumentExtraPanelsController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.nib */; };
+		93AFF7971381D03B00054033 /* DocumentExtraPanelsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.xib */; };
 		93B150E71ADC61D900CF0A3A /* お読みください.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93C0685C1697230300D20F06 /* お読みください.rtfd */; };
 		93B436651939189400F6BDAC /* CHExportPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B436641939189400F6BDAC /* CHExportPrefetcher.m */; };
 		93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = 93B48F5D091FA47C00FDEEB6 /* tex.plist */; };
@@ -504,7 +504,7 @@
 		93B5ECD016B6F8CD00ECBB7B /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
 		93B5ECD316B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECD216B6F8FB00ECBB7B /* ServiceRegularExpressionFiltersTableView.m */; };
 		93BD149B0F967FF200E47097 /* NSUndoManagerDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */; };
-		93BEEB561195BDB40060166A /* DragFilterWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93BEEB551195BDB40060166A /* DragFilterWindowController.nib */; };
+		93BEEB561195BDB40060166A /* DragFilterWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93BEEB551195BDB40060166A /* DragFilterWindowController.xib */; };
 		93BEEB5B1195BDF20060166A /* DragFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */; };
 		93C27F9A139A5A1600410595 /* main.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E9CF7C0E9F307F00B08FB0 /* main.xib */; };
 		93C2A1DA07ED9CFA00AFBDC0 /* LogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93C2A1D807ED9CFA00AFBDC0 /* LogTableView.m */; };
@@ -535,8 +535,8 @@
 		93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; };
 		93E9D0110E9F3D8A00B08FB0 /* Automator_CreateEquations.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E9CFA30E9F318100B08FB0 /* Automator_CreateEquations.m */; };
 		93E9D0120E9F3DBA00B08FB0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 93E9CF750E9F305B00B08FB0 /* InfoPlist.strings */; };
-		93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.nib */; };
-		93ECCA69137F070B00F0CB1B /* ExportFormatOptionsPanes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.nib */; };
+		93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.xib */; };
+		93ECCA69137F070B00F0CB1B /* ExportFormatOptionsPanes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.xib */; };
 		93EE114B07F2F607009E1F36 /* HistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EE114907F2F607009E1F36 /* HistoryCell.m */; };
 		93EF9D2307EF7B740003FA6E /* HistoryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9D2107EF7B740003FA6E /* HistoryManager.m */; };
 		93EF9E9207EF99910003FA6E /* HistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EF9E9007EF99910003FA6E /* HistoryView.m */; };
@@ -547,7 +547,7 @@
 		93F5ED47223551730079B40C /* FileManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F5ED4522353BC10079B40C /* FileManagerHelper.m */; };
 		93F73C9D0898DEF800EFFA5E /* EncapsulationsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */; };
 		93F73CF00898E25C00EFFA5E /* EncapsulationsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F73CEE0898E25C00EFFA5E /* EncapsulationsWindowController.m */; };
-		93F7842710177099005BC2B6 /* PreferencesWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F7842510177099005BC2B6 /* PreferencesWindowController.nib */; };
+		93F7842710177099005BC2B6 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93F7842510177099005BC2B6 /* PreferencesWindowController.xib */; };
 		93F9DFD008A38ECA005DEBF6 /* poisson.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 93F9DFCE08A38ECA005DEBF6 /* poisson.pdf */; };
 		93FA9A2F156927ED00268E55 /* Leggimi.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A2E156927ED00268E55 /* Leggimi.rtfd */; };
 		93FA9A331569280000268E55 /* current-version-it.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 93FA9A311569280000268E55 /* current-version-it.rtf */; };
@@ -794,7 +794,7 @@
 		931AD67508491A8E00E8EE8B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		931CB3050801311100CF9D2B /* LaTeXPalettesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXPalettesWindowController.h; sourceTree = "<group>"; };
 		931CB3060801311100CF9D2B /* LaTeXPalettesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaTeXPalettesWindowController.m; sourceTree = "<group>"; };
-		931CB32E0801325800CF9D2B /* LaTeXPalettesWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LaTeXPalettesWindowController.nib; sourceTree = SOURCE_ROOT; };
+		931CB32E0801325800CF9D2B /* LaTeXPalettesWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LaTeXPalettesWindowController.xib; sourceTree = SOURCE_ROOT; };
 		931FB052252CD3C7009F8847 /* LaTeXiT_App_extension_XPC_Service.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = LaTeXiT_App_extension_XPC_Service.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		931FB055252CD3C7009F8847 /* LaTeXiT_XPC_Service.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LaTeXiT_XPC_Service.h; sourceTree = "<group>"; };
 		931FB056252CD3C7009F8847 /* LaTeXiT_XPC_Service.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LaTeXiT_XPC_Service.m; sourceTree = "<group>"; };
@@ -813,7 +813,7 @@
 		9323F02E182DA0A200F6EA37 /* CHiWorkSpotlightPlugin.mdimporter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CHiWorkSpotlightPlugin.mdimporter; path = Spotlight/CHiWorkSpotlightPlugin.mdimporter; sourceTree = "<group>"; };
 		9324182B0F9CF389006BA13B /* DocumentExtraPanelsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentExtraPanelsController.h; sourceTree = "<group>"; };
 		9324182C0F9CF389006BA13B /* DocumentExtraPanelsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentExtraPanelsController.m; sourceTree = "<group>"; };
-		9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = DocumentExtraPanelsController.nib; sourceTree = SOURCE_ROOT; };
+		9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DocumentExtraPanelsController.xib; sourceTree = SOURCE_ROOT; };
 		9324D34C08A63E540010DB95 /* ButtonNotClickThrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonNotClickThrough.h; sourceTree = "<group>"; };
 		9324D34D08A63E540010DB95 /* ButtonNotClickThrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonNotClickThrough.m; sourceTree = "<group>"; };
 		9325E1261831946F006BCD30 /* CHProtoBuffers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProtoBuffers.h; sourceTree = "<group>"; };
@@ -902,7 +902,7 @@
 		934AA8A60F3380CD0010E384 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = "Frameworks/Sparkle/10_15+/Sparkle.framework"; sourceTree = "<group>"; };
 		934AA8F30F3381210010E384 /* package-as-dmg.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "package-as-dmg.sh"; path = "scripts/package-as-dmg.sh"; sourceTree = "<group>"; };
 		934AAB280F343D830010E384 /* pdfcrop.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; path = pdfcrop.pl; sourceTree = "<group>"; };
-		934C03390AD03600007FEC06 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		934C03390AD03600007FEC06 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		934C033F0AD03632007FEC06 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
 		934C03400AD0363B007FEC06 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		934C03410AD03648007FEC06 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -910,7 +910,7 @@
 		934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lies mich.rtfd"; path = "Resources/documentation/Lies mich.rtfd"; sourceTree = "<group>"; };
 		934D1FD50E5F30FB00BA812B /* AdditionalFilesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalFilesWindowController.h; sourceTree = "<group>"; };
 		934D1FD60E5F30FB00BA812B /* AdditionalFilesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdditionalFilesWindowController.m; sourceTree = "<group>"; };
-		934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = AdditionalFilesWindowController.nib; sourceTree = SOURCE_ROOT; };
+		934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdditionalFilesWindowController.xib; sourceTree = SOURCE_ROOT; };
 		934D20B90E5F5A2000BA812B /* AdditionalFilesTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalFilesTableView.h; sourceTree = "<group>"; };
 		934D20BA0E5F5A2000BA812B /* AdditionalFilesTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdditionalFilesTableView.m; sourceTree = "<group>"; };
 		934D22AB0E6014FF00BA812B /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
@@ -925,9 +925,9 @@
 		93596686241D48D5008F8F4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Legacy/LaTeXiT Helper/Base.lproj/MainMenu.xib"; sourceTree = "<group>"; };
 		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/documentation/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
 		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
-		935AD8710F9E389700B361D8 /* MyDocument.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = MyDocument.nib; sourceTree = SOURCE_ROOT; };
-		935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LibraryWindowController.nib; sourceTree = SOURCE_ROOT; };
-		935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ExportFormatOptionsPanes.nib; sourceTree = SOURCE_ROOT; };
+		935AD8710F9E389700B361D8 /* MyDocument.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyDocument.xib; sourceTree = SOURCE_ROOT; };
+		935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LibraryWindowController.xib; sourceTree = SOURCE_ROOT; };
+		935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportFormatOptionsPanes.xib; sourceTree = SOURCE_ROOT; };
 		935ADDAC0FA0B0C500B361D8 /* ExportFormatOptionsPanes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportFormatOptionsPanes.h; sourceTree = "<group>"; };
 		935ADDAD0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExportFormatOptionsPanes.m; sourceTree = "<group>"; };
 		935AE4690FA1F8A700B361D8 /* NSSegmentedControlExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSSegmentedControlExtended.m; sourceTree = "<group>"; };
@@ -955,10 +955,10 @@
 		936E5F910906E64000A26F7B /* SMLSyntaxColouring.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; path = SMLSyntaxColouring.h; sourceTree = "<group>"; };
 		9372A1F2087819EF00A3A645 /* MarginsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarginsWindowController.h; sourceTree = "<group>"; };
 		9372A1F3087819EF00A3A645 /* MarginsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarginsWindowController.m; sourceTree = "<group>"; };
-		9372A26A08781EC800A3A645 /* MarginsWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = MarginsWindowController.nib; sourceTree = SOURCE_ROOT; };
+		9372A26A08781EC800A3A645 /* MarginsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MarginsWindowController.xib; sourceTree = SOURCE_ROOT; };
 		9375FC7A102ADDF000421561 /* PreferencesWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindow.h; sourceTree = "<group>"; };
 		9375FC7B102ADDF000421561 /* PreferencesWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindow.m; sourceTree = "<group>"; };
-		93773C3207FFF541004AAB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		93773C3207FFF541004AAB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		93773C4607FFF6FB004AAB30 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93773C4707FFF704004AAB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
 		93773C4907FFF713004AAB30 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1043,8 +1043,8 @@
 		93937FFC0FA58873007BEAC0 /* FileExistsTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileExistsTransformer.m; sourceTree = "<group>"; };
 		939380D90FA5B0E8007BEAC0 /* BoolTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoolTransformer.h; sourceTree = "<group>"; };
 		939380DA0FA5B0E8007BEAC0 /* BoolTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoolTransformer.m; sourceTree = "<group>"; };
-		939468322441D4FE004CEBE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = en.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
-		939468332441D507004CEBE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = en; path = en.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		939468322441D4FE004CEBE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
+		939468332441D507004CEBE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		939485EC1828472D0059522B /* CHDragFileWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDragFileWrapper.h; sourceTree = "<group>"; };
 		939485ED1828472D0059522B /* CHDragFileWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHDragFileWrapper.m; sourceTree = "<group>"; };
 		9396B9C0194ED54D003CD205 /* en */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = en; path = "en.lproj/additional-files-help.rtfd"; sourceTree = "<group>"; };
@@ -1094,15 +1094,15 @@
 		93ADD64F144AE96700BA13D9 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93ADD650144AE97100BA13D9 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93ADD651144AE97A00BA13D9 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
-		93ADD652144AE98300BA13D9 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		93ADD653144AE98D00BA13D9 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
+		93ADD652144AE98300BA13D9 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		93ADD653144AE98D00BA13D9 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
 		93AFF5B71381941F00054033 /* NSButtonExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSButtonExtended.h; sourceTree = "<group>"; };
 		93AFF5B81381941F00054033 /* NSButtonExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSButtonExtended.m; sourceTree = "<group>"; };
 		93B212C80BBC1BF400EFCA2F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = es; path = es.lproj/Credits.rtf; sourceTree = "<group>"; };
 		93B212FB0BBC1C8100EFCA2F /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93B212FE0BBC1C8A00EFCA2F /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93B212FF0BBC1C9800EFCA2F /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
-		93B2130C0BBC1CCC00EFCA2F /* es */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = es; path = es.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		93B2130C0BBC1CCC00EFCA2F /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		93B436631939189400F6BDAC /* CHExportPrefetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHExportPrefetcher.h; sourceTree = "<group>"; };
 		93B436641939189400F6BDAC /* CHExportPrefetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHExportPrefetcher.m; sourceTree = "<group>"; };
 		93B48F5D091FA47C00FDEEB6 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = tex.plist; sourceTree = "<group>"; };
@@ -1115,7 +1115,7 @@
 		93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSUndoManagerDebug.m; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93BDECD519B5B8FE00F2C4AB /* missing-translations.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "missing-translations.rtf"; sourceTree = "<group>"; };
-		93BEEB551195BDB40060166A /* DragFilterWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = DragFilterWindowController.nib; sourceTree = SOURCE_ROOT; };
+		93BEEB551195BDB40060166A /* DragFilterWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DragFilterWindowController.xib; sourceTree = SOURCE_ROOT; };
 		93BEEB591195BDF20060166A /* DragFilterWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterWindowController.h; sourceTree = "<group>"; };
 		93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterWindowController.m; sourceTree = "<group>"; };
 		93C0685C1697230300D20F06 /* お読みください.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "お読みください.rtfd"; path = "Resources/documentation/お読みください.rtfd"; sourceTree = "<group>"; };
@@ -1139,7 +1139,7 @@
 		93D6BA1C082941900081D58A /* NSArrayExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayExtended.m; sourceTree = "<group>"; };
 		93D7CA5409D362FC0001DC5E /* CompositionConfigurationsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositionConfigurationsWindowController.h; sourceTree = "<group>"; };
 		93D7CA5509D362FC0001DC5E /* CompositionConfigurationsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompositionConfigurationsWindowController.m; sourceTree = "<group>"; };
-		93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CompositionConfigurationsWindowController.nib; sourceTree = SOURCE_ROOT; };
+		93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CompositionConfigurationsWindowController.xib; sourceTree = SOURCE_ROOT; };
 		93DD13F0126B0FB700EBF198 /* PluginCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginCell.h; sourceTree = "<group>"; };
 		93DD13F1126B0FB700EBF198 /* PluginCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginCell.m; sourceTree = "<group>"; };
 		93DD6391106A392300EDDF82 /* BodyTemplatesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyTemplatesController.h; sourceTree = "<group>"; };
@@ -1159,7 +1159,7 @@
 		93E9CFA40E9F318100B08FB0 /* Automator_CreateEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Automator_CreateEquations.h; path = Automator/CreateEquations/Automator_CreateEquations.h; sourceTree = "<group>"; };
 		93EE114807F2F607009E1F36 /* HistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryCell.h; sourceTree = "<group>"; };
 		93EE114907F2F607009E1F36 /* HistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryCell.m; sourceTree = "<group>"; };
-		93EED7D508A2197500A99BDF /* HistoryWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = HistoryWindowController.nib; sourceTree = SOURCE_ROOT; };
+		93EED7D508A2197500A99BDF /* HistoryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryWindowController.xib; sourceTree = SOURCE_ROOT; };
 		93EF9D2007EF7B740003FA6E /* HistoryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryManager.h; sourceTree = "<group>"; };
 		93EF9D2107EF7B740003FA6E /* HistoryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryManager.m; sourceTree = "<group>"; };
 		93EF9E8F07EF99910003FA6E /* HistoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryView.h; sourceTree = "<group>"; };
@@ -1175,17 +1175,17 @@
 		93F73C9B0898DEF800EFFA5E /* EncapsulationsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationsTableView.m; sourceTree = "<group>"; };
 		93F73CED0898E25C00EFFA5E /* EncapsulationsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncapsulationsWindowController.h; sourceTree = "<group>"; };
 		93F73CEE0898E25C00EFFA5E /* EncapsulationsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncapsulationsWindowController.m; sourceTree = "<group>"; };
-		93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = EncapsulationsWindowController.nib; sourceTree = SOURCE_ROOT; };
-		93F78428101770A5005BC2B6 /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
-		93F78449101770AE005BC2B6 /* es */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = es; path = es.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
-		93F7844C101770B6005BC2B6 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
+		93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EncapsulationsWindowController.xib; sourceTree = SOURCE_ROOT; };
+		93F78428101770A5005BC2B6 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
+		93F78449101770AE005BC2B6 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
+		93F7844C101770B6005BC2B6 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
 		93F874F9108863D900995B12 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = ja; path = ja.lproj/Credits.rtf; sourceTree = "<group>"; };
 		93F874FA1088645700995B12 /* ja */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93F874FB1088647D00995B12 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = ja; path = ja.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
 		93F874FC1088648500995B12 /* ja */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		93F874FD108864A100995B12 /* ja */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ServicesMenu.strings; sourceTree = "<group>"; };
-		93F87500108864C000995B12 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		93F87502108864D100995B12 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/PreferencesWindowController.nib; sourceTree = "<group>"; };
+		93F87500108864C000995B12 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		93F87502108864D100995B12 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
 		93F875031088650400995B12 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = Automator/CreateEquations/ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93F9DFCE08A38ECA005DEBF6 /* poisson.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = poisson.pdf; sourceTree = "<group>"; };
 		93FA9A2E156927ED00268E55 /* Leggimi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Leggimi.rtfd; path = Resources/documentation/Leggimi.rtfd; sourceTree = "<group>"; };
@@ -1752,19 +1752,19 @@
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				930255CF07F0C2A800011996 /* Localizable.strings */,
 				939A64570800281900AE4486 /* ServicesMenu.strings */,
-				934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.nib */,
-				93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.nib */,
-				9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.nib */,
-				93BEEB551195BDB40060166A /* DragFilterWindowController.nib */,
-				935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.nib */,
-				93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.nib */,
-				93EED7D508A2197500A99BDF /* HistoryWindowController.nib */,
-				935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.nib */,
-				2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */,
-				9372A26A08781EC800A3A645 /* MarginsWindowController.nib */,
-				935AD8710F9E389700B361D8 /* MyDocument.nib */,
-				931CB32E0801325800CF9D2B /* LaTeXPalettesWindowController.nib */,
-				93F7842510177099005BC2B6 /* PreferencesWindowController.nib */,
+				934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.xib */,
+				93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.xib */,
+				9324184A0F9CF569006BA13B /* DocumentExtraPanelsController.xib */,
+				93BEEB551195BDB40060166A /* DragFilterWindowController.xib */,
+				935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.xib */,
+				93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.xib */,
+				93EED7D508A2197500A99BDF /* HistoryWindowController.xib */,
+				935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */,
+				2A37F4B6FDCFA73011CA2CEA /* MainMenu.xib */,
+				9372A26A08781EC800A3A645 /* MarginsWindowController.xib */,
+				935AD8710F9E389700B361D8 /* MyDocument.xib */,
+				931CB32E0801325800CF9D2B /* LaTeXPalettesWindowController.xib */,
+				93F7842510177099005BC2B6 /* PreferencesWindowController.xib */,
 			);
 			name = LaTeXiT;
 			sourceTree = "<group>";
@@ -2405,7 +2405,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */,
-				8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */,
+				8D15AC2D0486D014006FF6A4 /* MainMenu.xib in Resources */,
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				930255D007F0C2A800011996 /* Localizable.strings in Resources */,
 				93A592CB07F46075001DF900 /* Licence.rtf in Resources */,
@@ -2413,31 +2413,31 @@
 				93A592CD07F46075001DF900 /* Read Me.rtfd in Resources */,
 				558813762678A05000CA4738 /* Media.xcassets in Resources */,
 				939A64580800281900AE4486 /* ServicesMenu.strings in Resources */,
-				932417F40F9BBB0A006BA13B /* LaTeXPalettesWindowController.nib in Resources */,
+				932417F40F9BBB0A006BA13B /* LaTeXPalettesWindowController.xib in Resources */,
 				935A85ED084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt in Resources */,
 				935A85EE084F4DEF005724CE /* Licence_CeCILL_V2-en.txt in Resources */,
 				558813792678AD8B00CA4738 /* app-icon.xcassets in Resources */,
-				932417F30F9BBAF7006BA13B /* MarginsWindowController.nib in Resources */,
-				932417F10F9BBAE6006BA13B /* EncapsulationsWindowController.nib in Resources */,
-				932417F20F9BBAEE006BA13B /* HistoryWindowController.nib in Resources */,
+				932417F30F9BBAF7006BA13B /* MarginsWindowController.xib in Resources */,
+				932417F10F9BBAE6006BA13B /* EncapsulationsWindowController.xib in Resources */,
+				932417F20F9BBAEE006BA13B /* HistoryWindowController.xib in Resources */,
 				93F9DFD008A38ECA005DEBF6 /* poisson.pdf in Resources */,
 				93B48F5E091FA47C00FDEEB6 /* tex.plist in Resources */,
-				932417F00F9BBAE0006BA13B /* CompositionConfigurationsWindowController.nib in Resources */,
+				932417F00F9BBAE0006BA13B /* CompositionConfigurationsWindowController.xib in Resources */,
 				93F2C5D90A30D9130009FB59 /* latex-keywords.plist in Resources */,
 				9345E3360AC9A2620082ADB4 /* textShortcuts.plist in Resources */,
 				934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */,
 				934069DA0C058FFB0012A8DB /* Léeme.rtfd in Resources */,
 				931030240C116A2E000BECED /* palettes in Resources */,
 				937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */,
-				932417EF0F9BBAD1006BA13B /* AdditionalFilesWindowController.nib in Resources */,
+				932417EF0F9BBAD1006BA13B /* AdditionalFilesWindowController.xib in Resources */,
 				9396E9470EC8422E0014C4BD /* dsa_sparkle_latexit_pub.pem in Resources */,
 				934AAB290F343D830010E384 /* pdfcrop.pl in Resources */,
-				93AFF7971381D03B00054033 /* DocumentExtraPanelsController.nib in Resources */,
-				935AD8720F9E389700B361D8 /* MyDocument.nib in Resources */,
-				935ADA2B0F9EF7AD00B361D8 /* LibraryWindowController.nib in Resources */,
-				93ECCA69137F070B00F0CB1B /* ExportFormatOptionsPanes.nib in Resources */,
-				93F7842710177099005BC2B6 /* PreferencesWindowController.nib in Resources */,
-				93BEEB561195BDB40060166A /* DragFilterWindowController.nib in Resources */,
+				93AFF7971381D03B00054033 /* DocumentExtraPanelsController.xib in Resources */,
+				935AD8720F9E389700B361D8 /* MyDocument.xib in Resources */,
+				935ADA2B0F9EF7AD00B361D8 /* LibraryWindowController.xib in Resources */,
+				93ECCA69137F070B00F0CB1B /* ExportFormatOptionsPanes.xib in Resources */,
+				93F7842710177099005BC2B6 /* PreferencesWindowController.xib in Resources */,
+				93BEEB561195BDB40060166A /* DragFilterWindowController.xib in Resources */,
 				932BD009122BA6F3003C312C /* LaTeXMathML.pl in Resources */,
 				93E25B171231A1B200D65279 /* LaTeXMathML.js in Resources */,
 				93FA9A2F156927ED00268E55 /* Leggimi.rtfd in Resources */,
@@ -2469,7 +2469,7 @@
 				933B5F470F5F10060069E5B4 /* Latexit-2.4.0.xcdatamodel in Resources */,
 				93D231F91018332700768782 /* textShortcuts.plist in Resources */,
 				9341922E1281C70C009D3E97 /* Localizable.strings in Resources */,
-				93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.nib in Resources */,
+				93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.xib in Resources */,
 				936B925313898EE3007C8AF4 /* LaTeXMathML.js in Resources */,
 				936B925213898EDE007C8AF4 /* LaTeXMathML.pl in Resources */,
 				93FA9A331569280000268E55 /* current-version-it.rtf in Resources */,
@@ -3044,7 +3044,7 @@
 			name = InfoPlist.strings;
 			sourceTree = SOURCE_ROOT;
 		};
-		2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */ = {
+		2A37F4B6FDCFA73011CA2CEA /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				93773C3207FFF541004AAB30 /* fr */,
@@ -3054,7 +3054,7 @@
 				93F87500108864C000995B12 /* ja */,
 				939468332441D507004CEBE5 /* en */,
 			);
-			name = MainMenu.nib;
+			name = MainMenu.xib;
 			sourceTree = SOURCE_ROOT;
 		};
 		2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */ = {
@@ -3202,7 +3202,7 @@
 			path = ../..;
 			sourceTree = "<group>";
 		};
-		93F7842510177099005BC2B6 /* PreferencesWindowController.nib */ = {
+		93F7842510177099005BC2B6 /* PreferencesWindowController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				93F78428101770A5005BC2B6 /* fr */,
@@ -3212,7 +3212,7 @@
 				93F87502108864D100995B12 /* ja */,
 				939468322441D4FE004CEBE5 /* en */,
 			);
-			name = PreferencesWindowController.nib;
+			name = PreferencesWindowController.xib;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXVariantGroup section */
