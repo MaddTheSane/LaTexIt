@@ -68,9 +68,7 @@
 
 -(id) init
 {
-  if (![self initWithWorkingDirectory:NSTemporaryDirectory()])
-    return nil;
-  return self;
+  return [self initWithWorkingDirectory:NSTemporaryDirectory()];
 }
 //end init
 

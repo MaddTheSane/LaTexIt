@@ -24,6 +24,8 @@ static NSDictionary* noneBodyTemplate = nil;
   NSSet* result = nil;
   if ([key isEqualToString:@"arrangedObjectsNamesWithNone"])
     result = [NSSet setWithObjects:@"arrangedObjects", nil];
+  else
+    result = [NSSet set];
   return result;
 }
 //end keyPathsForValuesAffectingValueForKey:
@@ -194,10 +196,10 @@ static NSDictionary* noneBodyTemplate = nil;
   id modelObject = (selectedObjects && [selectedObjects count]) ? [selectedObjects objectAtIndex:0] :
                    (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
   if (!modelObject)
-    result = [[[self class] defaultLocalizedBodyTemplateDictionaryEncoded] deepMutableCopy];
+    result = [[[self class] defaultLocalizedBodyTemplateDictionaryEncoded] mutableCopyDeep];
   else
   {
-    result = [modelObject deepMutableCopy];
+    result = [modelObject mutableCopyDeep];
     [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", @""), [result objectForKey:@"name"]] forKey:@"name"];
   }
   return result;
@@ -209,6 +211,7 @@ static NSDictionary* noneBodyTemplate = nil;
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+  [newObject release];
 }
 //end add:
 

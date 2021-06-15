@@ -104,6 +104,18 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(void) dealloc
 {
+  [self->generalView release];
+  [self->editionView release];
+  [self->templatesView release];
+  [self->templatesTabView release];
+  [self->compositionView release];
+  [self->libraryView release];
+  [self->historyView release];
+  [self->serviceView release];
+  [self->advancedView release];
+  [self->webView release];
+  [self->pluginsView release];
+  [self->emptyView release];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [self->viewsMinSizes release];
   [self->toolbarItems release];
@@ -157,6 +169,19 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(void) awakeFromNib
 {
+  [self->generalView retain];
+  [self->editionView retain];
+  [self->templatesView retain];
+  [self->templatesTabView retain];
+  [self->compositionView retain];
+  [self->libraryView retain];
+  [self->historyView retain];
+  [self->serviceView retain];
+  [self->advancedView retain];
+  [self->webView retain];
+  [self->pluginsView retain];
+  [self->emptyView retain];
+  
   //get rid of formatter localization problems
   [self->generalPointSizeFormatter setLocale:[NSLocale currentLocale]];
   [self->generalPointSizeFormatter setGroupingSeparator:[[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator]];
@@ -1285,24 +1310,22 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     view = self->webView;
 
   NSWindow* window = [self window];
-  NSView*   contentView = [window contentView];
-  if (view != contentView)
+  NSView*   oldContentView = [window contentView];
+  if (view != oldContentView)
   {
     NSSize contentMinSize = [[self->viewsMinSizes objectForKey:itemIdentifier] sizeValue];
-    NSRect oldContentFrame = contentView ? [contentView frame] : NSZeroRect;
+    NSRect oldContentFrame = !oldContentView ? NSZeroRect : [oldContentView frame];
     NSRect newContentFrame = !view ? NSZeroRect : [view frame];
     NSRect newFrame = [window frame];
     newFrame.size.width  += (newContentFrame.size.width  - oldContentFrame.size.width);
     newFrame.size.height += (newContentFrame.size.height - oldContentFrame.size.height);
     newFrame.origin.y    -= (newContentFrame.size.height - oldContentFrame.size.height);
-    [[window contentView] retain];
     [self->emptyView setFrame:newContentFrame];
     [window setContentView:self->emptyView];
     [window setFrame:newFrame display:YES animate:YES];
-    [[window contentView] retain];
     [window setContentView:view];
     [window setContentMinSize:contentMinSize];
-  }//end if (view != contentView)
+  }//end if (view != oldContentView)
   
   [window setShowsResizeIndicator:
     [itemIdentifier isEqualToString:EditionToolbarItemIdentifier] ||

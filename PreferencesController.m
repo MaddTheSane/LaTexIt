@@ -1897,7 +1897,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 
 -(void) setCompositionConfigurationDocumentProgramPath:(NSString*)value forKey:(NSString*)key
 {
-  NSMutableDictionary* configuration = [[self compositionConfigurationDocument] deepMutableCopy];
+  NSMutableDictionary* configuration = [[self compositionConfigurationDocument] mutableCopyDeep];
   [configuration setObject:value forKey:key];
   [self setCompositionConfigurationDocument:configuration];
   #ifdef ARC_ENABLED
@@ -2319,12 +2319,14 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   BOOL result = NO;
   if (self->isLaTeXiT)
     result = [[NSUserDefaults standardUserDefaults] boolForKey:SynchronizationNewDocumentsSynchronizePreambleKey];
-  else
+  else//if (!self->isLaTeXiT)
+  {
     #ifdef ARC_ENABLED
-    [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
+    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
     #else
-    [(NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
+    result = [[NSMakeCollectable(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
     #endif
+  }//end if (!self->isLaTeXiT)
   return result;
 }
 //end synchronizationNewDocumentsSynchronizePreamble

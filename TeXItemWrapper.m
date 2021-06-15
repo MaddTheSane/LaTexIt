@@ -14,7 +14,7 @@
 
 -(id) initWithItem:(NSDictionary*)aData
 {
-  if (!(([super init])))
+  if (!((self = [super init])))
     return nil;
   self->data = [aData copy];
   self->enabled = YES;

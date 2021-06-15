@@ -15,10 +15,10 @@
 -(NSDictionary*) dictionaryByAddingObjectsAndKeys:(id)firstObject, ...;
 -(NSDictionary*) subDictionaryWithKeys:(NSArray*)keys;
 
--(id) deepCopy;
--(id) deepCopyWithZone:(NSZone*)zone;
--(id) deepMutableCopy;
--(id) deepMutableCopyWithZone:(NSZone*)zone;
+-(id) copyDeep;
+-(id) copyDeepWithZone:(NSZone*)zone;
+-(id) mutableCopyDeep;
+-(id) mutableCopyDeepWithZone:(NSZone*)zone;
 
 -(id) objectForKey:(id)aKey withClass:(Class)class;
 

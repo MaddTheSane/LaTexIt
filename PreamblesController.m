@@ -113,10 +113,10 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 {
   #ifdef ARC_ENABLED
   if (![[self arrangedObjects] count])
-    [self addObject:[[[self class] defaultLocalizedPreambleDictionaryEncoded] deepMutableCopy]];
+    [self addObject:[[[self class] defaultLocalizedPreambleDictionaryEncoded] mutableCopyDeep]];
   #else
   if (![[self arrangedObjects] count])
-    [self addObject:[[[[self class] defaultLocalizedPreambleDictionaryEncoded] deepMutableCopy] autorelease]];
+    [self addObject:[[[[self class] defaultLocalizedPreambleDictionaryEncoded] mutableCopyDeep] autorelease]];
   #endif
 }
 //end ensureDefaultPreamble
@@ -136,10 +136,10 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   id modelObject = (selectedObjects && [selectedObjects count]) ? [selectedObjects objectAtIndex:0] :
                    (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
   if (!modelObject)
-    result = [[[self class] defaultLocalizedPreambleDictionary] deepMutableCopy];
+    result = [[[self class] defaultLocalizedPreambleDictionary] mutableCopyDeep];
   else
   {
-    result = [modelObject deepMutableCopy];
+    result = [modelObject mutableCopyDeep];
     [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", @""), [result objectForKey:@"name"]] forKey:@"name"];
   }
   return result;
@@ -151,6 +151,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+  [newObject release];
 }
 //end add:
 

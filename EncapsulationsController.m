@@ -28,6 +28,7 @@
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+  [newObject release];
 }
 //end add:
 

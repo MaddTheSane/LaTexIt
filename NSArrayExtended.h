@@ -24,9 +24,9 @@
 
 -(NSArray*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
 
--(id) deepCopy;
--(id) deepCopyWithZone:(NSZone*)zone;
--(id) deepMutableCopy;
--(id) deepMutableCopyWithZone:(NSZone*)zone;
+-(id) copyDeep;
+-(id) copyDeepWithZone:(NSZone*)zone;
+-(id) mutableCopyDeep;
+-(id) mutableCopyDeepWithZone:(NSZone*)zone;
 
 @end

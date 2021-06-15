@@ -129,10 +129,10 @@
   id modelObject = (selectedObjects && [selectedObjects count]) ? [selectedObjects objectAtIndex:0] :
                    (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
   if (!modelObject)
-    result = [[[self class] defaultCompositionConfigurationDictionary] deepMutableCopy];
+    result = [[[self class] defaultCompositionConfigurationDictionary] mutableCopyDeep];
   else
   {
-    result = [modelObject deepMutableCopy];
+    result = [modelObject mutableCopyDeep];
     [result setObject:[NSMutableString stringWithFormat:NSLocalizedString(@"Copy of %@", @""), [result objectForKey:CompositionConfigurationNameKey]]
       forKey:CompositionConfigurationNameKey];
     [result setObject:@(NO) forKey:CompositionConfigurationIsDefaultKey];
@@ -146,6 +146,7 @@
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+  [newObject release];
 }
 //end add:
 
