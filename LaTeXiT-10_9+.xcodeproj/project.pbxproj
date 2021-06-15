@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -160,7 +160,7 @@
 		931FB155252CD540009F8847 /* textShortcuts.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9345E3350AC9A2620082ADB4 /* textShortcuts.plist */; };
 		931FB15C252CD540009F8847 /* textShortcuts.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9345E3350AC9A2620082ADB4 /* textShortcuts.plist */; };
 		931FB18E252CD68B009F8847 /* EncapsulationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93265F0B0FAEBA370060D667 /* EncapsulationsController.m */; };
-		931FB19C252CD825009F8847 /* LaTeXiT_App_extension_XPC_Service.xpc in Copy Files (1 item) */ = {isa = PBXBuildFile; fileRef = 931FB052252CD3C7009F8847 /* LaTeXiT_App_extension_XPC_Service.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		931FB19C252CD825009F8847 /* LaTeXiT_App_extension_XPC_Service.xpc in Copy XPC Services */ = {isa = PBXBuildFile; fileRef = 931FB052252CD3C7009F8847 /* LaTeXiT_App_extension_XPC_Service.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		931FB1AA252CDE75009F8847 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931FB1A9252CDE75009F8847 /* Quartz.framework */; };
 		931FB1AB252CDE7C009F8847 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B8E92B19C0F99A00263C1F /* QuartzCore.framework */; };
 		931FB1AD252CDE81009F8847 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931FB1AC252CDE81009F8847 /* PDFKit.framework */; };
@@ -266,7 +266,7 @@
 		934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
 		934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; };
-		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 934AA8A60F3380CD0010E384 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		934AAB290F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934AAB2A0F343D830010E384 /* pdfcrop.pl in Resources */ = {isa = PBXBuildFile; fileRef = 934AAB280F343D830010E384 /* pdfcrop.pl */; };
 		934C03700AD03D7B007FEC06 /* Lies mich.rtfd in Resources */ = {isa = PBXBuildFile; fileRef = 934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */; };
@@ -294,7 +294,7 @@
 		9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
 		9368A60D17737E9E00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; };
 		9368A61217737ECE00B2ACC1 /* LinkBack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9368A60C17737E9E00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9368A63C1773806F00B2ACC1 /* LinkBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; };
 		9368A63D1773808400B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */ = {isa = PBXBuildFile; fileRef = 9368A4EE17737E0D00B2ACC1 /* LinkBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9368E8E0095B184B00B35E30 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
@@ -523,8 +523,8 @@
 		93D49E6F0F6EDB290024087A /* LibraryEquation.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D49E6E0F6EDB290024087A /* LibraryEquation.m */; };
 		93D6BA1E082941900081D58A /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
 		93D7CA5709D362FC0001DC5E /* CompositionConfigurationsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D7CA5509D362FC0001DC5E /* CompositionConfigurationsWindowController.m */; };
-		93DD064F235CE009008252BB /* CreateEquations.action in Copy Files (Automator) */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		93DD0650235CE037008252BB /* LaTeXiT Helper.app in Copy Files (LaTeXiT Helper) */ = {isa = PBXBuildFile; fileRef = 938DBE1310BDC2E0002350CF /* LaTeXiT Helper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		93DD064F235CE009008252BB /* CreateEquations.action in Copy Automator Files */ = {isa = PBXBuildFile; fileRef = 9344B98F0E8CF38700FE90A5 /* CreateEquations.action */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		93DD0650235CE037008252BB /* LaTeXiT Helper.app in Copy LaTeXiT Helper */ = {isa = PBXBuildFile; fileRef = 938DBE1310BDC2E0002350CF /* LaTeXiT Helper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		93DD13F2126B0FB700EBF198 /* PluginCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DD13F1126B0FB700EBF198 /* PluginCell.m */; };
 		93DD6393106A392300EDDF82 /* BodyTemplatesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DD6392106A392300EDDF82 /* BodyTemplatesController.m */; };
 		93DD6394106A392300EDDF82 /* BodyTemplatesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DD6392106A392300EDDF82 /* BodyTemplatesController.m */; };
@@ -603,27 +603,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		93126C5C0834966D0021D026 /* Copy Files (Frameworks) */ = {
+		93126C5C0834966D0021D026 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Files (Frameworks) */,
-				934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Files (Frameworks) */,
+				9368A61317737EF600B2ACC1 /* LinkBack.framework in Copy Frameworks */,
+				934AA8F70F33813B0010E384 /* Sparkle.framework in Copy Frameworks */,
 			);
-			name = "Copy Files (Frameworks)";
+			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		931FB19B252CD7FD009F8847 /* Copy Files (1 item) */ = {
+		931FB19B252CD7FD009F8847 /* Copy XPC Services */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
 			dstSubfolderSpec = 16;
 			files = (
-				931FB19C252CD825009F8847 /* LaTeXiT_App_extension_XPC_Service.xpc in Copy Files (1 item) */,
+				931FB19C252CD825009F8847 /* LaTeXiT_App_extension_XPC_Service.xpc in Copy XPC Services */,
 			);
-			name = "Copy Files (1 item)";
+			name = "Copy XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9323F015182D9F9900F6EA37 /* Copy Files (Spotlight) */ = {
@@ -646,15 +646,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9349518410BDCEEE00931D51 /* Copy Files (LaTeXiT Helper) */ = {
+		9349518410BDCEEE00931D51 /* Copy LaTeXiT Helper */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = Contents/Library/Applications;
 			dstSubfolderSpec = 1;
 			files = (
-				93DD0650235CE037008252BB /* LaTeXiT Helper.app in Copy Files (LaTeXiT Helper) */,
+				93DD0650235CE037008252BB /* LaTeXiT Helper.app in Copy LaTeXiT Helper */,
 			);
-			name = "Copy Files (LaTeXiT Helper)";
+			name = "Copy LaTeXiT Helper";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		936BCE5418368E0100EF04DF /* Copy Files (Libraries) */ = {
@@ -700,15 +700,15 @@
 			name = "Copy Files (Frameworks)";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		93FD197023550FDC00E20695 /* Copy Files (Automator) */ = {
+		93FD197023550FDC00E20695 /* Copy Automator Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = Contents/Library/Automator;
 			dstSubfolderSpec = 1;
 			files = (
-				93DD064F235CE009008252BB /* CreateEquations.action in Copy Files (Automator) */,
+				93DD064F235CE009008252BB /* CreateEquations.action in Copy Automator Files */,
 			);
-			name = "Copy Files (Automator)";
+			name = "Copy Automator Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -1332,8 +1332,10 @@
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 				934AAB2E0F343DC20010E384 /* Project Helpers */,
 			);
+			indentWidth = 3;
 			name = LaTeXiT;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
@@ -2234,9 +2236,9 @@
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
 				936BCE5418368E0100EF04DF /* Copy Files (Libraries) */,
-				93126C5C0834966D0021D026 /* Copy Files (Frameworks) */,
-				93FD197023550FDC00E20695 /* Copy Files (Automator) */,
-				9349518410BDCEEE00931D51 /* Copy Files (LaTeXiT Helper) */,
+				93126C5C0834966D0021D026 /* Copy Frameworks */,
+				93FD197023550FDC00E20695 /* Copy Automator Files */,
+				9349518410BDCEEE00931D51 /* Copy LaTeXiT Helper */,
 				9323F015182D9F9900F6EA37 /* Copy Files (Spotlight) */,
 				93791ECA2526485B00B1AD26 /* Embed App Extensions */,
 				937920202527854000B1AD26 /* Embed XPC Services */,
@@ -2299,7 +2301,7 @@
 				93791EB52526485B00B1AD26 /* Sources */,
 				93791EB62526485B00B1AD26 /* Frameworks */,
 				93791EB72526485B00B1AD26 /* Resources */,
-				931FB19B252CD7FD009F8847 /* Copy Files (1 item) */,
+				931FB19B252CD7FD009F8847 /* Copy XPC Services */,
 			);
 			buildRules = (
 			);
@@ -2354,19 +2356,37 @@
 			attributes = {
 				LastUpgradeCheck = 1200;
 				TargetAttributes = {
+					8D15AC270486D014006FF6A4 = {
+						DevelopmentTeam = 7SFX84GNR7;
+						ProvisioningStyle = Automatic;
+					};
 					931FB051252CD3C7009F8847 = {
 						CreatedOnToolsVersion = 12.0.1;
+						DevelopmentTeam = 7SFX84GNR7;
+						ProvisioningStyle = Automatic;
+					};
+					9344B98E0E8CF38700FE90A5 = {
+						DevelopmentTeam = 7SFX84GNR7;
+						ProvisioningStyle = Automatic;
 					};
 					93791EB82526485B00B1AD26 = {
 						CreatedOnToolsVersion = 12.0.1;
+						DevelopmentTeam = 7SFX84GNR7;
+						ProvisioningStyle = Automatic;
 					};
 					937920102527854000B1AD26 = {
 						CreatedOnToolsVersion = 12.0.1;
+						DevelopmentTeam = 7SFX84GNR7;
+						ProvisioningStyle = Automatic;
+					};
+					938DBD4C10BDC2E0002350CF = {
+						DevelopmentTeam = 7SFX84GNR7;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-10_9+" */;
-			compatibilityVersion = "Xcode 3.0";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
