@@ -292,7 +292,7 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
         (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) ];
       #else
       servicesItems = [NSMutableArray arrayWithArray:
-        [NSMakeCollectable((id)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease]];
+        [(NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) autorelease]];
       #endif
     NSUInteger count = [servicesItems count];
     while(count--)
@@ -391,9 +391,9 @@ static NSString* Old_CompositionConfigurationAdditionalProcessingScriptsContentK
   [self replaceKey:Old_CompositionConfigurationsKey withKey:CompositionConfigurationsKey];
   [self replaceKey:Old_CurrentCompositionConfigurationIndexKey withKey:CompositionConfigurationDocumentIndexKey];
   #ifdef ARC_ENABLED
-  NSMutableArray* newCompositionConfigurations = [[self compositionConfigurations] mutableCopyDeep];
+  NSMutableArray* newCompositionConfigurations = [[self compositionConfigurations] deepMutableCopy];
   #else
-  NSMutableArray* newCompositionConfigurations = [[[self compositionConfigurations] mutableCopyDeep] autorelease];
+  NSMutableArray* newCompositionConfigurations = [[[self compositionConfigurations] deepMutableCopy] autorelease];
   #endif
   NSEnumerator* enumerator = [newCompositionConfigurations objectEnumerator];
   NSMutableDictionary* compositionConfiguration = nil;

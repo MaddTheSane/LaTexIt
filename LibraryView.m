@@ -940,14 +940,14 @@
     }
     if ([representedObject isKindOfClass:[LibraryEquation class]])
     {
-      LatexitEquation* latexitEquation = [[representedObject dynamicCastToClass:[LibraryEquation class]] equation];
+      LatexitEquation* latexitEquation = [(LibraryEquation*)representedObject equation];
       cellImage = (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) ? nil : [latexitEquation pdfCachedImage];
       cellTextBackgroundColor = [latexitEquation backgroundColor];
-      NSColor* greyLevelColor = [cellTextBackgroundColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]];
+      NSColor* greyLevelColor  = [cellTextBackgroundColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]];
       cellDrawsBackground = (cellTextBackgroundColor != nil) && ([greyLevelColor whiteComponent] != 1.0f);
       if ((currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) && ![cell isHighlighted])
         cellTextColor = [latexitEquation color];
-    }//end if ([representedObject isKindOfClass:[LibraryEquation class]])
+    }
     else if ([representedObject isKindOfClass:[LibraryGroupItem class]])
       cellImage = [self iconForRepresentedObject:representedObject];
     else

@@ -836,7 +836,7 @@ static LaTeXProcessor* sharedInstance = nil;
   }//end if (runInBackgroundThread)
   else//if (!runInBackgroundThread)
   {
-    NSMutableDictionary* configuration2 = [configuration mutableCopyDeep];//will protect from preferences changes
+    NSMutableDictionary* configuration2 = [configuration deepMutableCopy];//will protect from preferences changes
     NSString* fullLog = [configuration2 objectForKey:@"outFullLog"];
     NSArray*  errors  = [configuration2 objectForKey:@"outErrors"];
     NSData*   pdfData = [configuration2 objectForKey:@"outPdfData"];
@@ -2796,10 +2796,10 @@ static LaTeXProcessor* sharedInstance = nil;
         {
           #ifdef ARC_ENABLED
           propertiesImmutable = (CHBRIDGE NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0);
-          properties = [propertiesImmutable mutableCopyDeep];
+          properties = [propertiesImmutable deepMutableCopy];
           #else
           propertiesImmutable = NSMakeCollectable((CHBRIDGE NSDictionary*)CGImageSourceCopyPropertiesAtIndex(imageSource, 0, 0));
-          properties = [[propertiesImmutable mutableCopyDeep] autorelease];
+          properties = [[propertiesImmutable deepMutableCopy] autorelease];
           #endif
           NSMutableDictionary* exifDictionary = [properties objectForKey:(NSString*)kCGImagePropertyExifDictionary];
           if (!exifDictionary)

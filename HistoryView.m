@@ -622,8 +622,7 @@
           (exportFormat != EXPORT_FORMAT_JPEG))
         [[NSWorkspace sharedWorkspace] setIcon:[[LaTeXProcessor sharedLaTeXProcessor] makeIconForData:[[historyItem equation] pdfData] backgroundColor:iconBackgroundColor]
                                        forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
-      if (fileName)
-        [names addObject:fileName];
+      [names addObject:fileName];
     }//end if (![fileManager fileExistsAtPath:filePath])
     index = [indexSet indexGreaterThanIndex:index]; //now, let's do the same for the next item
   }//end while (index != NSNotFound) 

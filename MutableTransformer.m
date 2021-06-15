@@ -68,11 +68,11 @@
 -(id) transformedValue:(id)value
 {
   id result = value;
-  if ([result respondsToSelector:@selector(mutableCopyDeep)])
+  if ([result respondsToSelector:@selector(deepMutableCopy)])
     #ifdef ARC_ENABLED
-    result = [result mutableCopyDeep];
+    result = [result deepMutableCopy];
     #else
-    result = [[result mutableCopyDeep] autorelease];
+    result = [[result deepMutableCopy] autorelease];
     #endif
   else if ([result respondsToSelector:@selector(mutableCopy)])    
     #ifdef ARC_ENABLED

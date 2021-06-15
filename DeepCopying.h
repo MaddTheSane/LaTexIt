@@ -9,11 +9,11 @@
 #import <Cocoa/Cocoa.h>
 
 @protocol DeepCopying
--(id) copyDeep;
--(id) copyDeepWithZone:(NSZone*)zone;
+-(id) deepCopy;
+-(id) deepCopyWithZone:(NSZone*)zone;
 @end
 
 @protocol DeepMutableCopying
--(id) mutableCopyDeep;
--(id) mutableCopyDeepWithZone:(NSZone*)zone;
+-(id) deepMutableCopy;
+-(id) deepMutableCopyWithZone:(NSZone*)zone;
 @end

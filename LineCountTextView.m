@@ -815,7 +815,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   {
     NSData* rtfData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
-    NSMutableAttributedString* attributedString = [[[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes] autorelease];
+    NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
     [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
     if (attributedString)
       [self insertText:attributedString];

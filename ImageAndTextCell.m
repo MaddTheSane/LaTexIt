@@ -30,10 +30,7 @@
 {
   ImageAndTextCell* clone = (ImageAndTextCell*) [super copyWithZone:zone];
   if (clone)
-  {
     clone->image = [self->image retain];
-    clone->imageBackgroundColor = [self->imageBackgroundColor copy];
-  }//end if (clone)
   return clone;
 }
 //end copyWithZone:
@@ -52,13 +49,13 @@
 }
 //end image
 
--(void) setImageBackgroundColor:(NSColor*)value
+-(void) setImageBackgroundColor:(NSColor*)anImageBackgroundColor
 {
-  [value retain];
+  [anImageBackgroundColor retain];
   [self->imageBackgroundColor release];
-  self->imageBackgroundColor = value;
+  self->imageBackgroundColor = anImageBackgroundColor;
 }
-//end setImageBackgroundColor:
+//end setImage:
 
 -(NSColor*) imageBackgroundColor
 {
@@ -142,7 +139,7 @@
     {
       [self->imageBackgroundColor set];
       NSRectFill(imageFrame);
-    }//end if (self->imageBackgroundColor)
+    }
     [NSGraphicsContext saveGraphicsState];
     [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
     NSAffineTransform* transform = [NSAffineTransform transform];
