@@ -1158,5 +1158,26 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MC0CFA5H6BPVdUwtk3gO3EyOI6hE9qtOAhUAh4dTLmMftGNhBppBUfY6BV71QQk="
 			/>
     </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.16.3</guid>
+      <title>Version 2.16.3</title>
+      <description><![CDATA[
+        <ul>
+          <li>Library import was broken on some MacOS versions;</li>
+          <li>adjustments against regressions caused by MacOS Big Sur.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-it.html#version-2.16.3</sparkle:releaseNotesLink>
+			<pubDate>Mon, 07 Jun 2021 21:53:03 +0200</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_16_3.dmg"
+				sparkle:version="2.16.3"
+                   sparkle:shortVersionString="2.16.3"
+				type="application/octet-stream"
+				length="11676730"
+				sparkle:dsaSignature="MCwCFCe2qFNud4kS1Fk3cHkc6betIsj3AhQSKd8aMYUtRG4NtZjzvE4R6/ueQQ=="
+			/>
+    </item>
   </channel>
 </rss>

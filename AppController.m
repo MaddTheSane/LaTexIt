@@ -3354,37 +3354,47 @@ static NSMutableDictionary* cachePaths = nil;
               NSString* filePrefix         = [NSString stringWithFormat:@"latexit-%d", 0];
               export_format_t exportFormat = [[PreferencesController sharedController] exportFormatPersistent];
               NSString* extension = nil;
+              NSString* uti = nil;
               switch(exportFormat)
               {
                 case EXPORT_FORMAT_PDF:
                 case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
                   extension = @"pdf";
+                  uti = (NSString*)kUTTypePDF;
                   break;
                 case EXPORT_FORMAT_EPS:
                   extension = @"eps";
+                  uti = @"com.adobe.encapsulated-​postscript";
                   break;
                 case EXPORT_FORMAT_TIFF:
                   extension = @"tiff";
+                  uti = (NSString*)kUTTypeTIFF;
                   break;
                 case EXPORT_FORMAT_PNG:
                   extension = @"png";
+                  uti = (NSString*)kUTTypePNG;
                   break;
                 case EXPORT_FORMAT_JPEG:
                   extension = @"jpeg";
+                  uti = (NSString*)kUTTypeJPEG;
                   break;
                 case EXPORT_FORMAT_MATHML:
                   extension = @"html";
+                  uti = @"public.mathml";
                   break;
                 case EXPORT_FORMAT_SVG:
                   extension = @"svg";
+                  uti = GetMySVGPboardType();
                   break;
                 case EXPORT_FORMAT_TEXT:
                   extension = @"tex";
+                  uti = (NSString*)kUTTypeText;
                   break;
                 case EXPORT_FORMAT_RTFD:
                   extension = @"rtfd";
+                  uti = (NSString*)kUTTypeRTFD;
                   break;
-              }
+              }//end switch(exportFormat)
 
               if ([[PreferencesController sharedController] historySaveServicesResultsEnabled])//we may add the item to the history
               {
@@ -3422,20 +3432,40 @@ static NSMutableDictionary* cachePaths = nil;
               if (useBaseline)
                 newBaseline -= [[[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:&pdfData] objectForKey:@"baseline"] doubleValue];//[LatexitEquation baselineFromData:pdfData];
 
-              //creates a mutable attributed string containing the image file
-              [fileHandle writeData:attachedData];
-              [fileHandle closeFile];
-              NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithURL:attachedFileURL options:0 error:nil] autorelease];
-              NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
-              NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
-              NSMutableAttributedString* mutableAttributedStringWithImage =
-                [[[NSMutableAttributedString alloc] initWithAttributedString:attributedStringWithImage] autorelease];
-                  
-              //changes the baseline of the attachment to align it with the surrounding text
-              [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
-                                                       value:@(newBaseline)
-                                                       range:mutableAttributedStringWithImage.range];
-                
+              NSMutableAttributedString* mutableAttributedStringWithImage = nil;
+              if (NO && isMacOS10_11OrAbove())
+              {
+                NSImage* image = !pdfData ? nil : [[[NSImage alloc] initWithData:pdfData] autorelease];
+                NSTextAttachment* textAttachment = !attachedData ? nil : [[[NSTextAttachment alloc] initWithData:attachedData ofType:uti] autorelease];
+                //textAttachment.image = image;
+                NSSize imageSize = image.size;
+                CGFloat renderingfontSize = pointSize;
+                CGFloat renderingEx = [[NSFont systemFontOfSize:renderingfontSize] xHeight];
+                CGSize renderingSize = {imageSize.width*renderingEx, imageSize.height*renderingEx};
+                if (!imageSize.width*imageSize.height)
+                {
+                  double aspectRatio = !imageSize.height ? 0. : imageSize.width/imageSize.height;
+                  renderingSize = CGSizeMake(aspectRatio*renderingEx, renderingEx);
+                }//end if (!imageSize.width*imageSize.height)
+                textAttachment.bounds = NSMakeRect(0, newBaseline*renderingEx, renderingSize.width, renderingSize.height);
+                mutableAttributedStringWithImage = !textAttachment ? nil : [[[NSAttributedString attributedStringWithAttachment:textAttachment] mutableCopy] autorelease];
+              }//end if (isMacOS10_11OrAbove())
+              else//if (!isMacOS10_11OrAbove())
+              {
+                //creates a mutable attributed string containing the image file
+                [fileHandle writeData:attachedData];
+                [fileHandle closeFile];
+                NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithURL:attachedFileURL options:0 error:nil] autorelease];
+                NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
+                NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
+                mutableAttributedStringWithImage =
+                  [[[NSMutableAttributedString alloc] initWithAttributedString:attributedStringWithImage] autorelease];
+                //changes the baseline of the attachment to align it with the surrounding text
+                [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
+                                                         value:@(newBaseline)
+                                                         range:mutableAttributedStringWithImage.range];
+               }//end if (!isMacOS10_11OrAbove())
+                                  
               //add a space after the image, to restore the baseline of the surrounding text
               //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
               //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.

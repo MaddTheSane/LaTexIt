@@ -72,7 +72,7 @@
     [fetchRequest setPredicate:predicate];
   }
 
-  result = [super countForFetchRequest:fetchRequest error:error];
+  result = [self countForFetchRequest:fetchRequest error:error];
   #ifdef ARC_ENABLED
   #else
   [fetchRequest release];

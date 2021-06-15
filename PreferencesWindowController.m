@@ -230,6 +230,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [window setDelegate:(id)self];
   [window setToolbar:toolbar];
   [window setShowsToolbarButton:NO];
+  if ([window respondsToSelector:@selector(setToolbarStyle:)])
+    [window setToolbarStyle:NSWindowToolbarStyleExpanded];
   [toolbar setSelectedItemIdentifier:GeneralToolbarItemIdentifier];
   [self toolbarHit:[self->toolbarItems objectForKey:[toolbar selectedItemIdentifier]]];
   [toolbar release];
@@ -1164,8 +1166,6 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   NSPoint topLeftPoint  = window.frame.origin;
   topLeftPoint.y       += window.frame.size.height;
   [[self window] setFrameTopLeftPoint:topLeftPoint];
-  if ([window respondsToSelector:@selector(setToolbarStyle:)])
-    [window setToolbarStyle:NSWindowToolbarStyleExpanded];
 }
 //end windowDidLoad
 
@@ -1290,47 +1290,47 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(IBAction) toolbarHit:(id)sender
 {
-  NSView* view = nil;
+  NSView* newContentView = nil;
   NSString* itemIdentifier = [sender itemIdentifier];
 
   if ([itemIdentifier isEqualToString:GeneralToolbarItemIdentifier])
-    view = self->generalView;
+    newContentView = self->generalView;
   else if ([itemIdentifier isEqualToString:EditionToolbarItemIdentifier])
-    view = self->editionView;
+    newContentView = self->editionView;
   else if ([itemIdentifier isEqualToString:TemplatesToolbarItemIdentifier])
-    view = self->templatesView;
+    newContentView = self->templatesView;
   else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
-    view = self->compositionView;
+    newContentView = self->compositionView;
   else if ([itemIdentifier isEqualToString:LibraryToolbarItemIdentifier])
-    view = self->libraryView;
+    newContentView = self->libraryView;
   else if ([itemIdentifier isEqualToString:HistoryToolbarItemIdentifier])
-    view = self->historyView;
+    newContentView = self->historyView;
   else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
-    view = self->serviceView;
+    newContentView = self->serviceView;
   else if ([itemIdentifier isEqualToString:PluginsToolbarItemIdentifier])
-    view = self->pluginsView;
+    newContentView = self->pluginsView;
   else if ([itemIdentifier isEqualToString:AdvancedToolbarItemIdentifier])
-    view = self->advancedView;
+    newContentView = self->advancedView;
   else if ([itemIdentifier isEqualToString:WebToolbarItemIdentifier])
-    view = self->webView;
+    newContentView = self->webView;
 
   NSWindow* window = [self window];
   NSView*   oldContentView = [window contentView];
-  if (view != oldContentView)
+  if (newContentView != oldContentView)
   {
     NSSize contentMinSize = [[self->viewsMinSizes objectForKey:itemIdentifier] sizeValue];
-    NSRect oldContentFrame = !oldContentView ? NSZeroRect : [oldContentView frame];
-    NSRect newContentFrame = !view ? NSZeroRect : [view frame];
-    NSRect newFrame = [window frame];
-    newFrame.size.width  += (newContentFrame.size.width  - oldContentFrame.size.width);
-    newFrame.size.height += (newContentFrame.size.height - oldContentFrame.size.height);
-    newFrame.origin.y    -= (newContentFrame.size.height - oldContentFrame.size.height);
+    NSRect newContentFrame = !newContentView ? NSZeroRect : [newContentView frame];
+    NSRect oldFrame = [window frame];
+    NSRect newFrame = [window frameRectForContentRect:newContentFrame];
+    newFrame.origin = NSMakePoint(
+      oldFrame.origin.x+oldFrame.size.width-newFrame.size.width,
+      oldFrame.origin.y+oldFrame.size.height-newFrame.size.height);
     [self->emptyView setFrame:newContentFrame];
     [window setContentView:self->emptyView];
     [window setFrame:newFrame display:YES animate:YES];
-    [window setContentView:view];
+    [window setContentView:newContentView];
     [window setContentMinSize:contentMinSize];
-  }//end if (view != oldContentView)
+  }//end if (newContentView != oldContentView)
   
   [window setShowsResizeIndicator:
     [itemIdentifier isEqualToString:EditionToolbarItemIdentifier] ||
@@ -1987,8 +1987,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     self->synchronizationAdditionalScriptsHelpPanel =
     [[NSPanel alloc] initWithContentRect:NSMakeRect(0, 0, 600, 200)
                                styleMask:NSTitledWindowMask | NSClosableWindowMask |
-     NSMiniaturizableWindowMask | NSResizableWindowMask |
-     NSTexturedBackgroundWindowMask
+                                         NSMiniaturizableWindowMask | NSResizableWindowMask |
+                                         NSTexturedBackgroundWindowMask
                                  backing:NSBackingStoreBuffered defer:NO];
     [self->synchronizationAdditionalScriptsHelpPanel setTitle:NSLocalizedString(@"Help on synchronization scripts", @"")];
     [self->synchronizationAdditionalScriptsHelpPanel center];
