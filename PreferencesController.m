@@ -3437,12 +3437,16 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
             NSString* dst = [infoPlistURL path];
             if (!myStatus && src && dst && [infoPlist writeToFile:src atomically:YES])
             {
-              const char* args[] = {[src UTF8String], [dst UTF8String], NULL};
-              myStatus = AuthorizationExecuteWithPrivileges(myAuthorizationRef, "/bin/cp", kAuthorizationFlagDefaults, (char**)args, NULL);
+              NSString* systemCall = [NSString stringWithFormat:@"cat \"%@\" | /usr/libexec/authopen -w \"%@\"", src, dst];
+              int status = system([systemCall UTF8String]);
+              DebugLog(1, @"<%@> =>%d", systemCall, status);
+              //const char* args[] = {[src UTF8String], [dst UTF8String], NULL};
+              //myStatus = AuthorizationExecuteWithPrivileges(myAuthorizationRef, "/bin/cp", kAuthorizationFlagDefaults, (char**)args, NULL);
             }
             if (src)
               [[NSFileManager defaultManager] removeItemAtPath:src error:0];
-            myStatus = myStatus ? myStatus : AuthorizationFree(myAuthorizationRef, kAuthorizationFlagDestroyRights);
+            if (myAuthorizationRef != 0)
+              AuthorizationFree(myAuthorizationRef, kAuthorizationFlagDestroyRights);
             ok = (myStatus == 0);
           }//end if (!ok)
           if (ok)

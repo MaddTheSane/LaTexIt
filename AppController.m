@@ -2543,7 +2543,17 @@ static NSMutableDictionary* cachePaths = nil;
 
   MyDocument* document = [self documentForLink:link];
   if (!document)
-    document = (MyDocument*)[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+  {
+    NSDocumentController* documentController = [NSDocumentController sharedDocumentController];
+    //document = (MyDocument*)[documentController openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+    document = (MyDocument*)[documentController makeUntitledDocumentOfType:@"MyDocumentType" error:nil];
+    if (document != nil)
+    {
+      [documentController addDocument:document];
+      [document makeWindowControllers];
+      [document showWindows];
+    }//end if (document != nil)
+  }//end if (!document)
   if (document && latexitEquation)
   {
     if ([document linkBackLink] != link)
@@ -2921,14 +2931,22 @@ static NSMutableDictionary* cachePaths = nil;
                                        NSLocalizedString(@"Open in LaTeXiT", @""), nil);
           if (choice == NSAlertAlternateReturn)
           {
-           MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
-           [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
-           [document setLatexModeRequested:mode];
-           [document setColor:color];
-           [document setMagnification:magnification];
-           [[document windowForSheet] makeFirstResponder:[document preferredFirstResponder]];
-           [document latexize:self];
-          }
+            NSDocumentController* documentController = [NSDocumentController sharedDocumentController];
+            //MyDocument* document = [documentController openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+            MyDocument* document = (MyDocument*)[documentController makeUntitledDocumentOfType:@"MyDocumentType" error:nil];
+            if (document != nil)
+            {
+              [documentController addDocument:document];
+              [document makeWindowControllers];
+              [document showWindows];
+            }//end if (document != nil)
+            [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
+            [document setLatexModeRequested:mode];
+            [document setColor:color];
+            [document setMagnification:magnification];
+            [[document windowForSheet] makeFirstResponder:[document preferredFirstResponder]];
+            [document latexize:self];
+          }//end if (choice == NSAlertAlternateReturn)
         }//end //if (![pdfData length])
       }
       //if the input is not RTF but just string, we will use default color and size
@@ -3113,11 +3131,19 @@ static NSMutableDictionary* cachePaths = nil;
                                        NSLocalizedString(@"Open in LaTeXiT", @""), nil);
           if (choice == NSAlertAlternateReturn)
           {
-           MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
-           [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
-           [document setLatexModeRequested:mode];
-           [[document windowForSheet] makeFirstResponder:[document preferredFirstResponder]];
-           [document latexize:self];
+            NSDocumentController* documentController = [NSDocumentController sharedDocumentController];
+            //MyDocument* document = [documentController openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+            MyDocument* document = (MyDocument*)[documentController makeUntitledDocumentOfType:@"MyDocumentType" error:nil];
+            if (document != nil)
+            {
+              [documentController addDocument:document];
+              [document makeWindowControllers];
+              [document showWindows];
+            }//end if (document != nil)
+            [document setSourceText:[[[NSAttributedString alloc] initWithString:pboardString] autorelease]];
+            [document setLatexModeRequested:mode];
+            [[document windowForSheet] makeFirstResponder:[document preferredFirstResponder]];
+            [document latexize:self];
           }//if (![pdfData length])
         }//end if pdfData (LaTeXisation has worked)
       }//end if not RTF
@@ -3294,7 +3320,15 @@ static NSMutableDictionary* cachePaths = nil;
               remainingRange.length = [mutableAttrString length]-remainingRange.location;
               
               //builds a document containing the error
-              MyDocument* document = [[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+              NSDocumentController* documentController = [NSDocumentController sharedDocumentController];
+              //MyDocument* document = [documentController openUntitledDocumentOfType:@"MyDocumentType" display:YES];
+              MyDocument* document = (MyDocument*)[documentController makeUntitledDocumentOfType:@"MyDocumentType" error:nil];
+              if (document != nil)
+              {
+                [documentController addDocument:document];
+                [document makeWindowControllers];
+                [document showWindows];
+              }//end if (document != nil)
               [[document windowControllers] makeObjectsPerformSelector:@selector(window)];//calls windowDidLoad
               [document setSourceText:[[[NSAttributedString alloc] initWithString:body] autorelease]];
               [document setLatexModeRequested:mode];

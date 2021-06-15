@@ -47,7 +47,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       if (!freeIds)
       {
         NSInteger debugLogLevelShift = 0;
-        BOOL shiftIsPressed = ((GetCurrentEventKeyModifiers() & shiftKey) != 0);
+        BOOL shiftIsPressed = (([NSEvent modifierFlags] & NSEventModifierFlagShift) != 0);
         if (shiftIsPressed)
         {
           NSLog(@"Shift key pressed during launch");

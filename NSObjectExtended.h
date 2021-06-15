@@ -13,7 +13,6 @@
 
 +(Class) dynamicCastToClass:(Class)aClass;
 -(id)    dynamicCastToClass:(Class)aClass;
--(void)  forwardInvocation:(NSInvocation*)anInvocation;
 -(BOOL)  isDarkMode;
 
 @end

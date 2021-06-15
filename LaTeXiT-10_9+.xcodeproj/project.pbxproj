@@ -158,8 +158,6 @@
 		931B0F991939302B008C64E8 /* CHExportPrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B436641939189400F6BDAC /* CHExportPrefetcher.m */; };
 		931B0FA019393053008C64E8 /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; };
 		931CB3080801311100CF9D2B /* LaTeXPalettesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 931CB3060801311100CF9D2B /* LaTeXPalettesWindowController.m */; };
-		931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 931D94F50E8A252100D9A778 /* DirectoryService.framework */; };
-		931D95C10E8A33B800D9A778 /* DirectoryServiceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 931D95C00E8A33B800D9A778 /* DirectoryServiceHelper.m */; };
 		932417EF0F9BBAD1006BA13B /* AdditionalFilesWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.nib */; };
 		932417F00F9BBAE0006BA13B /* CompositionConfigurationsWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93D7CA7809D363B50001DC5E /* CompositionConfigurationsWindowController.nib */; };
 		932417F10F9BBAE6006BA13B /* EncapsulationsWindowController.nib in Resources */ = {isa = PBXBuildFile; fileRef = 93F73D100898E33D00EFFA5E /* EncapsulationsWindowController.nib */; };
@@ -177,7 +175,6 @@
 		9326605C0FB05EA70060D667 /* AdditionalFilesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9326605B0FB05EA70060D667 /* AdditionalFilesController.m */; };
 		9326606E0FB0606B0060D667 /* AdditionalFilesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9326605B0FB05EA70060D667 /* AdditionalFilesController.m */; };
 		9328604407F4505F009BF03D /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
-		9328CEB60F8E77E3008AC6B3 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9328CEB50F8E77E3008AC6B3 /* Carbon.framework */; };
 		9328D1180F8FDC0C008AC6B3 /* NSObjectExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9328D1160F8FDC0C008AC6B3 /* NSObjectExtended.m */; };
 		93291FB20F57434400F47078 /* HistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 93291FB10F57434400F47078 /* HistoryItem.m */; };
 		93291FB30F57434400F47078 /* HistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 93291FB10F57434400F47078 /* HistoryItem.m */; };
@@ -303,11 +300,8 @@
 		937CFBA81B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 937CFBA61B1E4AF6006AD93E /* OutlineViewSelectedItemTransformer.m */; };
 		937D7CEA0E48F315006F04E1 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
 		937D7D250E48F5B2006F04E1 /* defaultPreamble.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 937D7D240E48F5B2006F04E1 /* defaultPreamble.rtf */; };
+		938508592517EB5200B2A369 /* VDKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 938508582517EB5200B2A369 /* VDKQueue.m */; };
 		93869F9F1195E3EB00147048 /* DragFilterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 93869F9E1195E3EB00147048 /* DragFilterWindow.m */; };
-		9387FA9C1930E7D500888628 /* UKFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA951930E7D500888628 /* UKFileWatcher.m */; };
-		9387FA9D1930E7D500888628 /* UKFNSubscribeFileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA971930E7D500888628 /* UKFNSubscribeFileWatcher.m */; };
-		9387FA9E1930E7D500888628 /* UKKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA991930E7D500888628 /* UKKQueue.m */; };
-		9387FA9F1930E7D500888628 /* UKMainThreadProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387FA9B1930E7D500888628 /* UKMainThreadProxy.m */; };
 		9388E87F16B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */; };
 		9388E88016B5D66800A59DF1 /* Latexit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */; };
 		938999BD10159DA000A9E04F /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
@@ -399,14 +393,6 @@
 		93D23257101836B700768782 /* NSObjectExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 9328D1160F8FDC0C008AC6B3 /* NSObjectExtended.m */; };
 		93D232F11018491C00768782 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; };
 		93D232F21018492000768782 /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
-		93D4947910C1051700A0D06A /* NDProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947510C1051700A0D06A /* NDProcess.m */; };
-		93D4947A10C1051700A0D06A /* NSURL+NDCarbonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */; };
-		93D4947E10C1057000A0D06A /* NDProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947510C1051700A0D06A /* NDProcess.m */; };
-		93D4947F10C1057000A0D06A /* NSURL+NDCarbonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */; };
-		93D4948010C1057100A0D06A /* NDProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947510C1051700A0D06A /* NDProcess.m */; };
-		93D4948110C1057100A0D06A /* NSURL+NDCarbonUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */; };
-		93D4955E10C1059600A0D06A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9328CEB50F8E77E3008AC6B3 /* Carbon.framework */; };
-		93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9328CEB50F8E77E3008AC6B3 /* Carbon.framework */; };
 		93D49E6F0F6EDB290024087A /* LibraryEquation.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D49E6E0F6EDB290024087A /* LibraryEquation.m */; };
 		93D6BA1E082941900081D58A /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
 		93D7CA5709D362FC0001DC5E /* CompositionConfigurationsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D7CA5509D362FC0001DC5E /* CompositionConfigurationsWindowController.m */; };
@@ -691,9 +677,6 @@
 		931CB3050801311100CF9D2B /* LaTeXPalettesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaTeXPalettesWindowController.h; sourceTree = "<group>"; };
 		931CB3060801311100CF9D2B /* LaTeXPalettesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaTeXPalettesWindowController.m; sourceTree = "<group>"; };
 		931CB32E0801325800CF9D2B /* LaTeXPalettesWindowController.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LaTeXPalettesWindowController.nib; sourceTree = "<group>"; };
-		931D94F50E8A252100D9A778 /* DirectoryService.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DirectoryService.framework; path = /System/Library/Frameworks/DirectoryService.framework; sourceTree = "<absolute>"; };
-		931D95BF0E8A33B800D9A778 /* DirectoryServiceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryServiceHelper.h; sourceTree = "<group>"; };
-		931D95C00E8A33B800D9A778 /* DirectoryServiceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryServiceHelper.m; sourceTree = "<group>"; };
 		9323F02E182DA0A200F6EA37 /* CHiWorkSpotlightPlugin.mdimporter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CHiWorkSpotlightPlugin.mdimporter; path = Spotlight/CHiWorkSpotlightPlugin.mdimporter; sourceTree = "<group>"; };
 		9324182B0F9CF389006BA13B /* DocumentExtraPanelsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentExtraPanelsController.h; sourceTree = "<group>"; };
 		9324182C0F9CF389006BA13B /* DocumentExtraPanelsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentExtraPanelsController.m; sourceTree = "<group>"; };
@@ -712,7 +695,6 @@
 		9326605B0FB05EA70060D667 /* AdditionalFilesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdditionalFilesController.m; sourceTree = "<group>"; };
 		9326E0E50A2E46B5003A430E /* convert */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text.script.sh; name = convert; path = "Resources/latex-keywords/convert"; sourceTree = "<group>"; };
 		9328604307F4505F009BF03D /* latexit.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = latexit.icns; path = "Resources/file-icons/latexit.icns"; sourceTree = "<group>"; };
-		9328CEB50F8E77E3008AC6B3 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		9328D1160F8FDC0C008AC6B3 /* NSObjectExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSObjectExtended.m; sourceTree = "<group>"; };
 		9328D1170F8FDC0C008AC6B3 /* NSObjectExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObjectExtended.h; sourceTree = "<group>"; };
 		93291FB00F57434400F47078 /* HistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryItem.h; sourceTree = "<group>"; };
@@ -867,16 +849,10 @@
 		937D7D270E48F5BA006F04E1 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = de; path = de.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
 		937D7D280E48F5CF006F04E1 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = es; path = es.lproj/defaultPreamble.rtf; sourceTree = "<group>"; };
 		9380FE340F9A433E009B4D78 /* NSSegmentedControlExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSegmentedControlExtended.h; sourceTree = "<group>"; };
+		938508572517EB5200B2A369 /* VDKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VDKQueue.h; sourceTree = "<group>"; };
+		938508582517EB5200B2A369 /* VDKQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VDKQueue.m; sourceTree = "<group>"; };
 		93869F9D1195E3EB00147048 /* DragFilterWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterWindow.h; sourceTree = "<group>"; };
 		93869F9E1195E3EB00147048 /* DragFilterWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterWindow.m; sourceTree = "<group>"; };
-		9387FA941930E7D500888628 /* UKFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKFileWatcher.h; path = UKKQueue/UKFileWatcher.h; sourceTree = "<group>"; };
-		9387FA951930E7D500888628 /* UKFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKFileWatcher.m; path = UKKQueue/UKFileWatcher.m; sourceTree = "<group>"; };
-		9387FA961930E7D500888628 /* UKFNSubscribeFileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKFNSubscribeFileWatcher.h; path = UKKQueue/UKFNSubscribeFileWatcher.h; sourceTree = "<group>"; };
-		9387FA971930E7D500888628 /* UKFNSubscribeFileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKFNSubscribeFileWatcher.m; path = UKKQueue/UKFNSubscribeFileWatcher.m; sourceTree = "<group>"; };
-		9387FA981930E7D500888628 /* UKKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKKQueue.h; path = UKKQueue/UKKQueue.h; sourceTree = "<group>"; };
-		9387FA991930E7D500888628 /* UKKQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKKQueue.m; path = UKKQueue/UKKQueue.m; sourceTree = "<group>"; };
-		9387FA9A1930E7D500888628 /* UKMainThreadProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UKMainThreadProxy.h; path = UKKQueue/UKMainThreadProxy.h; sourceTree = "<group>"; };
-		9387FA9B1930E7D500888628 /* UKMainThreadProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UKMainThreadProxy.m; path = UKKQueue/UKMainThreadProxy.m; sourceTree = "<group>"; };
 		9388E87E16B5D66800A59DF1 /* Latexit.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Latexit.xcdatamodel; sourceTree = "<group>"; };
 		938999BB10159DA000A9E04F /* PreferencesControllerMigration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesControllerMigration.h; sourceTree = "<group>"; };
 		938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesControllerMigration.m; sourceTree = "<group>"; };
@@ -1014,11 +990,6 @@
 		93CFB9AD16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewWithPlaceHolder.m; sourceTree = "<group>"; };
 		93D19DAF0AA2E41C00DFBEE8 /* NSAttributedStringExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedStringExtended.h; sourceTree = "<group>"; };
 		93D19DB00AA2E41C00DFBEE8 /* NSAttributedStringExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedStringExtended.m; sourceTree = "<group>"; };
-		93D4947410C1051700A0D06A /* NDProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDProcess.h; path = Frameworks/NDProcess/NDProcess.h; sourceTree = "<group>"; };
-		93D4947510C1051700A0D06A /* NDProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NDProcess.m; path = Frameworks/NDProcess/NDProcess.m; sourceTree = "<group>"; };
-		93D4947610C1051700A0D06A /* NDSDKCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDSDKCompatibility.h; path = Frameworks/NDProcess/NDSDKCompatibility.h; sourceTree = "<group>"; };
-		93D4947710C1051700A0D06A /* NSURL+NDCarbonUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+NDCarbonUtilities.h"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.h"; sourceTree = "<group>"; };
-		93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+NDCarbonUtilities.m"; path = "Frameworks/NDProcess/NSURL+NDCarbonUtilities.m"; sourceTree = "<group>"; };
 		93D49E6D0F6EDB290024087A /* LibraryEquation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryEquation.h; sourceTree = "<group>"; };
 		93D49E6E0F6EDB290024087A /* LibraryEquation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryEquation.m; sourceTree = "<group>"; };
 		93D6BA1B082941900081D58A /* NSArrayExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayExtended.h; sourceTree = "<group>"; };
@@ -1097,11 +1068,9 @@
 				938E23A70889C38D000626E6 /* Foundation.framework in Frameworks */,
 				938E23A60889C382000626E6 /* Quartz.framework in Frameworks */,
 				93C531900D9E2781003AF7FC /* Security.framework in Frameworks */,
-				931D94F60E8A252100D9A778 /* DirectoryService.framework in Frameworks */,
 				9344B4380E8B7DAC00FE90A5 /* Automator.framework in Frameworks */,
 				9344B74D0E8BBF9500FE90A5 /* OSAKit.framework in Frameworks */,
 				9357846B0E9D2A9C00736F31 /* CoreData.framework in Frameworks */,
-				9328CEB60F8E77E3008AC6B3 /* Carbon.framework in Frameworks */,
 				9368A4EF17737E0D00B2ACC1 /* LinkBack.framework in Frameworks */,
 				934AA8A90F3380CD0010E384 /* Sparkle.framework in Frameworks */,
 			);
@@ -1117,7 +1086,6 @@
 				9344BA420E8CF4DC00FE90A5 /* Quartz.framework in Frameworks */,
 				933B5F600F5F101F0069E5B4 /* CoreData.framework in Frameworks */,
 				9390D4D60FAA43030002100B /* Security.framework in Frameworks */,
-				93D4955F10C1059600A0D06A /* Carbon.framework in Frameworks */,
 				9368A60D17737E9E00B2ACC1 /* LinkBack.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1129,7 +1097,6 @@
 				938DBDFF10BDC2E0002350CF /* AppKit.framework in Frameworks */,
 				938DBE0010BDC2E0002350CF /* Cocoa.framework in Frameworks */,
 				938DBE0110BDC2E0002350CF /* Foundation.framework in Frameworks */,
-				93D4955E10C1059600A0D06A /* Carbon.framework in Frameworks */,
 				9368A63C1773806F00B2ACC1 /* LinkBack.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1140,12 +1107,10 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9328CEB50F8E77E3008AC6B3 /* Carbon.framework */,
 				9357846A0E9D2A9C00736F31 /* CoreData.framework */,
 				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
 				9344B4370E8B7DAC00FE90A5 /* Automator.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
-				931D94F50E8A252100D9A778 /* DirectoryService.framework */,
 				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
 				9344B74C0E8BBF9500FE90A5 /* OSAKit.framework */,
 				931AD67508491A8E00E8EE8B /* Quartz.framework */,
@@ -1293,9 +1258,8 @@
 		9302548807F0BC7600011996 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				9387FA8F1930E7BC00888628 /* UKKQueue */,
+				9387FA8F1930E7BC00888628 /* VDKQueue */,
 				9325E1251831944C006BCD30 /* ProtoBuffers */,
-				93D4947110C1050700A0D06A /* NDProcess */,
 				935AE0E40FA1B41F00B361D8 /* Value transformers */,
 				936369DF1194C9BD00C5DE49 /* NSButtonPalette.h */,
 				936369E01194C9BD00C5DE49 /* NSButtonPalette.m */,
@@ -1303,8 +1267,6 @@
 				93B436641939189400F6BDAC /* CHExportPrefetcher.m */,
 				9302547F07F0BC6A00011996 /* Compressor.h */,
 				9302547E07F0BC6A00011996 /* Compressor.m */,
-				931D95BF0E8A33B800D9A778 /* DirectoryServiceHelper.h */,
-				931D95C00E8A33B800D9A778 /* DirectoryServiceHelper.m */,
 				9318AEBB101DCB8E00F808E8 /* CGExtras.h */,
 				9318AEBC101DCB8E00F808E8 /* CGExtras.m */,
 				9350FC16139CB1A30016B2E8 /* CGPDFExtras.h */,
@@ -1831,19 +1793,13 @@
 			name = Margins;
 			sourceTree = "<group>";
 		};
-		9387FA8F1930E7BC00888628 /* UKKQueue */ = {
+		9387FA8F1930E7BC00888628 /* VDKQueue */ = {
 			isa = PBXGroup;
 			children = (
-				9387FA941930E7D500888628 /* UKFileWatcher.h */,
-				9387FA951930E7D500888628 /* UKFileWatcher.m */,
-				9387FA961930E7D500888628 /* UKFNSubscribeFileWatcher.h */,
-				9387FA971930E7D500888628 /* UKFNSubscribeFileWatcher.m */,
-				9387FA981930E7D500888628 /* UKKQueue.h */,
-				9387FA991930E7D500888628 /* UKKQueue.m */,
-				9387FA9A1930E7D500888628 /* UKMainThreadProxy.h */,
-				9387FA9B1930E7D500888628 /* UKMainThreadProxy.m */,
+				938508572517EB5200B2A369 /* VDKQueue.h */,
+				938508582517EB5200B2A369 /* VDKQueue.m */,
 			);
-			name = UKKQueue;
+			name = VDKQueue;
 			sourceTree = "<group>";
 		};
 		938DBD2710BDC2A2002350CF /* LaTeXiT Helper */ = {
@@ -2008,18 +1964,6 @@
 				93077ABF1694724100ADAAA1 /* warning-triangle@2x.png */,
 			);
 			name = interface;
-			sourceTree = "<group>";
-		};
-		93D4947110C1050700A0D06A /* NDProcess */ = {
-			isa = PBXGroup;
-			children = (
-				93D4947410C1051700A0D06A /* NDProcess.h */,
-				93D4947510C1051700A0D06A /* NDProcess.m */,
-				93D4947610C1051700A0D06A /* NDSDKCompatibility.h */,
-				93D4947710C1051700A0D06A /* NSURL+NDCarbonUtilities.h */,
-				93D4947810C1051700A0D06A /* NSURL+NDCarbonUtilities.m */,
-			);
-			name = NDProcess;
 			sourceTree = "<group>";
 		};
 		93D7CA5309D362D40001DC5E /* CompositionConfiguration */ = {
@@ -2190,7 +2134,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1120;
+				LastUpgradeCheck = 1200;
 			};
 			buildConfigurationList = 9323885A0854FD210017F3BB /* Build configuration list for PBXProject "LaTeXiT-10_9+" */;
 			compatibilityVersion = "Xcode 3.0";
@@ -2492,7 +2436,6 @@
 				93F5ED4622353BC10079B40C /* FileManagerHelper.m in Sources */,
 				934D20BB0E5F5A2000BA812B /* AdditionalFilesTableView.m in Sources */,
 				934D22AD0E6014FF00BA812B /* ImageAndTextCell.m in Sources */,
-				931D95C10E8A33B800D9A778 /* DirectoryServiceHelper.m in Sources */,
 				935784520E9D21FB00736F31 /* LatexitEquation.m in Sources */,
 				93E9CFA50E9F318100B08FB0 /* Automator_CreateEquations.m in Sources */,
 				93291FB20F57434400F47078 /* HistoryItem.m in Sources */,
@@ -2546,8 +2489,6 @@
 				936091A21087084300F4B39A /* RegexKitLite.m in Sources */,
 				934A2C9D10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */,
 				938DBADB10BD7C19002350CF /* PalettePanel.m in Sources */,
-				93D4947910C1051700A0D06A /* NDProcess.m in Sources */,
-				93D4947A10C1051700A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
 				936368CA1194BA4900C5DE49 /* DragThroughButton.m in Sources */,
 				936369E11194C9BD00C5DE49 /* NSButtonPalette.m in Sources */,
 				93636AAD11957D5B00C5DE49 /* DragFilterView.m in Sources */,
@@ -2572,16 +2513,13 @@
 				93CFB9AE16BBAF4300AD8DB7 /* TextViewWithPlaceHolder.m in Sources */,
 				939485EE1828472D0059522B /* CHDragFileWrapper.m in Sources */,
 				9325E1281831946F006BCD30 /* CHProtoBuffers.mm in Sources */,
-				9387FA9C1930E7D500888628 /* UKFileWatcher.m in Sources */,
-				9387FA9D1930E7D500888628 /* UKFNSubscribeFileWatcher.m in Sources */,
-				9387FA9E1930E7D500888628 /* UKKQueue.m in Sources */,
-				9387FA9F1930E7D500888628 /* UKMainThreadProxy.m in Sources */,
 				93B436651939189400F6BDAC /* CHExportPrefetcher.m in Sources */,
 				939D6588194457DA008A29AB /* PropertyStorage.m in Sources */,
 				939846BB194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m in Sources */,
 				938FF3341955778A00491B00 /* NSSavePanelExtended.m in Sources */,
 				938BAEA71957340B005E3C6B /* FolderExistsTransformer.m in Sources */,
 				938BAED019573789005E3C6B /* FilePathLocalizedTransformer.m in Sources */,
+				938508592517EB5200B2A369 /* VDKQueue.m in Sources */,
 				939D4E041A2A38FB00D4A80C /* LaTeXProcessor.m in Sources */,
 				937CFAE11B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */,
 				937CFB8E1B1E4864006AD93E /* IsKindOfClassTransformer.m in Sources */,
@@ -2636,8 +2574,6 @@
 				9333458B1077322E0022DBEB /* LatexitEquationWrapper.m in Sources */,
 				936091A31087084300F4B39A /* RegexKitLite.m in Sources */,
 				934A2C9C10B6C4AC00AAA2CD /* NSDataExtended.m in Sources */,
-				93D4947E10C1057000A0D06A /* NDProcess.m in Sources */,
-				93D4947F10C1057000A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
 				93257A4E12366ABC006EF4E8 /* NSUserDefaultsControllerExtended.m in Sources */,
 				93102836127A136600170119 /* NSMutableSetExtended.m in Sources */,
 				9341927C1281CC92009D3E97 /* NSPopUpButtonExtended.m in Sources */,
@@ -2674,8 +2610,6 @@
 				938DBE4610BDC4B1002350CF /* main.m in Sources */,
 				9349515D10BDCDA500931D51 /* LaTeXiT_HelperAppDelegate.m in Sources */,
 				934951D410BDD23300931D51 /* NSWorkspaceExtended.m in Sources */,
-				93D4948010C1057100A0D06A /* NDProcess.m in Sources */,
-				93D4948110C1057100A0D06A /* NSURL+NDCarbonUtilities.m in Sources */,
 				93102837127A136600170119 /* NSMutableSetExtended.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2870,7 +2804,7 @@
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.11;
+				CURRENT_PROJECT_VERSION = 2.15.0;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2917,7 +2851,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.11;
+				MARKETING_VERSION = 2.15.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -2939,7 +2873,7 @@
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.11;
+				CURRENT_PROJECT_VERSION = 2.15.0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2985,7 +2919,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.11;
+				MARKETING_VERSION = 2.15.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -3003,6 +2937,7 @@
 		9323885B0854FD210017F3BB /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -3016,6 +2951,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -3037,6 +2973,7 @@
 		9323885C0854FD210017F3BB /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -3050,6 +2987,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -3087,11 +3025,10 @@
 		9344B9910E8CF38800FE90A5 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.11;
+				CURRENT_PROJECT_VERSION = 2.15.0;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
@@ -3124,7 +3061,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.11;
+				MARKETING_VERSION = 2.15.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-licucore",
@@ -3143,11 +3080,10 @@
 		9344B9920E8CF38800FE90A5 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.11;
+				CURRENT_PROJECT_VERSION = 2.15.0;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
@@ -3180,7 +3116,7 @@
 					"\"$(SRCROOT)/Frameworks\"",
 					"\"$(SRCROOT)\"",
 				);
-				MARKETING_VERSION = 2.14.11;
+				MARKETING_VERSION = 2.15.0;
 				OTHER_LDFLAGS = (
 					"-licucore",
 					"-lsqlite3",
@@ -3202,7 +3138,7 @@
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.11;
+				CURRENT_PROJECT_VERSION = 2.15.0;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3238,7 +3174,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 2.14.11;
+				MARKETING_VERSION = 2.15.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;
@@ -3256,7 +3192,7 @@
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.14.11;
+				CURRENT_PROJECT_VERSION = 2.15.0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7SFX84GNR7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -3291,7 +3227,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				MARKETING_VERSION = 2.14.11;
+				MARKETING_VERSION = 2.15.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.club.ktd.LaTeXiT;

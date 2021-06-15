@@ -7,7 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <Carbon/Carbon.h>
 
 #import "Utils.h"
 
@@ -16,7 +15,7 @@ int main(int argc, char *argv[])
   NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
   
   int debugLogLevelShift = 0;
-  BOOL shiftIsPressed = ((GetCurrentEventKeyModifiers() & shiftKey) != 0);
+  BOOL shiftIsPressed = (([NSEvent modifierFlags] & NSEventModifierFlagShift) != 0);
   if (shiftIsPressed)
   {
     NSLog(@"Shift key pressed during launch");

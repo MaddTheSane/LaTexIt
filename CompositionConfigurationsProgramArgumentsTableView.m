@@ -109,13 +109,13 @@ static NSString* CompositionConfigurationsProgramArgumentsPboardType = @"Composi
   if ([sender action] == @selector(undo:))
   {
     ok = [undoManager canUndo];
-    [sender setTitleWithMnemonic:[undoManager undoMenuItemTitle]];
-  }
+    [sender setTitle:[undoManager undoMenuItemTitle]];
+  }//end if ([sender action] == @selector(undo:))
   else if ([sender action] == @selector(redo:))
   {
     ok = [undoManager canRedo];
-    [sender setTitleWithMnemonic:[undoManager redoMenuItemTitle]];
-  }
+    [sender setTitle:[undoManager redoMenuItemTitle]];
+  }//end if ([sender action] == @selector(redo:))
   return ok;
 }
 //end validateMenuItem:

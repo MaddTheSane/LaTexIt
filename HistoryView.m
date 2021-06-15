@@ -24,10 +24,9 @@
 #import "MyImageView.h"
 #import "NSColorExtended.h"
 #import "NSFileManagerExtended.h"
+#import "NSWindowExtended.h"
 #import "PreferencesController.h"
 #import "Utils.h"
-
-#import <Carbon/Carbon.h>
 
 @interface HistoryView (PrivateAPI)
 -(void) activateSelectedItem;
@@ -126,13 +125,13 @@
   else if ([sender action] == @selector(undo:))
   {
     ok = [undoManager canUndo];
-    [sender setTitleWithMnemonic:[undoManager undoMenuItemTitle]];
-  }
+    [sender setTitle:[undoManager undoMenuItemTitle]];
+  }//end if ([sender action] == @selector(undo:))
   else if ([sender action] == @selector(redo:))
   {
     ok = [undoManager canRedo];
-    [sender setTitleWithMnemonic:[undoManager redoMenuItemTitle]];
-  }
+    [sender setTitle:[undoManager redoMenuItemTitle]];
+  }//end if ([sender action] == @selector(redo:))
   return ok;
 }
 //end validateMenuItem:
@@ -469,9 +468,7 @@
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 =
-    isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[self convertPoint:center toView:nil]] :
-    [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 = [[self window] bridge_convertPointToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =
@@ -583,7 +580,7 @@
       HistoryItem* historyItem = [[self->historyItemsController arrangedObjects] objectAtIndex:index];
       NSString* oldFilePath = filePath;
       LatexitEquation* equation = [historyItem equation];
-      BOOL altIsPressed = ((GetCurrentEventKeyModifiers() & (optionKey|rightOptionKey)) != 0);
+      BOOL altIsPressed = (([NSEvent modifierFlags] & NSEventModifierFlagOption) != 0);
       filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:[[equation sourceText] string]];
       filePath = !filePrefix || [filePrefix isEqualToString:@""] ? filePath :
         [fileManager getUnusedFilePathFromPrefix:filePrefix extension:extension folder:dropPath startSuffix:index];

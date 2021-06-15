@@ -97,6 +97,13 @@
 }
 //end stringWithContentsOfURL:guessEncoding:error:
 
++(BOOL) isNilOrEmpty:(NSString*)string
+{
+  BOOL result = !string || [string isEqualToString:@""];
+  return result;
+}
+//enc isNilOrEmpty;
+
 -(NSRange) range
 {
   return NSMakeRange(0, self.length);

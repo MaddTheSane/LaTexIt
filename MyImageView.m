@@ -34,6 +34,7 @@
 #import "NSMenuExtended.h"
 #import "NSObjectExtended.h"
 #import "NSStringExtended.h"
+#import "NSWindowExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
 #import "RegexKitLite.h"
@@ -41,7 +42,6 @@
 
 #import "CGExtras.h"
 
-#import <Carbon/Carbon.h>
 #import <LinkBack/LinkBack.h>
 #import <Quartz/Quartz.h>
 
@@ -433,9 +433,7 @@ typedef NSInteger NSDraggingContext;
         if (!self->shouldRedrag)
         {
           self->lastDragStartPointSelfBased = p;
-          NSPoint eventLocation =
-            isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[event locationInWindow]] :
-            [[self window] convertBaseToScreen:[event locationInWindow]];
+          NSPoint eventLocation = [[self window] bridge_convertPointToScreen:[event locationInWindow]];
           [[[AppController appController] dragFilterWindowController] setWindowVisible:YES withAnimation:YES atPoint:eventLocation];
           [[[AppController appController] dragFilterWindowController] setDelegate:self];
         }//end if (!self->shouldRedrag)
@@ -599,9 +597,7 @@ typedef NSInteger NSDraggingContext;
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 =
-    isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[self convertPoint:center toView:nil]] :
-    [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 = [[self window] bridge_convertPointToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =
@@ -632,7 +628,7 @@ typedef NSInteger NSDraggingContext;
     NSString* dropPath = [dropDestination path];
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSString* equationSourceText = [[self->transientDragEquation sourceText] string];
-    BOOL altIsPressed = ((GetCurrentEventKeyModifiers() & (optionKey|rightOptionKey)) != 0);
+    BOOL altIsPressed = (([NSEvent modifierFlags] & NSEventModifierFlagOption) != 0);
     NSString* filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:equationSourceText];
     if (!filePrefix || [filePrefix isEqualToString:@""])
       filePrefix = @"latex-image";
@@ -703,7 +699,7 @@ typedef NSInteger NSDraggingContext;
   if (self->pdfData)
   {
     NSString* equationSourceText = [[self->transientDragEquation sourceText] string];
-    BOOL altIsPressed = ((GetCurrentEventKeyModifiers() & (optionKey|rightOptionKey)) != 0);
+    BOOL altIsPressed = (([NSEvent modifierFlags] & NSEventModifierFlagOption) != 0);
     NSString* filePrefix = altIsPressed ? nil : [LatexitEquation computeFileNameFromContent:equationSourceText];
     if (!filePrefix || [filePrefix isEqualToString:@""])
       filePrefix = @"latex-image";
@@ -869,6 +865,8 @@ typedef NSInteger NSDraggingContext;
     ok = YES;
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSPDFPboardType, kUTTypePDF, nil]]))
     ok = YES;
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:NSHTMLPboardType, kUTTypeHTML, nil]]))
+    ok = YES;
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]]))
     ok = YES;
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
@@ -1024,6 +1022,11 @@ typedef NSInteger NSDraggingContext;
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
     done = [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypePDF];
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:kUTTypePDF, NSPDFPboardType, nil]])))
+  if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeHTML, NSHTMLPboardType, nil]])))
+  {
+    DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
+    done = [self->document applyData:[pboard dataForType:type] sourceUTI:(NSString*)kUTTypeHTML];
+  }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:kUTTypeHTML, NSHTMLPboardType, nil]])))
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFileContentsPboardType]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);

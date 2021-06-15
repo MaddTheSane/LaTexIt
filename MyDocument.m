@@ -49,7 +49,6 @@
 #import "SystemTask.h"
 #import "Utils.h"
 
-#import <Carbon/Carbon.h>
 #import <LinkBack/LinkBack.h>
 #import <Quartz/Quartz.h>
 #import "RegexKitLite.h"
@@ -2611,14 +2610,14 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
 -(void) closeBackSyncFile
 {
-  if (self->backSyncUkkQueue)
+  if (self->backSyncVdkQueue)
   {
     if (self->backSyncFilePath)
     {
-      [self->backSyncUkkQueue removePath:self->backSyncFilePath];
-      [self->backSyncUkkQueue removePath:[self->backSyncFilePath stringByDeletingLastPathComponent]];
+      [self->backSyncVdkQueue removePath:self->backSyncFilePath];
+      [self->backSyncVdkQueue removePath:[self->backSyncFilePath stringByDeletingLastPathComponent]];
     }//end if (self->backSyncFilePath)
-  }//end if (self->backSyncUkkQueue)
+  }//end if (self->backSyncVdkQueue)
   [self->backSyncFilePath release];
   self->backSyncFilePath = nil;
   [self->backSyncFileLastModificationDate release];
@@ -2643,17 +2642,17 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     self->backSyncFileLastModificationDate =
       [[[[NSFileManager defaultManager] attributesOfItemAtPath:self->backSyncFilePath error:nil]
         fileModificationDate] copy];
-    if (!self->backSyncUkkQueue)
+    if (!self->backSyncVdkQueue)
     {
-      self->backSyncUkkQueue = [[UKKQueue alloc] init];
-      [self->backSyncUkkQueue setDelegate:self];
+      self->backSyncVdkQueue = [[VDKQueue alloc] init];
+      [self->backSyncVdkQueue setDelegate:self];
     }//end if (!self->backSyncUkkQueue)
-    [self->backSyncUkkQueue addPath:self->backSyncFilePath];
-    [self->backSyncUkkQueue addPath:[self->backSyncFilePath stringByDeletingLastPathComponent]];
+    [self->backSyncVdkQueue addPath:self->backSyncFilePath];
+    [self->backSyncVdkQueue addPath:[self->backSyncFilePath stringByDeletingLastPathComponent]];
     [self setFileURL:(!self->backSyncFilePath ? nil : [NSURL fileURLWithPath:self->backSyncFilePath])];
     NSImage* icon = [NSImage imageNamed:@"backsync"];
     [[[self windowForSheet] standardWindowButton:NSWindowDocumentIconButton] setImage:icon];
-    [self watcher:nil receivedNotification:UKFileWatcherWriteNotification forPath:self->backSyncFilePath];
+    [self VDKQueue:nil receivedNotification:VDKQueueWriteNotification forPath:self->backSyncFilePath];
   }//end if (path)
 }
 //end openBackSyncFile:
@@ -2833,16 +2832,16 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       if (synchronizeEnabled)
       {
         [self openBackSyncFile:filename options:[self->backSyncOptions dictionary]];
-        [self watcher:nil receivedNotification:UKFileWatcherWriteNotification forPath:self->backSyncFilePath];
+        [self VDKQueue:nil receivedNotification:VDKQueueWriteNotification forPath:self->backSyncFilePath];
       }//end if (synchronizeEnabled)
     }//end if (result == NSFileHandlingPanelOKButton)
   }];
 }
 //end saveAs:
 
--(void) watcher:(id<UKFileWatcher>)kq receivedNotification:(NSString*)nm forPath:(NSString*)fpath
+-(void) VDKQueue:(VDKQueue*)queue receivedNotification:(NSString*)noteName forPath:(NSString*)fpath
 {
-  DebugLog(1, @"watcher:<%@> <%@>", nm, fpath);
+  DebugLog(1, @"VDKQueue:<%@> <%@>", noteName, fpath);
   @synchronized(self)
   {
     BOOL shouldUpdate = NO;
@@ -2857,27 +2856,27 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         (!self->backSyncFileLastModificationDate || [newFileModificationDate isGreaterThan:self->backSyncFileLastModificationDate]);
       if (shouldUpdate && self->backSyncFilePathLinkHasBeenBroken)
       {
-        [self->backSyncUkkQueue addPath:self->backSyncFilePath];
+        [self->backSyncVdkQueue addPath:self->backSyncFilePath];
         self->backSyncFilePathLinkHasBeenBroken = NO;
       }//end if (shouldUpdate && self->backSyncFilePathLinkHasBeenBroken)
     }//end if ([fpath isEqualToString:[self->backSyncFilePath stringByDeletingLastPathComponent]])
-    else if ([nm isEqualToString:UKFileWatcherDeleteNotification])
+    else if ([noteName isEqualToString:VDKQueueDeleteNotification])
     {
       self->backSyncFilePathLinkHasBeenBroken = YES;
       if (self->backSyncFilePath)
-        [self->backSyncUkkQueue removePath:self->backSyncFilePath];
+        [self->backSyncVdkQueue removePath:self->backSyncFilePath];
       shouldUpdate = NO;
-    }//end if ([nm isEqualToString:UKFileWatcherDeleteNotification])
-    else if ([nm isEqualToString:UKFileWatcherRenameNotification])
+    }//end if ([noteName isEqualToString:VDKQueueDeleteNotification])
+    else if ([noteName isEqualToString:VDKQueueRenameNotification])
     {
       self->backSyncFilePathLinkHasBeenBroken = YES;
       if (self->backSyncFilePath)
-        [self->backSyncUkkQueue removePath:self->backSyncFilePath];
+        [self->backSyncVdkQueue removePath:self->backSyncFilePath];
       shouldUpdate = NO;
-    }//end if ([nm isEqualToString:UKFileWatcherRenameNotification])
-    else if ([nm isEqualToString:UKFileWatcherWriteNotification])
+    }//end if ([noteName isEqualToString:VDKQueueRenameNotification])
+    else if ([noteName isEqualToString:VDKQueueWriteNotification])
       shouldUpdate = YES;
-    else if ([nm isEqualToString:UKFileWatcherAttributeChangeNotification])
+    else if ([noteName isEqualToString:VDKQueueAttributeChangeNotification])
       shouldUpdate = YES;
     if (shouldUpdate)
     {
@@ -2888,7 +2887,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       NSStringEncoding encoding;
       NSError* error = nil;
 
-      BOOL shouldUseScripts = (kq != nil);
+      BOOL shouldUseScripts = (queue != nil);
       NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-%lu", (unsigned long)self->uniqueId];
       NSMutableString* fullLog = [NSMutableString string];
       NSDictionary* fullEnvironment = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
@@ -2934,10 +2933,10 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       BOOL synchronizeBody =
         [[[self->backSyncOptions objectForKey:@"synchronizeBody"] dynamicCastToClass:[NSNumber class]] boolValue];
       [self updateDocumentFromString:string updatePreamble:synchronizePreamble updateEnvironment:synchronizeEnvironment updateBody:synchronizeBody];
-    }//end if ([nm isEqualToString:UKFileWatcherRenameNotification])
+    }//end if (shouldUpdate)
   }//end @synchronized(self)
 }
-//end watcher:receivedNotification:
+//end VDKQueue:receivedNotification:forPath:
 
 -(void) updateDocumentFromString:(NSString*)string updatePreamble:(BOOL)updatePreamble updateEnvironment:(BOOL)updateEnvironment updateBody:(BOOL)updateBody
 {
@@ -2972,14 +2971,23 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       }//end if (components && ([components count] == 2))
       
       components = (latexMode != LATEX_MODE_TEXT) ? nil :
-      [body captureComponentsMatchedByRegex:@"^\\s*\\$\\displayStyle(.*)\\$\\$\\s*$"
+      [body captureComponentsMatchedByRegex:@"^\\s*\\$\\\\displaystyle(.*)\\$\\s*$"
                                     options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
       if (components && ([components count] == 2))
       {
         latexMode = LATEX_MODE_DISPLAY;
         body = [components objectAtIndex:1];
       }//end if (components && ([components count] == 2))
-      
+
+      components = (latexMode != LATEX_MODE_TEXT) ? nil :
+      [body captureComponentsMatchedByRegex:@"^\\s*\\{\\\\displaystyle(.*)\\}\\s*$"
+                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+      if (components && ([components count] == 2))
+      {
+        latexMode = LATEX_MODE_DISPLAY;
+        body = [components objectAtIndex:1];
+      }//end if (components && ([components count] == 2))
+
       components = (latexMode != LATEX_MODE_TEXT) ? nil :
       [body captureComponentsMatchedByRegex:@"^\\s*\\\\\\[(.*)\\\\\\]\\s*$"
                                     options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];

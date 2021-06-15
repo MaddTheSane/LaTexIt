@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "LaTeXiTSharedTypes.h"
-#import "UKKQueue.h"
+#import "VDKQueue.h"
 
 @class AppController;
 @class DocumentExtraPanelsController;
@@ -24,7 +24,7 @@
 @class MySplitView;
 @class PropertyStorage;
 
-@interface MyDocument : NSDocument
+@interface MyDocument : NSDocument <VDKQueueDelegate>
 {
   IBOutlet NSBox*               upperBox;
   IBOutlet NSBox*               upperImageBox;
@@ -91,7 +91,7 @@
   
   BOOL shouldApplyToPasteboardAfterLatexization;
   
-  UKKQueue* backSyncUkkQueue;
+  VDKQueue* backSyncVdkQueue;
   NSString* backSyncFilePath;
   BOOL      backSyncFilePathLinkHasBeenBroken;
   NSDate*   backSyncFileLastModificationDate;

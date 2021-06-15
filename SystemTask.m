@@ -8,7 +8,6 @@
 
 #import "SystemTask.h"
 
-#import "DirectoryServiceHelper.h"
 #import "NSFileManagerExtended.h"
 #import "NSStringExtended.h"
 
@@ -237,13 +236,6 @@
   else
   {
     NSString* currentShell = nil;
-    #warning fix bugs with TCSH first
-    /*if (isUsingLoginShell)
-    {
-      DirectoryServiceHelper* directoryServiceHelper = [[DirectoryServiceHelper alloc] init];
-      currentShell = [directoryServiceHelper valueForKey:kDS1AttrUserShell andUser:NSUserName()];
-      [directoryServiceHelper release];
-    }*/
     if (!currentShell)
       currentShell = @"/bin/bash";
     NSString* option = ![currentShell isEqualToString:@"/bin/bash"] ? @"" :

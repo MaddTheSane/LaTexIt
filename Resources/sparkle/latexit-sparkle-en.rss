@@ -1024,8 +1024,8 @@
 			<pubDate>Tue, 21 Apr 2020 08:41:08 +0200</pubDate>
 			<enclosure
 				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_9.dmg"
-				sparkle:version="2.14.11"
-                   sparkle:shortVersionString="2.14.11"
+				sparkle:version="2.14.9"
+                   sparkle:shortVersionString="2.14.9"
 				type="application/octet-stream"
 				length="10032347"
 				sparkle:dsaSignature="MCwCFBROhkmuNWyhB47qTBbbuy0h7OnhAhRcnAHnvrlGgOHi3YZjuONm5gL/XA=="
@@ -1045,8 +1045,8 @@
 			<pubDate>Sat, 12 Sep 2020 11:37:13 +0200</pubDate>
 			<enclosure
 				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_14_10.dmg"
-				sparkle:version="2.14.11"
-                   sparkle:shortVersionString="2.14.11"
+				sparkle:version="2.14.10"
+                   sparkle:shortVersionString="2.14.10"
 				type="application/octet-stream"
 				length="9950530"
 				sparkle:dsaSignature="MC0CFBRHqMskrj1e2mq+YygIUzn+/hEdAhUAgZ+vGuqpO4LZ7murtD7o6tTVTAE="
@@ -1054,7 +1054,7 @@
     </item>
     <item>
       <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.14.11</guid>
-      <title>Version 2.14.11/title>
+      <title>Version 2.14.11</title>
       <description><![CDATA[
         <ul>
           <li>Changed a little the meta-data to circumvent a problem with Adobe Acrobat Reader.</li>
@@ -1070,6 +1070,27 @@
 				type="application/octet-stream"
 				length="9941554"
 				sparkle:dsaSignature="MCwCFDhQb+RG2NGr7FAxuq7BuSX9bUdMAhQ+D7AIc7cmmYP5E7CrO2ADyXv/3Q=="
+			/>
+    </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.15.0</guid>
+      <title>Version 2.15.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>Replaced deprecated APIs;</li>
+          <li>added support for some equations copied from Wikipedia web pages.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.15.0</sparkle:releaseNotesLink>
+			<pubDate>Sun, 27 Sep 2020 21:20:54 +0200</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_15_0.dmg"
+				sparkle:version="2.15.0"
+                   sparkle:shortVersionString="2.15.0"
+				type="application/octet-stream"
+				length="9935997"
+				sparkle:dsaSignature="MCwCFH5sxASWBniLg9ErtIKk0HcIby6nAhQ749REdS80UHNQDX6fr01rqtFohg=="
 			/>
     </item>
   </channel>

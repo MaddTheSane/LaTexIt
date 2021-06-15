@@ -124,7 +124,8 @@
 
 -(NSUndoManager*) undoManager
 {
-  return [[self managedObjectContext] undoManager];
+  NSUndoManager* result = [[self managedObjectContext] undoManager];
+  return result;
 }
 //end undoManager
 

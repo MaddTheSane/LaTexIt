@@ -34,8 +34,6 @@
 
 #import "RegexKitLite.h"
 
-#import <Carbon/Carbon.h>
-
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
 NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
 
@@ -687,7 +685,10 @@ static NSArray* WellKnownLatexKeywords = nil;
       [super performDragOperation:sender];
     [attributedString release];
   }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObjects:NSRTFPboardType, nil]])
-  
+  else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeHTML, NSHTMLPboardType, nil]]))
+  {
+    [(id)[self nextResponder] performDragOperation:sender];
+  }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObjects:(NSString*)kUTTypeHTML, NSHTMLPboardType, nil]]))
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   {
     NSString* lastFilePath = [[pboard propertyListForType:NSFilenamesPboardType] lastObject];
@@ -726,7 +727,8 @@ static NSArray* WellKnownLatexKeywords = nil;
     else if (plainTextContent)
       [self insertText:plainTextContent];
     
-    if (uti) CFRelease(uti);
+    if (uti)
+      CFRelease(uti);
   }//end if ([pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]])
   else
     [super performDragOperation:sender];

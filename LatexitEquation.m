@@ -31,11 +31,118 @@
 
 #import <Quartz/Quartz.h>
 
+#import <libxml/parser.h>
+#import <libxml/xpath.h>
+#import <libxml/HTMLparser.h>
+
 #ifdef ARC_ENABLED
 #define CHBRIDGE CHBRIDGE
 #else
 #define CHBRIDGE
 #endif
+
+static NSDictionary* DictionaryForNode(xmlNodePtr currentNode, NSMutableDictionary* parentResult)
+{
+  NSDictionary* result = nil;
+  if (currentNode)
+  {
+    NSMutableDictionary* resultForNode = [NSMutableDictionary dictionary];
+    if (currentNode->name)
+    {
+      NSString* currentNodeContent = [NSString stringWithCString:(const char *)currentNode->name encoding:NSUTF8StringEncoding];
+      [resultForNode setObject:currentNodeContent forKey:@"nodeName"];
+    }//end if (currentNode->name)
+    
+    if (currentNode->content && (currentNode->type != XML_DOCUMENT_TYPE_NODE))
+    {
+      NSString* currentNodeContent =
+        [NSString stringWithCString:(const char *)currentNode->content encoding:NSUTF8StringEncoding];
+      if ([[resultForNode objectForKey:@"nodeName"] isEqual:@"text"] && parentResult)
+      {
+        currentNodeContent = [currentNodeContent stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSString* existingContent = [parentResult objectForKey:@"nodeContent"];
+        NSString* newContent = !existingContent ? currentNodeContent : [existingContent stringByAppendingString:currentNodeContent];
+        if (newContent)
+          [parentResult setObject:newContent forKey:@"nodeContent"];
+        return nil;
+      }
+      [resultForNode setObject:currentNodeContent forKey:@"nodeContent"];
+    }//end if (currentNode->content && (currentNode->type != XML_DOCUMENT_TYPE_NODE))
+    
+    NSMutableArray* attributeArray = [NSMutableArray array];
+    for(xmlAttr* attribute = currentNode->properties ; attribute != 0 ; attribute = attribute->next)
+    {
+      NSMutableDictionary* attributeDictionary = [NSMutableDictionary dictionary];
+      NSString *attributeName = [NSString stringWithCString:(const char *)attribute->name encoding:NSUTF8StringEncoding];
+      if (attributeName)
+        [attributeDictionary setObject:attributeName forKey:@"attributeName"];
+      if (attribute->children)
+      {
+        NSDictionary *childDictionary = DictionaryForNode(attribute->children, attributeDictionary);
+        if (childDictionary)
+          [attributeDictionary setObject:childDictionary forKey:@"attributeContent"];
+      }//end if (attribute->children)
+      if ([attributeDictionary count] > 0)
+        [attributeArray addObject:attributeDictionary];
+    }//end for each attribute
+    if ([attributeArray count] > 0)
+      [resultForNode setObject:attributeArray forKey:@"nodeAttributeArray"];
+
+    NSMutableArray* childContentArray = [NSMutableArray array];
+    for(xmlNodePtr childNode = currentNode->children ; childNode != 0 ; childNode = childNode->next)
+    {
+      NSDictionary* childDictionary = DictionaryForNode(childNode, resultForNode);
+      if (childDictionary)
+        [childContentArray addObject:childDictionary];
+    }//end for each childNode
+    if ([childContentArray count] > 0)
+      [resultForNode setObject:childContentArray forKey:@"nodeChildArray"];
+    result = resultForNode;
+	}//end if (currentNode)
+	return result;
+}
+//end DictionaryForNode()
+
+static NSArray* PerformXPathQuery(xmlDocPtr doc, NSString* query)
+{
+  NSArray* result = nil;
+  xmlXPathContextPtr xpathCtx = xmlXPathNewContext(doc);
+  if (xpathCtx != 0)
+  {
+    xmlChar *queryString = (xmlChar *)[query cStringUsingEncoding:NSUTF8StringEncoding];
+    xmlXPathObjectPtr xpathObj = xmlXPathEvalExpression(queryString, xpathCtx);
+    xmlNodeSetPtr nodes = !xpathObj ? 0 : xpathObj->nodesetval;
+    if (nodes)
+    {
+      NSMutableArray* resultNodes = [NSMutableArray array];
+      for(NSInteger i = 0; i < nodes->nodeNr; ++i)
+      {
+        NSDictionary* nodeDictionary = DictionaryForNode(nodes->nodeTab[i], nil);
+        if (nodeDictionary)
+          [resultNodes addObject:nodeDictionary];
+      }//end for each node
+      result = resultNodes;
+    }//end if (nodes)
+    if (xpathObj != 0)
+      xmlXPathFreeObject(xpathObj);
+    xmlXPathFreeContext(xpathCtx);
+  }//end if (xpathCtx != 0)
+  return result;
+}
+//end PerformXPathQuery(xmlDocPtr, NSString*)
+
+static NSArray* PerformHTMLXPathQuery(NSData* document, NSString* query)
+{
+  NSArray *result = nil;
+  xmlDocPtr doc = htmlReadMemory([document bytes], (int)[document length], "", 0, XML_PARSE_RECOVER);
+  if (doc != 0)
+  {
+    result = PerformXPathQuery(doc, query);
+    xmlFreeDoc(doc);
+  }//end if (doc != 0)
+  return result;
+}
+//end PerformHTMLXPathQuery(NSData*, NSString*)
 
 @interface LaTeXiTMetaDataParsingContext : NSObject
 {
@@ -1164,9 +1271,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     if (error)
       DebugLog(1, @"error : %@", error);
     NSArray* descriptions =
-    [string componentsMatchedByRegex:@"<math(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</math>"
-                             options:RKLCaseless|RKLMultiline|RKLDotAll
-                               range:NSMakeRange(0, [string length]) capture:0 error:&error];
+      [string componentsMatchedByRegex:@"<math(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</math>"
+                               options:RKLCaseless|RKLMultiline|RKLDotAll
+                                 range:NSMakeRange(0, [string length]) capture:0 error:&error];
     if (error)
       DebugLog(1, @"error : %@", error);
     NSEnumerator* enumerator = nil;
@@ -1703,27 +1810,108 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSString* annotationBase64 =
         [svgString stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
           inRange:NSMakeRange(0, [svgString length]) capture:1 error:0];
-      NSData* annotationData = [NSData dataWithBase64:annotationBase64];
-      annotationData = [Compressor zipuncompress:annotationData];
+      NSData* annotationData = !annotationBase64 ? nil : [NSData dataWithBase64:annotationBase64];
+      annotationData = !annotationData ? nil : [Compressor zipuncompress:annotationData];
       NSDictionary* metaData = !annotationData ? nil :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
-      result = [self initWithMetaData:metaData useDefaults:useDefaults];
+      result = !result ? nil : [self initWithMetaData:metaData useDefaults:useDefaults];
+      if (!result)
+        [self release];
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
     else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.html")))
     {
       #ifdef ARC_ENABLED
-      NSString* mathmlString = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
+      NSString* htmlString = [[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding];
       #else
-      NSString* mathmlString = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
+      NSString* htmlString = [[[NSString alloc] initWithData:someData encoding:NSUTF8StringEncoding] autorelease];
       #endif
+      //first, try LaTeXiT mathml
       NSString* annotationBase64 =
-        [mathmlString stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
-          inRange:NSMakeRange(0, [mathmlString length]) capture:1 error:0];
-      NSData* annotationData = [NSData dataWithBase64:annotationBase64];
-      annotationData = [Compressor zipuncompress:annotationData];
+        [htmlString stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
+          inRange:NSMakeRange(0, [htmlString length]) capture:1 error:0];
+      NSData* annotationData = !annotationBase64 ? nil : [NSData dataWithBase64:annotationBase64];
+      annotationData = !annotationData ? nil : [Compressor zipuncompress:annotationData];
       NSDictionary* metaData = !annotationData ? nil :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
-      result = [self initWithMetaData:metaData useDefaults:useDefaults];
+      result = !metaData ? nil : [self initWithMetaData:metaData useDefaults:useDefaults];
+      if (!result)
+      {
+        NSArray* elements = PerformHTMLXPathQuery(someData, @"//span[@class=\"mwe-math-element\"]/img/@alt");
+        NSDictionary* element = [[elements lastObject] dynamicCastToClass:[NSDictionary class]];
+        NSString* nodeContent = [[element objectForKey:@"nodeContent"] dynamicCastToClass:[NSString class]];
+        NSArray* components = !nodeContent ? nil :
+          [nodeContent captureComponentsMatchedByRegex:@"\\s*\\{\\s*(.*)\\s*\\}\\s*|\\s*(.*)\\s*" options:RKLDotAll range:NSMakeRange(0, [nodeContent length]) error:nil];
+        NSString* latexSourceCode = nil;
+        if (components.count == 3)
+        {
+          if ([NSString isNilOrEmpty:latexSourceCode])
+            latexSourceCode = [[components objectAtIndex:1] dynamicCastToClass:[NSString class]];
+          if ([NSString isNilOrEmpty:latexSourceCode])
+            latexSourceCode = [[components objectAtIndex:2] dynamicCastToClass:[NSString class]];
+        }//end if (components.count == 3)
+        if (![NSString isNilOrEmpty:latexSourceCode])
+        {
+          NSString* latexSubSourceCode = latexSourceCode;
+          NSRange latexSourceCodeRange = NSMakeRange(0, latexSourceCode.length);
+          latex_mode_t latexMode = LATEX_MODE_TEXT;
+          if (latexMode == LATEX_MODE_TEXT)
+          {
+            components = [latexSourceCode captureComponentsMatchedByRegex:@"^\\s*\\begin\\{align\\}(.*)\\\\end\\{align\\}\\s*$" options:RKLDotAll range:latexSourceCodeRange error:nil];
+            if (components.count == 2)
+            {
+              latexSubSourceCode = [[components lastObject] dynamicCastToClass:[NSString class]];
+              latexMode = LATEX_MODE_ALIGN;
+            }//end if (components.count == 2)
+          }//end if (latexMode == LATEX_MODE_TEXT)
+          if (latexMode == LATEX_MODE_TEXT)
+          {
+            components = [latexSourceCode captureComponentsMatchedByRegex:@"^\\s*\\$\\$(.*)\\$\\$\\s*$" options:RKLDotAll range:latexSourceCodeRange error:nil];
+            if (components.count == 2)
+            {
+              latexSubSourceCode = [[components lastObject] dynamicCastToClass:[NSString class]];
+              latexMode = LATEX_MODE_DISPLAY;
+            }//end if (components.count == 2)
+          }//end if (latexMode == LATEX_MODE_TEXT)
+          if (latexMode == LATEX_MODE_TEXT)
+          {
+            components = [latexSourceCode captureComponentsMatchedByRegex:@"^\\s*\\\\[(.*)\\\\]\\s*$" options:RKLDotAll range:latexSourceCodeRange error:nil];
+            if (components.count == 2)
+            {
+              latexSubSourceCode = [[components lastObject] dynamicCastToClass:[NSString class]];
+              latexMode = LATEX_MODE_DISPLAY;
+            }//end if (components.count == 2)
+          }//end if (latexMode == LATEX_MODE_TEXT)
+          if (latexMode == LATEX_MODE_TEXT)
+          {
+            components = [latexSourceCode captureComponentsMatchedByRegex:@"^\\s*\\\\displaystyle(.*)\\s*$" options:RKLDotAll range:latexSourceCodeRange error:nil];
+            if (components.count == 2)
+            {
+              latexSubSourceCode = [[components lastObject] dynamicCastToClass:[NSString class]];
+              latexMode = LATEX_MODE_DISPLAY;
+            }//end if (components.count == 2)
+          }//end if (latexMode == LATEX_MODE_TEXT)
+          if (latexMode == LATEX_MODE_TEXT)
+          {
+            components = [latexSourceCode captureComponentsMatchedByRegex:@"^\\s*\\$(.*)\\$\\s*$" options:RKLDotAll range:latexSourceCodeRange error:nil];
+            if (components.count == 2)
+            {
+              latexSubSourceCode = [[components lastObject] dynamicCastToClass:[NSString class]];
+              latexMode = LATEX_MODE_INLINE;
+            }//end if (components.count == 2)
+          }//end if (latexMode == LATEX_MODE_TEXT)
+          PreferencesController* preferencesController = [PreferencesController sharedController];
+          NSAttributedString* latexSourceCodeAttributed = !latexSubSourceCode ? nil :
+            [[[NSAttributedString alloc] initWithString:latexSubSourceCode] autorelease];
+          metaData = !latexSourceCodeAttributed ? nil : @{
+            @"mode":@(latexMode),
+            @"sourceText":latexSourceCodeAttributed,
+            @"magnification":@([preferencesController latexisationFontSize])
+          };
+          result = !metaData ? nil : [self initWithMetaData:metaData useDefaults:useDefaults];
+        }//end if (![NSString isNilOrEmpty:latexSourceCode])
+      }//end if (!result)
+      if (!result)
+        [self release];
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
     else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.text")))
     {

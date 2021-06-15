@@ -13,8 +13,6 @@
 
 #import "PreferencesController.h"
 
-#import <Carbon/Carbon.h>
-
 extern NSString *NSMenuDidBeginTrackingNotification;
 
 @interface ServiceShortcutsTableView (PrivateAPI)

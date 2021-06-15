@@ -14,6 +14,7 @@
 //a similar method exists on Tiger, but does not work as I expect; this is a wrapper plus some additions
 +(id) stringWithContentsOfFile:(NSString*)path guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
 +(id) stringWithContentsOfURL:(NSURL*)url guessEncoding:(NSStringEncoding*)enc error:(NSError**)error;
++(BOOL) isNilOrEmpty:(NSString*)string;
 
 -(NSRange) range;
 -(NSString*) string;//useful for binding

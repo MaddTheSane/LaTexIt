@@ -496,7 +496,8 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     [persistentStoreCoordinator setMetadata:@{@"version":applicationVersion} forPersistentStore:persistentStore];
   }//end if (setVersion && persistentStore)
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
-  //[result setUndoManager:(!result ? nil : [[[NSUndoManagerDebug alloc] init] autorelease])];
+  if (!result.undoManager)
+    result.undoManager = [[[NSUndoManager alloc] init] autorelease];
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
   [result setRetainsRegisteredObjects:YES];
   #ifdef ARC_ENABLED

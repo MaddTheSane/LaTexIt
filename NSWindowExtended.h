@@ -12,5 +12,6 @@
 @interface NSWindow (Extended) 
 
 -(void) setAnimationEnabled:(BOOL)value;
+-(NSPoint) bridge_convertPointToScreen:(NSPoint)point;
 
 @end

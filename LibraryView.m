@@ -34,10 +34,9 @@
 #import "NSObjectTreeNode.h"
 #import "NSOutlineViewExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
+#import "NSWindowExtended.h"
 #import "PreferencesController.h"
 #import "Utils.h"
-
-#import <Carbon/Carbon.h>
 
 @interface LibraryView (PrivateAPI)
 -(NSImage*) iconForRepresentedObject:(id)representedObject;
@@ -415,10 +414,7 @@
 
 -(void) deleteBackward:(id)sender
 {
-  BOOL hasCommandMask =
-    [[NSEvent class] respondsToSelector:@selector(modifierFlags)] ?
-      ((NSUInteger)[(id)[NSEvent class] modifierFlags] & NSCommandKeyMask) :
-      ((GetCurrentEventKeyModifiers() & cmdKey) != 0);
+  BOOL hasCommandMask = (([NSEvent modifierFlags] & NSEventModifierFlagCommand) != 0);
   if (hasCommandMask)
     [self removeSelection:sender];
 }
@@ -509,13 +505,13 @@
   else if ([sender action] == @selector(undo:))
   {
     ok = [undoManager canUndo];
-    [sender setTitleWithMnemonic:[undoManager undoMenuItemTitle]];
-  }
+    [sender setTitle:[undoManager undoMenuItemTitle]];
+  }//end if ([sender action] == @selector(undo:))
   else if ([sender action] == @selector(redo:))
   {
     ok = [undoManager canRedo];
-    [sender setTitleWithMnemonic:[undoManager redoMenuItemTitle]];
-  }
+    [sender setTitle:[undoManager redoMenuItemTitle]];
+  }//end if ([sender action] == @selector(redo:))
   return ok;
 }
 //end validateMenuItem:
@@ -724,7 +720,7 @@
   }//end if (isMacOS10_15OrAbove() || !self->shouldRedrag)
   if (self->shouldRedrag)
   {
-    NSPasteboard* pboard = session.draggingPasteboard;
+    //NSPasteboard* pboard = session.draggingPasteboard;
     [self performSelector:@selector(performProgrammaticRedrag:) withObject:nil afterDelay:0];
   }//end if (self->shouldRedrag)
 }
@@ -804,9 +800,7 @@
   [[[[AppController appController] dragFilterWindowController] window] setIgnoresMouseEvents:YES];
   NSPoint center = self->lastDragStartPointSelfBased;
   NSPoint mouseLocation1 = [NSEvent mouseLocation];
-  NSPoint mouseLocation2 =
-    isMacOS10_12OrAbove() ? [[self window] convertPointToScreen:[self convertPoint:center toView:nil]] :
-    [[self window] convertBaseToScreen:[self convertPoint:center toView:nil]];
+  NSPoint mouseLocation2 = [[self window] bridge_convertPointToScreen:[self convertPoint:center toView:nil]];
   CGPoint cgMouseLocation1 = NSPointToCGPoint(mouseLocation1);
   CGPoint cgMouseLocation2 = NSPointToCGPoint(mouseLocation2);
   CGEventRef cgEvent1 =
