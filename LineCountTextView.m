@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //The LineCountTextView is an NSTextView that I have associated with a LineCountRulerView
 //This ruler will display the line numbers
@@ -31,8 +31,6 @@
 #import "PreferencesController.h"
 #import "SMLSyntaxColouring.h"
 #import "Utils.h"
-
-#import "RegexKitLite.h"
 
 NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
 NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
@@ -166,7 +164,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 
 -(void) refreshCheckSpelling
 {
-  [[NSSpellChecker sharedSpellChecker] checkSpellingOfString:[[self textStorage] string] startingAt:0 language:nil wrap:YES inSpellDocumentWithTag:[self spellCheckerDocumentTag] wordCount:0];
+  [[NSSpellChecker sharedSpellChecker] checkSpellingOfString:[self.textStorage string] startingAt:0 language:nil wrap:YES inSpellDocumentWithTag:[self spellCheckerDocumentTag] wordCount:0];
 }
 //end refreshCheckSpelling:
 
@@ -244,10 +242,10 @@ static NSArray* WellKnownLatexKeywords = nil;
   self->lastCharacterEnablesAutoCompletion = NO;
   NSDictionary* attributes = @{NSFontAttributeName:[[PreferencesController sharedController] editionFont]};
   NSMutableAttributedString* attributedString = [[value mutableCopy] autorelease];
-  [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
+  [attributedString addAttributes:attributes range:attributedString.range];
   
   if (attributedString)
-    [[self textStorage] setAttributedString:attributedString];
+    [self.textStorage setAttributedString:attributedString];
   [self->syntaxColouring recolourCompleteDocument];
 }
 //end setAttributedString:
@@ -291,9 +289,8 @@ static NSArray* WellKnownLatexKeywords = nil;
       adaptedRange.length = adaptedRange.length+tabsCount*[tabToSpacesString length]-tabsCount;
   }//end if (tabToSpacesString != nil)
   [self insertText:aString];
-  NSRange fullRange = [[[self textStorage] string] range];
   if (adaptedRange.location != NSNotFound)
-    [self setSelectedRange:NSIntersectionRange(adaptedRange, fullRange)];
+    [self setSelectedRange:NSIntersectionRange(adaptedRange, self.textStorage.range)];
 }
 //end insertText:
 
@@ -307,7 +304,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   else if ([aString isKindOfClass:[NSAttributedString class]])
   {
     NSMutableAttributedString* attributedString = [[aString mutableCopy] autorelease];
-    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+    [attributedString setAttributes:nil range:attributedString.range];
     NSRange range = [[attributedString string] rangeOfString:@"\t"];
     while(range.location != NSNotFound)
     {
@@ -363,7 +360,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 
   //normal lines are displayed with the default foregound color
   NSDictionary* normalAttributes = @{NSForegroundColorAttributeName:[[PreferencesController sharedController] editionSyntaxColoringTextForegroundColor]};
-  [[self textStorage] addAttributes:normalAttributes range:NSMakeRange(0, [[self textStorage] length])];
+  [self.textStorage addAttributes:normalAttributes range:self.textStorage.range];
 
   //line count
   [[NSNotificationCenter defaultCenter] postNotificationName:LineCountDidChangeNotification object:self];
@@ -388,10 +385,10 @@ static NSArray* WellKnownLatexKeywords = nil;
     {
       NSRange range = NSRangeFromString([self->lineRanges objectAtIndex:index]);
       [syntaxColouring removeColoursFromRange:range];
-      [[self textStorage] addAttributes:forbiddenAttributes range:range];
+      [self.textStorage addAttributes:forbiddenAttributes range:range];
     }
     numberIndex = [enumerator nextObject];
-  }
+  }//end while(numberIndex)
 }
 //end textDidChange:
 
@@ -642,7 +639,13 @@ static NSArray* WellKnownLatexKeywords = nil;
     }//end if ([type isEqualToString:LibraryItemsWrappedPboardType])
     else if ([type isEqualToString:LibraryItemsArchivedPboardType])
     {
-      NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
+      NSData* pboardData = [pboard dataForType:type];
+      NSError* decodingError = nil;
+      NSArray* libraryItemsArray = !pboardData ? nil :
+        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClass:[LibraryItem allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+        [[NSKeyedUnarchiver unarchiveObjectWithData:pboardData] dynamicCastToClass:[NSArray class]];
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
       NSUInteger count = [libraryItemsArray count];
       while(count-- && !equation)
       {
@@ -653,7 +656,13 @@ static NSArray* WellKnownLatexKeywords = nil;
     }//end if ([type isEqualToString:LibraryItemsArchivedPboardType])
     else if ([type isEqualToString:LatexitEquationsPboardType])
     {
-      NSArray* latexitEquationsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
+      NSData* pboardData = [pboard dataForType:type];
+      NSError* decodingError = nil;
+      NSArray* latexitEquationsArray = !pboardData ? nil :
+        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClass:[LatexitEquation allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+        [[NSKeyedUnarchiver unarchiveObjectWithData:pboardData] dynamicCastToClass:[NSArray class]];
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
       equation = [latexitEquationsArray lastObject];
     }//end if ([type isEqualToString:LatexitEquationsPboardType])
     NSAttributedString* sourceText = [equation sourceText];
@@ -678,7 +687,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSData* rtfData = [pboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes];
-    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+    [attributedString setAttributes:nil range:attributedString.range];
     if (attributedString)
       [self insertTextAtMousePosition:attributedString];
     else
@@ -804,7 +813,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     else
     {
         NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
-      [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+      [attributedString setAttributes:nil range:attributedString.range];
       if (attributedString)
         [self insertText:attributedString];
       [attributedString release];
@@ -818,7 +827,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSData* rtfData = [pasteboard dataForType:type];
     NSDictionary* docAttributes = nil;
     NSMutableAttributedString* attributedString = [[[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes] autorelease];
-    [attributedString setAttributes:nil range:NSMakeRange(0, [attributedString length])];
+    [attributedString setAttributes:nil range:attributedString.range];
     if (attributedString)
       [self insertText:attributedString];
     //[super paste:sender];
@@ -831,11 +840,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   NSFont* currentFont = [[self typingAttributes] objectForKey:NSFontAttributeName];
   currentFont = [[PreferencesController sharedController] editionFont];
   if (currentFont)
-  {
-    NSRange range = NSMakeRange(0, [[self textStorage] length]);
-    [self setFont:currentFont range:range];
-    //[self setAlignment:NSLeftTextAlignment range:range];
-  }//end if (currentFont)
+    [self setFont:currentFont range:self.textStorage.range];
 }
 //end paste:
 
@@ -864,7 +869,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 
 -(void) restorePreviousSelectedRangeLocation
 {
-  NSRange currentTextRange = NSMakeRange(0, [[[self textStorage] string] length]);
+  NSRange currentTextRange = self.textStorage.range;
   if (self->previousSelectedRangeLocation <= currentTextRange.length)
     [self setSelectedRange:NSMakeRange(self->previousSelectedRangeLocation, 0)];
 }
@@ -922,7 +927,7 @@ static NSArray* WellKnownLatexKeywords = nil;
       if (self->lastCharacterEnablesAutoCompletion && self->editionAutoCompleteOnBackslashEnabled)
       {
         NSRange selectedRange = [self selectedRange];
-        NSString* string = [[self textStorage] string];
+        NSString* string = [self.textStorage string];
         NSError* error = nil;
         NSRange matchRange = [string rangeOfRegex:@".*\\\\[a-zA-Z]+" options:RKLDotAll inRange:NSMakeRange(0, selectedRange.location) capture:0 error:&error];
         if (error)
@@ -954,7 +959,9 @@ static NSArray* WellKnownLatexKeywords = nil;
     }//end if (textShortcut)
   }//end if (!isSmallReturn)
   else
+  {
     [[(MyDocument*)[AppController currentDocument] lowerBoxLatexizeButton] performClick:self];
+  }
 }
 //end keyDown:
 
@@ -1178,7 +1185,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSColorPanel* colorPanel = [NSColorPanel sharedColorPanel];
     NSColor* color = [colorPanel color];
     NSRange selectedRange = !color ? NSMakeRange(0, 0) : [self selectedRange];
-    NSString* fullString = [[self textStorage] string];
+    NSString* fullString = [self.textStorage string];
     NSString* input = !selectedRange.length ? nil : [fullString substringWithRange:selectedRange];
     NSString* output = nil;
     if (input)
@@ -1188,7 +1195,7 @@ static NSArray* WellKnownLatexKeywords = nil;
         [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
       BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLDotAll
         //options:RKLMultiline
-        inRange:NSMakeRange(0, [input length]) capture:1 error:nil] != nil);
+        inRange:input.range capture:1 error:nil] != nil);
       if (replacement)
         output = !isMatching ? nil :
           [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
@@ -1212,7 +1219,7 @@ static NSArray* WellKnownLatexKeywords = nil;
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo
 {
   self->lastCharacterEnablesAutoCompletion = NO;
-  NSString* input = !range.length ? nil : [[[self textStorage] string] substringWithRange:range];
+  NSString* input = !range.length ? nil : [[self.textStorage string] substringWithRange:range];
   if (input && string)
   {
     NSRange newRange = NSMakeRange(range.location, [string length]);
@@ -1228,15 +1235,15 @@ static NSArray* WellKnownLatexKeywords = nil;
 {
   self->lastCharacterEnablesAutoCompletion = NO;
   NSUInteger index = [self characterIndexForPoint:[NSEvent mouseLocation]];
-  NSUInteger length = [[self textStorage] length];
+  NSUInteger length = [self.textStorage length];
   if (index <= length)
   {
     NSDictionary* attributes = @{NSFontAttributeName:[[PreferencesController sharedController] editionFont]};
     NSMutableAttributedString* attributedString =
       [object isKindOfClass:[NSAttributedString class]] ? [[object mutableCopy] autorelease] :
       [[[NSMutableAttributedString alloc] initWithString:object] autorelease];
-    [attributedString addAttributes:attributes range:NSMakeRange(0, [attributedString length])];
-    [[self textStorage] insertAttributedString:attributedString atIndex:index];
+    [attributedString addAttributes:attributes range:attributedString.range];
+    [self.textStorage insertAttributedString:attributedString atIndex:index];
     [self->syntaxColouring recolourCompleteDocument];
   }//end if (index <= length)
 }

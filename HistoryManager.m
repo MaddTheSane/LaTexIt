@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 21/03/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //This file is the history manager, data source of every historyView.
 //It is a singleton, holding a single copy of the history items, that will be shared by all documents.
@@ -351,7 +351,12 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       {
         NSArray* historyItems = nil;
         @try{
-          historyItems = [NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData];
+          NSError* decodingError = nil;
+          historyItems = !uncompressedData ? nil :
+            isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[HistoryItem class] fromData:uncompressedData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+            [[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData] dynamicCastToClass:[NSArray class]];
+          if (decodingError != nil)
+            DebugLog(0, @"decoding error : %@", decodingError);
         }
         @catch(NSException* e){
           migrationError = YES;
@@ -580,9 +585,16 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           if (!done)
           {
             NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
-            NSData* data = [NSKeyedArchiver archivedDataWithRootObject:itemsToSave];
+            NSData* data =
+              isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:itemsToSave requiringSecureCoding:YES error:nil] :
+              [NSKeyedArchiver archivedDataWithRootObject:itemsToSave];
             [LatexitEquation pushManagedObjectContext:saveManagedObjectContext];
-            NSArray* savedItems = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            NSError* decodingError = nil;
+            NSArray* savedItems = !data ? nil :
+              isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[HistoryItem allowedSecureDecodedClasses] fromData:data error:&decodingError] dynamicCastToClass:[NSArray class]] :
+                [[NSKeyedUnarchiver unarchiveObjectWithData:data] dynamicCastToClass:[NSArray class]];
+            if (decodingError != nil)
+              DebugLog(0, @"decoding error : %@", decodingError);
             [LatexitEquation popManagedObjectContext];
             NSError* error = nil;
             [saveManagedObjectContext save:&error];
@@ -666,8 +678,13 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     {
       [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
       @try{
-        [NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData];
-        ok = YES;
+        NSError* decodingError = nil;
+        NSArray* historyItems = !historyItemsToAddAsData ? nil :
+          isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[HistoryItem allowedSecureDecodedClasses] fromData:historyItemsToAddAsData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+          [[NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData] dynamicCastToClass:[NSArray class]];
+        if (decodingError != nil)
+          DebugLog(0, @"decoding error : %@", decodingError);
+        ok = (historyItems != nil);
       }
       @catch(NSException* e){
         DebugLog(0, @"exception : %@", e);

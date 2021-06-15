@@ -202,6 +202,7 @@
 "JPEG bitmap format" = "Image bitmap JPEG";
 "MathML text format" = "Texte MathML";
 "Text format" = "Texte";
+"Rich text" = "RTFD";
 "Migrating history to new format" = "Migration de l'historique vers un nouveau format";
 "Migrating library to new format" = "Migration de la bibliothèque vers un nouveau format";
 "+temp. file" = "+fichier temp.";

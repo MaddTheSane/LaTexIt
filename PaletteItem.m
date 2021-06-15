@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/12/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //This class is useful to describe a palette item
 
@@ -11,8 +11,6 @@
 
 #import "NSStringExtended.h"
 #import "Utils.h"
-
-#import <RegexKitLite.h>
 
 static NSString* bulletString = @"\u2026";
 
@@ -112,7 +110,7 @@ static NSString* bulletString = @"\u2026";
         self->argumentTokenRemoveBraces ? @"" : @"{",
         [textBackslashed length] ? textBackslashed : NSStringWithNilDefault(self->argumentTokenDefaultReplace, bulletString),
         self->argumentTokenRemoveBraces ? @"" : @"}"];
-    NSRange searchRange = [string range];
+    NSRange searchRange = string.range;
     NSRange lastPatternRange = NSMakeRange(NSNotFound, 0);
     NSRange lastReplacementRange = NSMakeRange(NSNotFound, 0);
     lastPatternRange = [string rangeOfRegex:pattern options:0 inRange:searchRange capture:0 error:&error];
@@ -127,7 +125,7 @@ static NSString* bulletString = @"\u2026";
       lastPatternRange = [string rangeOfRegex:pattern options:0 inRange:searchRange capture:0 error:&error];
     }//end while pattern found
     interestingRange =
-      ([textBackslashed length] != 0) ? [string range] :
+      ([textBackslashed length] != 0) ? string.range :
       self->argumentTokenRemoveBraces || (lastReplacementRange.length <= 2) ? lastReplacementRange :
       NSMakeRange(lastReplacementRange.location+1, lastReplacementRange.length-2);
   }//end if (self->type == LATEX_ITEM_TYPE_STANDARD)

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //The LibraryGroupItem is a libraryItem (that can appear in the library outlineview)
 //But it represents a "folder", that is to say a parent for other library items
@@ -37,6 +37,8 @@ static NSEntityDescription* cachedEntity = nil;
   return cachedEntity;
 }
 //end entity
+
++(BOOL) supportsSecureCoding {return YES;}
 
 -(id) initWithParent:(LibraryItem*)aParent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {

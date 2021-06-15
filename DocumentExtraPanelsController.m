@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "DocumentExtraPanelsController.h"
@@ -381,6 +381,9 @@
         break;
       case EXPORT_FORMAT_TEXT:
         extension = @"tex";
+        break;
+      case EXPORT_FORMAT_RTFD:
+        extension = @"rtfd";
         break;
     }
 

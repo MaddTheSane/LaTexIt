@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //A LibraryItem is similar to an XMLNode, in the way that it has parent (weak link to prevent cycling)
 //and children (strong link)
@@ -42,6 +42,27 @@ static NSEntityDescription* cachedEntity = nil;
   return cachedEntity;
 }
 //end entity
+
++(BOOL) supportsSecureCoding {return YES;}
+
++(NSSet*) allowedSecureDecodedClasses
+{
+  static NSSet* _result = nil;
+  if (!_result)
+  {
+    @synchronized(self)
+    {
+      if (!_result)
+      {
+        NSMutableSet* classes = [NSMutableSet setWithObjects:[LibraryItem class], [LibraryEquation class], [LibraryGroupItem class], nil];
+        [classes unionSet:[LatexitEquation allowedSecureDecodedClasses]];
+        _result = [classes copy];
+      }//end if (!_result)
+    }//end @synchronized(self)
+  }//end if (!_result)
+  return _result;
+}
+//end allowedSecureDecodedClasses
 
 -(id) initWithEntity:(NSEntityDescription*)entity insertIntoManagedObjectContext:(NSManagedObjectContext*)context
 {

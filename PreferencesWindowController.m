@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -35,6 +35,7 @@
 #import "LineCountTextView.h"
 #import "LogicTransformer.h"
 #import "MyDocument.h"
+#import "NSAttributedStringExtended.h"
 #import "NSButtonExtended.h"
 #import "NSColorExtended.h"
 #import "NSDictionaryExtended.h"
@@ -44,6 +45,7 @@
 #import "NSObjectExtended.h"
 #import "NSPopUpButtonExtended.h"
 #import "NSSegmentedControlExtended.h"
+#import "NSStringExtended.h"
 #import "NSUserDefaultsControllerExtended.h"
 #import "NSViewExtended.h"
 #import "ObjectTransformer.h"
@@ -59,7 +61,6 @@
 #import "TextViewWithPlaceHolder.h"
 #import "Utils.h"
 
-#import "RegexKitLite.h"
 #import <Sparkle/Sparkle.h>
 
 #define NSAppKitVersionNumber10_4 824
@@ -255,6 +256,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     tag:(NSInteger)EXPORT_FORMAT_MATHML];
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"Text format", @"")
     tag:(NSInteger)EXPORT_FORMAT_TEXT];
+  [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"Rich text", @"")
+    tag:(NSInteger)EXPORT_FORMAT_RTFD];
   [self->generalExportFormatPopupButton setTarget:self];
   [self->generalExportFormatPopupButton setAction:@selector(nilAction:)];
   [self->generalExportFormatPopupButton bind:NSSelectedTagBinding toObject:userDefaultsController
@@ -1471,25 +1474,25 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [[PreferencesController sharedController] setEditionFont:newFont];
 
   NSMutableAttributedString* example = [self->editionSyntaxColouringTextView textStorage];
-  [example addAttribute:NSFontAttributeName value:newFont range:NSMakeRange(0, [example length])];
+  [example addAttribute:NSFontAttributeName value:newFont range:example.range];
 
   //if sender is nil or self, this "changeFont:" only updates fontTextField, but should not modify textViews
   if (sender && (sender != self))
   {
     NSMutableAttributedString* preamble = [self->preamblesValueTextView textStorage];
-    [preamble addAttribute:NSFontAttributeName value:newFont range:NSMakeRange(0, [preamble length])];
+    [preamble addAttribute:NSFontAttributeName value:newFont range:preamble.range];
     [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:self->preamblesValueTextView];
 
     NSMutableAttributedString* bodyTemplateHead = [self->bodyTemplatesHeadTextView textStorage];
-    [bodyTemplateHead addAttribute:NSFontAttributeName value:newFont range:NSMakeRange(0, [bodyTemplateHead length])];
+    [bodyTemplateHead addAttribute:NSFontAttributeName value:newFont range:bodyTemplateHead.range];
     [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:self->bodyTemplatesHeadTextView];
 
     NSMutableAttributedString* bodyTemplateTail = [self->bodyTemplatesTailTextView textStorage];
-    [bodyTemplateTail addAttribute:NSFontAttributeName value:newFont range:NSMakeRange(0, [bodyTemplateTail length])];
+    [bodyTemplateTail addAttribute:NSFontAttributeName value:newFont range:bodyTemplateTail.range];
     [[NSNotificationCenter defaultCenter] postNotificationName:NSTextDidChangeNotification object:self->bodyTemplatesTailTextView];
 
     NSMutableAttributedString* example = [self->editionSyntaxColouringTextView textStorage];
-    [example addAttribute:NSFontAttributeName value:newFont range:NSMakeRange(0, [example length])];
+    [example addAttribute:NSFontAttributeName value:newFont range:example.range];
     
     NSArray* documents = [[NSDocumentController sharedDocumentController] documents];
     [documents makeObjectsPerformSelector:@selector(setFont:) withObject:newFont];

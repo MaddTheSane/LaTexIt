@@ -3,14 +3,21 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/08/06.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "NSAttributedStringExtended.h"
 
-asm(".weak_reference _OBJC_CLASS_$_NSFileWrapper");//10.6 compatibility
+#import "NSObjectExtended.h"
 
 @implementation NSAttributedString (Extended)
+
+-(NSRange) range
+{
+  NSRange result = NSMakeRange(0, [self length]);
+  return result;
+}
+//end range
 
 -(NSDictionary*) attachmentsOfType:(NSString*)type docAttributes:(NSDictionary*)docAttributes
 {
@@ -29,3 +36,29 @@ asm(".weak_reference _OBJC_CLASS_$_NSFileWrapper");//10.6 compatibility
 }
 
 @end
+
+#if defined(USE_REGEXKITLITE) && USE_REGEXKITLITE
+#else
+
+@implementation NSMutableAttributedString (RegexKitLiteExtension)
+
+-(NSInteger) replaceOccurrencesOfRegex:(NSString*)pattern withString:(NSString*)replacement options:(RKLRegexOptions)options range:(NSRange)searchRange error:(NSError **)error
+{
+  NSInteger result = 0;
+  NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern options:convertRKLOptions(options) error:error];
+  NSArray* matches = [regex matchesInString:self.string options:0 range:self.range];
+  for(NSUInteger i = 0, count = matches.count ; i<count ; ++i)
+  {
+    NSUInteger i_reversed = count-i-1;
+    NSTextCheckingResult* match = [[matches objectAtIndex:i_reversed] dynamicCastToClass:[NSTextCheckingResult class]];
+    NSRange matchRange = [match range];
+    [self replaceCharactersInRange:matchRange withString:replacement];
+  }//end for each match
+  return result;
+}
+//end replaceOccurrencesOfRegex:withString:options:range:error:
+
+@end
+
+#endif
+

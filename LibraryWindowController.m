@@ -4,7 +4,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -541,7 +541,7 @@ static int kExportContext = 0;
   NSArray* additionalFilesPaths = [preferencesController additionalFilesPaths];
   NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
   NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-library"];
-  NSDictionary* fullEnvironment  = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
+  NSDictionary* fullEnvironment  = [latexProcessor fullEnvironment];
   NSString* fullLog = nil;
   NSArray* errors = nil;
   self->relatexizeCurrentIndex = 0;
@@ -629,7 +629,10 @@ static int kExportContext = 0;
         LatexitEquation* newLatexitEquation = [document latexitEquationWithCurrentStateTransient:NO];
         [newLatexitEquation setTitle:[libraryEquation title]];
         [libraryEquation setComment:nil];
+        LatexitEquation* oldEquation = [[[libraryEquation equation] retain] autorelease];
         [libraryEquation setEquation:newLatexitEquation];
+        if (oldEquation)
+          [[[LibraryManager sharedManager] managedObjectContext] deleteObject:oldEquation];
         [[[LibraryManager sharedManager] managedObjectContext] processPendingChanges];
         if (item)
           [self->libraryView reloadItem:item];

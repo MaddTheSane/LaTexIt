@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 01/02/13.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "TextViewWithPlaceHolder.h"
@@ -61,7 +61,7 @@
 {
   [super drawRect:rect];
   if (self->placeHolder && ![self->placeHolder isEqualToString:@""] && (self != [[self window]
-firstResponder] && [[[self textStorage] string] isEqualToString:@""]))
+firstResponder] && [[self.textStorage string] isEqualToString:@""]))
   {
     NSClipView* clipView = [[self superview] dynamicCastToClass:[NSClipView class]];
     [self->attributedPlaceHolder drawInRect:!clipView ? [self bounds] : [clipView documentVisibleRect]];

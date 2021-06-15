@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreamblesController.h"
@@ -34,7 +34,8 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
       if (!result)
       {
         NSString* path = [[NSBundle bundleForClass:[self class]] pathForResource:@"defaultPreamble" ofType:@"rtf"];
-        defaultLocalizedPreambleValueAttributedString = !path ? nil : [[NSAttributedString alloc] initWithPath:path documentAttributes:nil];
+        defaultLocalizedPreambleValueAttributedString = !path ? nil :
+          [[NSAttributedString alloc] initWithURL:[NSURL fileURLWithPath:path] options:@{} documentAttributes:nil error:nil];
         result = defaultLocalizedPreambleValueAttributedString;
       }//end if (!result)
     }//end @synchronized(self)
@@ -54,9 +55,14 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
 
 +(NSMutableDictionary*) defaultLocalizedPreambleDictionaryEncoded
 {
-  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-           [NSMutableString stringWithString:NSLocalizedString(@"default", @"")], @"name",
-           [NSKeyedArchiver archivedDataWithRootObject:[self defaultLocalizedPreambleValueAttributedString]], @"value", nil];
+  NSMutableDictionary* result = nil;
+  NSAttributedString* defaultPreamble = [self defaultLocalizedPreambleValueAttributedString];
+  NSData* defaultPreambleEncoded =
+    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:defaultPreamble requiringSecureCoding:YES error:nil] :
+    [NSKeyedArchiver archivedDataWithRootObject:defaultPreamble];
+  result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+             [NSMutableString stringWithString:NSLocalizedString(@"default", @"")], @"name",
+             defaultPreambleEncoded, @"value", nil];
   return result;
 }
 //end defaultLocalizedPreambleDictionaryEncoded

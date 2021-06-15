@@ -14,7 +14,7 @@
 \f1\fs26 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc\partightenfactor0
 
-\f2\b \cf0 LaTeXiT 2.15.0\
+\f2\b \cf0 LaTeXiT 2.16.0\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
@@ -61,7 +61,7 @@ Feedback an eMail-Adresse (Mails bitte nur in Englisch oder Franz\'f6sisch): \cf
 Systemanforderungen\
 
 \fs22 \ulnone \
-LaTeXiT 2.15.0 ben\'f6tigt Mac OS X Version 10.9 oder h\'f6her und eine funktionierende LaTeX-Installation mit mindestens pdflatex und Ghostscript (gs). Wenn Sie nicht wissen, was dies f\'fcr Programme sind, k\'f6nnen Sie dies im Teil "LaTeX installieren" in dieser Dokumentation nachlesen.\
+LaTeXiT 2.16.0 ben\'f6tigt Mac OS X Version 10.9 oder h\'f6her und eine funktionierende LaTeX-Installation mit mindestens pdflatex und Ghostscript (gs). Wenn Sie nicht wissen, was dies f\'fcr Programme sind, k\'f6nnen Sie dies im Teil "LaTeX installieren" in dieser Dokumentation nachlesen.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
 
 \f2\b\fs26 \cf0 \
@@ -415,7 +415,7 @@ Ein Beispiel:\
 					\\setmathrm\{Chalkboard\}\
 					\\fontspec\{Chalkboard\}\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
-\cf0  	Bitte sehen Sie auch Informationen hier : {\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex/2009/fonts/"}}{\fldrslt http://www.tug.org/mactex/2009/fonts/}}\
+\cf0  	Bitte sehen Sie auch Informationen hier : {\field{\*\fldinst{HYPERLINK "https://tug.org/pracjourn/2006-1/schmidt/"}}{\fldrslt https://tug.org/pracjourn/2006-1/schmidt/}}\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qj\partightenfactor0
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
@@ -457,10 +457,10 @@ LaTeXiT basiert auf einer funktionsf\'e4higen LaTeX-Installation. Sollten Sie ni
 \cf0 Unter Mac OS X gibt es mehrere bekannte Verteiler: MacTeX und TeXLive,.\
 \pard\pardeftab720\partightenfactor0
 \cf0 - TexLive \
-TexLive ({\field{\*\fldinst{HYPERLINK "http://www.tug.org/texlive"}}{\fldrslt http://www.tug.org/texlive}}) ist ein Multi-Plattform LaTeX-Distribution. \
+TexLive ({\field{\*\fldinst{HYPERLINK "https://www.tug.org/texlive"}}{\fldrslt https://www.tug.org/texlive}}) ist ein Multi-Plattform LaTeX-Distribution. \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 \cf0 - MacTeX\
-MacTeX ({\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex"}}{\fldrslt http://www.tug.org/mactex}}) enth\'e4lt TeXLive. Es stellt eine einfache Installationsmethode \'fcber eine simple DMG-Datei zur Verf\'fcgung, die von der Homepage heruntergeladen werden kann (im Moment einige hundert MB, bald gegen 1 GB tendierend).\
+MacTeX ({\field{\*\fldinst{HYPERLINK "https://www.tug.org/mactex"}}{\fldrslt https://www.tug.org/mactex}}) enth\'e4lt TeXLive. Es stellt eine einfache Installationsmethode \'fcber eine simple DMG-Datei zur Verf\'fcgung, die von der Homepage heruntergeladen werden kann (im Moment einige hundert MB, bald gegen 1 GB tendierend).\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qj\partightenfactor0
 \cf0 \
 Nun haben Sie erfolgreich LaTeX auf Ihrem Komputer installiert. Wenn Sie dies aber nicht wissen, bemerkten Sie es auch niemals! LaTeX besitzt keine graphische Benutzeroberfl\'e4che, das Programm ist UNIX-orientiert und kann nur \'fcber die Befehlszeile aufgerufen werden (via /Programme/Dienstprogramme/Terminal)\
@@ -473,7 +473,16 @@ Aber seien Sie deshalb nicht traurig: es existieren einige graphische Benutzerob
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
 
-\fs22 \cf0 \ulnone v 2.15.0 (27/09/2020)\
+\fs22 \cf0 \ulnone v 2.16.0 (25/01/2021)\
+-Added Apple Silicon architecture;\
+-replaced deprecated APIs;\
+-added LaTeXiT "App extension";\
+\pard\tx395\pardeftab395\pardirnatural\partightenfactor0
+\cf0 -fixed an error case that could prevent the Library from being saved;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
+\cf0 -slightly improved baseline handling in the LaTeXiT Service.\
+\
+v 2.15.0 (27/09/2020)\
 -Replaced deprecated APIs;\
 -added support for some equations copied from Wikipedia web pages.\
 \

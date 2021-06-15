@@ -1,0 +1,6 @@
+framework module LinkBack {
+  umbrella header "LinkBack.h"
+
+  export *
+  module * { export * }
+}

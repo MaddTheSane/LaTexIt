@@ -201,6 +201,7 @@
 "JPEG bitmap format" = "JPEG";
 "MathML text format" = "MathML";
 "Text format" = "Text";
+"Rich text" = "RTFD";
 "Migrating history to new format" = "履歴を新しいフォーマットに移行しています";
 "Migrating library to new format" = "ライブラリを新しいフォーマットに移行しています";
 "+temp. file" = "+一時ファイル";

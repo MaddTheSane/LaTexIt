@@ -3,7 +3,7 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>

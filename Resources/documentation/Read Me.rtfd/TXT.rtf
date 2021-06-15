@@ -13,7 +13,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc\partightenfactor0
 
-\f2\b \cf0 LaTeXiT 2.15.0\
+\f2\b \cf0 LaTeXiT 2.16.0\
 
 \f1\b0\fs22 \cf2 Joyce of quick LaTeX to typeset formulas\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
@@ -60,7 +60,7 @@ Feedback e-mail address: \cf3 pierre@chachatelier.fr
 System Requirements\
 
 \fs22 \ulnone \
-LaTeXiT 2.15.0 requires Mac OS X version 10.9 or above, and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
+LaTeXiT 2.16.0 requires Mac OS X version 10.9 or above, and a working LaTeX installation with at least pdflatex and GhostScript (gs). If you do not know what these programs are, you can look at the "Install LaTeX" section of this document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
 
 \f2\b\fs26 \cf0 \
@@ -410,7 +410,7 @@ Here an example for the Chalkboard font :\
 					\\setmainfont\{Chalkboard\}\
 					\\SetSymbolFont\{letters\}\{normal\}\{\\encodingdefault\}\{\\rmdefault\}\{m\}\{it\}\
 					\\SetSymbolFont\{letters\}\{bold\}\{\\encodingdefault\}\{\\rmdefault\}\{b\}\{it\}\
- 	Please also see information on this page : {\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex/2009/fonts/"}}{\fldrslt http://www.tug.org/mactex/2009/fonts/}}\
+ 	Please also see information on this page : {\field{\*\fldinst{HYPERLINK "https://tug.org/pracjourn/2006-1/schmidt/"}}{\fldrslt https://tug.org/pracjourn/2006-1/schmidt/}}\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
 
@@ -445,9 +445,9 @@ LaTeXiT relies on a functional LaTeX installation. But if you do not know what L
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
 \cf0 On MacOS X, there are two well-known distributions : TexLive and MacTeX, the second one embedding the first one.\
 - TexLive\
-TexLive ({\field{\*\fldinst{HYPERLINK "http://www.tug.org/texlive"}}{\fldrslt http://www.tug.org/texlive}}) is a  multi-platform LaTeX distribution.\
+TexLive ({\field{\*\fldinst{HYPERLINK "https://www.tug.org/texlive"}}{\fldrslt https://www.tug.org/texlive}}) is a  multi-platform LaTeX distribution.\
 - MacTeX\
-MacTeX ({\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex"}}{\fldrslt http://www.tug.org/mactex}}) is a TeXLive distribution embedding some more apps specific to MacOS X. It is provided through a simple dmg file downloaded on the website (a few hundreds of megabytes, though)\
+MacTeX ({\field{\*\fldinst{HYPERLINK "https://www.tug.org/mactex"}}{\fldrslt https://www.tug.org/mactex}}) is a TeXLive distribution embedding some more apps specific to MacOS X. It is provided through a simple dmg file downloaded on the website (a few hundreds of megabytes, though)\
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qj\partightenfactor0
 \cf0 Once such a distribution expanded, LaTeX is installed on your computer. But if you were not warned, you would not even notice that ! In fact, LaTeX has no graphical front-end, the programs are Unix-oriented and can only be called on the command line (using the /Application/Utilities/Terminal)\
@@ -460,7 +460,16 @@ However, do not worry : there exists graphical interfaces to use LaTeX in a more
 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
 
-\fs22 \cf0 \ulnone v 2.15.0 (27/09/2020)\
+\fs22 \cf0 \ulnone v 2.16.0 (25/01/2021)\
+-Added Apple Silicon architecture;\
+-replaced deprecated APIs;\
+-added LaTeXiT "App extension";\
+\pard\tx395\pardeftab395\pardirnatural\partightenfactor0
+\cf0 -fixed an error case that could prevent the Library from being saved;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
+\cf0 -slightly improved baseline handling in the LaTeXiT Service.\
+\
+v 2.15.0 (27/09/2020)\
 -Replaced deprecated APIs;\
 -added support for some equations copied from Wikipedia web pages.\
 \

@@ -3,11 +3,12 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
 
+#import "NSAttributedStringExtended.h"
 #import "CHExportPrefetcher.h"
 #import "Compressor.h"
 #import "FileManagerHelper.h"
@@ -24,10 +25,11 @@
 #import "NSStringExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
-#import "RegexKitLite.h"
 #import "Utils.h"
 
+#if !defined(CH_APP_EXTENSION) && !defined(CH_APP_XPC_SERVICE)
 #import <LinkBack/LinkBack.h>
+#endif
 
 #import <Quartz/Quartz.h>
 
@@ -276,7 +278,7 @@ static NSArray* PerformHTMLXPathQuery(NSData* document, NSString* query)
   NSArray* components =
     [string captureComponentsMatchedByRegex:@"^\\<latexit sha1_base64=\"(.*?)\"\\>(.*?)\\</latexit\\>\\x00*$"
                                     options:RKLMultiline|RKLDotAll
-                                      range:NSMakeRange(0, [string length]) error:&error];
+                                      range:string.range error:&error];
   if ([components count] == 3)
   {
     DebugLogStatic(1, @"this is metadata : %@", string);
@@ -562,6 +564,34 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end entity
 
++(BOOL) supportsSecureCoding {return YES;}
+
++(NSSet*) allowedSecureDecodedClasses
+{
+  static NSSet* _result = nil;
+  if (!_result)
+  {
+    @synchronized(self)
+    {
+      if (!_result)
+        _result = [[NSSet alloc] initWithObjects:
+          [NSArray class], [NSMutableArray class],
+          [NSDictionary class], [NSMutableDictionary class],
+          [NSData class], [NSMutableData class],
+          [NSString class], [NSMutableString class],
+          [NSAttributedString class], [NSMutableAttributedString class],
+          [NSNumber class],
+          [NSColor class],
+          [NSDate class],
+          [NSFont class],
+          [LatexitEquation class],
+          nil];
+    }//end @synchronized(self)
+  }//end if (!_result)
+  return _result;
+}
+//end allowedSecureDecodedClasses
+
 +(NSMutableArray*) managedObjectContextStack
 {
   if (!managedObjectContextStackInstance)
@@ -652,7 +682,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
             NSString* contents = [annotationTextCandidate contents];
             NSData* data = !contents ? nil : [NSData dataWithBase64:contents];
             @try{
-              embeddedInfos = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+              NSError* decodingError = nil;
+              embeddedInfos = !data ? nil :
+                isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[self allowedSecureDecodedClasses] fromData:data error:&decodingError]  dynamicCastToClass:[NSDictionary class]]:
+                [[NSKeyedUnarchiver unarchiveObjectWithData:data] dynamicCastToClass:[NSDictionary class]];
+              if (decodingError != nil)
+                DebugLog(0, @"decoding error : %@", decodingError);
               DebugLog(1, @"embeddedInfos = %@", embeddedInfos);
             }
             @catch(NSException* e){
@@ -770,10 +805,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSRange range = [preambleString rangeOfString:@"ESannopend"];
       range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
       [preambleString deleteCharactersInRange:range];
-      [preambleString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [preambleString length])];
-      [preambleString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [preambleString length])];
-      [preambleString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [preambleString length])];
-      [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preambleString length])];
+      [preambleString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:preambleString.range];
+      [preambleString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:preambleString.range];
+      [preambleString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:preambleString.range];
+      [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:preambleString.range];
     }
     #ifdef ARC_ENABLED
     NSAttributedString* preamble =
@@ -797,15 +832,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSRange range = [preambleString rangeOfString:@"ESannoepend"];
       range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
       [preambleString deleteCharactersInRange:range];
-      NSString* unescapedPreamble =
-        (CHBRIDGE NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                           (CHBRIDGE CFStringRef)preambleString, CFSTR(""),
-                                                                           kCFStringEncodingUTF8);
-      preambleString = [NSMutableString stringWithString:(NSString*)unescapedPreamble];
-      #ifdef ARC_ENABLED
-      #else
-      CFRelease(unescapedPreamble);
-      #endif
+      NSString* unescapedPreamble = [preambleString stringByRemovingPercentEncoding];
+      [preambleString setString:unescapedPreamble];
     }
     #ifdef ARC_ENABLED
     preamble = preambleString ? [[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes]
@@ -842,10 +870,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSRange range = [sourceString rangeOfString:@"ESannotend"];
       range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
       [sourceString deleteCharactersInRange:range];
-      [sourceString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [sourceString length])];
-      [sourceString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [sourceString length])];
-      [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [sourceString length])];
-      [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [sourceString length])];
+      [sourceString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:sourceString.range];
+      [sourceString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:sourceString.range];
+      [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:sourceString.range];
+      [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:sourceString.range];
     }
     #ifdef ARC_ENABLED
     NSAttributedString* sourceText =
@@ -866,15 +894,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSRange range = !sourceString ? NSMakeRange(0, 0) : [sourceString rangeOfString:@"ESannoesend"];
       range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
       [sourceString deleteCharactersInRange:range];
-      NSString* unescapedSource =
-        (CHBRIDGE NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                           (CHBRIDGE CFStringRef)sourceString, CFSTR(""),
-                                                                           kCFStringEncodingUTF8);
+      NSString* unescapedSource = [sourceString stringByRemovingPercentEncoding];
       [sourceString setString:unescapedSource];
-      #ifdef ARC_ENABLED
-      #else
-      CFRelease(unescapedSource);
-      #endif
     }
     #ifdef ARC_ENABLED
     sourceText = sourceString ? [[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes]
@@ -1245,7 +1266,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     NSArray* descriptions =
       [string componentsMatchedByRegex:@"<svg(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</svg>"
                                options:RKLCaseless|RKLMultiline|RKLDotAll
-                                 range:NSMakeRange(0, [string length]) capture:0 error:&error];
+                                 range:string.range capture:0 error:&error];
     if (error)
       DebugLog(1, @"error : %@", error);
     NSEnumerator* enumerator = [descriptions objectEnumerator];
@@ -1267,13 +1288,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     NSArray* descriptions_legacy =
       [string componentsMatchedByRegex:@"<blockquote(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</blockquote>"
                                options:RKLCaseless|RKLMultiline|RKLDotAll
-                                 range:NSMakeRange(0, [string length]) capture:0 error:&error];
+                                 range:string.range capture:0 error:&error];
     if (error)
       DebugLog(1, @"error : %@", error);
     NSArray* descriptions =
       [string componentsMatchedByRegex:@"<math(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</math>"
                                options:RKLCaseless|RKLMultiline|RKLDotAll
-                                 range:NSMakeRange(0, [string length]) capture:0 error:&error];
+                                 range:string.range capture:0 error:&error];
     if (error)
       DebugLog(1, @"error : %@", error);
     NSEnumerator* enumerator = nil;
@@ -1600,10 +1621,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSRange range = [preambleString rangeOfString:@"ESannopend"];
       range.length = (range.location != NSNotFound) ? [preambleString length]-range.location : 0;
       [preambleString deleteCharactersInRange:range];
-      [preambleString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [preambleString length])];
-      [preambleString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [preambleString length])];
-      [preambleString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [preambleString length])];
-      [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [preambleString length])];
+      [preambleString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:preambleString.range];
+      [preambleString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:preambleString.range];
+      [preambleString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:preambleString.range];
+      [preambleString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:preambleString.range];
     }
     NSAttributedString* preamble =
       preambleString ? [[[NSAttributedString alloc] initWithString:preambleString attributes:defaultAttributes] autorelease]
@@ -1654,10 +1675,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSRange range = [sourceString rangeOfString:@"ESannotend"];
       range.length = (range.location != NSNotFound) ? [sourceString length]-range.location : 0;
       [sourceString deleteCharactersInRange:range];
-      [sourceString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:NSMakeRange(0, [sourceString length])];
-      [sourceString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:NSMakeRange(0, [sourceString length])];
-      [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:NSMakeRange(0, [sourceString length])];
-      [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:NSMakeRange(0, [sourceString length])];
+      [sourceString replaceOccurrencesOfString:@"ESslash"      withString:@"\\" options:0 range:sourceString.range];
+      [sourceString replaceOccurrencesOfString:@"ESleftbrack"  withString:@"{"  options:0 range:sourceString.range];
+      [sourceString replaceOccurrencesOfString:@"ESrightbrack" withString:@"}"  options:0 range:sourceString.range];
+      [sourceString replaceOccurrencesOfString:@"ESdollar"     withString:@"$"  options:0 range:sourceString.range];
     }
     NSAttributedString* sourceText = sourceString ?
       [[[NSAttributedString alloc] initWithString:sourceString attributes:defaultAttributes] autorelease] : @"";
@@ -1791,8 +1812,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       DebugLog(1, @"annotationData(64) = %@", annotationData);
       annotationData = [Compressor zipuncompress:annotationData];
       DebugLog(1, @"annotationData(z) = %@", annotationData);
+      NSError* decodingError = nil;
       NSDictionary* metaData = !annotationData ? nil :
+        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[[self class] allowedSecureDecodedClasses] fromData:annotationData error:&decodingError] dynamicCastToClass:[NSDictionary class]] :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
       DebugLog(1, @"metaData = %@", metaData);
       result = [self initWithMetaData:metaData useDefaults:useDefaults];
       if (properties)
@@ -1809,12 +1834,16 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       #endif
       NSString* annotationBase64 =
         [svgString stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
-          inRange:NSMakeRange(0, [svgString length]) capture:1 error:0];
+          inRange:svgString.range capture:1 error:0];
       NSData* annotationData = !annotationBase64 ? nil : [NSData dataWithBase64:annotationBase64];
       annotationData = !annotationData ? nil : [Compressor zipuncompress:annotationData];
+      NSError* decodingError = nil;
       NSDictionary* metaData = !annotationData ? nil :
+        isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClasses:[[self class] allowedSecureDecodedClasses] fromData:annotationData error:&decodingError] :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
-      result = !result ? nil : [self initWithMetaData:metaData useDefaults:useDefaults];
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
+      result = !metaData ? nil : [self initWithMetaData:metaData useDefaults:useDefaults];
       if (!result)
         [self release];
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
@@ -1831,8 +1860,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
           inRange:NSMakeRange(0, [htmlString length]) capture:1 error:0];
       NSData* annotationData = !annotationBase64 ? nil : [NSData dataWithBase64:annotationBase64];
       annotationData = !annotationData ? nil : [Compressor zipuncompress:annotationData];
+      NSError* decodingError = nil;
       NSDictionary* metaData = !annotationData ? nil :
+        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[[self class] allowedSecureDecodedClasses] fromData:annotationData error:&decodingError] dynamicCastToClass:[NSDictionary class]] :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
       result = !metaData ? nil : [self initWithMetaData:metaData useDefaults:useDefaults];
       if (!result)
       {
@@ -1852,7 +1885,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         if (![NSString isNilOrEmpty:latexSourceCode])
         {
           NSString* latexSubSourceCode = latexSourceCode;
-          NSRange latexSourceCodeRange = NSMakeRange(0, latexSourceCode.length);
+          NSRange latexSourceCodeRange = latexSourceCode.range;
           latex_mode_t latexMode = LATEX_MODE_TEXT;
           if (latexMode == LATEX_MODE_TEXT)
           {
@@ -1923,14 +1956,18 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       NSString* annotationBase64 = nil;
       if (!annotationBase64)
         annotationBase64 = [string stringByMatching:@"<!--latexit:(.*?)-->" options:RKLCaseless|RKLDotAll|RKLMultiline
-                                            inRange:NSMakeRange(0, [string length]) capture:1 error:0];
+                                            inRange:string.range capture:1 error:0];
       if (!annotationBase64)
         annotationBase64 = [string stringByMatching:@"([A-Za-z0-9\\+\\/\\n])*\\=*" options:RKLCaseless|RKLDotAll|RKLMultiline
-                                            inRange:NSMakeRange(0, [string length]) capture:0 error:0];
+                                            inRange:string.range capture:0 error:0];
       NSData* annotationData = !annotationBase64 ? nil : [NSData dataWithBase64:annotationBase64];
       annotationData = !annotationData ? nil : [Compressor zipuncompress:annotationData];
+      NSError* decodingError = nil;
       NSDictionary* metaData = !annotationData ? nil :
+        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[[self class] allowedSecureDecodedClasses] fromData:annotationData error:&decodingError] dynamicCastToClass:[NSDictionary class]] :
         [[NSKeyedUnarchiver unarchiveObjectWithData:annotationData] dynamicCastToClass:[NSDictionary class]];
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
       if (!metaData)
         result = nil;
       else
@@ -2188,7 +2225,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [self willAccessValueForKey:@"preambleAsData"];
     NSData* archivedData = [self primitiveValueForKey:@"preambleAsData"];
     [self didAccessValueForKey:@"preambleAsData"];
-    result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+    NSError* decodingError = nil;
+    result = !archivedData ? nil :
+      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:archivedData error:&decodingError] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:archivedData] dynamicCastToClass:[NSAttributedString class]];
+    if (decodingError != nil)
+      DebugLog(0, @"decoding error : %@", decodingError);
     [self setPrimitiveValue:result forKey:@"preamble"];
   }//end if (!result)
   return result;
@@ -2202,7 +2244,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"preamble"];
   [self setPrimitiveValue:value forKey:@"preamble"];
   [self didChangeValueForKey:@"preamble"];
-  NSData* archivedData = [NSKeyedArchiver archivedDataWithRootObject:value];
+  NSData* archivedData =
+    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:value requiringSecureCoding:YES error:nil] :
+    [NSKeyedArchiver archivedDataWithRootObject:value];
   [self willChangeValueForKey:@"preambleAsData"];
   [self setPrimitiveValue:archivedData forKey:@"preambleAsData"];
   [self didChangeValueForKey:@"preambleAsData"];
@@ -2221,7 +2265,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [self willAccessValueForKey:@"sourceTextAsData"];
     NSData* archivedData = [self primitiveValueForKey:@"sourceTextAsData"];
     [self didAccessValueForKey:@"sourceTextAsData"];
-    result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+    NSError* decodingError = nil;
+    result = !archivedData ? nil :
+      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:archivedData error:&decodingError] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:archivedData] dynamicCastToClass:[NSAttributedString class]];
+    if (decodingError != nil)
+      DebugLog(0, @"decoding error : %@", decodingError);
     [self setPrimitiveValue:result forKey:@"sourceText"];
   }
   return result;
@@ -2235,7 +2284,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"sourceText"];
   [self setPrimitiveValue:value forKey:@"sourceText"];
   [self didChangeValueForKey:@"sourceText"];
-  NSData* archivedData = [NSKeyedArchiver archivedDataWithRootObject:value];
+  NSData* archivedData =
+    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:value requiringSecureCoding:YES error:nil] :
+    [NSKeyedArchiver archivedDataWithRootObject:value];
   [self willChangeValueForKey:@"sourceTextAsData"];
   [self setPrimitiveValue:archivedData forKey:@"sourceTextAsData"];
   [self didChangeValueForKey:@"sourceTextAsData"];
@@ -2254,7 +2305,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [self willAccessValueForKey:@"colorAsData"];
     NSData* archivedData = [self primitiveValueForKey:@"colorAsData"];
     [self didAccessValueForKey:@"colorAsData"];
-    result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+    NSError* decodingError = nil;
+    result = !archivedData ? nil :
+      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:archivedData error:&decodingError] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:archivedData] dynamicCastToClass:[NSColor class]];
+    if (decodingError != nil)
+      DebugLog(0, @"decoding error : %@", decodingError);
     [self setPrimitiveValue:result forKey:@"color"];
   }//end if (!result)
   return result;
@@ -2268,7 +2324,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"color"];
   [self setPrimitiveValue:value forKey:@"color"];
   [self didChangeValueForKey:@"color"];
-  NSData* archivedData = [NSKeyedArchiver archivedDataWithRootObject:value];
+  NSData* archivedData =
+    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:value requiringSecureCoding:YES error:nil] :
+    [NSKeyedArchiver archivedDataWithRootObject:value];
   [self willChangeValueForKey:@"colorAsData"];
   [self setPrimitiveValue:archivedData forKey:@"colorAsData"];
   [self didChangeValueForKey:@"colorAsData"];
@@ -2370,7 +2428,12 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     [self willAccessValueForKey:@"backgroundColorAsData"];
     NSData* archivedData = [self primitiveValueForKey:@"backgroundColorAsData"];
     [self didAccessValueForKey:@"backgroundColorAsData"];
-    result = !archivedData ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+    NSError* decodingError = nil;
+    result = !archivedData ? nil :
+      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:archivedData error:&decodingError] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:archivedData] dynamicCastToClass:[NSColor class]];
+    if (decodingError != nil)
+      DebugLog(0, @"decoding error : %@", decodingError);
     [self setPrimitiveValue:result forKey:@"backgroundColor"];
   }//end if (!result)
   return result;
@@ -2386,7 +2449,9 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"backgroundColor"];
   [self setPrimitiveValue:value forKey:@"backgroundColor"];
   [self didChangeValueForKey:@"backgroundColor"];
-  NSData* archivedData = !value ? nil : [NSKeyedArchiver archivedDataWithRootObject:value];
+  NSData* archivedData = !value ? nil :
+    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:value requiringSecureCoding:YES error:nil] :
+    [NSKeyedArchiver archivedDataWithRootObject:value];
   [self willChangeValueForKey:@"backgroundColorAsData"];
   [self setPrimitiveValue:archivedData forKey:@"backgroundColorAsData"];
   [self didChangeValueForKey:@"backgroundColorAsData"];
@@ -2702,6 +2767,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   //LinkBack pasteboard
   DebugLog(1, @"lazyDataProvider = %p(%@)>", lazyDataProvider, lazyDataProvider);
 
+  #if !defined(CH_APP_EXTENSION) && !defined(CH_APP_XPC_SERVICE)
   NSArray* latexitEquationArray = [NSArray arrayWithObject:self];
   NSData*  latexitEquationData  = [NSKeyedArchiver archivedDataWithRootObject:latexitEquationArray];
   NSDictionary* linkBackPlist =
@@ -2714,6 +2780,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   else
     [pboard addTypes:[NSArray arrayWithObject:LinkBackPboardType] owner:self];
   [pboard setPropertyList:linkBackPlist forType:LinkBackPboardType];
+  #else
+  #endif
 
   NSData* pdfData = [self pdfData];
   //[pboard addTypes:[NSArray arrayWithObject:NSFileContentsPboardType] owner:self];
@@ -2756,19 +2824,19 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   switch(exportFormat)
   {
     case EXPORT_FORMAT_PDF:
-      [pboard addTypes:[NSArray arrayWithObjects:NSPDFPboardType, (NSString*)kUTTypePDF, nil] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypePDF, (NSString*)kUTTypePDF, nil] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
-        [pboard setData:data forType:NSPDFPboardType];
+        [pboard setData:data forType:NSPasteboardTypePDF];
         [pboard setData:data forType:(NSString*)kUTTypePDF];
       }//end if (!lazyDataProvider)
       break;
     case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
-      [pboard addTypes:[NSArray arrayWithObjects:NSPDFPboardType, (NSString*)kUTTypePDF, nil]
+      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypePDF, (NSString*)kUTTypePDF, nil]
                  owner:lazyDataProvider ? lazyDataProvider : self];
       if (data && (!lazyDataProvider || (lazyDataProvider != self)))
       {
-        [pboard setData:data forType:NSPDFPboardType];
+        [pboard setData:data forType:NSPasteboardTypePDF];
         [pboard setData:data forType:(NSString*)kUTTypePDF];
       }//end if (data && (!lazyDataProvider || (lazyDataProvider != self)))
       break;
@@ -2791,10 +2859,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [pboard setData:data forType:(NSString*)kUTTypeJPEG];
       break;
     case EXPORT_FORMAT_TIFF:
-      [pboard addTypes:[NSArray arrayWithObjects:NSTIFFPboardType, (NSString*)kUTTypeTIFF, nil] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeTIFF, (NSString*)kUTTypeTIFF, nil] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
-        [pboard setData:data forType:NSTIFFPboardType];
+        [pboard setData:data forType:NSPasteboardTypeTIFF];
         [pboard setData:data forType:(NSString*)kUTTypeTIFF];
       }//end if (!lazyDataProvider)
       break;
@@ -2807,16 +2875,16 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         #else
         NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
         #endif
-        NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLMultiline|RKLDotAll|RKLCaseless inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
-        //[pboard addTypes:[NSArray arrayWithObjects:NSHTMLPboardType, kUTTypeHTML, nil] owner:lazyDataProvider];
-        [pboard addTypes:[NSArray arrayWithObjects:NSStringPboardType, kUTTypeText, nil] owner:lazyDataProvider];
+        NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLMultiline|RKLDotAll|RKLCaseless inRange:documentString.range capture:0 error:0];
+        //[pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeHTML, kUTTypeHTML, nil] owner:lazyDataProvider];
+        [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, kUTTypeText, nil] owner:lazyDataProvider];
         if (blockquoteString)
         {
           NSError* error = nil;
           NSString* mathString =
             [blockquoteString stringByReplacingOccurrencesOfRegex:@"<blockquote(.*?)style=(.*?)>(.*?)<math(.*?)>(.*?)</math>(.*)</blockquote>"
                                                        withString:@"<math$4 style=$2>$3$5</math>"
-                                                          options:RKLMultiline|RKLDotAll|RKLCaseless range:[blockquoteString range] error:&error];
+                                                          options:RKLMultiline|RKLDotAll|RKLCaseless range:blockquoteString.range error:&error];
           if (error)
             DebugLog(1, @"error = <%@>", error);
           /*if (!lazyDataProvider)
@@ -2826,27 +2894,78 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
           }//end if (!lazyDataProvider)*/
           if (!lazyDataProvider)
           {
-            [pboard setString:(!mathString ? blockquoteString : mathString) forType:NSStringPboardType];
+            [pboard setString:(!mathString ? blockquoteString : mathString) forType:NSPasteboardTypeString];
             [pboard setString:(!mathString ? blockquoteString : mathString) forType:(NSString*)kUTTypeText];
           }//end if (!lazyDataProvider)
         }//end if (blockquoteString)
       }
       break;
     case EXPORT_FORMAT_SVG:
-      [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), @"public.svg-image", NSStringPboardType, nil] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), @"public.svg-image", NSPasteboardTypeString, nil] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
         [pboard setData:data forType:GetMySVGPboardType()];
         [pboard setData:data forType:@"public.svg-image"];
-        [pboard setData:data forType:NSStringPboardType];
+        [pboard setData:data forType:NSPasteboardTypeString];
       }//end if (!lazyDataProvider)
       break;
     case EXPORT_FORMAT_TEXT:
-      [pboard addTypes:[NSArray arrayWithObjects:NSStringPboardType, (NSString*)kUTTypeText, nil] owner:lazyDataProvider];
+      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, (NSString*)kUTTypeText, nil] owner:lazyDataProvider];
       if (!lazyDataProvider)
       {
-        [pboard setData:data forType:NSStringPboardType];
+        [pboard setData:data forType:NSPasteboardTypeString];
         [pboard setData:data forType:(NSString*)kUTTypeText];
+      }//end if (!lazyDataProvider)
+      break;
+    case EXPORT_FORMAT_RTFD:
+      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeRTFD, nil] owner:lazyDataProvider];
+      if (!lazyDataProvider)
+      {
+        CGFloat newBaseline = 0;
+        BOOL useBaseline = YES;
+        if (useBaseline)
+          newBaseline -= self.baseline;
+          
+        NSString* attachedFilePath = nil;
+        NSFileHandle* fileHandle =
+          [[NSFileManager defaultManager] temporaryFileWithTemplate:[NSString stringWithFormat:@"%@-XXXXXXXX", @"latexit-rtfd-attachement"]
+                                                          extension:@"pdf"
+                                                        outFilePath:&attachedFilePath workingDirectory:NSTemporaryDirectory()];
+        NSURL* attachedFileURL = !attachedFilePath ? nil : [NSURL fileURLWithPath:attachedFilePath];
+        NSData* attachedData = pdfData;
+        [fileHandle writeData:attachedData];
+        [fileHandle closeFile];
+        NSFileWrapper* fileWrapperOfImage = !attachedFileURL ? nil :
+          [[[NSFileWrapper alloc] initWithURL:attachedFileURL options:0 error:nil] autorelease];
+        NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
+        NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
+        NSMutableAttributedString* mutableAttributedStringWithImage =
+          [[[NSMutableAttributedString alloc] initWithAttributedString:attributedStringWithImage] autorelease];
+            
+        //changes the baseline of the attachment to align it with the surrounding text
+        [mutableAttributedStringWithImage addAttribute:NSFontSizeAttribute
+                                                 value:@(self.pointSize)
+                                                 range:mutableAttributedStringWithImage.range];
+        [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
+                                                 value:@(newBaseline)
+                                                 range:mutableAttributedStringWithImage.range];
+          
+        //add a space after the image, to restore the baseline of the surrounding text
+        //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
+        //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
+        //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
+        unichar invisibleSpace = 0xFEFF;
+        NSString* invisibleSpaceString = [[[NSString alloc] initWithCharacters:&invisibleSpace length:1] autorelease];
+        NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
+        //[space setAttributes:contextAttributes range:space.range];
+        [space addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline)
+                      range:space.range];
+        [mutableAttributedStringWithImage insertAttributedString:space atIndex:0];
+        [mutableAttributedStringWithImage appendAttributedString:space];
+        //inserts the image in the global string
+        NSData* data = [mutableAttributedStringWithImage dataFromRange:mutableAttributedStringWithImage.range documentAttributes:@{NSDocumentTypeDocumentAttribute:NSRTFDTextDocumentType} error:nil];
+        [pboard setData:data forType:NSPasteboardTypeRTFD];
+        [[NSFileManager defaultManager] removeItemAtURL:attachedFileURL error:nil];
       }//end if (!lazyDataProvider)
       break;
   }//end switch(exportFormat)
@@ -2854,7 +2973,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   BOOL fillFilenames = [[PreferencesController sharedController] exportAddTempFileCurrentSession];
   if (fillFilenames)
   {
-    [pboard addTypes:[NSArray arrayWithObjects:NSFileContentsPboardType, NSFilenamesPboardType, NSURLPboardType, nil] owner:lazyDataProvider];
+    [pboard addTypes:[NSArray arrayWithObjects:NSFileContentsPboardType, NSFilenamesPboardType, (NSString*)kUTTypeURL, nil] owner:lazyDataProvider];
     if (!lazyDataProvider)
     {
       NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
@@ -2943,6 +3062,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       extension = @"txt";
       uti = (NSString*)kUTTypeText;
       break;
+    case EXPORT_FORMAT_RTFD:
+      extension = @"rtfd";
+      uti = (NSString*)kUTTypeRTFD;
+      break;
   }//end switch(exportFormat)
   
   if (exportFormat == EXPORT_FORMAT_MATHML)
@@ -2952,17 +3075,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     #else
     NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     #endif
-    NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLMultiline|RKLDotAll|RKLCaseless inRange:[documentString range] capture:0 error:0];
+    NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLMultiline|RKLDotAll|RKLCaseless inRange:documentString.range capture:0 error:0];
     if (blockquoteString)
     {
       NSError* error = nil;
       NSString* mathString =
       [blockquoteString stringByReplacingOccurrencesOfRegex:@"<blockquote(.*?)style=(.*?)>(.*?)<math(.*?)>(.*?)</math>(.*)</blockquote>"
                                                  withString:@"<math$4 style=$2>$3$5</math>"
-                                                    options:RKLMultiline|RKLDotAll|RKLCaseless range:[blockquoteString range] error:&error];
+                                                    options:RKLMultiline|RKLDotAll|RKLCaseless range:blockquoteString.range error:&error];
       if (error)
         DebugLog(1, @"error = <%@>", error);
-      BOOL isHTML = [type isEqualToString:(NSString*)kUTTypeHTML] || [type isEqualToString:NSHTMLPboardType];
+      BOOL isHTML = [type isEqualToString:(NSString*)kUTTypeHTML] || [type isEqualToString:NSPasteboardTypeHTML];
       if (isHTML)
         [pasteboard setString:blockquoteString forType:type];
       else//if (!isHTML)
@@ -2976,7 +3099,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   {
     if ([type isEqualToString:NSFileContentsPboardType])
       [pasteboard setData:data forType:NSFileContentsPboardType];
-    else if ([type isEqualToString:NSFilenamesPboardType])
+    else if ([type isEqualToString:(NSString*)kUTTypeFileURL])
     {
       NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
       NSString* filePrefix = [self computeFileName];
@@ -2991,8 +3114,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
         [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
       }//end if (filePath)
-    }//end if ([type isEqualToString:NSFilenamesPboardType])
-    else if ([type isEqualToString:NSURLPboardType])
+    }//end if ([type isEqualToString:(NSString*)kUTTypeFileURL])
+    else if ([type isEqualToString:(NSString*)kUTTypeURL])
     {
       NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
       NSString* filePrefix = [self computeFileName];
@@ -3008,7 +3131,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
         [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
       }//end if (filePath)
-    }//end if ([type isEqualToString:NSURLPboardType])
+    }//end if ([type isEqualToString:(NSString*)kUTTypeURL])
   }//end if (data)
   
   DebugLog(1, @"<pasteboard:%p provideDataForType:%@", pasteboard, type);
@@ -3090,16 +3213,16 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   BOOL stop = !oldLength;
   while(!stop)
   {
-    [mutableString replaceOccurrencesOfRegex:@"\\\\begin\\{(.+)\\}(.*)\\\\end\\{\\1\\}" withString:@"$2" options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"\\\\" withString:@" " options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"\\{" withString:@" " options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"\\}" withString:@" " options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"\\[" withString:@" " options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"\\]" withString:@" " options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"\\:" withString:@" " options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"([[:space:]]+)" withString:@"_" options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"(_*)\\^(_*)" withString:@"\\^" options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
-    [mutableString replaceOccurrencesOfRegex:@"__" withString:@"_" options:RKLMultiline|RKLDotAll range:[mutableString range] error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"\\\\begin\\{(.+)\\}(.*)\\\\end\\{\\1\\}" withString:@"$2" options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"\\\\" withString:@" " options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"\\{" withString:@" " options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"\\}" withString:@" " options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"\\[" withString:@" " options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"\\]" withString:@" " options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"\\:" withString:@" " options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"([[:space:]]+)" withString:@"_" options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"(_*)\\^(_*)" withString:@"\\^" options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
+    [mutableString replaceOccurrencesOfRegex:@"__" withString:@"_" options:RKLMultiline|RKLDotAll range:mutableString.range error:nil];
     [mutableString replaceOccurrencesOfRegex:@"^([_%]+)" withString:@""];
     [mutableString replaceOccurrencesOfRegex:@"(_+)$" withString:@""];
     [mutableString replaceOccurrencesOfRegex:@"\\/" withString:@"\xE2\x88\x95"];

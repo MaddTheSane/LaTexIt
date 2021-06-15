@@ -40,6 +40,7 @@
 #include <CoreFoundation/CFArray.h>
 #include <CoreFoundation/CFString.h>
 #import <Foundation/NSArray.h>
+#import <Foundation/NSAttributedString.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSException.h>

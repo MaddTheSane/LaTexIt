@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -14,7 +14,7 @@ extern NSString* LatexitEquationsPboardType;
 
 @class CHExportPrefetcher;
 
-@interface LatexitEquation : NSManagedObject <NSCopying, NSCoding> {
+@interface LatexitEquation : NSManagedObject <NSCopying, NSCoding, NSSecureCoding> {
   //NSData*             pdfData;     //pdf data representing the image. It may contain advanced PDF features like meta-data keywords, creator...
   //NSAttributedString* preamble;    //the user preamble of the latex source code
   //NSAttributedString* sourceText;  //the user body of the latex source code
@@ -36,6 +36,8 @@ extern NSString* LatexitEquationsPboardType;
 }
 
 +(NSEntityDescription*) entity;
+
++(NSSet*) allowedSecureDecodedClasses;
 
 +(void) pushManagedObjectContext:(NSManagedObjectContext*)context;
 +(NSManagedObjectContext*) currentManagedObjectContext;

@@ -3,7 +3,7 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "Automator_CreateEquations.h"
@@ -26,7 +26,6 @@
 #import "Utils.h"
 
 #import <OSAKit/OSAKit.h>
-#import "RegexKitLite.h"
 
 static NSMutableIndexSet* freeIds = nil;
 
@@ -482,6 +481,9 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
           case EXPORT_FORMAT_TEXT:
             extension = @"tex";
             break;
+          case EXPORT_FORMAT_RTFD:
+            extension = @"rtfd";
+            break;
         }
         NSString* outFilePath2 = [[outFilePath stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
         DebugLog(1, @"outFilePath2 = %@", outFilePath2);
@@ -674,10 +676,10 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     NSError* error = nil;
     NSString* preamble =
       [fullText stringByMatching:@"(.*)[^%\n]*\\\\begin\\{document\\}(.*)[^%\n]*\\\\end\\{document\\}(.*)" options:RKLMultiline|RKLDotAll
-        inRange:NSMakeRange(0, [fullText length]) capture:1 error:&error];
+        inRange:fullText.range capture:1 error:&error];
     NSString* body =
       [fullText stringByMatching:@"(.*)[^%\n]*\\\\begin\\{document\\}(.*)[^%\n]*\\\\end\\{document\\}(.*)" options:RKLMultiline|RKLDotAll
-        inRange:NSMakeRange(0, [fullText length]) capture:2 error:&error];
+        inRange:fullText.range capture:2 error:&error];
     if ((!preamble || ![preamble length]) && (!body || ![body length]))
       body = fullText;
     if (!body)     body     = @"";

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -37,7 +37,6 @@
 #import "NSWindowExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
-#import "RegexKitLite.h"
 #import "Utils.h"
 
 #import "CGExtras.h"
@@ -209,6 +208,8 @@ typedef NSInteger NSDraggingContext;
                           tag:(NSInteger)EXPORT_FORMAT_MATHML];
     [subMenu addItemWithTitle:NSLocalizedString(@"Text", @"") target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
                           tag:(NSInteger)EXPORT_FORMAT_TEXT];
+    [subMenu addItemWithTitle:NSLocalizedString(@"Rich text", @"") target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
+                          tag:(NSInteger)EXPORT_FORMAT_RTFD];
     [self->copyAsContextualMenu setSubmenu:subMenu forItem:superItem];
     [subMenu release];
     result = self->copyAsContextualMenu;
@@ -831,14 +832,14 @@ typedef NSInteger NSDraggingContext;
     else//if (exportFormat == EXPORT_FORMAT_MATHML)
     {
       NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-      NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:NSMakeRange(0, [documentString length]) capture:0 error:0];
+      NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLDotAll inRange:documentString.range capture:0 error:0];
       if (blockquoteString)
       {
         NSError* error = nil;
         NSString* mathString =
           [blockquoteString stringByReplacingOccurrencesOfRegex:@"<blockquote(.*?)style=(.*?)>(.*?)<math(.*?)>(.*?)</math>(.*)</blockquote>"
                                                      withString:@"<math$4 style=$2>$3$5</math>"
-                                                        options:RKLMultiline|RKLDotAll|RKLCaseless range:[blockquoteString range] error:&error];
+                                                        options:RKLMultiline|RKLDotAll|RKLCaseless range:blockquoteString.range error:&error];
         if (error)
           DebugLog(1, @"error = <%@>", error);
         BOOL isHTML = [type isEqualToString:(NSString*)kUTTypeHTML] || [type isEqualToString:(NSString*)NSHTMLPboardType];
@@ -1001,7 +1002,13 @@ typedef NSInteger NSDraggingContext;
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsArchivedPboardType]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
-    NSArray* libraryItemsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
+    NSData* pboardData = [pboard dataForType:type];
+    NSError* decodingError = nil;
+    NSArray* libraryItemsArray = !pboardData ? nil :
+      isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[LibraryItem allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:pboardData] dynamicCastToClass:[NSArray class]];
+    if (decodingError != nil)
+      DebugLog(0, @"decoding error : %@", decodingError);
     NSUInteger count = [libraryItemsArray count];
     LibraryEquation* libraryEquation = nil;
     while(count-- && !libraryEquation)
@@ -1013,7 +1020,13 @@ typedef NSInteger NSDraggingContext;
   if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])))
   {
     DebugLog(1, @"_applyDataFromPasteboard type = %@", type);
-    NSArray* latexitEquationsArray = [NSKeyedUnarchiver unarchiveObjectWithData:[pboard dataForType:type]];
+    NSData* pboardData = [pboard dataForType:type];
+    NSError* decodingError = nil;
+    NSArray* latexitEquationsArray = !pboardData ? nil :
+      isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[LatexitEquation allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:pboardData] dynamicCastToClass:[NSArray class]];
+    if (decodingError != nil)
+      DebugLog(0, @"decoding error : %@", decodingError);
     [self->document applyLatexitEquation:[latexitEquationsArray lastObject] isRecentLatexisation:NO];
     done = YES;
   }//end if (!done && ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])))

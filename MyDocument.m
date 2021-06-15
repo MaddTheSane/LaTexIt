@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -27,6 +27,7 @@
 #import "MyImageView.h"
 #import "MySplitView.h"
 #import "NotifyingScrollView.h"
+#import "NSAttributedStringExtended.h"
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSDictionaryCompositionConfiguration.h"
@@ -51,7 +52,6 @@
 
 #import <LinkBack/LinkBack.h>
 #import <Quartz/Quartz.h>
-#import "RegexKitLite.h"
 
 static NSMutableIndexSet* freeIds = nil;
 
@@ -879,7 +879,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   {
     NSArray* components =
     [string captureComponentsMatchedByRegex:@"^\\s*(.*)\\s*\\\\begin\\{document\\}\\s*(.*)\\s*\\\\end\\{document\\}.*$"
-                                    options:RKLDotAll range:NSMakeRange(0, [string length]) error:nil];
+                                    options:RKLDotAll range:string.range error:nil];
     BOOL hasPreambleAndBody = ([components count] == 3);
     NSString* preamble = !hasPreambleAndBody ? nil : [components objectAtIndex:1];
     NSString* body = !hasPreambleAndBody ? string : [components objectAtIndex:2];
@@ -935,19 +935,31 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   //get rid of previous bodyTemplate
   NSAttributedString* currentBody = [self->lowerBoxSourceTextView textStorage];
   id rawHead = [self->lastRequestedBodyTemplate objectForKey:@"head"];
-  NSAttributedString* head = [rawHead isKindOfClass:[NSAttributedString class]] ? rawHead :
-                             [rawHead isKindOfClass:[NSData class]] ? [NSKeyedUnarchiver unarchiveObjectWithData:rawHead] :
-                             nil;
+  NSError* decodingError = nil;
+  NSAttributedString* head = !rawHead ? nil :
+    [rawHead isKindOfClass:[NSAttributedString class]] ? rawHead :
+    [rawHead isKindOfClass:[NSData class]] ?
+      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:rawHead error:&decodingError] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:rawHead] dynamicCastToClass:[NSAttributedString class]] :
+    nil;
+  if (decodingError != nil)
+    DebugLog(0, @"decoding error : %@", decodingError);
   id rawTail = [self->lastRequestedBodyTemplate objectForKey:@"tail"];
-  NSAttributedString* tail = [rawTail isKindOfClass:[NSAttributedString class]] ? rawTail :
-                             [rawTail isKindOfClass:[NSData class]] ? [NSKeyedUnarchiver unarchiveObjectWithData:rawTail] :
-                             nil;
+  decodingError = nil;
+  NSAttributedString* tail = !rawTail ? nil :
+    [rawTail isKindOfClass:[NSAttributedString class]] ? rawTail :
+    [rawTail isKindOfClass:[NSData class]] ?
+      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:rawTail error:&decodingError] :
+        [[NSKeyedUnarchiver unarchiveObjectWithData:rawTail] dynamicCastToClass:[NSAttributedString class]] :
+    nil;
+  if (decodingError != nil)
+    DebugLog(0, @"decoding error : %@", decodingError);
   NSString* currentBodyString = [currentBody string];
   NSString* headString = [head string];
   NSString* tailString = [tail string];
   NSString* regexString = [NSString stringWithFormat:@"^[\\s\\n]*\\Q%@\\E[\\s\\n]*(.*)[\\s\\n]*\\Q%@\\E[\\s\\n]*$", headString, tailString];
   NSError* error = nil;
-  NSString* innerBody = [currentBodyString stringByMatching:regexString options:RKLMultiline|RKLDotAll inRange:NSMakeRange(0, [currentBodyString length])
+  NSString* innerBody = [currentBodyString stringByMatching:regexString options:RKLMultiline|RKLDotAll inRange:currentBodyString.range
                                                     capture:1 error:&error];
   currentBodyString = !innerBody ? currentBodyString : innerBody;
 
@@ -956,13 +968,25 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   self->lastRequestedBodyTemplate = [bodyTemplate copyDeep];
 
   rawHead = [self->lastRequestedBodyTemplate objectForKey:@"head"];
-  head    = [rawHead isKindOfClass:[NSAttributedString class]] ? rawHead :
-              [rawHead isKindOfClass:[NSData class]] ? [NSKeyedUnarchiver unarchiveObjectWithData:rawHead] :
-              nil;
+  decodingError = nil;
+  head = !rawHead ? nil :
+    [rawHead isKindOfClass:[NSAttributedString class]] ? rawHead :
+    [rawHead isKindOfClass:[NSData class]] ?
+      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:rawHead error:&decodingError] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:rawHead] dynamicCastToClass:[NSAttributedString class]] :
+    nil;
+  if (decodingError != nil)
+    DebugLog(0, @"decoding error : %@", decodingError);
   rawTail = [self->lastRequestedBodyTemplate objectForKey:@"tail"];
-  tail    = [rawTail isKindOfClass:[NSAttributedString class]] ? rawTail :
-               [rawTail isKindOfClass:[NSData class]] ? [NSKeyedUnarchiver unarchiveObjectWithData:rawTail] :
-               nil;
+  decodingError = nil;
+  tail = !rawTail ? nil :
+    [rawTail isKindOfClass:[NSAttributedString class]] ? rawTail :
+    [rawTail isKindOfClass:[NSData class]] ?
+      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:rawTail error:&decodingError] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:rawTail] dynamicCastToClass:[NSAttributedString class]] :
+    nil;
+  if (decodingError != nil)
+    DebugLog(0, @"decoding error : %@", decodingError);
   headString = [head string];
   tailString = [tail string];
   NSString* trimmedHead = [headString trim];
@@ -978,7 +1002,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   NSMutableDictionary* typingAttributes = [NSMutableDictionary dictionaryWithDictionary:[self->lowerBoxPreambleTextView typingAttributes]];
   NSFont* defaultFont = [[PreferencesController sharedController] editionFont];
   [typingAttributes setObject:defaultFont forKey:NSFontAttributeName];
-  [newBody addAttributes:typingAttributes range:NSMakeRange(0, [newBody length])];
+  [newBody addAttributes:typingAttributes range:newBody.range];
   [self setSourceText:newBody];
   if (moveCursor)
     [self->lowerBoxSourceTextView setSelectedRange:NSMakeRange([headString length], 0)];
@@ -1519,7 +1543,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [[[self undoManager] prepareWithInvocationTarget:self] applyLatexitEquation:[self latexitEquationWithCurrentStateTransient:YES]  isRecentLatexisation:self->currentEquationIsARecentLatexisation];
   NSArray* components =
     [string captureComponentsMatchedByRegex:@"^\\s*(.*)\\s*\\\\begin\\{document\\}\\s*(.*)\\s*\\\\end\\{document\\}.*$"
-                                    options:RKLDotAll range:NSMakeRange(0, [string length]) error:nil];
+                                    options:RKLDotAll range:string.range error:nil];
   BOOL hasPreambleAndBody = ([components count] == 3);
   NSString* preamble = !hasPreambleAndBody ? nil : [components objectAtIndex:1];
   NSString* body = !hasPreambleAndBody ? string : [components objectAtIndex:2];
@@ -1595,8 +1619,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     NSParagraphStyle* paragraphStyle = [self->lowerBoxPreambleTextView defaultParagraphStyle];
     [self setPreamble:[latexitEquation preamble]];
     [self setSourceText:[latexitEquation sourceText]];
-    [[self->lowerBoxPreambleTextView textStorage] addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [[self->lowerBoxPreambleTextView textStorage] length])];
-    [[self->lowerBoxSourceTextView textStorage]   addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [[self->lowerBoxSourceTextView textStorage] length])];
+    [[self->lowerBoxPreambleTextView textStorage] addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:self->lowerBoxPreambleTextView.textStorage.range];
+    [[self->lowerBoxSourceTextView textStorage]   addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:self->lowerBoxSourceTextView.textStorage.range];
 
     [self->lowerBoxControlsBoxFontColorWell deactivate];
     NSColor* latexitEquationColor = [latexitEquation color];
@@ -1631,8 +1655,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     NSFont* defaultFont = [preferencesController editionFont];
 
     NSParagraphStyle* paragraphStyle = [self->lowerBoxPreambleTextView defaultParagraphStyle];
-    [[self->lowerBoxPreambleTextView textStorage] addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [[self->lowerBoxPreambleTextView textStorage] length])];
-    [[self->lowerBoxSourceTextView textStorage]   addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [[self->lowerBoxSourceTextView textStorage] length])];
+    [[self->lowerBoxPreambleTextView textStorage] addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:self->lowerBoxPreambleTextView.textStorage.range];
+    [[self->lowerBoxSourceTextView textStorage]   addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:self->lowerBoxSourceTextView.textStorage.range];
 
     NSMutableDictionary* typingAttributes = [NSMutableDictionary dictionaryWithDictionary:[self->lowerBoxPreambleTextView typingAttributes]];
     [typingAttributes setObject:defaultFont forKey:NSFontAttributeName];
@@ -1640,8 +1664,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [self->lowerBoxSourceTextView   setTypingAttributes:typingAttributes];
     [self setPreamble:[[AppController appController] preambleLatexisationAttributedString]];
     [self setSourceText:[[[NSAttributedString alloc ] init] autorelease]];
-    [[self->lowerBoxPreambleTextView textStorage] addAttributes:typingAttributes range:NSMakeRange(0, [[self->lowerBoxPreambleTextView textStorage] length])];
-    [[self->lowerBoxSourceTextView textStorage]   addAttributes:typingAttributes range:NSMakeRange(0, [[self->lowerBoxSourceTextView textStorage] length])];
+    [[self->lowerBoxPreambleTextView textStorage] addAttributes:typingAttributes range:self->lowerBoxPreambleTextView.textStorage.range];
+    [[self->lowerBoxSourceTextView textStorage]   addAttributes:typingAttributes range:self->lowerBoxSourceTextView.textStorage.range];
     [self->lowerBoxControlsBoxFontColorWell deactivate];
     [self->lowerBoxControlsBoxFontColorWell setColor:[preferencesController latexisationFontColor]];
     [self->lowerBoxControlsBoxFontSizeTextField setDoubleValue:[preferencesController latexisationFontSize]];
@@ -2101,12 +2125,11 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     NSDictionary* resources = [NSDictionary dictionaryWithObjectsAndKeys:@"poisson.pdf", @"aprilfish", nil];
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     NSData* dataFromUserDefaults = [userDefaults dataForKey:LastEasterEggsDatesKey];
-    NSMutableDictionary* easterEggLastDates = dataFromUserDefaults ?
-      [NSMutableDictionary dictionaryWithDictionary:[NSUnarchiver unarchiveObjectWithData:dataFromUserDefaults]] :
-      [NSMutableDictionary dictionary];
-    if (!easterEggLastDates)
-      easterEggLastDates = [NSMutableDictionary dictionary];
-    NSCalendarDate* easterEggLastDate = [easterEggLastDates objectForKey:easterEggString];
+    NSDictionary* easterEggLastDates = !dataFromUserDefaults ? nil :
+      [NSUnarchiver unarchiveObjectWithData:dataFromUserDefaults];
+    NSMutableDictionary* easterEggLastDatesMutable = !easterEggLastDates ? [NSMutableDictionary dictionary] :
+      [NSMutableDictionary dictionaryWithDictionary:easterEggLastDates];
+    NSCalendarDate* easterEggLastDate = [easterEggLastDatesMutable objectForKey:easterEggString];
     if (forceEasterEggForDebugging || (!easterEggLastDate) || [now isLessThan:easterEggLastDate] ||
         ([now yearOfCommonEra] != [easterEggLastDate yearOfCommonEra]))
     {
@@ -2115,9 +2138,9 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
                                                                       ofType:[resource pathExtension]] : nil;
       if (resource && filePath)
         easterEggImage = [[[NSImage alloc] initWithContentsOfFile:filePath] autorelease];
-      [easterEggLastDates setObject:[NSCalendarDate date] forKey:easterEggString];
+      [easterEggLastDatesMutable setObject:[NSCalendarDate date] forKey:easterEggString];
     }
-    [userDefaults setObject:[NSArchiver archivedDataWithRootObject:easterEggLastDates] forKey:LastEasterEggsDatesKey];
+    [userDefaults setObject:[NSArchiver archivedDataWithRootObject:easterEggLastDatesMutable] forKey:LastEasterEggsDatesKey];
   }//end if (easterEggString)
   return easterEggImage;
 }
@@ -2217,9 +2240,15 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     {
       NSDictionary* preamble = [preambles objectAtIndex:i];
       id rawValue = [preamble objectForKey:@"value"];
-      NSAttributedString* value = [rawValue isKindOfClass:[NSAttributedString class]] ? rawValue :
-                                  [rawValue isKindOfClass:[NSData class]] ? [NSKeyedUnarchiver unarchiveObjectWithData:rawValue] :
-                                  nil;
+      NSError* decodingError = nil;
+      NSAttributedString* value = !rawValue ? nil :
+        [rawValue isKindOfClass:[NSAttributedString class]] ? rawValue :
+        [rawValue isKindOfClass:[NSData class]] ?
+          isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:rawValue error:&decodingError] :
+          [[NSKeyedUnarchiver unarchiveObjectWithData:rawValue] dynamicCastToClass:[NSAttributedString class]] :
+        nil;
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
       NSString* currentPreambleAsTrimmedString = [[currentPreamble string] trim];
       NSString* candidatePreambleAsTrimmedString = [[value string] trim];
       BOOL isMatching = [currentPreambleAsTrimmedString isEqualToString:candidatePreambleAsTrimmedString];
@@ -2256,18 +2285,30 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     {
       NSDictionary* bodyTemplate = [bodyTemplates objectAtIndex:i];
       id rawHead = [bodyTemplate objectForKey:@"head"];
-      NSAttributedString* head = [rawHead isKindOfClass:[NSAttributedString class]] ? rawHead :
-                                 [rawHead isKindOfClass:[NSData class]] ? [NSKeyedUnarchiver unarchiveObjectWithData:rawHead] :
-                                 nil;
+      NSError* decodingError = nil;
+      NSAttributedString* head = !rawHead ? nil :
+        [rawHead isKindOfClass:[NSAttributedString class]] ? rawHead :
+        [rawHead isKindOfClass:[NSData class]] ?
+          isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:rawHead error:&decodingError] :
+          [[NSKeyedUnarchiver unarchiveObjectWithData:rawHead] dynamicCastToClass:[NSAttributedString class]] :
+        nil;
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
       id rawTail = [bodyTemplate objectForKey:@"tail"];
-      NSAttributedString* tail = [rawTail isKindOfClass:[NSAttributedString class]] ? rawTail :
-                                 [rawTail isKindOfClass:[NSData class]] ? [NSKeyedUnarchiver unarchiveObjectWithData:rawTail] :
-                                 nil;
+      decodingError = nil;
+      NSAttributedString* tail = !rawTail ? nil :
+        [rawTail isKindOfClass:[NSAttributedString class]] ? rawTail :
+        [rawTail isKindOfClass:[NSData class]] ?
+          isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:rawTail error:&decodingError] :
+          [[NSKeyedUnarchiver unarchiveObjectWithData:rawTail] dynamicCastToClass:[NSAttributedString class]] :
+        nil;
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
       NSString* headString = [head string];
       NSString* tailString = [tail string];
       NSString* regexString = [NSString stringWithFormat:@"^[\\s\\n]*\\Q%@\\E[\\s\\n]*(.*)[\\s\\n]*\\Q%@\\E[\\s\\n]*$", headString, tailString];
       NSError*  error = nil;
-      NSString* innerBody = [currentBody stringByMatching:regexString options:RKLMultiline|RKLDotAll inRange:NSMakeRange(0, [currentBody length])
+      NSString* innerBody = [currentBody stringByMatching:regexString options:RKLMultiline|RKLDotAll inRange:currentBody.range
                                                   capture:1 error:nil];
       BOOL isMatching = innerBody && !error;
       if (isMatching && (!matchIndex || (i == bodyTemplateDocumentIndex+1)))
@@ -2304,9 +2345,15 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     preamble = [sender representedObject];
   if ([preamble isKindOfClass:[NSDictionary class]])
   {
-    NSAttributedString* preambleAttributedString = [NSKeyedUnarchiver unarchiveObjectWithData:[preamble objectForKey:@"value"]];
+    NSData* preambleData = [[preamble objectForKey:@"value"] dynamicCastToClass:[NSData class]];
+    NSError* decodingError = nil;
+    NSAttributedString* preambleAttributedString = !preambleData ? nil :
+      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:preambleData error:&decodingError] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:preambleData] dynamicCastToClass:[NSAttributedString class]];
+    if (decodingError != nil)
+      DebugLog(0, @"decoding error : %@", decodingError);
     [self setPreamble:preambleAttributedString];
-  }
+  }//end if ([preamble isKindOfClass:[NSDictionary class]])
   else
     [[AppController appController] showPreferencesPaneWithItemIdentifier:TemplatesToolbarItemIdentifier options:@(0)];
 }
@@ -2337,7 +2384,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 {
   latex_mode_t result = LATEX_MODE_DISPLAY;
   NSString* body = [[self->lowerBoxSourceTextView textStorage] string];
-  NSRange range = NSMakeRange(0, [body length]);
+  NSRange range = body.range;
   RKLRegexOptions options = RKLDotAll | RKLMultiline;
   if ([body isMatchedByRegex:@"\\$\\$(.+)\\$\\$" options:options inRange:range error:nil] ||
       [body isMatchedByRegex:@"\\$(.+)\\$" options:options inRange:range error:nil] ||
@@ -2361,7 +2408,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     nil;
   NSTextView* targetTextView = [targetView dynamicCastToClass:[NSTextView class]];
   NSTextStorage* textStorage = [targetTextView textStorage];
-  NSRange fullRange = NSMakeRange(0, [textStorage length]);
+  NSRange fullRange = textStorage.range;
   if (fullRange.length)
   {
     NSArray* selectedRanges = [targetTextView selectedRanges];
@@ -2387,7 +2434,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 -(void) formatChangeAlignment:(alignment_mode_t)value
 {
   NSString* string = [[self->lowerBoxSourceTextView textStorage] string];
-  NSRange fullRange = NSMakeRange(0, [string length]);
+  NSRange fullRange = string.range;
   NSArray* selectedRanges = [self->lowerBoxSourceTextView selectedRanges];
   NSMutableArray* mutableSelectedRanges = [[selectedRanges mutableCopy] autorelease];
   if (![mutableSelectedRanges count])
@@ -2435,9 +2482,9 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         NSDictionary* attributes1 = isEmpty ? nil : [textStorage attributesAtIndex:firstRangeAdapted.location effectiveRange:0];
         NSDictionary* attributes2 = isEmpty ? nil : [textStorage attributesAtIndex:!firstRangeAdapted.length ? 0 : (firstRangeAdapted.location+firstRangeAdapted.length-1) effectiveRange:0];
         if (attributes1)
-          [attributedString1 setAttributes:attributes1 range:NSMakeRange(0, [attributedString1 length])];
+          [attributedString1 setAttributes:attributes1 range:attributedString1.range];
         if (attributes2)
-          [attributedString2 setAttributes:attributes2 range:NSMakeRange(0, [attributedString2 length])];
+          [attributedString2 setAttributes:attributes2 range:attributedString2.range];
         [textStorage insertAttributedString:attributedString1 atIndex:firstRangeAdapted.location];
         [textStorage insertAttributedString:attributedString2 atIndex:firstRangeAdapted.location+firstRangeAdapted.length+[attributedString1 length]];
         [self setSourceText:textStorage];
@@ -2532,7 +2579,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [shiftedSelectedRanges addObject:[NSValue valueWithRange:shiftedSelectedRange]];
   }//end for each selectedRange
 
-  [textStorage replaceCharactersInRange:NSMakeRange(0, [textStorage length]) withString:string];
+  [textStorage replaceCharactersInRange:textStorage.range withString:string];
   [self setSourceText:textStorage];
   [self->lowerBoxSourceTextView setSelectedRanges:shiftedSelectedRanges];
 }
@@ -2595,7 +2642,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [shiftedSelectedRanges addObject:[NSValue valueWithRange:shiftedSelectedRange]];
   }//end for each selectedRange
   
-  [textStorage replaceCharactersInRange:NSMakeRange(0, [textStorage length]) withString:string];
+  [textStorage replaceCharactersInRange:textStorage.range withString:string];
   [self setSourceText:textStorage];
   [self->lowerBoxSourceTextView setSelectedRanges:shiftedSelectedRanges];
 }
@@ -2944,7 +2991,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   {
     NSArray* components =
       [string captureComponentsMatchedByRegex:@"^\\s*(.*)\\s*\\\\begin\\{document\\}\\s*(.*)\\s*\\\\end\\{document\\}.*$"
-                                      options:RKLDotAll range:NSMakeRange(0, [string length]) error:nil];
+                                      options:RKLDotAll range:string.range error:nil];
     BOOL hasPreambleAndBody = ([components count] == 3);
     NSString* preamble = !hasPreambleAndBody ? nil : [components objectAtIndex:1];
     NSString* body = !hasPreambleAndBody ? string : [components objectAtIndex:2];
@@ -2954,7 +3001,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     {
       components = (latexMode != LATEX_MODE_TEXT) ? nil :
       [body captureComponentsMatchedByRegex:@"^\\s*\\\\begin\\{align\\*\\}(.*)\\\\end\\{align\\*\\}\\s*$"
-                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+                                    options:RKLDotAll range:body.range error:nil];
       if (components && ([components count] == 2))
       {
         latexMode = LATEX_MODE_ALIGN;
@@ -2963,7 +3010,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       
       components = (latexMode != LATEX_MODE_TEXT) ? nil :
       [body captureComponentsMatchedByRegex:@"^\\s*\\$\\$(.*)\\$\\$\\s*$"
-                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+                                    options:RKLDotAll range:body.range error:nil];
       if (components && ([components count] == 2))
       {
         latexMode = LATEX_MODE_DISPLAY;
@@ -2972,7 +3019,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       
       components = (latexMode != LATEX_MODE_TEXT) ? nil :
       [body captureComponentsMatchedByRegex:@"^\\s*\\$\\\\displaystyle(.*)\\$\\s*$"
-                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+                                    options:RKLDotAll range:body.range error:nil];
       if (components && ([components count] == 2))
       {
         latexMode = LATEX_MODE_DISPLAY;
@@ -2981,7 +3028,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
       components = (latexMode != LATEX_MODE_TEXT) ? nil :
       [body captureComponentsMatchedByRegex:@"^\\s*\\{\\\\displaystyle(.*)\\}\\s*$"
-                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+                                    options:RKLDotAll range:body.range error:nil];
       if (components && ([components count] == 2))
       {
         latexMode = LATEX_MODE_DISPLAY;
@@ -2990,7 +3037,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
       components = (latexMode != LATEX_MODE_TEXT) ? nil :
       [body captureComponentsMatchedByRegex:@"^\\s*\\\\\\[(.*)\\\\\\]\\s*$"
-                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+                                    options:RKLDotAll range:body.range error:nil];
       if (components && ([components count] == 2))
       {
         latexMode = LATEX_MODE_DISPLAY;
@@ -2999,7 +3046,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       
       components = (latexMode != LATEX_MODE_TEXT) ? nil :
       [body captureComponentsMatchedByRegex:@"^\\s*\\$(.*)\\$\\s*$"
-                                    options:RKLDotAll range:NSMakeRange(0, [body length]) error:nil];
+                                    options:RKLDotAll range:body.range error:nil];
       if (components && ([components count] == 2))
       {
         latexMode = LATEX_MODE_INLINE;

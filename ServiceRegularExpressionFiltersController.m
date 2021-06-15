@@ -3,14 +3,15 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 28/01/13.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "ServiceRegularExpressionFiltersController.h"
 
 #import "NSObjectExtended.h"
+#import "NSAttributedStringExtended.h"
+#import "NSStringExtended.h"
 #import "PreferencesController.h"
-#import "RegexKitLite.h"
 
 @implementation ServiceRegularExpressionFiltersController
 
@@ -61,7 +62,7 @@
       if (inputPattern && ![inputPattern isEqualToString:@""])
       {
         @try{
-          [result replaceOccurrencesOfRegex:inputPattern withString:outputPattern options:RKLMultiline|RKLDotAll range:NSMakeRange(0, [result length]) error:nil];
+          [result replaceOccurrencesOfRegex:inputPattern withString:outputPattern options:RKLMultiline|RKLDotAll range:result.range error:nil];
         }
         @catch(NSException*){
         }
@@ -98,7 +99,7 @@
       if (inputPattern && ![inputPattern isEqualToString:@""])
       {
         @try{
-          [result replaceOccurrencesOfRegex:inputPattern withString:outputPattern options:RKLMultiline|RKLDotAll range:NSMakeRange(0, [result length]) error:nil];
+          [result replaceOccurrencesOfRegex:inputPattern withString:outputPattern options:RKLMultiline|RKLDotAll range:result.range error:nil];
         }
         @catch(NSException*){
         }

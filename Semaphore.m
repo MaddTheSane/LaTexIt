@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 09/10/06.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "Semaphore.h"
@@ -12,7 +12,8 @@
 
 @implementation Semaphore
 
-//designated initializer
++(BOOL) supportsSecureCoding {return YES;}
+
 -(id) initWithValue:(NSUInteger)initialValue
 {
   if ((!(self = [super init])))
@@ -101,7 +102,6 @@
 }
 //end Z
 
-//NSCoding protocol
 -(id) initWithCoder:(NSCoder*)coder
 {
   return [self initWithValue:[[[coder decodeObjectForKey:@"value"] dynamicCastToClass:[NSNumber class]] unsignedIntegerValue]];

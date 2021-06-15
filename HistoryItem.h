@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 26/02/09.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -12,7 +12,7 @@
 
 @class LatexitEquation;
 
-@interface HistoryItem : NSManagedObject <NSCoding> {
+@interface HistoryItem : NSManagedObject <NSCoding, NSSecureCoding> {
   //LatexitEquation* equation;
   BOOL customKVOEnabled;
   BOOL customKVOInhibited;
@@ -21,6 +21,8 @@
 
 +(NSEntityDescription*) entity;
 +(NSEntityDescription*) wrapperEntity;
+
++(NSSet*) allowedSecureDecodedClasses;
 
 -(id) initWithEquation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 

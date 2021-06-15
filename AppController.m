@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -56,7 +56,6 @@
 #import "PreferencesControllerMigration.h"
 #import "PreferencesWindowController.h"
 #import "PropertyStorage.h"
-#import "RegexKitLite.h"
 #import "Semaphore.h"
 #import "ServiceRegularExpressionFiltersController.h"
 #import "SystemTask.h"
@@ -66,8 +65,6 @@
 #include <sys/wait.h>
 
 #import <Sparkle/Sparkle.h>
-
-asm(".weak_reference _OBJC_CLASS_$_NSFileWrapper");//10.6 compatibility
 
 @interface MyTextAttachementCell : NSTextAttachmentCell
 @end
@@ -396,6 +393,8 @@ static NSMutableDictionary* cachePaths = nil;
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_MATHML];
   [editCopyImageAsMenu addItemWithTitle:@"Text" target:self action:@selector(copyAs:)
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_TEXT];
+  [editCopyImageAsMenu addItemWithTitle:@"Rich text" target:self action:@selector(copyAs:)
+                          keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_RTFD];
 }
 //end awakeFromNib
 
@@ -586,7 +585,7 @@ static NSMutableDictionary* cachePaths = nil;
       NSString* string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
       NSArray* equations = [string componentsMatchedByRegex:@"<svg(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</svg>"
                           options:RKLCaseless|RKLMultiline|RKLDotAll
-                             range:NSMakeRange(0, [string length]) capture:0 error:&error];
+                             range:string.range capture:0 error:&error];
       if (error)
         DebugLog(1, @"error : %@", error);
       NSUInteger equationsCount = [equations count];
@@ -623,13 +622,13 @@ static NSMutableDictionary* cachePaths = nil;
       NSString* string = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
       NSArray* equations_legacy = [string componentsMatchedByRegex:@"<blockquote(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</blockquote>"
                           options:RKLCaseless|RKLMultiline|RKLDotAll
-                             range:NSMakeRange(0, [string length]) capture:0 error:&error];
+                             range:string.range capture:0 error:&error];
       if (error)
         DebugLog(1, @"error : %@", error);
       error = nil;
       NSArray* equations_new = [string componentsMatchedByRegex:@"<math(.*?)>(.*?)<!--[[:space:]]*latexit:(.*?)-->(.*?)</math>"
                                                            options:RKLCaseless|RKLMultiline|RKLDotAll
-                                                             range:NSMakeRange(0, [string length]) capture:0 error:&error];
+                                                             range:string.range capture:0 error:&error];
       NSMutableArray* equations = [NSMutableArray arrayWithCapacity:([equations_legacy count]+[equations_new count])];
       if (equations_legacy)
         [equations addObjectsFromArray:equations_legacy];
@@ -1985,6 +1984,7 @@ static NSMutableDictionary* cachePaths = nil;
     case EXPORT_FORMAT_MATHML : result = @"MATHML"; break;
     case EXPORT_FORMAT_SVG : result = @"SVG"; break;
     case EXPORT_FORMAT_TEXT : result = @"TEXT"; break;
+    case EXPORT_FORMAT_RTFD : result = @"RTFD"; break;
   }//end switch(format)
   return result;
 }
@@ -2533,7 +2533,12 @@ static NSMutableDictionary* cachePaths = nil;
 -(void) linkBackClientDidRequestEdit:(LinkBack*)link
 {
   NSData* linkbackItemsData = [[[link pasteboard] propertyListForType:LinkBackPboardType] linkBackAppData];
-  NSArray* linkbackItems = [NSKeyedUnarchiver unarchiveObjectWithData:linkbackItemsData];
+  NSError* decodingError = nil;
+  NSArray* linkbackItems = !linkbackItemsData ? nil :
+    isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[HistoryItem allowedSecureDecodedClasses] fromData:linkbackItemsData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+    [[NSKeyedUnarchiver unarchiveObjectWithData:linkbackItemsData] dynamicCastToClass:[NSArray class]];
+  if (decodingError != nil)
+    DebugLog(0, @"decoding error : %@", decodingError);
   id firstLinkBackItem = (linkbackItems && [linkbackItems count]) ? [linkbackItems objectAtIndex:0] : nil;
   HistoryItem* historyItem = [firstLinkBackItem isKindOfClass:[HistoryItem class]] ? firstLinkBackItem : nil;
   LatexitEquation* latexitEquation =
@@ -2708,8 +2713,7 @@ static NSMutableDictionary* cachePaths = nil;
         CGFloat magnification = pointSize;
         NSColor* color = useColor ? [contextAttributes objectForKey:NSForegroundColorAttributeName] : nil;
         if (!color) color = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
-        NSNumber* originalBaseline = [contextAttributes objectForKey:NSBaselineOffsetAttributeName];
-        if (!originalBaseline) originalBaseline = @(0.0);
+        CGFloat originalBaseline = (CGFloat)[[[contextAttributes objectForKey:NSBaselineOffsetAttributeName] dynamicCastToClass:[NSNumber class]] doubleValue];
         NSString* pboardString = [attrString string];
         NSString* preamble = [[LaTeXProcessor sharedLaTeXProcessor] insertColorInPreamble:[[self preambleServiceAttributedString] string] color:color isColorStyAvailable:[self isColorStyAvailable]];
         NSString* body = pboardString;
@@ -2771,6 +2775,9 @@ static NSMutableDictionary* cachePaths = nil;
             case EXPORT_FORMAT_TEXT:
               extension = @"tex";
               break;
+            case EXPORT_FORMAT_RTFD:
+              extension = @"rtfd";
+              break;
           }//end switch(exportFormat)
 
           NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -2784,6 +2791,7 @@ static NSMutableDictionary* cachePaths = nil;
                                          nil];
           NSString* attachedFile     = [NSString stringWithFormat:@"%@.%@", filePrefix, extension];
           NSString* attachedFilePath = [directory stringByAppendingPathComponent:attachedFile];
+          NSURL*    attachedFileURL  = !attachedFilePath ? nil : [NSURL fileURLWithPath:attachedFilePath];
           NSData*   attachedData     = [[LaTeXProcessor sharedLaTeXProcessor] dataForType:exportFormat pdfData:pdfData
                                          exportOptions:exportOptions
                                          compositionConfiguration:[preferencesController compositionConfigurationDocument]
@@ -2797,13 +2805,13 @@ static NSMutableDictionary* cachePaths = nil;
           if (useBaseline)
           {
             //extracts the baseline of the equation, if possible
-            CGFloat newBaseline = [originalBaseline floatValue];
+            CGFloat newBaseline = originalBaseline;
             if (useBaseline)
               newBaseline -= [[[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:&pdfData] objectForKey:@"baseline"] doubleValue];//[LatexitEquation baselineFromData:pdfData];
 
             //creates a mutable attributed string containing the image file
             [attachedData writeToFile:attachedFilePath atomically:NO];
-            NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithPath:attachedFilePath] autorelease];
+            NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithURL:attachedFileURL options:0 error:nil] autorelease];
             NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
             NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
             NSMutableAttributedString* mutableAttributedStringWithImage =
@@ -2812,24 +2820,25 @@ static NSMutableDictionary* cachePaths = nil;
             //changes the baseline of the attachment to align it with the surrounding text
             [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
                                                      value:@(newBaseline)
-                                                     range:NSMakeRange(0, [mutableAttributedStringWithImage length])];
+                                                     range:mutableAttributedStringWithImage.range];
             
             //add a space after the image, to restore the baseline of the surrounding text
             //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
             //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
             //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
-            unichar invisibleSpace = 0xFEFF;
+            const unichar invisibleSpace = 0xFEFF;
             NSString* invisibleSpaceString = [[[NSString alloc] initWithCharacters:&invisibleSpace length:1] autorelease];
-            NSMutableAttributedString* space =
+            NSMutableAttributedString* spaceWithoutCustomBaseline =
               [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
-            [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
-            [space addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline)
-                          range:NSMakeRange(0, [space length])];
-            [mutableAttributedStringWithImage insertAttributedString:space atIndex:0];
-            [mutableAttributedStringWithImage appendAttributedString:space];
+            [spaceWithoutCustomBaseline setAttributes:contextAttributes range:spaceWithoutCustomBaseline.range];
+            NSMutableAttributedString* spaceWithCustomBaseline = [[spaceWithoutCustomBaseline mutableCopy] autorelease];
+            [spaceWithCustomBaseline addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline) range:spaceWithCustomBaseline.range];
+            [mutableAttributedStringWithImage insertAttributedString:spaceWithCustomBaseline atIndex:0];
+            [mutableAttributedStringWithImage appendAttributedString:spaceWithCustomBaseline];
+            [mutableAttributedStringWithImage appendAttributedString:spaceWithoutCustomBaseline];
 
             //finally creates the rtdfData
-            NSData* rtfdData = [mutableAttributedStringWithImage RTFDFromRange:NSMakeRange(0, [mutableAttributedStringWithImage length])
+            NSData* rtfdData = [mutableAttributedStringWithImage RTFDFromRange:mutableAttributedStringWithImage.range
                                                             documentAttributes:documentAttributes];
             //RTFd data
             //[pboard addTypes:[NSArray arrayWithObject:NSRTFDPboardType] owner:nil];
@@ -3028,6 +3037,9 @@ static NSMutableDictionary* cachePaths = nil;
             case EXPORT_FORMAT_TEXT:
               extension = @"tex";
               break;
+            case EXPORT_FORMAT_RTFD:
+              extension = @"rtfd";
+              break;
           }//end switch(exportFormat)
 
           NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -3212,7 +3224,7 @@ static NSMutableDictionary* cachePaths = nil;
         [mutableAttrString setAttributedString:
           [serviceRegularExpressionFiltersController applyFilterToAttributedString:mutableAttrString]];
       
-      NSRange remainingRange = NSMakeRange(0, [mutableAttrString length]);
+      NSRange remainingRange = mutableAttrString.range;
       NSInteger numberOfFailures = 0;
 
       //we must find some places where latexisations should be done. We look for "$$..$$", "\[..\]", and "$...$"
@@ -3288,8 +3300,7 @@ static NSMutableDictionary* cachePaths = nil;
             CGFloat magnification = pointSize;
             NSColor* color = useColor ? [contextAttributes objectForKey:NSForegroundColorAttributeName] : nil;
             if (!color) color = [NSColor colorWithData:[userDefaults objectForKey:DefaultColorKey]];
-            NSNumber* originalBaseline = [contextAttributes objectForKey:NSBaselineOffsetAttributeName];
-            if (!originalBaseline) originalBaseline = @(0.0);
+            CGFloat originalBaseline = (CGFloat)[[[contextAttributes objectForKey:NSBaselineOffsetAttributeName] dynamicCastToClass:[NSNumber class]] doubleValue];
             NSString* body     = [string substringWithRange:rangeOfTextOfEquation];
             NSString* preamble = [[LaTeXProcessor sharedLaTeXProcessor] insertColorInPreamble:[[self preambleServiceAttributedString] string] color:color isColorStyAvailable:[self isColorStyAvailable]];
             
@@ -3370,6 +3381,9 @@ static NSMutableDictionary* cachePaths = nil;
                 case EXPORT_FORMAT_TEXT:
                   extension = @"tex";
                   break;
+                case EXPORT_FORMAT_RTFD:
+                  extension = @"rtfd";
+                  break;
               }
 
               if ([[PreferencesController sharedController] historySaveServicesResultsEnabled])//we may add the item to the history
@@ -3387,6 +3401,7 @@ static NSMutableDictionary* cachePaths = nil;
                 [[NSFileManager defaultManager] temporaryFileWithTemplate:[NSString stringWithFormat:@"%@-XXXXXXXX", filePrefix]
                                                                 extension:extension
                                                               outFilePath:&attachedFilePath workingDirectory:directory];
+              NSURL* attachedFileURL = !attachedFilePath ? nil : [NSURL fileURLWithPath:attachedFilePath];
               
               NSDictionary* exportOptions = [NSDictionary dictionaryWithObjectsAndKeys:
                                              @([preferencesController exportJpegQualityPercent]), @"jpegQuality",
@@ -3403,14 +3418,14 @@ static NSMutableDictionary* cachePaths = nil;
                                        uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
 
               //extracts the baseline of the equation, if possible
-              CGFloat newBaseline = [originalBaseline floatValue];
+              CGFloat newBaseline = originalBaseline;
               if (useBaseline)
                 newBaseline -= [[[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:&pdfData] objectForKey:@"baseline"] doubleValue];//[LatexitEquation baselineFromData:pdfData];
 
               //creates a mutable attributed string containing the image file
               [fileHandle writeData:attachedData];
               [fileHandle closeFile];
-              NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithPath:attachedFilePath] autorelease];
+              NSFileWrapper*      fileWrapperOfImage        = [[[NSFileWrapper alloc] initWithURL:attachedFileURL options:0 error:nil] autorelease];
               NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
               NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
               NSMutableAttributedString* mutableAttributedStringWithImage =
@@ -3419,20 +3434,22 @@ static NSMutableDictionary* cachePaths = nil;
               //changes the baseline of the attachment to align it with the surrounding text
               [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
                                                        value:@(newBaseline)
-                                                       range:NSMakeRange(0, [mutableAttributedStringWithImage length])];
+                                                       range:mutableAttributedStringWithImage.range];
                 
               //add a space after the image, to restore the baseline of the surrounding text
               //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
               //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
               //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
-              unichar invisibleSpace = 0xFEFF;
+              const unichar invisibleSpace = 0xFEFF;
               NSString* invisibleSpaceString = [[[NSString alloc] initWithCharacters:&invisibleSpace length:1] autorelease];
-              NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
-              [space setAttributes:contextAttributes range:NSMakeRange(0, [space length])];
-              [space addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline)
-                            range:NSMakeRange(0, [space length])];
-              [mutableAttributedStringWithImage insertAttributedString:space atIndex:0];
-              [mutableAttributedStringWithImage appendAttributedString:space];
+              NSMutableAttributedString* spaceWithoutCustomBaseline =
+                [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
+              [spaceWithoutCustomBaseline setAttributes:contextAttributes range:spaceWithoutCustomBaseline.range];
+              NSMutableAttributedString* spaceWithCustomBaseline = [[spaceWithoutCustomBaseline mutableCopy] autorelease];
+              [spaceWithCustomBaseline addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline) range:spaceWithCustomBaseline.range];
+              [mutableAttributedStringWithImage insertAttributedString:spaceWithCustomBaseline atIndex:0];
+              [mutableAttributedStringWithImage appendAttributedString:spaceWithCustomBaseline];
+              [mutableAttributedStringWithImage appendAttributedString:spaceWithoutCustomBaseline];
               //inserts the image in the global string
               if (mutableAttributedStringWithImage)
                 [mutableAttrString replaceCharactersInRange:rangeOfEquation withAttributedString:mutableAttributedStringWithImage];
@@ -3472,7 +3489,7 @@ static NSMutableDictionary* cachePaths = nil;
       
       //Now we must feed the pasteboard
       NSMutableDictionary* dummyPboard = [NSMutableDictionary dictionary];
-      NSData* rtfdData = [mutableAttrString RTFDFromRange:NSMakeRange(0, [mutableAttrString length])
+      NSData* rtfdData = [mutableAttrString RTFDFromRange:mutableAttrString.range
                                        documentAttributes:documentAttributes];
       [dummyPboard setObject:rtfdData forKey:NSRTFDPboardType];
       [dummyPboard setObject:rtfdData forKey:(NSString*)kUTTypeRTFD];
@@ -3512,7 +3529,7 @@ static NSMutableDictionary* cachePaths = nil;
       [[[NSMutableAttributedString alloc] initWithAttributedString:[latexitEquation sourceText]] autorelease];
     if (source)
     {
-      NSFont* font = [[source fontAttributesInRange:NSMakeRange(0, [source length])] objectForKey:NSFontAttributeName];
+      NSFont* font = [[source fontAttributesInRange:source.range] objectForKey:NSFontAttributeName];
       font = font ? font : [NSFont userFontOfSize:[latexitEquation pointSize]];
       font = [NSFont fontWithName:[font fontName] size:[latexitEquation pointSize]];
       NSDictionary* attributes = 
@@ -3520,12 +3537,12 @@ static NSMutableDictionary* cachePaths = nil;
           font, NSFontAttributeName,
           [NSString stringWithFormat:@"%f",  [latexitEquation pointSize]], NSFontSizeAttribute,
           [latexitEquation color], NSForegroundColorAttributeName, nil];
-      [source addAttributes:attributes range:NSMakeRange(0, [source length])];
+      [source addAttributes:attributes range:source.range];
       [pboard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, @"public.utf8-plain-text",
                                                      NSRTFPboardType, kUTTypeRTF, nil]  owner:nil];
       [pboard setString:[source string] forType:NSStringPboardType];
       [pboard setString:[source string] forType:@"public.utf8-plain-text"];
-      NSData* rtfData = [source RTFFromRange:NSMakeRange(0, [source length]) documentAttributes:@{NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType}];
+      NSData* rtfData = [source RTFFromRange:source.range documentAttributes:@{NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType}];
       [pboard setData:rtfData forType:NSRTFPboardType];
       [pboard setData:rtfData forType:(NSString*)kUTTypeRTF];
     }//end if (source)
@@ -3600,11 +3617,11 @@ static NSMutableDictionary* cachePaths = nil;
     }//end while ! at the end of the string
     [pboard declareTypes:[NSArray arrayWithObjects:NSRTFDPboardType, kUTTypeRTFD,
                                                    NSRTFPboardType, kUTTypeRTF, nil] owner:nil];
-    NSData* outRtfdData = [attributedString RTFDFromRange:NSMakeRange(0, [attributedString length])
+    NSData* outRtfdData = [attributedString RTFDFromRange:attributedString.range
                           documentAttributes:docAttributes];
     [pboard setData:outRtfdData forType:NSRTFDPboardType];
     [pboard setData:outRtfdData forType:(NSString*)kUTTypeRTFD];
-    NSData* outRtfData = [attributedString RTFFromRange:NSMakeRange(0, [attributedString length])
+    NSData* outRtfData = [attributedString RTFFromRange:attributedString.range
                           documentAttributes:docAttributes];
     [pboard setData:outRtfData forType:NSRTFPboardType];
     [pboard setData:outRtfData forType:(NSString*)kUTTypeRTF];

@@ -3,14 +3,14 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 09/10/06.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 
 #include <pthread.h>
 
-@interface Semaphore : NSObject <NSCoding> {
+@interface Semaphore : NSObject <NSCoding, NSSecureCoding> {
   pthread_condattr_t    cond_attr;
   pthread_cond_t        cond;
   pthread_mutexattr_t   mutex_attr;

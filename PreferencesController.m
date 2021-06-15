@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesController.h"
@@ -250,10 +250,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
         NSString*  textShortcutsPlistPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"textShortcuts" ofType:@"plist"];
         NSData*    dataTextShortcutsPlist = [NSData dataWithContentsOfFile:textShortcutsPlistPath options:NSUncachedRead error:nil];
         NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
-        NSString* errorString = nil;
-        NSDictionary* plist = [NSPropertyListSerialization propertyListFromData:dataTextShortcutsPlist
-                                                               mutabilityOption:NSPropertyListImmutable
-                                                                         format:&format errorDescription:&errorString];
+        NSError* error = nil;
+        NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:dataTextShortcutsPlist
+                                                                        options:NSPropertyListImmutable format:&format error:&error];
         NSString* version = [plist objectForKey:@"version"];
         //we can check the version...
         if (!version || [version compare:@"1.13.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
@@ -312,7 +311,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
              @(YES), EditionTabKeyInsertsSpacesEnabledKey,
              @(2), EditionTabKeyInsertsSpacesCountKey,
              @(NO), EditionAutoCompleteOnBackslashEnabledKey,
-             @(NSOffState), ReducedTextAreaStateKey,
+             @(NSControlStateValueOff), ReducedTextAreaStateKey,
              [[NSFont fontWithName:@"Monaco" size:12] data], DefaultFontKey,
              factoryDefaultsPreambles, PreamblesKey,
              factoryDefaultsBodyTemplates, BodyTemplatesKey,
@@ -1700,8 +1699,13 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   NSInteger preambleDocumentIndex = [self preambleDocumentIndex];
   NSDictionary* preamble = (0<=preambleDocumentIndex) && ((unsigned)preambleDocumentIndex<[preambles count]) ?
                            [preambles objectAtIndex:preambleDocumentIndex] : nil;
-  id preambleValue = [preamble objectForKey:@"value"];
-  result = !preambleValue ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:preambleValue];
+  NSData* preambleData = [[preamble objectForKey:@"value"] dynamicCastToClass:[NSData class]];
+  NSError* decodingError = nil;
+  result = !preambleData ? nil :
+    isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:preambleData error:&decodingError] :
+    [[NSKeyedUnarchiver unarchiveObjectWithData:preambleData] dynamicCastToClass:[NSAttributedString class]];
+  if (decodingError != nil)
+    DebugLog(0, @"decoding error : %@", decodingError);
   if (!result)
     result = [PreamblesController defaultLocalizedPreambleValueAttributedString];
   return result;
@@ -1715,8 +1719,13 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   NSInteger preambleServiceIndex = [self preambleServiceIndex];
   NSDictionary* preamble = (0<=preambleServiceIndex) && ((unsigned)preambleServiceIndex<[preambles count]) ?
                            [preambles objectAtIndex:preambleServiceIndex] : nil;
-  id preambleValue = [preamble objectForKey:@"value"];
-  result = !preambleValue ? nil : [NSKeyedUnarchiver unarchiveObjectWithData:preambleValue];
+  NSData* preambleData = [[preamble objectForKey:@"value"] dynamicCastToClass:[NSData class]];
+  NSError* decodingError = nil;
+  result = !preambleData ? nil :
+    isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:preambleData error:&decodingError] :
+    [[NSKeyedUnarchiver unarchiveObjectWithData:preambleData] dynamicCastToClass:[NSAttributedString class]];
+  if (decodingError != nil)
+    DebugLog(0, @"decoding error : %@", decodingError);
   if (!result)
     result = [PreamblesController defaultLocalizedPreambleValueAttributedString];
   return result;
@@ -3133,17 +3142,18 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     NSString* infoPlistPath =
       [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents"] stringByAppendingPathComponent:@"Info.plist"];
     NSURL* infoPlistURL = !infoPlistPath ? nil : [NSURL fileURLWithPath:infoPlistPath];
-    CFStringRef cfStringError = nil;
+    CFPropertyListFormat format = kCFPropertyListBinaryFormat_v1_0;
+    CFErrorRef cfError = nil;
     #ifdef ARC_ENABLED
-    CFPropertyListRef cfInfoPlist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault,
-                                                                    (CHBRIDGE CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
-                                                                    kCFPropertyListMutableContainersAndLeaves, &cfStringError);
+    CFPropertyListRef cfInfoPlist = CFPropertyListCreateWithData(kCFAllocatorDefault,
+                                                                 (CHBRIDGE CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
+                                                                 kCFPropertyListMutableContainersAndLeaves, &format, &cfError);
     #else
-    CFPropertyListRef cfInfoPlist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault,
-                                                                    (CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
-                                                                    kCFPropertyListMutableContainersAndLeaves, &cfStringError);
+    CFPropertyListRef cfInfoPlist = CFPropertyListCreateWithData(kCFAllocatorDefault,
+                                                                 (CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
+                                                                 kCFPropertyListMutableContainersAndLeaves, &format, &cfError);
     #endif
-    if (cfInfoPlist && !cfStringError)
+    if (cfInfoPlist && !cfError)
     {
       //build services as found in info.plist
       #ifdef ARC_ENABLED
@@ -3387,19 +3397,19 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       {
         if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
         {
-          NSAlert* alert =
-            [NSAlert alertWithMessageText:NSLocalizedString(@"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences", @"")
-                            defaultButton:NSLocalizedString(@"Apply preferences", @"")
-                          alternateButton:NSLocalizedString(@"Update preferences", @"")
-                              otherButton:NSLocalizedString(@"Ignore", @"")
-                informativeTextWithFormat:NSLocalizedString(@"__EXPLAIN_CHANGE_SHORTCUTS__", @"")];
+          NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+          alert.messageText = NSLocalizedString(@"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences", @"");
+          [alert addButtonWithTitle:NSLocalizedString(@"Apply preferences", @"")];
+          [alert addButtonWithTitle:NSLocalizedString(@"Update preferences", @"")];
+          [alert addButtonWithTitle:NSLocalizedString(@"Ignore", @"")];
+          alert.informativeText = NSLocalizedString(@"__EXPLAIN_CHANGE_SHORTCUTS__", @"");
           [[[alert buttons] objectAtIndex:2] setKeyEquivalent:[NSString stringWithFormat:@"%c", '\033']];//escape
           NSInteger result = [alert runModal];
-          if (result == NSAlertDefaultReturn)
+          if (result == NSAlertFirstButtonReturn)
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS;
-          else if (result == NSAlertAlternateReturn)
+          else if (result == NSAlertSecondButtonReturn)
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS;
-          else if (result == NSAlertOtherReturn)
+          else if (result == NSAlertThirdButtonReturn)
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE;
         }
         if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE)
@@ -3455,19 +3465,18 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
           {
             if (authenticationFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
             {
-              NSAlert* alert =
-              [NSAlert alertWithMessageText:NSLocalizedString(@"New Service shortcuts could not be set", @"")
-                              defaultButton:NSLocalizedString(@"Update preferences", @"")
-                            alternateButton:NSLocalizedString(@"Ignore", @"")
-                                otherButton:nil
-                  informativeTextWithFormat:NSLocalizedString(@"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle", @"")];
-              [[[alert buttons] objectAtIndex:1] setKeyEquivalent:[NSString stringWithFormat:@"%c",'\033']];
+              NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+              alert.messageText = NSLocalizedString(@"New Service shortcuts could not be set", @"");
+              alert.informativeText = NSLocalizedString(@"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle", @"");
+              [alert addButtonWithTitle:NSLocalizedString(@"Update preferences", @"")];
+              [alert addButtonWithTitle:NSLocalizedString(@"Ignore", @"")];
+              [[alert.buttons objectAtIndex:1] setKeyEquivalent:[NSString stringWithFormat:@"%c",'\033']];
               NSInteger result = [alert runModal];
-              if (result == NSAlertDefaultReturn)
+              if (result == NSAlertFirstButtonReturn)
                  authenticationFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS;
               else
                  authenticationFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE;
-            }
+            }//end if (authenticationFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
             if (authenticationFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE)
               ok = NO;
             else if (authenticationFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS)
@@ -3475,11 +3484,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
               [self setServiceShortcuts:equivalentUserDefaultsToCurrentServicesInInfoPlist];
               NSUpdateDynamicServices();
               ok = YES;
-            }
+            }//end if (authenticationFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS)
           }//end if (authentication did not help writing)
         }//end if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS)
       }//end if (![currentServicesInInfoPlist iEqualTo:equivalentServicesToCurrentUserDefaults])
-    }//end if (cfInfoPlist)
+    }//end if (cfInfoPlist && !cfError)
     if (cfInfoPlist)
       CFRelease(cfInfoPlist);
   }//end if (ok)  

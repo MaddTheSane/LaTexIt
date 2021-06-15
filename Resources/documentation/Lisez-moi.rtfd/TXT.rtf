@@ -13,7 +13,7 @@
 \f1\fs26 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc\partightenfactor0
 
-\f2\b \cf0 LaTeXiT 2.15.0\
+\f2\b \cf0 LaTeXiT 2.16.0\
 
 \f1\b0\fs22 \cf2 Joies du LaTeX rapide pour taper ses formules\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
@@ -58,7 +58,7 @@ Adresse e-mail (commentaires, suggestions, probl\'e8mes,...): \cf3 pierre@chacha
 Syst\'e8me Requis\
 
 \fs22 \ulnone \
-LaTeXiT 2.15.0 requiert Mac OS X version 10.9 ou sup\'e9rieure, ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
+LaTeXiT 2.16.0 requiert Mac OS X version 10.9 ou sup\'e9rieure, ainsi qu'une installation fonctionnelle de LaTeX contenant au moins pdflatex et GhostScript (gs). Si vous ne connaissez pas ces programmes, vous pouvez consulter la section "Installer LaTeX" de ce document.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
 
 \f2\b\fs26 \cf0 \
@@ -402,7 +402,7 @@ Ici pour la police Chalkboard :\
 					\\setmainfont\{Chalkboard\}\
 					\\SetSymbolFont\{letters\}\{normal\}\{\\encodingdefault\}\{\\rmdefault\}\{m\}\{it\}\
 					\\SetSymbolFont\{letters\}\{bold\}\{\\encodingdefault\}\{\\rmdefault\}\{b\}\{it\}\
- 	Voyez \'e9galement des informations sur cette page : {\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex/2009/fonts/"}}{\fldrslt http://www.tug.org/mactex/2009/fonts/}}\
+ 	Voyez \'e9galement des informations sur cette page : {\field{\*\fldinst{HYPERLINK "https://tug.org/pracjourn/2006-1/schmidt/"}}{\fldrslt https://tug.org/pracjourn/2006-1/schmidt/}}\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
 \cf0 \
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
@@ -436,9 +436,9 @@ LaTeXiT se base sur une installation fonctionnelle de LaTeX. Mais si vous ne sav
 LaTeX n'est pas un simple programme, c'est un ensemble de programmes et de fichiers de donn\'e9es. De ce fait, tout comme Linux, on trouve LaTeX sous forme de *distributions*. Une distribution LaTeX, c'est un ensemble de ces fichiers que quelqu'un a rassembl\'e9s et organis\'e9s, de telle sorte qu'une fois install\'e9s, LaTeX soit fonctionnel.\
 Sur MacOS X, les deux distributions les plus connues sont celles de TexLive et MacTeX, la deuxi\'e8me incluant la premi\'e8re.\
 - TexLive\
-TexLive ({\field{\*\fldinst{HYPERLINK "http://www.tug.org/texlive"}}{\fldrslt http://www.tug.org/texlive}}) est une distribution multi-plateforme de LaTeX.\
+TexLive ({\field{\*\fldinst{HYPERLINK "https://www.tug.org/texlive"}}{\fldrslt https://www.tug.org/texlive}}) est une distribution multi-plateforme de LaTeX.\
 - MacTeX\
-MacTeX ({\field{\*\fldinst{HYPERLINK "http://www.tug.org/mactex"}}{\fldrslt http://www.tug.org/mactex}}) est une distribution de TeXLive incluant des logiciels sp\'e9cifiques \'e0 MacOS X. Il est distribu\'e9 sous forme d'un fichier dmg t\'e9l\'e9charg\'e9 sur le site (fichier pesant tout de m\'eame plusieurs centaines de mega-octets)\
+MacTeX ({\field{\*\fldinst{HYPERLINK "https://www.tug.org/mactex"}}{\fldrslt https://www.tug.org/mactex}}) est une distribution de TeXLive incluant des logiciels sp\'e9cifiques \'e0 MacOS X. Il est distribu\'e9 sous forme d'un fichier dmg t\'e9l\'e9charg\'e9 sur le site (fichier pesant tout de m\'eame plusieurs centaines de mega-octets)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qj\partightenfactor0
 \cf0 \
 Une fois accomplie l'une de ces installations, LaTeX est install\'e9 sur votre ordinateur. Si vous n'\'e9tiez pas pr\'e9venu, vous ne le sauriez m\'eame pas. En fait, LaTeX n'a pas d'interface graphique, les programmes sont orient\'e9s "Unix", et ne peuvent \'eatre appel\'e9s que sur la ligne de commande (avec /Application/Utilitaires/Terminal).\
@@ -450,6 +450,15 @@ Ne vous inqui\'e9tez cependant pas : il y a des interfaces graphiques pour utili
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
 
 \fs22 \cf0 \ulnone \
+v 2.16.0 (25/01/2021)\
+-Support de l'architecture Apple Silicon\'a0;\
+-remplacement d'API obsol\'e8tes\'a0;\
+-ajout de l"App extension" LaTeXiT\'a0;\
+\pard\tx395\pardeftab395\pardirnatural\partightenfactor0
+\cf0 -correction d'un cas d'erreur qui pouvait emp\'eacher la biblioth\'e8que d'\'eatre sauvegard\'e9e\'a0;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qj\partightenfactor0
+\cf0 -l\'e9g\'e8re am\'e9lioration de la gestion de la baseline dans le Service LaTeXiT.\
+\
 v 2.15.0 (27/09/2020)\
 -Remplacement d'API obsol\'e8tes\'a0;\
 \pard\tx321\pardeftab321\pardirnatural\partightenfactor0

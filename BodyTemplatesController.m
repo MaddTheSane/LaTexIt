@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 05/08/08.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "BodyTemplatesController.h"
@@ -77,26 +77,23 @@ static NSDictionary* noneBodyTemplate = nil;
 
 +(NSMutableDictionary*) bodyTemplateDictionaryEncodedForEnvironment:(NSString*)environment
 {
+  NSAttributedString* beginString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\begin{%@}", environment]];
+  NSAttributedString* endString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\begin{%@}", environment]];
+  NSData* beginData =
+    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:beginString requiringSecureCoding:YES error:nil] :
+    [NSKeyedArchiver archivedDataWithRootObject:beginString];
+  NSData* endData =
+    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:endString requiringSecureCoding:YES error:nil] :
+    [NSKeyedArchiver archivedDataWithRootObject:endString];
+  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+           [NSMutableString stringWithString:environment], @"name",
+           beginData, @"head",
+           endData, @"tail",
+           nil];
   #ifdef ARC_ENABLED
-  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-           [NSMutableString stringWithString:environment], @"name",
-           [NSKeyedArchiver archivedDataWithRootObject:
-             [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\begin{%@}", environment]]],
-           @"head",
-           [NSKeyedArchiver archivedDataWithRootObject:
-             [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\end{%@}", environment]]],
-           @"tail",
-           nil];
   #else
-  NSMutableDictionary* result = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-           [NSMutableString stringWithString:environment], @"name",
-           [NSKeyedArchiver archivedDataWithRootObject:
-             [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\begin{%@}", environment]] autorelease]],
-           @"head",
-           [NSKeyedArchiver archivedDataWithRootObject:
-             [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\\end{%@}", environment]] autorelease]],
-           @"tail",
-           nil];
+  [beginString release];
+  [endString release];
   #endif
   return result;
 }

@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -620,14 +620,26 @@
   else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LibraryItemsArchivedPboardType]])
   {
     [LatexitEquation pushManagedObjectContext:[self->libraryController managedObjectContext]];
-    NSArray* unarchivedLibraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:[pasteboard dataForType:LibraryItemsArchivedPboardType]];
+    NSData* pboardData = [pasteboard dataForType:LibraryItemsArchivedPboardType];
+    NSError* decodingError = nil;
+    NSArray* unarchivedLibraryItems = !pboardData ? nil :
+      isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[LibraryItem allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:pboardData] dynamicCastToClass:[NSArray class]];
+    if (decodingError != nil)
+      DebugLog(0, @"decoding error : %@", decodingError);
     libraryItems = [NSMutableArray arrayWithArray:
       [LibraryItem minimumNodeCoverFromItemsInArray:unarchivedLibraryItems parentSelector:@selector(parent)]];
     [LatexitEquation popManagedObjectContext];
   }
   else if ([pasteboard availableTypeFromArray:[NSArray arrayWithObject:LatexitEquationsPboardType]])
   {
-    NSArray* latexitEquations = [NSKeyedUnarchiver unarchiveObjectWithData:[pasteboard dataForType:LatexitEquationsPboardType]];
+    NSData* pboardData = [pasteboard dataForType:LatexitEquationsPboardType];
+    NSError* decodingError = nil;
+    NSArray* latexitEquations = !pboardData ? nil :
+      isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[LatexitEquation allowedSecureDecodedClasses] fromData:pboardData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+      [[NSKeyedUnarchiver unarchiveObjectWithData:pboardData] dynamicCastToClass:[NSArray class]];
+    if (decodingError != nil)
+      DebugLog(0, @"decoding error : %@", decodingError);
     libraryItems = [NSMutableArray arrayWithCapacity:[latexitEquations count]];
     NSEnumerator* enumerator = [latexitEquations objectEnumerator];
     LatexitEquation* latexitEquation = nil;

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 16/03/09.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -13,7 +13,7 @@
 @class LatexitEquation;
 @class LibraryGroupItem;
 
-@interface LibraryEquation : LibraryItem <NSCopying, NSCoding>
+@interface LibraryEquation : LibraryItem <NSCopying, NSCoding, NSSecureCoding>
 {
   BOOL customKVOEnabled;
   BOOL customKVOInhibited;

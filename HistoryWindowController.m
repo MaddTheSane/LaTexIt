@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryWindowController.h"
@@ -446,8 +446,8 @@
   CGFloat rightMargin = [preferencesController marginsAdditionalRight];
   NSArray* additionalFilesPaths = [preferencesController additionalFilesPaths];
   NSString* workingDirectory = [[NSWorkspace sharedWorkspace] temporaryDirectory];
-  NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-library"];
-  NSDictionary* fullEnvironment  = [[LaTeXProcessor sharedLaTeXProcessor] fullEnvironment];
+  NSString* uniqueIdentifier = [NSString stringWithFormat:@"latexit-history"];
+  NSDictionary* fullEnvironment  = [latexProcessor fullEnvironment];
   NSString* fullLog = nil;
   NSArray* errors = nil;
   self->relatexizeCurrentIndex = 0;

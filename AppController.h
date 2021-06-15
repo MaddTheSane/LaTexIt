@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -12,7 +12,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+#if !defined(CH_APP_EXTENSION) && !defined(CH_APP_XPC_SERVICE)
 #import <LinkBack/LinkBack.h>
+#endif
 
 #import "LaTeXiTSharedTypes.h"
 

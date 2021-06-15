@@ -1093,5 +1093,29 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				sparkle:dsaSignature="MCwCFH5sxASWBniLg9ErtIKk0HcIby6nAhQ749REdS80UHNQDX6fr01rqtFohg=="
 			/>
     </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.16.0</guid>
+      <title>Version 2.16.0</title>
+      <description><![CDATA[
+        <ul>
+          <li>Support de l'architecture Apple Silicon&nbsp;;</li>
+          <li>remplacement d'API obsolètes&nbsp;;</li>
+          <li>ajout de l'&quot;App extension&quot; LaTeXiT&nbsp;;</li>
+          <li>correction d'un cas d'erreur qui pouvait empêcher la bibliothèque d'être sauvegardée&nbsp;;</li>
+          <li>légère amélioration de la gestion de la baseline dans le Service LaTeXiT.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.16.0</sparkle:releaseNotesLink>
+			<pubDate>Mon, 25 Jan 2021 19:31:29 +0100</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_16_0.dmg"
+				sparkle:version="2.16.0"
+                   sparkle:shortVersionString="2.16.0"
+				type="application/octet-stream"
+				length="12324310"
+				sparkle:dsaSignature="MCwCFBEBorPS4Q7VSbkCkZjwZTvyW0dfAhQtBp4R/Ak0sRGHvWQ/cbS5ypB4DA=="
+			/>
+    </item>
   </channel>
 </rss>

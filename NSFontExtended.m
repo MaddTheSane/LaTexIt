@@ -3,24 +3,35 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 04/07/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //This file is an extension of the NSFont class
 
 #import "NSFontExtended.h"
 
+#import "NSObjectExtended.h"
+#import "Utils.h"
+
 @implementation NSFont (Extended)
 
 +(NSFont*) fontWithData:(NSData*)data
 {
-  NSFont* result = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+  NSFont* result = nil;
+  NSError* decodingError = nil;
+  result = !data ? nil :
+    isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSFont class] fromData:data error:&decodingError] :
+    [[NSKeyedUnarchiver unarchiveObjectWithData:data] dynamicCastToClass:[NSFont class]];
+  if (decodingError != nil)
+    DebugLog(0, @"decoding error : %@", decodingError);
   return result;
 }
 //end fontWithData:
 
 -(NSData*) data
 {
-  NSData* result = [NSKeyedArchiver archivedDataWithRootObject:self];
+  NSData* result =
+    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:YES error:nil] :
+    [NSKeyedArchiver archivedDataWithRootObject:self];
   return result;
 }
 //end data

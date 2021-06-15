@@ -3,15 +3,15 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/05/07.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "SystemTask.h"
 
 #import "NSFileManagerExtended.h"
 #import "NSStringExtended.h"
+#import "NSWorkspaceExtended.h"
 
-#import "RegexKitLite.h"
 #import "Utils.h"
 
 #include <unistd.h>
@@ -214,7 +214,7 @@
     }
   }//end if (environment && [environment count])
   if (self->currentDirectoryPath)
-    [scriptContent appendFormat:@"cd %@\n", currentDirectoryPath];
+    [scriptContent appendFormat:@"cd \"%@\"\n", currentDirectoryPath];
   if (self->launchPath)
   {
     [scriptContent appendFormat:@"%@", launchPath];
@@ -241,7 +241,7 @@
     NSString* option = ![currentShell isEqualToString:@"/bin/bash"] ? @"" :
                        self->isUsingLoginShell ? @"" : @"-l";
     int       intTimeOutLimit = (int)self->timeOutLimit;
-    NSString* userScriptCall = [NSString stringWithFormat:@"%@ %@ %@", currentShell, option, tmpScriptFilePath];
+    NSString* userScriptCall = [NSString stringWithFormat:@"%@ %@ \"%@\"", currentShell, option, tmpScriptFilePath];
     [self->runningLock lock];
     NSString* timeLimitedScript = !intTimeOutLimit ?
       [NSString stringWithFormat:@"#!/bin/bash\n%@", userScriptCall] :
@@ -259,7 +259,7 @@
     [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-timelimited.XXXXXXXX" extension:@"script"
                                                   outFilePath:&timeLimitedScriptPath workingDirectory:self->workingDirectory];
     [timeLimitedScript writeToFile:timeLimitedScriptPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    NSString* systemCall = [NSString stringWithFormat:@"/bin/sh %@", timeLimitedScriptPath];
+    NSString* systemCall = [NSString stringWithFormat:@"/bin/sh \"%@\"", timeLimitedScriptPath];
     self->terminationStatus = system([systemCall UTF8String]);
     /*pid_t pid = fork();
     if (!pid)

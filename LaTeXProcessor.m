@@ -3,12 +3,17 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXProcessor.h"
 
+#if defined(CH_APP_EXTENSION)
+#elif defined(CH_APP_XPC_SERVICE)
+#else
 #import "AppController.h"
+#endif
+
 #import "Compressor.h"
 #import "LatexitEquation.h"
 #import "NSArrayExtended.h"
@@ -26,8 +31,6 @@
 #import "SystemTask.h"
 #import "TeXItemWrapper.h"
 #import "Utils.h"
-
-#import "RegexKitLite.h"
 
 #import <Quartz/Quartz.h>
 #import <libxml/parser.h>
@@ -51,7 +54,7 @@ static NSString* mathMLFix(NSString* value)
   if (value)
   {
     NSError* error = nil;
-    NSArray* components = [value captureComponentsMatchedByRegex:@".*<math[^>]*xmlns=\"(.*?)\"" options:RKLDotAll|RKLCaseless range:[value range] error:&error];
+    NSArray* components = [value captureComponentsMatchedByRegex:@".*<math[^>]*xmlns=\"(.*?)\"" options:RKLDotAll|RKLCaseless range:value.range error:&error];
     NSString* mmlXmlns = ([components count] < 2) ? nil : [[components objectAtIndex:1] dynamicCastToClass:[NSString class]];
     if (error)
       DebugLogStatic(1, @"error = %@", error);
@@ -90,10 +93,10 @@ static NSString* mathMLFix(NSString* value)
       #else
       NSMutableString* modified = [[[NSMutableString alloc] initWithBytes:mem length:size encoding:NSUTF8StringEncoding] autorelease];
       #endif
-      [modified replaceOccurrencesOfRegex:@"<latexitDummyTableRow.*?>" withString:@"<mtr><mtd>" options:RKLDotAll|RKLMultiline|RKLCaseless range:[modified range] error:&error];
+      [modified replaceOccurrencesOfRegex:@"<latexitDummyTableRow.*?>" withString:@"<mtr><mtd>" options:RKLDotAll|RKLMultiline|RKLCaseless range:modified.range error:&error];
       if (error)
         DebugLogStatic(1, @"error = %@", error);
-      [modified replaceOccurrencesOfRegex:@"</latexitDummyTableRow.*?>" withString:@"</mtd></mtr>" options:RKLDotAll|RKLMultiline|RKLCaseless range:[modified range] error:&error];
+      [modified replaceOccurrencesOfRegex:@"</latexitDummyTableRow.*?>" withString:@"</mtd></mtr>" options:RKLDotAll|RKLMultiline|RKLCaseless range:modified.range error:&error];
       if (error)
         DebugLogStatic(1, @"error = %@", error);
       #ifdef ARC_ENABLED
@@ -303,21 +306,26 @@ static LaTeXProcessor* sharedInstance = nil;
     @try{
       pdfDocument = [[PDFDocument alloc] initWithData:data2];
       PDFPage* pdfPage = [pdfDocument pageAtIndex:0];
-      pdfAnnotation = !pdfPage ? nil : [[PDFAnnotationText alloc] initWithBounds:NSZeroRect];
+      pdfAnnotation = !pdfPage ? nil :
+        isMacOS10_13OrAbove() ? [[PDFAnnotationText alloc] initWithBounds:NSZeroRect forType:PDFAnnotationSubtypeText withProperties:nil] :
+        [[PDFAnnotationText alloc] initWithBounds:NSZeroRect];
       [pdfAnnotation setShouldDisplay:NO];
       [pdfAnnotation setShouldPrint:NO];
-      NSData* embeddedData = !pdfAnnotation ? nil :
-        [NSKeyedArchiver archivedDataWithRootObject:
-          [NSDictionary dictionaryWithObjectsAndKeys:
-            preamble, @"preamble",
-            source, @"source",
-            [(!color ? [NSColor blackColor] : color) colorAsData], @"color",
-            @(mode), @"mode",
-            @(magnification), @"magnification",
-            @(baseline), @"baseline",
-            [(!backgroundColor ? [NSColor whiteColor] : backgroundColor) colorAsData], @"backgroundColor",            
-            title, @"title",
-            nil]];
+      NSDictionary* rootObject =
+        [NSDictionary dictionaryWithObjectsAndKeys:
+          preamble, @"preamble",
+          source, @"source",
+          [(!color ? [NSColor blackColor] : color) colorAsData], @"color",
+          @(mode), @"mode",
+          @(magnification), @"magnification",
+          @(baseline), @"baseline",
+          [(!backgroundColor ? [NSColor whiteColor] : backgroundColor) colorAsData], @"backgroundColor",
+          title, @"title",
+          nil];
+      NSData* embeddedData =
+        !pdfAnnotation ? nil :
+        isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:rootObject requiringSecureCoding:YES error:nil] :
+        [NSKeyedArchiver archivedDataWithRootObject:rootObject];
       NSString* embeddedDataBase64 = [embeddedData encodeBase64];
       [pdfAnnotation performSelector:@selector(setUserName:) withObject:@"fr.chachatelier.pierre.LaTeXiT"];
       [pdfAnnotation setContents:embeddedDataBase64];
@@ -342,26 +350,18 @@ static LaTeXProcessor* sharedInstance = nil;
   if (data2)
   {
     NSMutableString* replacedPreamble = [NSMutableString stringWithString:preamble];
-    [replacedPreamble replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedPreamble length])];
-    [replacedPreamble replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:NSMakeRange(0, [replacedPreamble length])];
-    [replacedPreamble replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedPreamble length])];
-    [replacedPreamble replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedPreamble length])];
-
-    CFStringRef cfEscapedPreamble =
-      CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)preamble, NULL, NULL, kCFStringEncodingUTF8);
-    NSMutableString* escapedPreamble = [NSMutableString stringWithString:(CHBRIDGE NSString*)cfEscapedPreamble];
-    CFRelease(cfEscapedPreamble);
+    [replacedPreamble replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:replacedPreamble.range];
+    [replacedPreamble replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:replacedPreamble.range];
+    [replacedPreamble replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:replacedPreamble.range];
+    [replacedPreamble replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:replacedPreamble.range];
+    NSString* escapedPreamble = [preamble stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
 
     NSMutableString* replacedSource = [NSMutableString stringWithString:source];
-    [replacedSource replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:NSMakeRange(0, [replacedSource length])];
-    [replacedSource replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:NSMakeRange(0, [replacedSource length])];
-    [replacedSource replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:NSMakeRange(0, [replacedSource length])];
-    [replacedSource replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:NSMakeRange(0, [replacedSource length])];
-
-    CFStringRef cfEscapedSource =
-      CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)source, NULL, NULL, kCFStringEncodingUTF8);
-    NSMutableString* escapedSource = [NSMutableString stringWithString:(CHBRIDGE NSString*)cfEscapedSource];
-    CFRelease(cfEscapedSource);
+    [replacedSource replaceOccurrencesOfString:@"\\" withString:@"ESslash"      options:0 range:replacedSource.range];
+    [replacedSource replaceOccurrencesOfString:@"{"  withString:@"ESleftbrack"  options:0 range:replacedSource.range];
+    [replacedSource replaceOccurrencesOfString:@"}"  withString:@"ESrightbrack" options:0 range:replacedSource.range];
+    [replacedSource replaceOccurrencesOfString:@"$"  withString:@"ESdollar"     options:0 range:replacedSource.range];
+    NSString* escapedSource = [source stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
 
     NSString* type = [@(mode) stringValue];
     
@@ -475,7 +475,7 @@ static LaTeXProcessor* sharedInstance = nil;
     #else
     NSString* xrefString = [[[NSString alloc] initWithData:xrefData encoding:NSASCIIStringEncoding] autorelease];
     #endif
-    NSString* afterObjCountString = [xrefString stringByMatching:@"xref\\s*[0-9]+\\s+[0-9]+\\s+(.*)" options:RKLDotAll inRange:NSMakeRange(0, [xrefString length]) capture:1 error:0];
+    NSString* afterObjCountString = [xrefString stringByMatching:@"xref\\s*[0-9]+\\s+[0-9]+\\s+(.*)" options:RKLDotAll inRange:xrefString.range capture:1 error:0];
 
     NSData* trailerData = (r2.location == NSNotFound) ? nil : [data2 subdataWithRange:r2];
     #ifdef ARC_ENABLED
@@ -483,14 +483,14 @@ static LaTeXProcessor* sharedInstance = nil;
     #else
     NSString* trailerString = [[[NSString alloc] initWithData:trailerData encoding:NSASCIIStringEncoding] autorelease];
     #endif
-    NSString* trailerAfterSize = [trailerString stringByMatching:@"trailer\\s+<<\\s+/Size\\s+[0-9]+(.*)" options:RKLDotAll inRange:NSMakeRange(0, [trailerString length]) capture:1 error:0];
+    NSString* trailerAfterSize = [trailerString stringByMatching:@"trailer\\s+<<\\s+/Size\\s+[0-9]+(.*)" options:RKLDotAll inRange:trailerString.range capture:1 error:0];
     
     NSUInteger nbObjects = 0;
     if ((r1.location != NSNotFound) && (r2.location != NSNotFound))
     {
       const unsigned char* bytes = (const unsigned char*)[data2 bytes];
       NSString* s = [[NSString alloc] initWithBytesNoCopy:(unsigned char*)bytes+r1.location length:r2.location-r1.location encoding:NSUTF8StringEncoding freeWhenDone:NO];
-      NSArray* components = [s componentsMatchedByRegex:@"^[0-9]+\\s+[0-9]+\\s[^0-9]+$" options:RKLMultiline range:NSMakeRange(0, [s length]) capture:0 error:0];
+      NSArray* components = [s componentsMatchedByRegex:@"^[0-9]+\\s+[0-9]+\\s[^0-9]+$" options:RKLMultiline range:s.range capture:0 error:nil];
       nbObjects = [components count];
       #ifdef ARC_ENABLED
       #else
@@ -526,7 +526,7 @@ static LaTeXProcessor* sharedInstance = nil;
     #else
     NSString* startxrefString = [[[NSString alloc] initWithData:startxrefData encoding:NSASCIIStringEncoding] autorelease];
     #endif
-    NSString* byteCountString = [startxrefString stringByMatching:@"[^0-9]*([0-9]*).*" options:RKLDotAll inRange:NSMakeRange(0, [startxrefString length]) capture:1 error:0];
+    NSString* byteCountString = [startxrefString stringByMatching:@"[^0-9]*([0-9]*).*" options:RKLDotAll inRange:startxrefString.range capture:1 error:0];
     #ifdef ARC_ENABLED
     NSNumberFormatter* numberFormatter = [[NSNumberFormatter alloc] init];
     #else
@@ -731,7 +731,7 @@ static LaTeXProcessor* sharedInstance = nil;
   NSMutableString* preamble = [NSMutableString stringWithString:thePreamble];
   
   NSString* token = @"%__TEXTCOLOR__";
-  [preamble replaceOccurrencesOfString:token withString:colorString options:0 range:NSMakeRange(0, [preamble length])];
+  [preamble replaceOccurrencesOfString:token withString:colorString options:0 range:preamble.range];
   
   NSRange colorRange = [preamble rangeOfString:@"{color}"];
   BOOL xcolor = NO;
@@ -1024,7 +1024,7 @@ static LaTeXProcessor* sharedInstance = nil;
   
   NSString* ptSizeString =
     [colouredPreamble stringByMatching:@"(^|\n)[^%\n]*\\\\documentclass\\[(.*)pt\\].*" options:RKLMultiline|RKLDotAll
-                               inRange:NSMakeRange(0, [colouredPreamble length]) capture:2 error:nil];
+                               inRange:colouredPreamble.range capture:2 error:nil];
   if (ptSizeString && [ptSizeString length])
   {
     CGFloat floatValue = [ptSizeString floatValue];
@@ -2058,7 +2058,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [icon lockFocus];
       [backgroundColor set];
       NSRectFill(NSMakeRect(0, 0, 128, 128));
-      [image drawInRect:dstRect fromRect:srcRect operation:NSCompositeSourceOver fraction:1];
+      [image drawInRect:dstRect fromRect:srcRect operation:NSCompositingOperationSourceOver fraction:1];
       if (imageSize.width > maxAspectRatio*imageSize.height) //if the equation is truncated, adds <...>
       {
         NSRectFill(NSMakeRect(100, 0, 28, 128));
@@ -2098,7 +2098,7 @@ static LaTeXProcessor* sharedInstance = nil;
   [alert setInformativeText:!informativeText1 ? @"" : informativeText1];
   [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
   [alert addButtonWithTitle:NSLocalizedString(@"Display the error message", @"")];
-  [alert setAlertStyle:NSCriticalAlertStyle];
+  [alert setAlertStyle:NSAlertStyleCritical];
   NSInteger displayError = [alert runModal];
   if (displayError == NSAlertSecondButtonReturn)
   {
@@ -2112,7 +2112,7 @@ static LaTeXProcessor* sharedInstance = nil;
     [alert2 setMessageText:NSLocalizedString(@"Error message", @"")];
     [alert2 setInformativeText:!informativeText2 ? @"" : informativeText2];
     [alert2 addButtonWithTitle:NSLocalizedString(@"OK", @"")];
-    [alert2 setAlertStyle:NSInformationalAlertStyle];
+    [alert2 setAlertStyle:NSAlertStyleInformational];
     [alert2 runModal];
   }//end if (displayError == NSAlertSecondButtonReturn)
 }
@@ -2499,10 +2499,11 @@ static LaTeXProcessor* sharedInstance = nil;
 
           if ([gsTask terminationStatus] != 0)
           {
-            NSRunAlertPanel(NSLocalizedString(@"Error", @""),
-                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@", @""),
-                                                       errorString],
-                            @"OK", nil, nil);
+            NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+            alert.messageText = [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@", @""),
+                                                       errorString];
+            [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
+            [alert runModal];
           }
           #ifdef ARC_ENABLED
           #else
@@ -2523,6 +2524,7 @@ static LaTeXProcessor* sharedInstance = nil;
         [image release];
         #endif
         NSData* annotationData =
+          isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0] requiringSecureCoding:YES error:nil] :
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
         data = [self annotateData:data ofUTI:(NSString*)kUTTypeTIFF withData:annotationDataCompressed];
@@ -2533,12 +2535,13 @@ static LaTeXProcessor* sharedInstance = nil;
         NSImage* image = [[NSImage alloc] initWithData:pdfData];
         data = [image TIFFRepresentationDpiAwareUsingCompression:NSTIFFCompressionLZW factor:15.0];
         NSBitmapImageRep* imageRep = [NSBitmapImageRep imageRepWithData:data];
-        data = [imageRep representationUsingType:NSPNGFileType properties:@{}];
+        data = [imageRep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
         #ifdef ARC_ENABLED
         #else
         [image release];
         #endif
         NSData* annotationData =
+          isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0] requiringSecureCoding:YES error:nil] :
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
         data = [self annotateData:data ofUTI:(NSString*)kUTTypePNG withData:annotationDataCompressed];
@@ -2590,6 +2593,7 @@ static LaTeXProcessor* sharedInstance = nil;
 
         data = mutableData;
         NSData* annotationData =
+          isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0] requiringSecureCoding:YES error:nil] :
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
         data = [self annotateData:data ofUTI:(NSString*)kUTTypeJPEG withData:annotationDataCompressed];
@@ -2625,10 +2629,11 @@ static LaTeXProcessor* sharedInstance = nil;
 
           if ([svgTask terminationStatus] != 0)
           {
-            NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                            [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@", @""),
-                                                       errorString],
-                            @"OK", nil, nil);
+            NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+            alert.messageText = [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@", @""),
+                                                       errorString];
+            [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
+            [alert runModal];
           }//end if ([svgTask terminationStatus] != 0)
           #ifdef ARC_ENABLED          
           #else
@@ -2637,6 +2642,7 @@ static LaTeXProcessor* sharedInstance = nil;
         }
         data = [NSData dataWithContentsOfFile:tmpSvgFilePath options:NSUncachedRead error:nil];
         NSData* annotationData =
+          isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0] requiringSecureCoding:YES error:nil] :
           [NSKeyedArchiver archivedDataWithRootObject:[LatexitEquation metaDataFromPDFData:pdfData useDefaults:YES outPdfData:0]];
         NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
         data = [self annotateData:data ofUTI:GetMySVGPboardType() withData:annotationDataCompressed];
@@ -2725,7 +2731,9 @@ static LaTeXProcessor* sharedInstance = nil;
           #endif
           NSString* fixedResult = !rawResult ? nil : mathMLFix(rawResult);
           data = !fixedResult ? data : [fixedResult dataUsingEncoding:NSUTF8StringEncoding];
-          NSData* annotationData = [NSKeyedArchiver archivedDataWithRootObject:metaData];
+          NSData* annotationData =
+            isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:metaData requiringSecureCoding:YES error:nil] :
+            [NSKeyedArchiver archivedDataWithRootObject:metaData];
           NSData* annotationDataCompressed = [Compressor zipcompress:annotationData level:Z_BEST_COMPRESSION];
           data = [self annotateData:data ofUTI:(NSString*)kUTTypeHTML withData:annotationDataCompressed];
           [[NSFileManager defaultManager] removeItemAtPath:outputFile error:0];
@@ -2852,7 +2860,7 @@ static LaTeXProcessor* sharedInstance = nil;
       [outputString
          replaceOccurrencesOfRegex:@"<svg(.*?)>(.*)</svg>"
          withString:[NSString stringWithFormat:@"<svg$1><!--latexit:%@-->$2</svg>", annotationDataBase64]
-         options:RKLCaseless|RKLDotAll|RKLMultiline range:NSMakeRange(0, [outputString length]) error:&error];
+         options:RKLCaseless|RKLDotAll|RKLMultiline range:outputString.range error:&error];
       if (error)
         DebugLog(0, @"error : %@", error);
       result = !outputString ? nil : [outputString dataUsingEncoding:NSUTF8StringEncoding];
@@ -2870,7 +2878,7 @@ static LaTeXProcessor* sharedInstance = nil;
       NSError* error = nil;
       [outputString replaceOccurrencesOfRegex:@"<blockquote(.*?)>(.*?)</blockquote>"
          withString:[NSString stringWithFormat:@"<blockquote$1><!--latexit:%@-->$2</blockquote>", annotationDataBase64]
-            options:RKLCaseless|RKLDotAll|RKLMultiline range:NSMakeRange(0, [outputString length]) error:&error];
+            options:RKLCaseless|RKLDotAll|RKLMultiline range:outputString.range error:&error];
       if (error)
         DebugLog(0, @"error : %@", error);
       result = !outputString ? nil : [outputString dataUsingEncoding:NSUTF8StringEncoding];

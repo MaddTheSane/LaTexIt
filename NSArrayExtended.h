@@ -1,7 +1,7 @@
 //  NSArrayExtended.h
 //  LaTeXiT
 //  Created by Pierre Chatelier on 4/05/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 // This file is an extension of the NSArray class
 

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 16/03/09.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryEquation.h"
@@ -54,6 +54,8 @@ static NSEntityDescription* cachedWrapperEntity = nil;
   return cachedWrapperEntity;
 }
 //end wrapperEntity
+
++(BOOL) supportsSecureCoding {return YES;}
 
 -(id) initWithParent:(LibraryItem*)aParent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext
 {

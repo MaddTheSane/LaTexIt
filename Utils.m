@@ -3,14 +3,14 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 15/03/06.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "Utils.h"
 
 #import "NSObjectExtended.h"
+#import "NSStringExtended.h"
 
-#import "RegexKitLite.h"
 int DebugLogLevel = 0;
 
 #include <AvailabilityMacros.h>
@@ -20,83 +20,6 @@ int DebugLogLevel = 0;
 NSString* NSAppearanceDidChangeNotification = @"NSAppearanceDidChangeNotification";
 
 static NSString* MyWebURLsWithTitlesPboardType = nil;
-
-BOOL isMacOS10_5OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_4);
-  return result;
-}
-//end isMacOS10_5OrAbove()
-
-BOOL isMacOS10_6OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_5);
-  return result;
-}
-//end isMacOS10_6OrAbove()
-
-BOOL isMacOS10_7OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6);
-  return result;
-}
-//end isMacOS10_7OrAbove()
-
-BOOL isMacOS10_8OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_7);
-  return result;
-}
-//end isMacOS10_8OrAbove()
-
-BOOL isMacOS10_9OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_8);
-  return result;
-}
-//end isMacOS10_9OrAbove()
-
-BOOL isMacOS10_10OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_9);
-  return result;
-}
-//end isMacOS10_10OrAbove()
-
-BOOL isMacOS10_11OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_10);
-  return result;
-}
-//end isMacOS10_11OrAbove()
-
-BOOL isMacOS10_12OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_11);
-  return result;
-}
-//end isMacOS10_12OrAbove()
-
-BOOL isMacOS10_13OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_12);
-  return result;
-}
-//end isMacOS10_13OrAbove()
-
-BOOL isMacOS10_14OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_13);
-  return result;
-}
-//end isMacOS10_14OrAbove()
-
-BOOL isMacOS10_15OrAbove(void)
-{
-  BOOL result = (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_14);
-  return result;
-}
-//end isMacOS10_15OrAbove()
 
 NSString* GetMySVGPboardType(void)
 {
@@ -158,6 +81,9 @@ NSString* getUTIForExportFormat(export_format_t exportFormat)
     case EXPORT_FORMAT_TEXT:
       result = (NSString*)kUTTypeText;
       break;
+    case EXPORT_FORMAT_RTFD:
+      result = (NSString*)kUTTypeRTFD;
+      break;
   }//end switch(exportFormat)
   return result;
 }
@@ -193,6 +119,9 @@ NSString* getFileExtensionForExportFormat(export_format_t exportFormat)
     case EXPORT_FORMAT_TEXT:
       result = @"tex";
       break;
+    case EXPORT_FORMAT_RTFD:
+      result = @"rtfd";
+      break;
   }//end switch(exportFormat)
   return result;
 }
@@ -205,10 +134,10 @@ NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* pDi
   BOOL didChange = NO;
 
   NSString* radical =
-    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:NSMakeRange(0, [string length])
+    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:string.range
                      capture:1 error:nil];
   NSString* identifierString =
-    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:NSMakeRange(0, [string length])
+    [string stringByMatching:@"(.*) \\(([[:digit:]]+)\\)" options:RKLNoOptions inRange:string.range
                      capture:2 error:nil];
   if (!radical || ![radical length])
     radical = string;

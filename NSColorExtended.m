@@ -2,18 +2,27 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/05/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //This file is an extension of the NSColor class
 
 #import "NSColorExtended.h"
+
+#import "NSObjectExtended.h"
+#import "Utils.h"
 
 @implementation NSColor (Extended)
 
 //creates a color from data
 +(NSColor*) colorWithData:(NSData*)data
 {
-  NSColor* result = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+  NSColor* result = nil;
+  NSError* decodingError = nil;
+  result = !data ? nil :
+    isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:data error:&decodingError] :
+    [[NSKeyedUnarchiver unarchiveObjectWithData:data] dynamicCastToClass:[NSColor class]];
+  if (decodingError != nil)
+    DebugLog(0, @"decoding error : %@", decodingError);
   return result;
 }
 //end colorWithData:
@@ -21,7 +30,9 @@
 //returns the color as data
 -(NSData*) colorAsData
 {
-  NSData* result = [NSKeyedArchiver archivedDataWithRootObject:self];
+  NSData* result =
+    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:YES error:nil] :
+    [NSKeyedArchiver archivedDataWithRootObject:self];
   return result;
 }
 //end colorAsData

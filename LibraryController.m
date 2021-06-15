@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 10/05/09.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryController.h"
@@ -28,8 +28,6 @@
 #import "PreferencesController.h"
 
 #import "Utils.h"
-
-#import "RegexKitLite.h"
 
 @interface LibraryController (PrivateAPI)
 -(NSFetchRequest*) rootFetchRequest;
@@ -372,9 +370,9 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
       NSString* source = [[latexitEquation sourceText] string];
       NSMutableString* replacedText = [NSMutableString stringWithString:!encapsulation ? @"" : encapsulation];
       if (title)
-        [replacedText replaceOccurrencesOfString:@"@" withString:title options:NSLiteralSearch range:NSMakeRange(0, [replacedText length])];
+        [replacedText replaceOccurrencesOfString:@"@" withString:title options:NSLiteralSearch range:replacedText.range];
       if (source)
-        [replacedText replaceOccurrencesOfString:@"#" withString:source options:NSLiteralSearch range:NSMakeRange(0, [replacedText length])];
+        [replacedText replaceOccurrencesOfString:@"#" withString:source options:NSLiteralSearch range:replacedText.range];
       [labels appendString:replacedText];
     }//end for each libraryEquationItem
     export_format_t exportFormat = [preferencesController exportFormatCurrentSession];
@@ -645,6 +643,9 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
       break;
     case EXPORT_FORMAT_TEXT:
       extension = @"tex";
+      break;
+    case EXPORT_FORMAT_RTFD:
+      extension = @"rtfd";
       break;
   }
   

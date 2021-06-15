@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2020 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -22,6 +22,7 @@
 #import "LibraryView.h"
 #import "LibraryWindowController.h"
 #import "NSArrayExtended.h"
+#import "NSAttributedStringExtended.h"
 #import "NSColorExtended.h"
 #import "NSFileManagerExtended.h"
 #import "NSIndexSetExtended.h"
@@ -32,7 +33,6 @@
 #import "NSUndoManagerDebug.h"
 #import "NSWorkspaceExtended.h"
 #import "PreferencesController.h"
-#import "RegexKitLite.h"
 #import "TeXItemWrapper.h"
 #import "Utils.h"
 
@@ -293,7 +293,12 @@ static LibraryManager* sharedManagerInstance = nil;
             NSManagedObjectContext* saveManagedObjectContext = [self managedObjectContextAtPath:path setVersion:YES];
             NSData* data = [NSKeyedArchiver archivedDataWithRootObject:rootLibraryItemsToSave];
             [LatexitEquation pushManagedObjectContext:saveManagedObjectContext];
-            NSArray* libraryItems = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            NSError* decodingError = nil;
+            NSArray* libraryItems = !data ? nil :
+              isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[LibraryItem allowedSecureDecodedClasses] fromData:data error:&decodingError] dynamicCastToClass:[NSArray class]] :
+              [[NSKeyedUnarchiver unarchiveObjectWithData:data] dynamicCastToClass:[NSArray class]];
+            if (decodingError != nil)
+              DebugLog(0, @"decoding error : %@", decodingError);
             [LatexitEquation popManagedObjectContext];
             NSError* error = nil;
             [saveManagedObjectContext save:&error];
@@ -461,7 +466,13 @@ static LibraryManager* sharedManagerInstance = nil;
           @try{
             [NSKeyedUnarchiver setClass:[LibraryEquation class] forClassName:@"LibraryFile"];
             [NSKeyedUnarchiver setClass:[LibraryGroupItem class] forClassName:@"LibraryFolder"];
-            libraryItemsAdded = [NSArray arrayWithObjects:[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData], nil];
+            NSError* decodingError = nil;
+            LibraryItem* decodedItem = !uncompressedData ? nil :
+              isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[LibraryItem allowedSecureDecodedClasses] fromData:uncompressedData error:&decodingError] dynamicCastToClass:[LibraryItem class]] :
+              [[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData] dynamicCastToClass:[LibraryItem class]];
+            if (decodingError != nil)
+              DebugLog(0, @"decoding error : %@", decodingError);
+            libraryItemsAdded = [NSArray arrayWithObjects:decodedItem, nil];
             [self->managedObjectContext processPendingChanges];
           }
           @catch(NSException* e){
@@ -517,7 +528,12 @@ static LibraryManager* sharedManagerInstance = nil;
         [fetchRequest release];
         NSData* libraryItemsToAddAsData = [NSKeyedArchiver archivedDataWithRootObject:libraryItemsToAdd];
         [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
-        NSArray* libraryItemsAdded = [NSKeyedUnarchiver unarchiveObjectWithData:libraryItemsToAddAsData];
+        NSError* decodingError = nil;
+        NSArray* libraryItemsAdded = !libraryItemsToAddAsData ? nil :
+          isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[LibraryItem allowedSecureDecodedClasses] fromData:libraryItemsToAddAsData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+          [[NSKeyedUnarchiver unarchiveObjectWithData:libraryItemsToAddAsData] dynamicCastToClass:[NSArray class]];
+        if (decodingError != nil)
+          DebugLog(0, @"decoding error : %@", decodingError);
         [LatexitEquation popManagedObjectContext];
         NSUInteger i = 0;
         NSUInteger count = [libraryItemsAdded count];
@@ -561,7 +577,12 @@ static LibraryManager* sharedManagerInstance = nil;
       [fetchRequest release];
       NSData* historyItemsToAddAsData = [NSKeyedArchiver archivedDataWithRootObject:historyItemsToAdd];
       [LatexitEquation pushManagedObjectContext:self->managedObjectContext];
-      NSArray* historyItemsAdded = [NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData];
+      NSError* decodingError = nil;
+      NSArray* historyItemsAdded = !historyItemsToAddAsData ? nil :
+        isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[HistoryItem allowedSecureDecodedClasses] fromData:historyItemsToAddAsData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+        [[NSKeyedUnarchiver unarchiveObjectWithData:historyItemsToAddAsData] dynamicCastToClass:[NSArray class]];
+      if (decodingError != nil)
+        DebugLog(0, @"decoding error : %@", decodingError);
       [LatexitEquation popManagedObjectContext];
       NSUInteger i = 0;
       NSUInteger count = [historyItemsAdded count];
@@ -1231,7 +1252,7 @@ static LibraryManager* sharedManagerInstance = nil;
     NSError* error = nil;
     NSStringEncoding encoding = NSUTF8StringEncoding;
     NSString* fileContent = [[NSString alloc] initWithContentsOfFile:filename usedEncoding:&encoding error:&error];
-    NSArray* components = [fileContent captureComponentsMatchedByRegex:@"^(.*?)\\s*\\\\begin\\{document\\}(.*)\\\\end\\{document\\}" options:RKLDotAll|RKLMultiline|RKLCaseless range:[fileContent range] error:&error];
+    NSArray* components = [fileContent captureComponentsMatchedByRegex:@"^(.*?)\\s*\\\\begin\\{document\\}(.*)\\\\end\\{document\\}" options:RKLDotAll|RKLMultiline|RKLCaseless range:fileContent.range error:&error];
     if (error)
       DebugLog(0, @"error = <%@>", error);
     NSString* preamble = ([components count]<2) ? nil : [[components objectAtIndex:1] dynamicCastToClass:[NSString class]];
@@ -1245,7 +1266,7 @@ static LibraryManager* sharedManagerInstance = nil;
       NSString* eqnarrayRegex = @"\\\\begin\\{eqnarray\\}(.+?)\\\\end\\{eqnarray\\}|\\\\begin\\{eqnarray\\*\\}(.+?)\\\\end\\{eqnarray\\*\\}";
       NSArray* equationsRegexes = [NSArray arrayWithObjects:displayRegex, inlineRegex, alignRegex, eqnarrayRegex, nil];
       NSString* equationsRegex = [equationsRegexes componentsJoinedByString:@"|"];
-      NSRange fullRange = [body range];
+      NSRange fullRange = body.range;
       NSRange searchRange = fullRange;
       NSRange matchRange = [body rangeOfRegex:equationsRegex options:RKLMultiline|RKLDotAll inRange:searchRange capture:0 error:&error];
       if (error)
@@ -1263,22 +1284,22 @@ static LibraryManager* sharedManagerInstance = nil;
       NSString* match = nil;
       while ((match = [enumerator nextObject]))
       {
-        NSArray* displayCapture = [match captureComponentsMatchedByRegex:displayRegex options:RKLMultiline|RKLDotAll range:[match range] error:&error];
+        NSArray* displayCapture = [match captureComponentsMatchedByRegex:displayRegex options:RKLMultiline|RKLDotAll range:match.range error:&error];
         if (error)
           DebugLog(0, @"error <%@>", error);
         NSString* displayMatch = ([displayCapture count]<=1) ? nil :
         [[displayCapture subarrayWithRange:NSMakeRange(1, [displayCapture count]-1)] firstObjectNotIdenticalTo:@""];
-        NSArray* inlineCapture = [match captureComponentsMatchedByRegex:inlineRegex options:RKLMultiline|RKLDotAll range:[match range] error:&error];
+        NSArray* inlineCapture = [match captureComponentsMatchedByRegex:inlineRegex options:RKLMultiline|RKLDotAll range:match.range error:&error];
         if (error)
           DebugLog(0, @"error <%@>", error);
         NSString* inlineMatch = ([inlineCapture count]<=1) ? nil :
         [[inlineCapture subarrayWithRange:NSMakeRange(1, [inlineCapture count]-1)] firstObjectNotIdenticalTo:@""];
-        NSArray* alignCapture = [match captureComponentsMatchedByRegex:alignRegex options:RKLMultiline|RKLDotAll range:[match range] error:&error];
+        NSArray* alignCapture = [match captureComponentsMatchedByRegex:alignRegex options:RKLMultiline|RKLDotAll range:match.range error:&error];
         if (error)
           DebugLog(0, @"error <%@>", error);
         NSString* alignMatch = ([alignCapture count]<=1) ? nil :
         [[alignCapture subarrayWithRange:NSMakeRange(1, [alignCapture count]-1)] firstObjectNotIdenticalTo:@""];
-        NSArray* eqnArrayCapture = [match captureComponentsMatchedByRegex:eqnarrayRegex options:RKLMultiline|RKLDotAll range:[match range] error:&error];
+        NSArray* eqnArrayCapture = [match captureComponentsMatchedByRegex:eqnarrayRegex options:RKLMultiline|RKLDotAll range:match.range error:&error];
         if (error)
           DebugLog(0, @"error <%@>", error);
         NSString* eqnArrayMatch = ([eqnArrayCapture count]<=1) ? nil :
