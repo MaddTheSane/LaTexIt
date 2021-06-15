@@ -1761,7 +1761,6 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
       }//end if (filenames && [filenames count])
     }//end if ((result == NSOKButton) && contextInfo)
   }];
-  [(NSDictionary*)contextInfo release];
 }
 //end didEndOpenPanel:returnCode:contextInfo:
 
