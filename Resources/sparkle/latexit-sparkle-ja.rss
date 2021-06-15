@@ -1137,5 +1137,26 @@
 				sparkle:dsaSignature="MC0CFG9+QeBZQiutYEI/NuCOF4FnP74PAhUAqqU43Btpk+sEKbaQzqHoZaKW9Qc="
 			/>
     </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.16.2</guid>
+      <title>Version 2.16.2</title>
+      <description><![CDATA[
+        <ul>
+          <li>Better &quot;auto&quot; mode;</li>
+          <li>fixed regressions related to deprecated APIs replacement.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.16.2</sparkle:releaseNotesLink>
+			<pubDate>Sun, 11 Apr 2021 10:35:59 +0200</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_16_2.dmg"
+				sparkle:version="2.16.2"
+                   sparkle:shortVersionString="2.16.2"
+				type="application/octet-stream"
+				length="11676233"
+				sparkle:dsaSignature="MC0CFA5H6BPVdUwtk3gO3EyOI6hE9qtOAhUAh4dTLmMftGNhBppBUfY6BV71QQk="
+			/>
+    </item>
   </channel>
 </rss>

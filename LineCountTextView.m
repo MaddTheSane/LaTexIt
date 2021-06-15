@@ -1193,15 +1193,15 @@ static NSArray* WellKnownLatexKeywords = nil;
       NSColor* rgbColor = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
       NSString* replacement = [NSString stringWithFormat:@"{\\\\color[rgb]{%f,%f,%f}$1}",
         [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]];
-      BOOL isMatching = ([input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLDotAll
+      BOOL isMatching = ![NSString isNilOrEmpty:[input stringByMatching:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" options:RKLDotAll
         //options:RKLMultiline
-        inRange:input.range capture:1 error:nil] != nil);
+        inRange:input.range capture:1 error:nil]];
       if (replacement)
         output = !isMatching ? nil :
           [input stringByReplacingOccurrencesOfRegex:@"^\\{\\\\color\\[rgb\\]\\{[^\\}]*\\}(.*)\\}$" withString:replacement
                options:RKLDotAll
                //options:RKLMultiline
-                 range:NSMakeRange(0, [input length]) error:nil];
+                 range:input.range error:nil];
       if (!output && selectedRange.length)
         output = [NSString stringWithFormat:@"{\\color[rgb]{%f,%f,%f}%@}",
                        [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent], input];

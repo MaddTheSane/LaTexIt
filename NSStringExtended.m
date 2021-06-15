@@ -276,7 +276,7 @@ NSRegularExpressionOptions convertRKLOptions(RKLRegexOptions options)
   NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern options:convertRKLOptions(options) error:nil];
   NSTextCheckingResult* match = [regex firstMatchInString:self options:0 range:range];
   NSRange matchRange = [match rangeAtIndex:capture];
-  result = (matchRange.location == NSNotFound) ? @"" : [self substringWithRange:matchRange];
+  result = (matchRange.location == NSNotFound) || !matchRange.length ? nil : [self substringWithRange:matchRange];
   return result;
 }
 //end stringByMatching:options:inRange:capture:
@@ -298,7 +298,7 @@ NSRegularExpressionOptions convertRKLOptions(RKLRegexOptions options)
   {
     NSTextCheckingResult* match = [[matches objectAtIndex:i] dynamicCastToClass:[NSTextCheckingResult class]];
     NSRange matchRange = [match rangeAtIndex:capture];
-    NSString* component = (matchRange.location == NSNotFound) ? @"" : [self substringWithRange:matchRange];
+    NSString* component = (matchRange.location == NSNotFound) || !matchRange.length ? @"" : [self substringWithRange:matchRange];
     if (component != nil)
       [result addObject:component];
   }//end for each match
@@ -315,7 +315,7 @@ NSRegularExpressionOptions convertRKLOptions(RKLRegexOptions options)
   for(NSUInteger i = 0, count = match.numberOfRanges ; i<count ; ++i)
   {
     NSRange matchRange = [match rangeAtIndex:i];
-    NSString* captureComponent = (matchRange.location == NSNotFound) ? @"" : [self substringWithRange:matchRange];
+    NSString* captureComponent = (matchRange.location == NSNotFound) || !matchRange.length ? @"" : [self substringWithRange:matchRange];
     if (captureComponent != nil)
       [result addObject:captureComponent];
   }//end for each match

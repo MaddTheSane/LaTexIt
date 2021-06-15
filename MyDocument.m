@@ -2388,7 +2388,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   RKLRegexOptions options = RKLDotAll | RKLMultiline;
   if ([body isMatchedByRegex:@"\\$\\$(.+)\\$\\$" options:options inRange:range error:nil] ||
       [body isMatchedByRegex:@"\\$(.+)\\$" options:options inRange:range error:nil] ||
-      [body isMatchedByRegex:@"\\[(.*)\\]" options:options inRange:range error:nil] ||
+      [body isMatchedByRegex:@"\\\\\\[(.*)\\\\\\]" options:options inRange:range error:nil] ||
       [body isMatchedByRegex:@"\\\\begin\\{(.+)\\}(.*)\\\\end\\{\\1\\}" options:options inRange:range error:nil])
     result = LATEX_MODE_TEXT;
   else if ([body isMatchedByRegex:@"&" options:options inRange:range error:nil] ||
