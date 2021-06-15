@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -175,7 +175,7 @@
         <window title="Einstellungen" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="preferences" animationBehavior="default" id="129" userLabel="Preferences" customClass="PreferencesWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="461" y="416" width="548" height="228"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1129"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="130">
                 <rect key="frame" x="0.0" y="0.0" width="548" height="228"/>
@@ -406,7 +406,7 @@
                 <button id="582">
                     <rect key="frame" x="191" y="364" width="308" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warnung: JPEG unterstützt keine Transparenz" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" inset="2" id="9235">
+                    <buttonCell key="cell" type="square" title="Warnung: JPEG unterstützt keine Transparenz" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="9235">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -414,7 +414,7 @@
                 <button id="9498">
                     <rect key="frame" x="231" y="364" width="228" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warnung: pdf2svg Pfad ist ungültig" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" state="on" inset="2" id="9499">
+                    <buttonCell key="cell" type="square" title="Warnung: pdf2svg Pfad ist ungültig" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="9499">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -422,7 +422,7 @@
                 <button id="9695">
                     <rect key="frame" x="231" y="364" width="228" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warning : MathML" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" state="on" inset="2" id="9696">
+                    <buttonCell key="cell" type="square" title="Warning : MathML" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="9696">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -444,7 +444,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="9233">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="menu"/>
                         <menu key="menu" title="OtherViews" id="575"/>
                     </popUpButtonCell>
                     <connections>
@@ -535,15 +535,15 @@
                                         <rect key="frame" x="20" y="53" width="598" height="113"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="4WO-g6-lbe">
-                                            <rect key="frame" x="1" y="1" width="581" height="111"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <rect key="frame" x="1" y="1" width="596" height="111"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="947" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="581" height="111"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="596" height="111"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <size key="minSize" width="581" height="111"/>
+                                                    <size key="minSize" width="596" height="111"/>
                                                     <size key="maxSize" width="907" height="10000000"/>
                                                     <attributedString key="textStorage">
                                                         <fragment>
@@ -555,7 +555,7 @@ Etwas Text &amp; $etwas Mathe$ \\
 </string>
                                                             <attributes>
                                                                 <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                <font key="NSFont" metaFont="user"/>
+                                                                <font key="NSFont" usesAppearanceFont="YES"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                                                             </attributes>
                                                         </fragment>
@@ -565,11 +565,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9349">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9349">
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="9348">
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9348">
                                             <rect key="frame" x="582" y="1" width="15" height="111"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -813,11 +813,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                         <rect key="frame" x="20" y="41" width="604" height="322"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="0tl-vt-1JE">
-                                            <rect key="frame" x="1" y="0.0" width="602" height="321"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <rect key="frame" x="1" y="1" width="602" height="320"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9352" id="1175" customClass="TextShortcutsTableView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="603" height="296"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="632" height="295"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -825,7 +825,6 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     <tableColumns>
                                                         <tableColumn identifier="enabled" width="40" minWidth="40" maxWidth="1000" id="1176">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="An">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -836,24 +835,22 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         </tableColumn>
                                                         <tableColumn identifier="input" width="92" minWidth="92" maxWidth="1000" id="1177">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Tastenkürzel">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="center" title="Text Cell" id="1185">
-                                                                <font key="font" metaFont="label" size="12"/>
+                                                                <font key="font" metaFont="cellTitle"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </tableColumn>
                                                         <tableColumn identifier="left" width="158" minWidth="158" maxWidth="1000" id="1178">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Linke Begrenzung">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="1184">
-                                                                <font key="font" metaFont="label" size="12"/>
+                                                                <font key="font" metaFont="cellTitle"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -861,12 +858,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         </tableColumn>
                                                         <tableColumn identifier="right" width="301" minWidth="301" maxWidth="1000" id="1182">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Rechte Begrenzung">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="1183">
-                                                                <font key="font" metaFont="label" size="12"/>
+                                                                <font key="font" metaFont="cellTitle"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -876,16 +872,16 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                 </tableView>
                                             </subviews>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9351">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9351">
                                             <rect key="frame" x="-100" y="-100" width="445" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9350">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9350">
                                             <rect key="frame" x="446" y="17" width="15" height="265"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <tableHeaderView key="headerView" id="9352">
-                                            <rect key="frame" x="0.0" y="0.0" width="603" height="25"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="632" height="25"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
                                     </scrollView>
@@ -1328,24 +1324,23 @@ Etwas Text &amp; $etwas Mathe$ \\
                                         <rect key="frame" x="103" y="245" width="438" height="75"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="jui-Mc-dYu">
-                                            <rect key="frame" x="1" y="0.0" width="436" height="74"/>
+                                            <rect key="frame" x="1" y="1" width="436" height="73"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9355" id="1069">
-                                                    <rect key="frame" x="0.0" y="0.0" width="436" height="49"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="436" height="48"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
-                                                        <tableColumn identifier="place" editable="NO" width="352" minWidth="265" maxWidth="1000" id="1071">
+                                                        <tableColumn identifier="place" editable="NO" width="323" minWidth="265" maxWidth="1000" id="1071">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Skript">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="1075">
-                                                                <font key="font" metaFont="label" size="12"/>
+                                                                <font key="font" metaFont="cellTitle"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -1353,7 +1348,6 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         </tableColumn>
                                                         <tableColumn identifier="enabled" width="78" minWidth="78" maxWidth="1000" id="1070">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Aktivieren">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -1366,11 +1360,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                 </tableView>
                                             </subviews>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9354">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9354">
                                             <rect key="frame" x="-100" y="-100" width="342" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9353">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9353">
                                             <rect key="frame" x="-100" y="-100" width="15" height="89"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1414,12 +1408,12 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </clipView>
-                                                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9357">
+                                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9357">
                                                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
-                                                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9356">
-                                                        <rect key="frame" x="-30" y="1" width="15" height="134"/>
+                                                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9356">
+                                                        <rect key="frame" x="539" y="1" width="16" height="83"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
@@ -1436,24 +1430,23 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     <rect key="frame" x="16" y="112" width="566" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="af9-qz-pMI">
-                                                        <rect key="frame" x="1" y="0.0" width="564" height="16"/>
+                                                        <rect key="frame" x="1" y="1" width="564" height="15"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9360" id="1082">
-                                                                <rect key="frame" x="0.0" y="0.0" width="564" height="19"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="564" height="39"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                 <tableColumns>
-                                                                    <tableColumn width="561" minWidth="38.27685546875" maxWidth="1000" id="1083">
+                                                                    <tableColumn width="532" minWidth="38.27685546875" maxWidth="1000" id="1083">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Skript">
-                                                                            <font key="font" metaFont="message" size="11"/>
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                         </tableHeaderCell>
                                                                         <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="1125">
-                                                                            <font key="font" metaFont="label" size="12"/>
+                                                                            <font key="font" metaFont="cellTitle"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
@@ -1463,11 +1456,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                             </tableView>
                                                         </subviews>
                                                     </clipView>
-                                                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9359">
+                                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9359">
                                                         <rect key="frame" x="-100" y="-100" width="143" height="15"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
-                                                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9358">
+                                                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9358">
                                                         <rect key="frame" x="-100" y="-100" width="15" height="37"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
@@ -1623,10 +1616,10 @@ Etwas Text &amp; $etwas Mathe$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="E0a-K7-g3r">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="1810" customClass="PreamblesTableView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="155" height="132"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1635,7 +1628,6 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     <tableColumns>
                                                         <tableColumn identifier="name" width="123" minWidth="123" maxWidth="1000" id="1812">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -1651,11 +1643,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                             <nil key="backgroundColor"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9371">
-                                            <rect key="frame" x="1" y="100" width="111" height="15"/>
+                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9371">
+                                            <rect key="frame" x="1" y="117" width="126" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9370">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9370">
                                             <rect key="frame" x="112" y="1" width="15" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1668,7 +1660,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="IkG-Jk-8Qy">
                                             <rect key="frame" x="1" y="1" width="481" height="132"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="916" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="481" height="132"/>
@@ -1696,11 +1688,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9369">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9369">
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9368">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9368">
                                             <rect key="frame" x="-30" y="1" width="15" height="125"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1778,15 +1770,15 @@ Etwas Text &amp; $etwas Mathe$ \\
                                         <rect key="frame" x="144" y="194" width="483" height="67"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="62Z-VL-fcP">
-                                            <rect key="frame" x="1" y="1" width="466" height="65"/>
+                                            <rect key="frame" x="1" y="1" width="481" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="9404" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-5.5234375" width="466" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="-5.03515625" width="481" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <size key="minSize" width="466" height="65"/>
+                                                    <size key="minSize" width="481" height="65"/>
                                                     <size key="maxSize" width="760" height="10000000"/>
                                                     <attributedString key="textStorage">
                                                         <fragment>
@@ -1807,11 +1799,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9406">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9406">
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.00074404761904761901" horizontal="NO" id="9405">
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00074404761904761901" horizontal="NO" id="9405">
                                             <rect key="frame" x="467" y="1" width="15" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1820,15 +1812,15 @@ Etwas Text &amp; $etwas Mathe$ \\
                                         <rect key="frame" x="144" y="127" width="483" height="68"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="kcZ-Ht-bh0">
-                                            <rect key="frame" x="1" y="1" width="466" height="66"/>
+                                            <rect key="frame" x="1" y="1" width="481" height="66"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="9409" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-5.5234375" width="466" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="-5.03515625" width="481" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    <size key="minSize" width="466" height="66"/>
+                                                    <size key="minSize" width="481" height="66"/>
                                                     <size key="maxSize" width="760" height="10000000"/>
                                                     <attributedString key="textStorage">
                                                         <fragment>
@@ -1849,11 +1841,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9407">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9407">
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.00076844262295081966" horizontal="NO" id="9408">
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00076844262295081966" horizontal="NO" id="9408">
                                             <rect key="frame" x="467" y="1" width="15" height="66"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1866,7 +1858,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9399" customClass="BodyTemplatesTableView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="126" height="132"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="155" height="132"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1875,7 +1867,6 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     <tableColumns>
                                                         <tableColumn identifier="name" width="123" minWidth="123" maxWidth="1000" id="9402">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -1891,11 +1882,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             </subviews>
                                             <nil key="backgroundColor"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9401">
-                                            <rect key="frame" x="1" y="100" width="111" height="15"/>
+                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9401">
+                                            <rect key="frame" x="1" y="117" width="126" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9400">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9400">
                                             <rect key="frame" x="112" y="1" width="15" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -1972,10 +1963,10 @@ Etwas Text &amp; $etwas Mathe$ \\
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" id="B7f-su-bGS">
                                     <rect key="frame" x="1" y="1" width="397" height="152"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9460" customClass="EncapsulationsTableView">
-                                            <rect key="frame" x="0.0" y="0.0" width="397" height="152"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="406" height="152"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1983,7 +1974,6 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <tableColumns>
                                                 <tableColumn identifier="encapsulations" width="394" minWidth="394" maxWidth="1000" id="9461">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Wählen Sie ein Exportformat">
-                                                        <font key="font" metaFont="message" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                     </tableHeaderCell>
@@ -1998,11 +1988,11 @@ Etwas Text &amp; $etwas Mathe$ \\
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="YES" id="9458">
-                                    <rect key="frame" x="-100" y="-100" width="227" height="11"/>
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" controlSize="small" horizontal="YES" id="9458">
+                                    <rect key="frame" x="1" y="139" width="397" height="14"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="9459">
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="9459">
                                     <rect key="frame" x="274" y="1" width="11" height="103"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -2175,7 +2165,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                             <button id="676">
                                                 <rect key="frame" x="102" y="50" width="180" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                <buttonCell key="cell" type="square" title="Dies verhindert LinkBack!" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" inset="2" id="9306">
+                                                <buttonCell key="cell" type="square" title="Dies verhindert LinkBack!" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="9306">
                                                     <behavior key="behavior" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -2283,17 +2273,17 @@ Etwas Text &amp; $etwas Mathe$ \\
                         <tabViewItem label="Tastatur-Kurzbefehle" identifier="" id="1026">
                             <view key="view" id="1028">
                                 <rect key="frame" x="10" y="33" width="644" height="246"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="1029">
                                         <rect key="frame" x="17" y="44" width="610" height="132"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="r85-mc-eQn">
-                                            <rect key="frame" x="1" y="0.0" width="608" height="131"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <rect key="frame" x="1" y="1" width="608" height="130"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9363" id="1030" customClass="ServiceShortcutsTableView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="608" height="106"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="608" height="105"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2301,7 +2291,6 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                     <tableColumns>
                                                         <tableColumn identifier="enabled" width="40" minWidth="40" maxWidth="1000" id="1036">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="An">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -2310,9 +2299,8 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                                 <font key="font" metaFont="label" size="12"/>
                                                             </buttonCell>
                                                         </tableColumn>
-                                                        <tableColumn identifier="description" editable="NO" width="439.0908203125" minWidth="353" maxWidth="1000" id="1035">
+                                                        <tableColumn identifier="description" editable="NO" width="430.0908203125" minWidth="353" maxWidth="1000" id="1035">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Beschreibung">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -2325,19 +2313,17 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                         </tableColumn>
                                                         <tableColumn identifier="string" width="88" minWidth="88" maxWidth="1000" id="1033">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Tastenkürzel">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="center" title="Text Cell" id="1034">
-                                                                <font key="font" metaFont="label" size="12"/>
+                                                                <font key="font" metaFont="cellTitle"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </tableColumn>
                                                         <tableColumn identifier="warning" editable="NO" width="29" minWidth="29" maxWidth="1000" id="1031">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
@@ -2350,15 +2336,15 @@ Etwas Text &amp; $etwas Mathe$ \\
                                                 </tableView>
                                             </subviews>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9362">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9362">
                                             <rect key="frame" x="-100" y="-100" width="307" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9361">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9361">
                                             <rect key="frame" x="-100" y="-100" width="15" height="56"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <tableHeaderView key="headerView" id="9363">
+                                        <tableHeaderView key="headerView" wantsLayer="YES" id="9363">
                                             <rect key="frame" x="0.0" y="0.0" width="608" height="25"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
@@ -2375,7 +2361,7 @@ Etwas Text &amp; $etwas Mathe$ \\
                                     <button id="1045">
                                         <rect key="frame" x="119" y="8" width="405" height="28"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="justified" alternateImage="warning-triangle" inset="2" id="9314">
+                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="justified" imageScaling="proportionallyDown" inset="2" id="9314">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <string key="title">Eine andere Aktion hat schon denselben Tastatur-Kurzbefehl.
 Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string>
@@ -2422,11 +2408,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                         <rect key="frame" x="17" y="107" width="610" height="94"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="oNH-OP-MUy">
-                                            <rect key="frame" x="1" y="0.0" width="608" height="93"/>
+                                            <rect key="frame" x="1" y="1" width="608" height="92"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9513" id="9516" customClass="ServiceRegularExpressionFiltersTableView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="609" height="68"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="638" height="67"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2434,7 +2420,6 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                     <tableColumns>
                                                         <tableColumn identifier="enabled" width="54" minWidth="54" maxWidth="1000" id="9519">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="aktiv">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -2445,12 +2430,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                         </tableColumn>
                                                         <tableColumn identifier="inputPattern" width="273" minWidth="273" maxWidth="1000" id="9518">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="ersetze">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="9521">
-                                                                <font key="font" metaFont="label" size="12"/>
+                                                                <font key="font" metaFont="cellTitle"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -2458,12 +2442,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                         </tableColumn>
                                                         <tableColumn identifier="outputPattern" width="273" minWidth="273" maxWidth="1000" id="9517">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="mit">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
                                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="9522">
-                                                                <font key="font" metaFont="label" size="12"/>
+                                                                <font key="font" metaFont="cellTitle"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
@@ -2473,16 +2456,16 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                 </tableView>
                                             </subviews>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9514">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9514">
                                             <rect key="frame" x="-100" y="-100" width="445" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9515">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9515">
                                             <rect key="frame" x="446" y="17" width="15" height="265"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <tableHeaderView key="headerView" id="9513">
-                                            <rect key="frame" x="0.0" y="0.0" width="609" height="25"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="638" height="25"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
                                         <connections>
@@ -2526,11 +2509,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9544">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9544">
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9545">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9545">
                                             <rect key="frame" x="237" y="1" width="15" height="61"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -2554,11 +2537,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9541">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9541">
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9540">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9540">
                                             <rect key="frame" x="237" y="1" width="15" height="61"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -2605,7 +2588,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="wrp-R0-lWS">
                                             <rect key="frame" x="1" y="1" width="467" height="455"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" id="7744" customClass="AdditionalFilesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="467" height="455"/>
@@ -2615,9 +2598,8 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                     <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
-                                                        <tableColumn identifier="filepath" editable="NO" width="464" minWidth="394" maxWidth="1000" id="7747">
+                                                        <tableColumn identifier="filepath" editable="NO" width="455" minWidth="394" maxWidth="1000" id="7747">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                <font key="font" metaFont="message" size="11"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                             </tableHeaderCell>
@@ -2632,11 +2614,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                 </tableView>
                                             </subviews>
                                         </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9365">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9365">
                                             <rect key="frame" x="1" y="119" width="223" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="9364">
+                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="9364">
                                             <rect key="frame" x="224" y="1" width="11" height="118"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -2726,24 +2708,23 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                     <rect key="frame" x="36" y="265" width="452" height="94"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="PZp-nJ-rXC">
-                                                        <rect key="frame" x="1" y="0.0" width="450" height="93"/>
+                                                        <rect key="frame" x="1" y="1" width="450" height="92"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9643" id="9646">
-                                                                <rect key="frame" x="0.0" y="0.0" width="450" height="68"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="450" height="67"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                 <tableColumns>
-                                                                    <tableColumn identifier="place" editable="NO" width="377.5" minWidth="221" maxWidth="1000" id="9647">
+                                                                    <tableColumn identifier="place" editable="NO" width="348.5" minWidth="221" maxWidth="1000" id="9647">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Skript">
-                                                                            <font key="font" metaFont="message" size="11"/>
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                         </tableHeaderCell>
                                                                         <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="9650">
-                                                                            <font key="font" metaFont="label" size="12"/>
+                                                                            <font key="font" metaFont="cellTitle"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
@@ -2751,7 +2732,6 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                                     </tableColumn>
                                                                     <tableColumn identifier="enabled" width="66.33935546875" minWidth="66" maxWidth="1000" id="9648">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Aktivieren">
-                                                                            <font key="font" metaFont="message" size="11"/>
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                         </tableHeaderCell>
@@ -2764,11 +2744,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                             </tableView>
                                                         </subviews>
                                                     </clipView>
-                                                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9644">
+                                                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9644">
                                                         <rect key="frame" x="-100" y="-100" width="342" height="15"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
-                                                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9645">
+                                                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9645">
                                                         <rect key="frame" x="-100" y="-100" width="15" height="89"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
@@ -2837,12 +2817,12 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                                     </subviews>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </clipView>
-                                                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9635">
+                                                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="9635">
                                                                     <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
-                                                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9634">
-                                                                    <rect key="frame" x="406" y="1" width="15" height="1"/>
+                                                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9634">
+                                                                    <rect key="frame" x="385" y="1" width="16" height="142"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
@@ -2859,24 +2839,23 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                                 <rect key="frame" x="16" y="161" width="412" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" id="lVD-ab-VsR">
-                                                                    <rect key="frame" x="1" y="0.0" width="410" height="16"/>
+                                                                    <rect key="frame" x="1" y="1" width="410" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9640" id="9637">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="410" height="19"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="410" height="39"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                             <tableColumns>
-                                                                                <tableColumn width="407" minWidth="38.27685546875" maxWidth="1000" id="9641">
+                                                                                <tableColumn width="378" minWidth="38.27685546875" maxWidth="1000" id="9641">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Skript">
-                                                                                        <font key="font" metaFont="message" size="11"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                                     </tableHeaderCell>
                                                                                     <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="9642">
-                                                                                        <font key="font" metaFont="label" size="12"/>
+                                                                                        <font key="font" metaFont="cellTitle"/>
                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
@@ -2886,11 +2865,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                                                         </tableView>
                                                                     </subviews>
                                                                 </clipView>
-                                                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9639">
+                                                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="9639">
                                                                     <rect key="frame" x="-100" y="-100" width="143" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
-                                                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9638">
+                                                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9638">
                                                                     <rect key="frame" x="-100" y="-100" width="15" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
@@ -3036,7 +3015,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
         <window title="Configurations de composition" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1127" userLabel="compositionConfigurationsManagerPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <rect key="contentRect" x="449" y="297" width="280" height="226"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1129"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="1128">
                 <rect key="frame" x="0.0" y="0.0" width="280" height="226"/>
@@ -3046,24 +3025,23 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                         <rect key="frame" x="20" y="37" width="240" height="169"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="pe5-K9-1Ps">
-                            <rect key="frame" x="1" y="0.0" width="238" height="168"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <rect key="frame" x="1" y="1" width="238" height="167"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9376" id="1130" customClass="CompositionConfigurationsTableView">
-                                    <rect key="frame" x="0.0" y="0.0" width="238" height="143"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="238" height="142"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="name" width="235.09423828125" minWidth="40" maxWidth="1000" id="1131">
+                                        <tableColumn identifier="name" width="226.09423828125" minWidth="40" maxWidth="1000" id="1131">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Konfigurationen">
-                                                <font key="font" metaFont="message" size="11"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="1160">
-                                                <font key="font" metaFont="label" size="12"/>
+                                                <font key="font" metaFont="cellTitle"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -3073,11 +3051,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                 </tableView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="YES" id="9375">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" controlSize="small" horizontal="YES" id="9375">
                             <rect key="frame" x="-100" y="-100" width="227" height="11"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="9374">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="9374">
                             <rect key="frame" x="-22" y="17" width="11" height="151"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -3138,7 +3116,7 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="8051" userLabel="compositionConfigurationsProgramArgumentsPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <rect key="contentRect" x="449" y="297" width="280" height="226"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1129"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="8052">
                 <rect key="frame" x="0.0" y="0.0" width="280" height="226"/>
@@ -3148,24 +3126,23 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                         <rect key="frame" x="20" y="37" width="240" height="169"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="Gsy-WB-RvD">
-                            <rect key="frame" x="1" y="0.0" width="238" height="168"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <rect key="frame" x="1" y="1" width="238" height="167"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9379" id="8060" customClass="CompositionConfigurationsProgramArgumentsTableView">
-                                    <rect key="frame" x="0.0" y="0.0" width="238" height="143"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="238" height="142"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="arguments" width="235.09423828125" minWidth="40" maxWidth="1000" id="8061">
+                                        <tableColumn identifier="arguments" width="226.09423828125" minWidth="40" maxWidth="1000" id="8061">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Argumente">
-                                                <font key="font" metaFont="message" size="11"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
                                             <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="8062">
-                                                <font key="font" metaFont="label" size="12"/>
+                                                <font key="font" metaFont="cellTitle"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -3175,11 +3152,11 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
                                 </tableView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="YES" id="9378">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" controlSize="small" horizontal="YES" id="9378">
                             <rect key="frame" x="-100" y="-100" width="227" height="11"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="9377">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="9377">
                             <rect key="frame" x="-22" y="17" width="11" height="151"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -3239,164 +3216,165 @@ Sie müssen für diese Aktion einen anderen Tastatur-Kurzbefehl wählen.</string
         </view>
     </objects>
     <resources>
-        <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSActionTemplate" width="15" height="15"/>
+        <image name="NSCaution" width="32" height="32"/>
         <image name="add" width="23" height="22"/>
         <image name="add-pressed" width="23" height="22"/>
         <image name="imageCell:1032:image" width="17" height="17">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05T
-S2V5ZWRBcmNoaXZlctEICVRyb290gAGuCwwZGh8UJCgpMDM2PD9VJG51bGzWDQ4PEBESExQVFhcYVk5T
+S2V5ZWRBcmNoaXZlctEICVRyb290gAGuCwwZGh8UJCkqMTQ3PUBVJG51bGzWDQ4PEBESExQVFhcYVk5T
 U2l6ZV5OU1Jlc2l6aW5nTW9kZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVwc1dOU0NvbG9ygAIQAIAN
-EiDAAACAA4ALWHsxNywgMTd90hsPHB5aTlMub2JqZWN0c6EdgASACtIbDyAjoiEigAWABoAJ0iUPJidf
-EBROU1RJRkZSZXByZXNlbnRhdGlvboAHgAhPESBuTU0AKgAABIzS2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ
-4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ
-4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ
-4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ
-4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ
-4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ
-4f/S2eH/0tnh/9LZ4f/S2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ
-4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/ABABAAAD
-AAAAAQARAAABAQADAAAAAQARAAABAgADAAAABAAABVIBAwADAAAAAQABAAABBgADAAAAAQACAAABCgAD
-AAAAAQABAAABEQAEAAAAAQAAAAgBEgADAAAAAQABAAABFQADAAAAAQAEAAABFgADAAAAAQARAAABFwAE
-AAAAAQAABIQBHAADAAAAAQABAAABKAADAAAAAQACAAABUgADAAAAAQABAAABUwADAAAABAAABVqHcwAH
-AAAbDAAABWIAAAAAAAgACAAIAAgAAQABAAEAAQAAGwxhcHBsAhAAAG1udHJSR0IgWFlaIAfjAAEABAAT
-AC4AN2Fjc3BBUFBMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD21gABAAAAANMtYXBwbAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEWRlc2MAAAFQAAAAYmRzY20AAAG0
-AAAEDmNwcnQAAAXEAAAAI3d0cHQAAAXoAAAAFHJYWVoAAAX8AAAAFGdYWVoAAAYQAAAAFGJYWVoAAAYk
-AAAAFHJUUkMAAAY4AAAIDGFhcmcAAA5EAAAAIHZjZ3QAAA5kAAAGEm5kaW4AABR4AAAGPmNoYWQAABq4
-AAAALG1tb2QAABrkAAAAKGJUUkMAAAY4AAAIDGdUUkMAAAY4AAAIDGFhYmcAAA5EAAAAIGFhZ2cAAA5E
-AAAAIGRlc2MAAAAAAAAACERpc3BsYXkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABtbHVjAAAAAAAAACEAAAAM
-aHJIUgAAABQAAAGca29LUgAAAAwAAAGwbmJOTwAAABIAAAG8aWQAAAAAABIAAAHOaHVIVQAAABQAAAHg
-Y3NDWgAAABYAAAH0ZGFESwAAABwAAAIKdWtVQQAAABwAAAImYXIAAAAAABQAAAJCaXRJVAAAABQAAAJW
-cm9STwAAABIAAAJqbmxOTAAAABYAAAJ8aGVJTAAAABYAAAKSZXNFUwAAABIAAAJqZmlGSQAAABAAAAKo
-emhUVwAAAAwAAAK4dmlWTgAAAA4AAALEc2tTSwAAABYAAALSemhDTgAAAAwAAAK4cnVSVQAAACQAAALo
-ZnJGUgAAABYAAAMMbXMAAAAAABIAAAMiY2FFUwAAABgAAAM0dGhUSAAAAAwAAANMZGVERQAAABAAAANY
-ZW5VUwAAABIAAANocHRCUgAAABgAAAN6cGxQTAAAABIAAAOSZWxHUgAAACIAAAOkc3ZTRQAAABAAAAPG
-dHJUUgAAABQAAAPWamFKUAAAAA4AAAPqcHRQVAAAABYAAAP4AEwAQwBEACAAdQAgAGIAbwBqAGnO7Lfs
-ACAATABDAEQARgBhAHIAZwBlAC0ATABDAEQATABDAEQAIABXAGEAcgBuAGEAUwB6AO0AbgBlAHMAIABM
-AEMARABCAGEAcgBlAHYAbgD9ACAATABDAEQATABDAEQALQBmAGEAcgB2AGUAcwBrAOYAcgBtBBoEPgQ7
-BEwEPgRABD4EMgQ4BDkAIABMAEMARCAPAEwAQwBEACAGRQZEBkgGRgYpAEwAQwBEACAAYwBvAGwAbwBy
-AGkATABDAEQAIABjAG8AbABvAHIASwBsAGUAdQByAGUAbgAtAEwAQwBEIA8ATABDAEQAIAXmBdEF4gXV
-BeAF2QBWAOQAcgBpAC0ATABDAERfaYJyACAATABDAEQATABDAEQAIABNAOAAdQBGAGEAcgBlAGIAbgDp
-ACAATABDAEQEJgQyBDUEQgQ9BD4EOQAgBBYEGgAtBDQEOARBBD8EOwQ1BDkATABDAEQAIABjAG8AdQBs
-AGUAdQByAFcAYQByAG4AYQAgAEwAQwBEAEwAQwBEACAAZQBuACAAYwBvAGwAbwByAEwAQwBEACAOKg41
-AEYAYQByAGIALQBMAEMARABDAG8AbABvAHIAIABMAEMARABMAEMARAAgAEMAbwBsAG8AcgBpAGQAbwBL
-AG8AbABvAHIAIABMAEMARAOIA7MDxwPBA8kDvAO3ACADvwO4A8wDvQO3ACAATABDAEQARgDkAHIAZwAt
-AEwAQwBEAFIAZQBuAGsAbABpACAATABDAEQwqzDpMPwAIABMAEMARABMAEMARAAgAGEAIABDAG8AcgBl
-AHMAAHRleHQAAAAAQ29weXJpZ2h0IEFwcGxlIEluYy4sIDIwMTkAAFhZWiAAAAAAAADzUgABAAAAARbP
-WFlaIAAAAAAAAGGcAAA2hAAAB01YWVogAAAAAAAAbZYAAK/8AAAYjlhZWiAAAAAAAAAnowAAGYAAALNS
-Y3VydgAAAAAAAAQAAAAABQAKAA8AFAAZAB4AIwAoAC0AMgA2ADsAQABFAEoATwBUAFkAXgBjAGgAbQBy
-AHcAfACBAIYAiwCQAJUAmgCfAKMAqACtALIAtwC8AMEAxgDLANAA1QDbAOAA5QDrAPAA9gD7AQEBBwEN
-ARMBGQEfASUBKwEyATgBPgFFAUwBUgFZAWABZwFuAXUBfAGDAYsBkgGaAaEBqQGxAbkBwQHJAdEB2QHh
-AekB8gH6AgMCDAIUAh0CJgIvAjgCQQJLAlQCXQJnAnECegKEAo4CmAKiAqwCtgLBAssC1QLgAusC9QMA
-AwsDFgMhAy0DOANDA08DWgNmA3IDfgOKA5YDogOuA7oDxwPTA+AD7AP5BAYEEwQgBC0EOwRIBFUEYwRx
-BH4EjASaBKgEtgTEBNME4QTwBP4FDQUcBSsFOgVJBVgFZwV3BYYFlgWmBbUFxQXVBeUF9gYGBhYGJwY3
-BkgGWQZqBnsGjAadBq8GwAbRBuMG9QcHBxkHKwc9B08HYQd0B4YHmQesB78H0gflB/gICwgfCDIIRgha
-CG4IggiWCKoIvgjSCOcI+wkQCSUJOglPCWQJeQmPCaQJugnPCeUJ+woRCicKPQpUCmoKgQqYCq4KxQrc
-CvMLCwsiCzkLUQtpC4ALmAuwC8gL4Qv5DBIMKgxDDFwMdQyODKcMwAzZDPMNDQ0mDUANWg10DY4NqQ3D
-Dd4N+A4TDi4OSQ5kDn8Omw62DtIO7g8JDyUPQQ9eD3oPlg+zD88P7BAJECYQQxBhEH4QmxC5ENcQ9RET
-ETERTxFtEYwRqhHJEegSBxImEkUSZBKEEqMSwxLjEwMTIxNDE2MTgxOkE8UT5RQGFCcUSRRqFIsUrRTO
-FPAVEhU0FVYVeBWbFb0V4BYDFiYWSRZsFo8WshbWFvoXHRdBF2UXiReuF9IX9xgbGEAYZRiKGK8Y1Rj6
-GSAZRRlrGZEZtxndGgQaKhpRGncanhrFGuwbFBs7G2MbihuyG9ocAhwqHFIcexyjHMwc9R0eHUcdcB2Z
-HcMd7B4WHkAeah6UHr4e6R8THz4faR+UH78f6iAVIEEgbCCYIMQg8CEcIUghdSGhIc4h+yInIlUigiKv
-It0jCiM4I2YjlCPCI/AkHyRNJHwkqyTaJQklOCVoJZclxyX3JicmVyaHJrcm6CcYJ0kneierJ9woDSg/
-KHEooijUKQYpOClrKZ0p0CoCKjUqaCqbKs8rAis2K2krnSvRLAUsOSxuLKIs1y0MLUEtdi2rLeEuFi5M
-LoIuty7uLyQvWi+RL8cv/jA1MGwwpDDbMRIxSjGCMbox8jIqMmMymzLUMw0zRjN/M7gz8TQrNGU0njTY
-NRM1TTWHNcI1/TY3NnI2rjbpNyQ3YDecN9c4FDhQOIw4yDkFOUI5fzm8Ofk6Njp0OrI67zstO2s7qjvo
-PCc8ZTykPOM9Ij1hPaE94D4gPmA+oD7gPyE/YT+iP+JAI0BkQKZA50EpQWpBrEHuQjBCckK1QvdDOkN9
-Q8BEA0RHRIpEzkUSRVVFmkXeRiJGZ0arRvBHNUd7R8BIBUhLSJFI10kdSWNJqUnwSjdKfUrESwxLU0ua
-S+JMKkxyTLpNAk1KTZNN3E4lTm5Ot08AT0lPk0/dUCdQcVC7UQZRUFGbUeZSMVJ8UsdTE1NfU6pT9lRC
-VI9U21UoVXVVwlYPVlxWqVb3V0RXklfgWC9YfVjLWRpZaVm4WgdaVlqmWvVbRVuVW+VcNVyGXNZdJ114
-XcleGl5sXr1fD19hX7NgBWBXYKpg/GFPYaJh9WJJYpxi8GNDY5dj62RAZJRk6WU9ZZJl52Y9ZpJm6Gc9
-Z5Nn6Wg/aJZo7GlDaZpp8WpIap9q92tPa6dr/2xXbK9tCG1gbbluEm5rbsRvHm94b9FwK3CGcOBxOnGV
-cfByS3KmcwFzXXO4dBR0cHTMdSh1hXXhdj52m3b4d1Z3s3gReG54zHkqeYl553pGeqV7BHtje8J8IXyB
-fOF9QX2hfgF+Yn7CfyN/hH/lgEeAqIEKgWuBzYIwgpKC9INXg7qEHYSAhOOFR4Wrhg6GcobXhzuHn4gE
-iGmIzokziZmJ/opkisqLMIuWi/yMY4zKjTGNmI3/jmaOzo82j56QBpBukNaRP5GokhGSepLjk02TtpQg
-lIqU9JVflcmWNJaflwqXdZfgmEyYuJkkmZCZ/JpomtWbQpuvnByciZz3nWSd0p5Anq6fHZ+Ln/qgaaDY
-oUehtqImopajBqN2o+akVqTHpTilqaYapoum/adup+CoUqjEqTepqaocqo+rAqt1q+msXKzQrUStuK4t
-rqGvFq+LsACwdbDqsWCx1rJLssKzOLOutCW0nLUTtYq2AbZ5tvC3aLfguFm40blKucK6O7q1uy67p7wh
-vJu9Fb2Pvgq+hL7/v3q/9cBwwOzBZ8Hjwl/C28NYw9TEUcTOxUvFyMZGxsPHQce/yD3IvMk6ybnKOMq3
-yzbLtsw1zLXNNc21zjbOts83z7jQOdC60TzRvtI/0sHTRNPG1EnUy9VO1dHWVdbY11zX4Nhk2OjZbNnx
-2nba+9uA3AXcit0Q3ZbeHN6i3ynfr+A24L3hROHM4lPi2+Nj4+vkc+T85YTmDeaW5x/nqegy6LzpRunQ
-6lvq5etw6/vshu0R7ZzuKO6070DvzPBY8OXxcvH/8ozzGfOn9DT0wvVQ9d72bfb794r4Gfio+Tj5x/pX
-+uf7d/wH/Jj9Kf26/kv+3P9t//9wYXJhAAAAAAADAAAAAmZmAADypwAADVkAABPQAAAKDnZjZ3QAAAAA
-AAAAAAADAQAAAgAAAAUAFQAyAF8AmwDoATUBiQHsAlwC2gNjA/kEpAVeBicG+AfYCMgJyArQC9wM9g4N
-DzcQXRGFEqwT0hT1FhIXJRg5GUAaRRtCHDAdFx4CHuof1CC9IaoimCOKJH4lciZpJ18oVylXKlcrVyxb
-LWUubS95MIkxmjKsM8M03zX7Nxc4PDlbOnw7kDydPas+uD/CQM9B30LuQ/xFDUYeRzFIQUlRSmdLe0yP
-TaVOuE/LUONR+lMRVCdVP1ZYV3VYmFnAWu9cHV1KXnZfo2DQYgBjMmRiZZhm02gLaUlqjGvUbRpuaW+7
-cRJybXPKdSp2jnfTeO56AHsQfCR9NH5Ff1CAXoFngmqDcoRwhWqGZYdZiEqJNYofiwSL54zJjaWOgI9d
-kEGRKpISkvqT45TLlbSWm5eDmG2ZV5pDmy+cG50Jnfme65/foNShzKLFo72kuqWlpoanbKhTqTiqIKsI
-q++s2K3Drq6vm7CGsXKyX7NNtDu1KrYZtwW38rjfucu6p7t/vFa9L74KvuW/wsCewX7CXsNAxCXFDcX1
-xuHHz8i+ybDKpcuczJPNiM53z2XQUdE90irTGtQH1PXV5tbW18nYvNmx2qfbn9yX3ZPejd+L4IjhhuKM
-45HkkOWJ5n3nc+hp6WHqYetn7HjtnO7S8CLxlvMq9OT21vj7+2/+Jv//AAAABwAhAFAAlgD2AToBiAHk
-AkgCuAM5A8wEZgULBcUGiQdbCDkJIAoWCxsMHA0rDkAPXhB5EZgSthPUFO8WABcOGBkZIRoeGxYcAhzn
-Hc8euR+hIIkhcyJhI1IkRSUzJignHSgPKQ0qCCsBLAEtBS4JLw0wFTEbMiYzNjRGNVo2ajeCOJc5qjqy
-O7A8rj2tPqk/p0CpQapCqkOsRK5FsUazR7ZIuknASsVLyUzOTdFO2E/fUORR6lLxU/lVBVYWVy5YS1lo
-WoRboFy9Xdte+mAbYTtiYGOLZLNl32cQaEVpeGqza/JtNW56b8FxC3JYc4x0oXWvdrt3ynjXeeN67nv5
-fQJ+B38NgBGBEoISgxCEDYUFhf2G9IfoiN2Jzoq/i66Mlo2CjmiPU5A+kSqSF5MEk/KU5ZXYls2Xw5i7
-mbOasJuunK6dsZ61n7ygwaHIorujnaSHpXOmX6dNqDypLKoeqxKsCKz+rfOu6a/gsNixzLLFs7u0rLWe
-tpC3g7h4uWu6XbtQvEO9Nr4pvxzAEMEDwfbC68PhxNTFzMbDx7rIs8mtyqrLpsypzb/O2s/y0QfSHNMx
-1ELVU9Zl13bYiNmb2rDbxtzh3frfGuA74WDih+Ov5NnmCuc66Gzppurk7CPtaO6y8ALxVvKq9AT1ZPbF
-+Cf5jvr1/Fv9vv8X//8AAAAGAA4AIQA+AGYAmADVARcBVgGdAe4CSwKxAyEDmAQaBKUFOwXbBn8HKgfc
-CJEJTQoPCsoLiwxODRANzQ6EDzoP7xCdEUgR7RKIEyQTvRRXFPEVixYnFsQXYxgEGKMZRRnpGo4bNRvd
-HIYdMh3jHpMfRB/5IKwhYyIfItsjlyRUJRgl2CaVJ0sn9CigKUwp9yqkK1MsAyy1LWcuHC7RL4cwPzD6
-MbUycTMwM+w0qjVpNiw26zerOG45MTn1Orc7ezxDPQo90j6aP2JAK0D2QcFCjUNcRC5E/UXPRqRHe0hP
-SSlKA0rfS7xMmk14TllPL0/+UMxRnFJuU0FUGVTwVctWqFeGWGpZTVo1WyBcDVz8Xexe3l/TYMhhwGK3
-Y65kpGWTZoJnb2hgaVNqRms7bC9tJm4gbxpwF3EVchNzEnQTdRZ2GnceeCV5LHoxezN8GXzxfch+n39y
-gEeBGYHpgruDjoRhhTSGB4bbh7KIi4liij+LHIv6jNmNu46cj3GQRJEXke6SyZOnlIiVa5ZWl0SYNZkv
-miybLZwznT6eTJ9eoHShj6Kro72kw6XEpsanyKjOqdeq4KvsrPyuC68esDOxSLJfs3a0jbWntr632Ljv
-ugi7Qbyjvfq/SsCfwf7DaMTgxm3IEsnby7/N0tAo0sLVqdkO3Q7iIujA8xz//wAAbmRpbgAAAAAAAAY2
-AACZAgAAVsgAAFUEAACRsAAAJ3MAABcKAABQDQAAVDkAAgo9AAH64QABJmYAAwEAAAIAAAATACwARQBf
-AHgAkQCrAMUA3wD5ARQBMAFMAWoBhwGmAcYB5wIKAi4CVAJ8AqcC0wMDAzUDagOlA+QEJARnBKwE8wU7
-BYUFzwYcBmoGugcMB10HsAgFCFsIsAkICWEJugoUCnEKzQsqC4cL5gxHDKYNCQ1sDdUORA61DyYPnBAU
-EIsRBBF/Ef0SehL6E3sT/xSFFQoVkRYbFqUXMhfCGFMY4hl2Ggsaohs6G9McbB0EHZweMR7HH2Af+iCX
-ITQh1CJ0IxQjtiRaJP0lnSZCJucniyguKM8pdSoZKrsrXiwALKItRC3mLosvLC/OMHoxRDIdMvkz1zSz
-NZg2ezdnOFE5Qzo9OzM8Nj0/Pko/YEB7QaJCzEQCRTlGfkfISRJKUUuQTNROGU9iUK1R/lNPVKFV91dK
-WKNZ/VtVXK1eBl9fYLdiD2NsZMNmN2fBaUJqyGxTbdpvaXD4coV0FXWldzx40XpqfAN9oH87gOGCiYQy
-heCHsYmPi3ONUo8zkRSS+5Talr2Ynpp4nFeeMKAIod+jtKWGp1apKasHrPKu47DYstK0xLbCuL+6uby4
-vrXAssKvxK3GqsipyqHMo86c0J7SndSK1ofYktqs3NLe7+EZ4zPlQudH6TDq/+y77lvv4fFL8qbz8PUp
-9kr3Yvhu+Wj6V/s2/BD83v2k/pf//wAAAAwAIwA8AFQAbgCHAKEAuwDWAPEBDAEpAUYBZAGCAaIBwwHl
-AgkCLgJVAn8CqwLZAwkDPQN0A7AD8AQxBHQEugUCBUsFlQXgBi8GfgbPByMHdQfKCCIIeQjRCSsJhwnj
-CkIKoQsAC2ELwgwnDIoM8A1YDcMOOA6wDygPpBAjEKERIRGkEigSrhM2E8AUTBTaFWgV+RaMFyEXuRhT
-GOsZiRooGskbaxwOHLEdUh3xHpAfMR/UIHkhHyHHInAjGiPFJHIlHiXIJnYnJCfSKH0pKinaKocrMyvg
-LIwtOS3lLpYvQS/wMK0xgTJeMz40HzUBNek20Te+OKs5oDqYO5A8kT2TPps/pUC1Qc5C5EQFRSRGTEd3
-SKZJ40seTGJNo07mUCtRcVK9VAFVSlaRV9pZIlpuW7Rc/F5EX4xg02IZY2VkrGYSZ5lpFGqQbBFtjG8O
-cI5yDHOMdQl2j3gUeZt7I3y0fkB/04FwgxCEsoZVh/eJoItPjPyOrZBgkhqT0ZWMl06ZDJrMnJOeVqAc
-oeSjrKV0pzqpBarCrGOuAq+nsVKzArSvtmm4Jbnhu5+9ZL8kwOjCqsRuxivH78moy2PNHc7S0IvSQNP3
-1abXV9kM2rncYN4F363hT+Lt5IrmIOey6Urq3+xw7fvviPEW8qX0MPW490f41vpk+/39jv//AAAAHQBE
-AGoAkQC4AN8BCAEyAV4BiwG8Ae4CJAJeAp4C4gMsA38D3AQ+BKYFEgWBBfMGagbjB18H3ghgCOEJZwnu
-CnkLAwuPDCAMrw1DDeEOkg9FD/4QuBF0EjMS9BO3FH4VQxYNFtgXqBh6GUwaJRr/G9scuh2fHoIfaCBR
-IT4iLSMdJBElBSX4JvEn6SjfKd0q1yvULNEtzy7SL9Mw5DIEMyc0SDVrNos3rzjOOfI7DjwvPU0+aT+F
-QKJBwkLdQ/5FGkY9R2BIhUm4Su1MKU1hTppP1VEQUlFTjFTJVglXRFiFWcZbCFxJXYxe0GAVYVpioGPu
-ZUJm0Whyag9rvG1mbx9w2XKUdFJ2FHfZeZx7XH0ift6AoYJkhCSF5ofHibCLm417j1iRMJMGlM6WlZhW
-mgebup1nnw6gsqJSo++liKceqLSqWawVrd6vqLF0sz21ALbJuI+6ULwSvdi/lMFXwxjE2saeyGXKKMv0
-zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM5J3l4+cY6EDpYup764Pshe1y7l3vN/AP8Nfxn/JX
-8w7zu/RY9Pb1i/YX9qP3KPec+A/4g/jx+VL5tPoW+nj6yvsT+1z7pfvu/Df8dvym/NX9Bf00/WT9k/3D
-/fP+Iv5P/nr+pf7Q/vv/J/9S/33/qP/U//8AAHNmMzIAAAAAAAEMQgAABd7///MmAAAHkgAA/ZH///ui
-///9owAAA9wAAMBsbW1vZAAAAAAAAAYQAACcgQAAAADBvfOhAAAAAAAAAAAAAAAAAAAAANIqKywtWiRj
-bGFzc25hbWVYJGNsYXNzZXNfEBBOU0JpdG1hcEltYWdlUmVwoywuL1pOU0ltYWdlUmVwWE5TT2JqZWN0
-0iorMTJXTlNBcnJheaIxL9IqKzQ1Xk5TTXV0YWJsZUFycmF5ozQxL9M3OA85OjtXTlNXaGl0ZVxOU0Nv
-bG9yU3BhY2VEMCAwABADgAzSKis9PldOU0NvbG9yoj0v0iorQEFXTlNJbWFnZaJALwAIABEAGgAkACkA
-MgA3AEkATABRAFMAYgBoAHUAfACLAJIAnwCmAK4AsACyALQAuQC7AL0AxgDLANYA2ADaANwA4QDkAOYA
-6ADqAO8BBgEIAQohfCGBIYwhlSGoIawhtyHAIcUhzSHQIdUh5CHoIe8h9yIEIgkiCyINIhIiGiIdIiIi
-KgAAAAAAAAIBAAAAAAAAAEIAAAAAAAAAAAAAAAAAACItA
+EiDAAACAA4ALWHsxNywgMTd90hsPHB5aTlMub2JqZWN0c6EdgASACtIbDyAjoiEigAWABoAJ0w8lJico
+FF8QFE5TVElGRlJlcHJlc2VudGF0aW9uXxAZTlNJbnRlcm5hbExheW91dERpcmVjdGlvboAIgAdPESBu
+TU0AKgAABIzS2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/
+0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/
+0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/
+0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/
+0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/
+0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0tnh/9LZ4f/S2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/
+0dnh/9HZ4f/R2eH/0dnh/9HZ4f/R2eH/ABABAAADAAAAAQARAAABAQADAAAAAQARAAABAgADAAAABAAA
+BVIBAwADAAAAAQABAAABBgADAAAAAQACAAABCgADAAAAAQABAAABEQAEAAAAAQAAAAgBEgADAAAAAQAB
+AAABFQADAAAAAQAEAAABFgADAAAAAQARAAABFwAEAAAAAQAABIQBHAADAAAAAQABAAABKAADAAAAAQAC
+AAABUgADAAAAAQABAAABUwADAAAABAAABVqHcwAHAAAbDAAABWIAAAAAAAgACAAIAAgAAQABAAEAAQAA
+GwxhcHBsAhAAAG1udHJSR0IgWFlaIAfjAAEABAATAC4AN2Fjc3BBUFBMAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAD21gABAAAAANMtYXBwbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAEWRlc2MAAAFQAAAAYmRzY20AAAG0AAAEDmNwcnQAAAXEAAAAI3d0cHQAAAXoAAAAFHJY
+WVoAAAX8AAAAFGdYWVoAAAYQAAAAFGJYWVoAAAYkAAAAFHJUUkMAAAY4AAAIDGFhcmcAAA5EAAAAIHZj
+Z3QAAA5kAAAGEm5kaW4AABR4AAAGPmNoYWQAABq4AAAALG1tb2QAABrkAAAAKGJUUkMAAAY4AAAIDGdU
+UkMAAAY4AAAIDGFhYmcAAA5EAAAAIGFhZ2cAAA5EAAAAIGRlc2MAAAAAAAAACERpc3BsYXkAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAABtbHVjAAAAAAAAACEAAAAMaHJIUgAAABQAAAGca29LUgAAAAwAAAGwbmJOTwAA
+ABIAAAG8aWQAAAAAABIAAAHOaHVIVQAAABQAAAHgY3NDWgAAABYAAAH0ZGFESwAAABwAAAIKdWtVQQAA
+ABwAAAImYXIAAAAAABQAAAJCaXRJVAAAABQAAAJWcm9STwAAABIAAAJqbmxOTAAAABYAAAJ8aGVJTAAA
+ABYAAAKSZXNFUwAAABIAAAJqZmlGSQAAABAAAAKoemhUVwAAAAwAAAK4dmlWTgAAAA4AAALEc2tTSwAA
+ABYAAALSemhDTgAAAAwAAAK4cnVSVQAAACQAAALoZnJGUgAAABYAAAMMbXMAAAAAABIAAAMiY2FFUwAA
+ABgAAAM0dGhUSAAAAAwAAANMZGVERQAAABAAAANYZW5VUwAAABIAAANocHRCUgAAABgAAAN6cGxQTAAA
+ABIAAAOSZWxHUgAAACIAAAOkc3ZTRQAAABAAAAPGdHJUUgAAABQAAAPWamFKUAAAAA4AAAPqcHRQVAAA
+ABYAAAP4AEwAQwBEACAAdQAgAGIAbwBqAGnO7LfsACAATABDAEQARgBhAHIAZwBlAC0ATABDAEQATABD
+AEQAIABXAGEAcgBuAGEAUwB6AO0AbgBlAHMAIABMAEMARABCAGEAcgBlAHYAbgD9ACAATABDAEQATABD
+AEQALQBmAGEAcgB2AGUAcwBrAOYAcgBtBBoEPgQ7BEwEPgRABD4EMgQ4BDkAIABMAEMARCAPAEwAQwBE
+ACAGRQZEBkgGRgYpAEwAQwBEACAAYwBvAGwAbwByAGkATABDAEQAIABjAG8AbABvAHIASwBsAGUAdQBy
+AGUAbgAtAEwAQwBEIA8ATABDAEQAIAXmBdEF4gXVBeAF2QBWAOQAcgBpAC0ATABDAERfaYJyACAATABD
+AEQATABDAEQAIABNAOAAdQBGAGEAcgBlAGIAbgDpACAATABDAEQEJgQyBDUEQgQ9BD4EOQAgBBYEGgAt
+BDQEOARBBD8EOwQ1BDkATABDAEQAIABjAG8AdQBsAGUAdQByAFcAYQByAG4AYQAgAEwAQwBEAEwAQwBE
+ACAAZQBuACAAYwBvAGwAbwByAEwAQwBEACAOKg41AEYAYQByAGIALQBMAEMARABDAG8AbABvAHIAIABM
+AEMARABMAEMARAAgAEMAbwBsAG8AcgBpAGQAbwBLAG8AbABvAHIAIABMAEMARAOIA7MDxwPBA8kDvAO3
+ACADvwO4A8wDvQO3ACAATABDAEQARgDkAHIAZwAtAEwAQwBEAFIAZQBuAGsAbABpACAATABDAEQwqzDp
+MPwAIABMAEMARABMAEMARAAgAGEAIABDAG8AcgBlAHMAAHRleHQAAAAAQ29weXJpZ2h0IEFwcGxlIElu
+Yy4sIDIwMTkAAFhZWiAAAAAAAADzUgABAAAAARbPWFlaIAAAAAAAAGGcAAA2hAAAB01YWVogAAAAAAAA
+bZYAAK/8AAAYjlhZWiAAAAAAAAAnowAAGYAAALNSY3VydgAAAAAAAAQAAAAABQAKAA8AFAAZAB4AIwAo
+AC0AMgA2ADsAQABFAEoATwBUAFkAXgBjAGgAbQByAHcAfACBAIYAiwCQAJUAmgCfAKMAqACtALIAtwC8
+AMEAxgDLANAA1QDbAOAA5QDrAPAA9gD7AQEBBwENARMBGQEfASUBKwEyATgBPgFFAUwBUgFZAWABZwFu
+AXUBfAGDAYsBkgGaAaEBqQGxAbkBwQHJAdEB2QHhAekB8gH6AgMCDAIUAh0CJgIvAjgCQQJLAlQCXQJn
+AnECegKEAo4CmAKiAqwCtgLBAssC1QLgAusC9QMAAwsDFgMhAy0DOANDA08DWgNmA3IDfgOKA5YDogOu
+A7oDxwPTA+AD7AP5BAYEEwQgBC0EOwRIBFUEYwRxBH4EjASaBKgEtgTEBNME4QTwBP4FDQUcBSsFOgVJ
+BVgFZwV3BYYFlgWmBbUFxQXVBeUF9gYGBhYGJwY3BkgGWQZqBnsGjAadBq8GwAbRBuMG9QcHBxkHKwc9
+B08HYQd0B4YHmQesB78H0gflB/gICwgfCDIIRghaCG4IggiWCKoIvgjSCOcI+wkQCSUJOglPCWQJeQmP
+CaQJugnPCeUJ+woRCicKPQpUCmoKgQqYCq4KxQrcCvMLCwsiCzkLUQtpC4ALmAuwC8gL4Qv5DBIMKgxD
+DFwMdQyODKcMwAzZDPMNDQ0mDUANWg10DY4NqQ3DDd4N+A4TDi4OSQ5kDn8Omw62DtIO7g8JDyUPQQ9e
+D3oPlg+zD88P7BAJECYQQxBhEH4QmxC5ENcQ9RETETERTxFtEYwRqhHJEegSBxImEkUSZBKEEqMSwxLj
+EwMTIxNDE2MTgxOkE8UT5RQGFCcUSRRqFIsUrRTOFPAVEhU0FVYVeBWbFb0V4BYDFiYWSRZsFo8WshbW
+FvoXHRdBF2UXiReuF9IX9xgbGEAYZRiKGK8Y1Rj6GSAZRRlrGZEZtxndGgQaKhpRGncanhrFGuwbFBs7
+G2MbihuyG9ocAhwqHFIcexyjHMwc9R0eHUcdcB2ZHcMd7B4WHkAeah6UHr4e6R8THz4faR+UH78f6iAV
+IEEgbCCYIMQg8CEcIUghdSGhIc4h+yInIlUigiKvIt0jCiM4I2YjlCPCI/AkHyRNJHwkqyTaJQklOCVo
+JZclxyX3JicmVyaHJrcm6CcYJ0kneierJ9woDSg/KHEooijUKQYpOClrKZ0p0CoCKjUqaCqbKs8rAis2
+K2krnSvRLAUsOSxuLKIs1y0MLUEtdi2rLeEuFi5MLoIuty7uLyQvWi+RL8cv/jA1MGwwpDDbMRIxSjGC
+Mbox8jIqMmMymzLUMw0zRjN/M7gz8TQrNGU0njTYNRM1TTWHNcI1/TY3NnI2rjbpNyQ3YDecN9c4FDhQ
+OIw4yDkFOUI5fzm8Ofk6Njp0OrI67zstO2s7qjvoPCc8ZTykPOM9Ij1hPaE94D4gPmA+oD7gPyE/YT+i
+P+JAI0BkQKZA50EpQWpBrEHuQjBCckK1QvdDOkN9Q8BEA0RHRIpEzkUSRVVFmkXeRiJGZ0arRvBHNUd7
+R8BIBUhLSJFI10kdSWNJqUnwSjdKfUrESwxLU0uaS+JMKkxyTLpNAk1KTZNN3E4lTm5Ot08AT0lPk0/d
+UCdQcVC7UQZRUFGbUeZSMVJ8UsdTE1NfU6pT9lRCVI9U21UoVXVVwlYPVlxWqVb3V0RXklfgWC9YfVjL
+WRpZaVm4WgdaVlqmWvVbRVuVW+VcNVyGXNZdJ114XcleGl5sXr1fD19hX7NgBWBXYKpg/GFPYaJh9WJJ
+Ypxi8GNDY5dj62RAZJRk6WU9ZZJl52Y9ZpJm6Gc9Z5Nn6Wg/aJZo7GlDaZpp8WpIap9q92tPa6dr/2xX
+bK9tCG1gbbluEm5rbsRvHm94b9FwK3CGcOBxOnGVcfByS3KmcwFzXXO4dBR0cHTMdSh1hXXhdj52m3b4
+d1Z3s3gReG54zHkqeYl553pGeqV7BHtje8J8IXyBfOF9QX2hfgF+Yn7CfyN/hH/lgEeAqIEKgWuBzYIw
+gpKC9INXg7qEHYSAhOOFR4Wrhg6GcobXhzuHn4gEiGmIzokziZmJ/opkisqLMIuWi/yMY4zKjTGNmI3/
+jmaOzo82j56QBpBukNaRP5GokhGSepLjk02TtpQglIqU9JVflcmWNJaflwqXdZfgmEyYuJkkmZCZ/Jpo
+mtWbQpuvnByciZz3nWSd0p5Anq6fHZ+Ln/qgaaDYoUehtqImopajBqN2o+akVqTHpTilqaYapoum/adu
+p+CoUqjEqTepqaocqo+rAqt1q+msXKzQrUStuK4trqGvFq+LsACwdbDqsWCx1rJLssKzOLOutCW0nLUT
+tYq2AbZ5tvC3aLfguFm40blKucK6O7q1uy67p7whvJu9Fb2Pvgq+hL7/v3q/9cBwwOzBZ8Hjwl/C28NY
+w9TEUcTOxUvFyMZGxsPHQce/yD3IvMk6ybnKOMq3yzbLtsw1zLXNNc21zjbOts83z7jQOdC60TzRvtI/
+0sHTRNPG1EnUy9VO1dHWVdbY11zX4Nhk2OjZbNnx2nba+9uA3AXcit0Q3ZbeHN6i3ynfr+A24L3hROHM
+4lPi2+Nj4+vkc+T85YTmDeaW5x/nqegy6LzpRunQ6lvq5etw6/vshu0R7ZzuKO6070DvzPBY8OXxcvH/
+8ozzGfOn9DT0wvVQ9d72bfb794r4Gfio+Tj5x/pX+uf7d/wH/Jj9Kf26/kv+3P9t//9wYXJhAAAAAAAD
+AAAAAmZmAADypwAADVkAABPQAAAKDnZjZ3QAAAAAAAAAAAADAQAAAgAAAAUAFQAyAF8AmwDoATUBiQHs
+AlwC2gNjA/kEpAVeBicG+AfYCMgJyArQC9wM9g4NDzcQXRGFEqwT0hT1FhIXJRg5GUAaRRtCHDAdFx4C
+Huof1CC9IaoimCOKJH4lciZpJ18oVylXKlcrVyxbLWUubS95MIkxmjKsM8M03zX7Nxc4PDlbOnw7kDyd
+Pas+uD/CQM9B30LuQ/xFDUYeRzFIQUlRSmdLe0yPTaVOuE/LUONR+lMRVCdVP1ZYV3VYmFnAWu9cHV1K
+XnZfo2DQYgBjMmRiZZhm02gLaUlqjGvUbRpuaW+7cRJybXPKdSp2jnfTeO56AHsQfCR9NH5Ff1CAXoFn
+gmqDcoRwhWqGZYdZiEqJNYofiwSL54zJjaWOgI9dkEGRKpISkvqT45TLlbSWm5eDmG2ZV5pDmy+cG50J
+nfme65/foNShzKLFo72kuqWlpoanbKhTqTiqIKsIq++s2K3Drq6vm7CGsXKyX7NNtDu1KrYZtwW38rjf
+ucu6p7t/vFa9L74KvuW/wsCewX7CXsNAxCXFDcX1xuHHz8i+ybDKpcuczJPNiM53z2XQUdE90irTGtQH
+1PXV5tbW18nYvNmx2qfbn9yX3ZPejd+L4IjhhuKM45HkkOWJ5n3nc+hp6WHqYetn7HjtnO7S8CLxlvMq
+9OT21vj7+2/+Jv//AAAABwAhAFAAlgD2AToBiAHkAkgCuAM5A8wEZgULBcUGiQdbCDkJIAoWCxsMHA0r
+DkAPXhB5EZgSthPUFO8WABcOGBkZIRoeGxYcAhznHc8euR+hIIkhcyJhI1IkRSUzJignHSgPKQ0qCCsB
+LAEtBS4JLw0wFTEbMiYzNjRGNVo2ajeCOJc5qjqyO7A8rj2tPqk/p0CpQapCqkOsRK5FsUazR7ZIuknA
+SsVLyUzOTdFO2E/fUORR6lLxU/lVBVYWVy5YS1loWoRboFy9Xdte+mAbYTtiYGOLZLNl32cQaEVpeGqz
+a/JtNW56b8FxC3JYc4x0oXWvdrt3ynjXeeN67nv5fQJ+B38NgBGBEoISgxCEDYUFhf2G9IfoiN2Jzoq/
+i66Mlo2CjmiPU5A+kSqSF5MEk/KU5ZXYls2Xw5i7mbOasJuunK6dsZ61n7ygwaHIorujnaSHpXOmX6dN
+qDypLKoeqxKsCKz+rfOu6a/gsNixzLLFs7u0rLWetpC3g7h4uWu6XbtQvEO9Nr4pvxzAEMEDwfbC68Ph
+xNTFzMbDx7rIs8mtyqrLpsypzb/O2s/y0QfSHNMx1ELVU9Zl13bYiNmb2rDbxtzh3frfGuA74WDih+Ov
+5NnmCuc66Gzppurk7CPtaO6y8ALxVvKq9AT1ZPbF+Cf5jvr1/Fv9vv8X//8AAAAGAA4AIQA+AGYAmADV
+ARcBVgGdAe4CSwKxAyEDmAQaBKUFOwXbBn8HKgfcCJEJTQoPCsoLiwxODRANzQ6EDzoP7xCdEUgR7RKI
+EyQTvRRXFPEVixYnFsQXYxgEGKMZRRnpGo4bNRvdHIYdMh3jHpMfRB/5IKwhYyIfItsjlyRUJRgl2CaV
+J0sn9CigKUwp9yqkK1MsAyy1LWcuHC7RL4cwPzD6MbUycTMwM+w0qjVpNiw26zerOG45MTn1Orc7ezxD
+PQo90j6aP2JAK0D2QcFCjUNcRC5E/UXPRqRHe0hPSSlKA0rfS7xMmk14TllPL0/+UMxRnFJuU0FUGVTw
+VctWqFeGWGpZTVo1WyBcDVz8Xexe3l/TYMhhwGK3Y65kpGWTZoJnb2hgaVNqRms7bC9tJm4gbxpwF3EV
+chNzEnQTdRZ2GnceeCV5LHoxezN8GXzxfch+n39ygEeBGYHpgruDjoRhhTSGB4bbh7KIi4liij+LHIv6
+jNmNu46cj3GQRJEXke6SyZOnlIiVa5ZWl0SYNZkvmiybLZwznT6eTJ9eoHShj6Kro72kw6XEpsanyKjO
+qdeq4KvsrPyuC68esDOxSLJfs3a0jbWntr632Ljvugi7Qbyjvfq/SsCfwf7DaMTgxm3IEsnby7/N0tAo
+0sLVqdkO3Q7iIujA8xz//wAAbmRpbgAAAAAAAAY2AACZAgAAVsgAAFUEAACRsAAAJ3MAABcKAABQDQAA
+VDkAAgo9AAH64QABJmYAAwEAAAIAAAATACwARQBfAHgAkQCrAMUA3wD5ARQBMAFMAWoBhwGmAcYB5wIK
+Ai4CVAJ8AqcC0wMDAzUDagOlA+QEJARnBKwE8wU7BYUFzwYcBmoGugcMB10HsAgFCFsIsAkICWEJugoU
+CnEKzQsqC4cL5gxHDKYNCQ1sDdUORA61DyYPnBAUEIsRBBF/Ef0SehL6E3sT/xSFFQoVkRYbFqUXMhfC
+GFMY4hl2Ggsaohs6G9McbB0EHZweMR7HH2Af+iCXITQh1CJ0IxQjtiRaJP0lnSZCJucniyguKM8pdSoZ
+KrsrXiwALKItRC3mLosvLC/OMHoxRDIdMvkz1zSzNZg2ezdnOFE5Qzo9OzM8Nj0/Pko/YEB7QaJCzEQC
+RTlGfkfISRJKUUuQTNROGU9iUK1R/lNPVKFV91dKWKNZ/VtVXK1eBl9fYLdiD2NsZMNmN2fBaUJqyGxT
+bdpvaXD4coV0FXWldzx40XpqfAN9oH87gOGCiYQyheCHsYmPi3ONUo8zkRSS+5Talr2Ynpp4nFeeMKAI
+od+jtKWGp1apKasHrPKu47DYstK0xLbCuL+6uby4vrXAssKvxK3GqsipyqHMo86c0J7SndSK1ofYktqs
+3NLe7+EZ4zPlQudH6TDq/+y77lvv4fFL8qbz8PUp9kr3Yvhu+Wj6V/s2/BD83v2k/pf//wAAAAwAIwA8
+AFQAbgCHAKEAuwDWAPEBDAEpAUYBZAGCAaIBwwHlAgkCLgJVAn8CqwLZAwkDPQN0A7AD8AQxBHQEugUC
+BUsFlQXgBi8GfgbPByMHdQfKCCIIeQjRCSsJhwnjCkIKoQsAC2ELwgwnDIoM8A1YDcMOOA6wDygPpBAj
+EKERIRGkEigSrhM2E8AUTBTaFWgV+RaMFyEXuRhTGOsZiRooGskbaxwOHLEdUh3xHpAfMR/UIHkhHyHH
+InAjGiPFJHIlHiXIJnYnJCfSKH0pKinaKocrMyvgLIwtOS3lLpYvQS/wMK0xgTJeMz40HzUBNek20Te+
+OKs5oDqYO5A8kT2TPps/pUC1Qc5C5EQFRSRGTEd3SKZJ40seTGJNo07mUCtRcVK9VAFVSlaRV9pZIlpu
+W7Rc/F5EX4xg02IZY2VkrGYSZ5lpFGqQbBFtjG8OcI5yDHOMdQl2j3gUeZt7I3y0fkB/04FwgxCEsoZV
+h/eJoItPjPyOrZBgkhqT0ZWMl06ZDJrMnJOeVqAcoeSjrKV0pzqpBarCrGOuAq+nsVKzArSvtmm4Jbnh
+u5+9ZL8kwOjCqsRuxivH78moy2PNHc7S0IvSQNP31abXV9kM2rncYN4F363hT+Lt5IrmIOey6Urq3+xw
+7fvviPEW8qX0MPW490f41vpk+/39jv//AAAAHQBEAGoAkQC4AN8BCAEyAV4BiwG8Ae4CJAJeAp4C4gMs
+A38D3AQ+BKYFEgWBBfMGagbjB18H3ghgCOEJZwnuCnkLAwuPDCAMrw1DDeEOkg9FD/4QuBF0EjMS9BO3
+FH4VQxYNFtgXqBh6GUwaJRr/G9scuh2fHoIfaCBRIT4iLSMdJBElBSX4JvEn6SjfKd0q1yvULNEtzy7S
+L9Mw5DIEMyc0SDVrNos3rzjOOfI7DjwvPU0+aT+FQKJBwkLdQ/5FGkY9R2BIhUm4Su1MKU1hTppP1VEQ
+UlFTjFTJVglXRFiFWcZbCFxJXYxe0GAVYVpioGPuZUJm0Whyag9rvG1mbx9w2XKUdFJ2FHfZeZx7XH0i
+ft6AoYJkhCSF5ofHibCLm417j1iRMJMGlM6WlZhWmgebup1nnw6gsqJSo++liKceqLSqWawVrd6vqLF0
+sz21ALbJuI+6ULwSvdi/lMFXwxjE2saeyGXKKMv0zbvPi9Fe0yLUlNYJ14nZE9qe3CTdo98b4Ivh8eNM
+5J3l4+cY6EDpYup764Pshe1y7l3vN/AP8Nfxn/JX8w7zu/RY9Pb1i/YX9qP3KPec+A/4g/jx+VL5tPoW
++nj6yvsT+1z7pfvu/Df8dvym/NX9Bf00/WT9k/3D/fP+Iv5P/nr+pf7Q/vv/J/9S/33/qP/U//8AAHNm
+MzIAAAAAAAEMQgAABd7///MmAAAHkgAA/ZH///ui///9owAAA9wAAMBsbW1vZAAAAAAAAAYQAACcgQAA
+AADBvfOhAAAAAAAAAAAAAAAAAAAAANIrLC0uWiRjbGFzc25hbWVYJGNsYXNzZXNfEBBOU0JpdG1hcElt
+YWdlUmVwoy0vMFpOU0ltYWdlUmVwWE5TT2JqZWN00issMjNXTlNBcnJheaIyMNIrLDU2Xk5TTXV0YWJs
+ZUFycmF5ozUyMNM4OQ86OzxXTlNXaGl0ZVxOU0NvbG9yU3BhY2VEMCAwABADgAzSKyw+P1dOU0NvbG9y
+oj4w0issQUJXTlNJbWFnZaJBMAAIABEAGgAkACkAMgA3AEkATABRAFMAYgBoAHUAfACLAJIAnwCmAK4A
+sACyALQAuQC7AL0AxgDLANYA2ADaANwA4QDkAOYA6ADqAPEBCAEkASYBKCGaIZ8hqiGzIcYhyiHVId4h
+4yHrIe4h8yICIgYiDSIVIiIiJyIpIisiMCI4IjsiQCJIAAAAAAAAAgEAAAAAAAAAQwAAAAAAAAAAAAAA
+AAAAIks
 </mutableData>
         </image>
         <image name="remove" width="23" height="22"/>
         <image name="remove-pressed" width="23" height="22"/>
-        <image name="warning-triangle" width="16" height="16"/>
     </resources>
 </document>

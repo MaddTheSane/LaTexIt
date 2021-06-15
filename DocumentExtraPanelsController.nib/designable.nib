@@ -158,7 +158,7 @@
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="37">
                     <rect key="frame" x="27" y="8" width="311" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warning : jpeg does not manage transparency" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" inset="2" id="51">
+                    <buttonCell key="cell" type="square" title="Warning : jpeg does not manage transparency" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="51">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -166,7 +166,7 @@
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="87">
                     <rect key="frame" x="101" y="8" width="164" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warning : pdf2svg path is invalid" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" inset="2" id="88">
+                    <buttonCell key="cell" type="square" title="Warning : pdf2svg path is invalid" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="88">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -174,12 +174,13 @@
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="90">
                     <rect key="frame" x="101" y="8" width="164" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" title="Warning : MathML" bezelStyle="shadowlessSquare" image="warning-triangle" imagePosition="left" alignment="center" alternateImage="warning-triangle" inset="2" id="91">
+                    <buttonCell key="cell" type="square" title="Warning : MathML" bezelStyle="shadowlessSquare" image="NSCaution" imagePosition="left" alignment="center" imageScaling="proportionallyDown" inset="2" id="91">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
             </subviews>
+            <point key="canvasLocation" x="0.0" y="-306"/>
         </customView>
         <numberFormatter formatterBehavior="10_0" positiveFormat="0%" negativeFormat="-0%" hasThousandSeparators="NO" thousandSeparator=" " id="7" userLabel="scaleAsPercentFormatter">
             <attributedString key="attributedStringForZero">
@@ -196,6 +197,6 @@
         </numberFormatter>
     </objects>
     <resources>
-        <image name="warning-triangle" width="16" height="16"/>
+        <image name="NSCaution" width="32" height="32"/>
     </resources>
 </document>

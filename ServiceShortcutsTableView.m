@@ -140,7 +140,7 @@ extern NSString *NSMenuDidBeginTrackingNotification;
         conflict |= (service != value) && valueHasShortcut && [[value objectForKey:ServiceShortcutEnabledKey] boolValue] &&
                     [[service objectForKey:ServiceShortcutEnabledKey] boolValue] &&
                     [[[service objectForKey:ServiceShortcutStringKey] uppercaseString] isEqualToString:valueShortcutString];
-      result = !conflict ? nil : [NSImage imageNamed:@"warning-triangle"];
+      result = !conflict ? nil : [NSImage imageNamed:NSImageNameCaution];
       [self->serviceWarningShortcutConflictButton setHidden:!conflict && [self->serviceWarningShortcutConflictButton isHidden]];
     }
   }//end if (!reverse)
@@ -148,10 +148,14 @@ extern NSString *NSMenuDidBeginTrackingNotification;
   {
     if ([context isEqual:@"string"])  
     {
+#if 0
       const unichar shift = 0x21e7;
       const unichar command = 0x2318;
       const unichar tab[] = {shift, command};
       NSString* charactersToTrim = [NSString stringWithCharacters:tab length:2];
+#else
+		NSString* charactersToTrim = @"\u21e7\u2318";
+#endif
       result = value;
       result = [result stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
       result = [result stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:charactersToTrim]];
