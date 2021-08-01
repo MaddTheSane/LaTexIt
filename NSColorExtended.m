@@ -18,9 +18,13 @@
 {
   NSColor* result = nil;
   NSError* decodingError = nil;
-  result = !data ? nil :
-    isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:data error:&decodingError] :
+  if (@available(macOS 10.13, *)) {
+    result = !data ? nil :
+    [NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class] fromData:data error:&decodingError];
+  } else {
+    result = !data ? nil :
     [[NSKeyedUnarchiver unarchiveObjectWithData:data] dynamicCastToClass:[NSColor class]];
+  }
   if (decodingError != nil)
     DebugLog(0, @"decoding error : %@", decodingError);
   return result;
@@ -30,9 +34,12 @@
 //returns the color as data
 -(NSData*) colorAsData
 {
-  NSData* result =
-    isMacOS10_13OrAbove() ? [NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:YES error:nil] :
-    [NSKeyedArchiver archivedDataWithRootObject:self];
+  NSData* result;
+  if (@available(macOS 10.13, *)) {
+    result = [NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:YES error:nil];
+  } else {
+    result = [NSKeyedArchiver archivedDataWithRootObject:self];
+  }
   return result;
 }
 //end colorAsData

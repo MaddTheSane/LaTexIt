@@ -184,7 +184,7 @@
     __block NSURL* fileURL = !filepath ? nil : [NSURL fileURLWithPath:filepath];
     [data writeToURL:fileURL atomically:YES];
     __block NSURL* applicationURL = [[NSWorkspace sharedWorkspace] URLForApplicationWithBundleIdentifier:@"fr.chachatelier.pierre.LaTeXiT"];
-    if (isMacOS10_15OrAbove())
+    if (@available(macOS 10.15, *))
     {
       NSWorkspaceOpenConfiguration* configuration = [NSWorkspaceOpenConfiguration configuration];
       [[NSWorkspace sharedWorkspace] openURLs:@[fileURL] withApplicationAtURL:applicationURL configuration:configuration completionHandler:^(NSRunningApplication * _Nullable app, NSError * _Nullable error) {

@@ -2347,9 +2347,14 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   {
     NSData* preambleData = [[preamble objectForKey:@"value"] dynamicCastToClass:[NSData class]];
     NSError* decodingError = nil;
-    NSAttributedString* preambleAttributedString = !preambleData ? nil :
-      isMacOS10_13OrAbove() ? [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:preambleData error:&decodingError] :
+    NSAttributedString* preambleAttributedString;
+    if (@available(macOS 10.13, *)) {
+      preambleAttributedString = !preambleData ? nil :
+      [NSKeyedUnarchiver unarchivedObjectOfClass:[NSAttributedString class] fromData:preambleData error:&decodingError];
+    } else {
+      preambleAttributedString = !preambleData ? nil :
       [[NSKeyedUnarchiver unarchiveObjectWithData:preambleData] dynamicCastToClass:[NSAttributedString class]];
+    }
     if (decodingError != nil)
       DebugLog(0, @"decoding error : %@", decodingError);
     [self setPreamble:preambleAttributedString];

@@ -37,19 +37,13 @@
 -(BOOL) isDarkMode
 {
   BOOL result = NO;
-  if (isMacOS10_14OrAbove())
-  {
-    NSString* _NSAppearanceNameAqua = @"NSAppearanceNameAqua";
-    NSString* _NSAppearanceNameDarkAqua = @"NSAppearanceNameDarkAqua";
-    SEL effectiveAppearanceSelector = NSSelectorFromString(@"effectiveAppearance");
-    id effectiveAppearance = ![self respondsToSelector:effectiveAppearanceSelector] ? nil :
-    [self performSelector:effectiveAppearanceSelector];
-    SEL bestMatchFromAppearancesWithNamesSelector = NSSelectorFromString(@"bestMatchFromAppearancesWithNames:");
-    NSArray* modes = [NSArray arrayWithObjects:_NSAppearanceNameAqua, _NSAppearanceNameDarkAqua, nil];
-    id mode = ![effectiveAppearance respondsToSelector:bestMatchFromAppearancesWithNamesSelector] ? nil :
-    [effectiveAppearance performSelector:bestMatchFromAppearancesWithNamesSelector withObject:modes];
-    NSString* modeAsString = [mode dynamicCastToClass:[NSString class]];
-    result = [modeAsString isEqualToString:_NSAppearanceNameDarkAqua];
+  if (@available(macOS 10.14, *)) {
+    if ([self conformsToProtocol:@protocol(NSAppearanceCustomization)]) {
+      NSAppearance *effectiveAppearance = [(id<NSAppearanceCustomization>)self effectiveAppearance];
+      NSArray* modes = @[NSAppearanceNameAqua, NSAppearanceNameDarkAqua];
+      NSAppearanceName mode = [effectiveAppearance bestMatchFromAppearancesWithNames:modes];
+      result = [mode isEqualToString:NSAppearanceNameDarkAqua];
+    }
   }//end if (isMacOS10_14OrAbove())
   return result;
 }
