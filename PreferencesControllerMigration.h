@@ -10,13 +10,17 @@
 
 #import "PreferencesController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString* Old_CheckForNewVersionsKey;
 
 @interface PreferencesController (Migration)
 
-+(NSArray*) oldKeys;
+@property (class, readonly, copy) NSArray<NSString*> *oldKeys;
 -(void) migratePreferences;
 -(void) removeKey:(NSString*)key;
 -(void) replaceKey:(NSString*)oldKey withKey:(NSString*)newKey;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -38,7 +38,7 @@
 #import <libxml/HTMLparser.h>
 
 #ifdef ARC_ENABLED
-#define CHBRIDGE CHBRIDGE
+#define CHBRIDGE __bridge
 #else
 #define CHBRIDGE
 #endif
@@ -156,10 +156,9 @@ static NSArray* PerformHTMLXPathQuery(NSData* document, NSString* query)
   size_t curvePointsSize;
 }
 
--(BOOL) latexitMetadataStarted;
--(void) setLatexitMetadataStarted:(BOOL)value;
+@property BOOL latexitMetadataStarted;
 -(NSMutableString*) latexitMetadataString;
--(id) latexitMetadata;
+@property (strong) id latexitMetadata;
 -(void) setLatexitMetadata:(id)plist;
 -(void) resetCurvePoints;
 -(void) appendCurvePoint:(CGPoint)point;
@@ -186,25 +185,19 @@ static NSArray* PerformHTMLXPathQuery(NSData* document, NSString* query)
 
 -(void) dealloc
 {
+#ifndef ARC_ENABLED
   [self->latexitMetadataString release];
   [self->latexitMetadata release];
+#endif
   if (self->curvePoints)
     free(self->curvePoints);
+#ifndef ARC_ENABLED
   [super dealloc];
+#endif
 }
 //end dealloc
 
--(BOOL) latexitMetadataStarted
-{
-  return self->latexitMetadataStarted;
-}
-//end latexitMetadataStarted
-
--(void) setLatexitMetadataStarted:(BOOL)value
-{
-  self->latexitMetadataStarted = value;
-}
-//end setLatexitMetadataStarted:
+@synthesize latexitMetadataStarted;
 
 -(NSMutableString*) latexitMetadataString
 {
@@ -212,21 +205,7 @@ static NSArray* PerformHTMLXPathQuery(NSData* document, NSString* query)
 }
 //end latexitMetadataString
 
--(id) latexitMetadata
-{
-  return [[self->latexitMetadata retain] autorelease];
-}
-//end latexitMetadata
-
--(void) setLatexitMetadata:(id)plist
-{
-  if (plist != self->latexitMetadata)
-  {
-    [self->latexitMetadata release];
-    self->latexitMetadata = [plist retain];
-  }//end if (plist != self->latexitMedatata)
-}
-//end setLatexitMetadata
+@synthesize latexitMetadata;
 
 -(void) resetCurvePoints
 {
@@ -268,7 +247,9 @@ static NSArray* PerformHTMLXPathQuery(NSData* document, NSString* query)
     }//end if (isValidIntegerX && isValidIntegerY)
   }//end for each point
   [self checkMetadataFromString:candidateString];
+#ifndef ARC_ENABLED
   [candidateString release];
+#endif
 }
 //end checkMetadataFromCurvePointBytes
 
@@ -393,7 +374,7 @@ static void CHCGPDFOperatorCallback_c(CGPDFScannerRef scanner, void *info)
 {
   //curveto (3 points)
   DebugLogStatic(1, @"<c (curveto)>");
-  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
+  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(CHBRIDGE id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
   CGPDFReal valueNumber1 = 0;
   CGPDFReal valueNumber2 = 0;
   CGPDFReal valueNumber3 = 0;
@@ -424,7 +405,7 @@ static void CHCGPDFOperatorCallback_h(CGPDFScannerRef scanner, void *info)
 {
   //close subpath
   DebugLogStatic(1, @"<h (close subpath)>");
-  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
+  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(CHBRIDGE id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
   [pdfScanningContext checkMetadataFromCurvePointBytes];
   [pdfScanningContext resetCurvePoints];
 }
@@ -433,7 +414,7 @@ static void CHCGPDFOperatorCallback_h(CGPDFScannerRef scanner, void *info)
 static void CHCGPDFOperatorCallback_l(CGPDFScannerRef scanner, void *info)
 {
   //lineto (1 point)
-  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
+  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(CHBRIDGE id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
   DebugLogStatic(1, @"<l (lineto)>");
   CGPDFReal valueNumber1 = 0;
   CGPDFReal valueNumber2 = 0;
@@ -448,7 +429,7 @@ static void CHCGPDFOperatorCallback_m(CGPDFScannerRef scanner, void *info)
 {
   //moveto (new subpath)
   DebugLogStatic(1, @"<m (moveto) (new subpath)>");
-  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
+  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(CHBRIDGE id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
   [pdfScanningContext resetCurvePoints];
 }
 //end CHCGPDFOperatorCallback_m()
@@ -474,7 +455,7 @@ static void CHCGPDFOperatorCallback_Tj(CGPDFScannerRef scanner, void *info)
     #endif
     DebugLogStatic(1, @"PDF scanning found <%@>", string);
     
-    LaTeXiTMetaDataParsingContext* pdfScanningContext = [(id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
+    LaTeXiTMetaDataParsingContext* pdfScanningContext = [(CHBRIDGE id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
 
     BOOL isStartingLatexitMetadata = [string isMatchedByRegex:@"^\\<latexit sha1_base64=\""];
     if (isStartingLatexitMetadata)
@@ -502,7 +483,7 @@ static void CHCGPDFOperatorCallback_v(CGPDFScannerRef scanner, void *info)
 {
   //curve
   DebugLogStatic(1, @"<v (curve)>");
-  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
+  LaTeXiTMetaDataParsingContext* pdfScanningContext = [(CHBRIDGE id)info dynamicCastToClass:[LaTeXiTMetaDataParsingContext class]];
   CGPDFReal valueNumber1 = 0;
   CGPDFReal valueNumber2 = 0;
   CGPDFReal valueNumber3 = 0;
@@ -1074,7 +1055,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       CGPDFOperatorTableSetCallback(operatorTable, "y", &CHCGPDFOperatorCallback_y);
       LaTeXiTMetaDataParsingContext* pdfScanningContext = [[LaTeXiTMetaDataParsingContext alloc] init];
       CGPDFScannerRef pdfScanner = !contentStream ? 0 :
-        CGPDFScannerCreate(contentStream, operatorTable, pdfScanningContext);
+        CGPDFScannerCreate(contentStream, operatorTable, (CHBRIDGE void * _Nullable)(pdfScanningContext));
       CGPDFScannerScan(pdfScanner);
       CGPDFScannerRelease(pdfScanner);
       CGPDFOperatorTableRelease(operatorTable);
@@ -1204,7 +1185,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     CGPDFOperatorTableSetCallback(operatorTable, "v", &CHCGPDFOperatorCallback_v);
     CGPDFOperatorTableSetCallback(operatorTable, "y", &CHCGPDFOperatorCallback_y);
     CGPDFScannerRef pdfScanner = !contentStream ? 0 :
-      CGPDFScannerCreate(contentStream, operatorTable, pdfScanningContext);
+      CGPDFScannerCreate(contentStream, operatorTable, (CHBRIDGE void * _Nullable)(pdfScanningContext));
     CGPDFScannerScan(pdfScanner);
     CGPDFScannerRelease(pdfScanner);
     CGPDFOperatorTableRelease(operatorTable);
@@ -1853,8 +1834,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (decodingError != nil)
         DebugLog(0, @"decoding error : %@", decodingError);
       result = !metaData ? nil : [self initWithMetaData:metaData useDefaults:useDefaults];
-      if (!result)
+      if (!result) {
+#ifndef ARC_ENABLED
         [self release];
+#endif
+      }
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.svg-image")))
     else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.html")))
     {
@@ -1943,17 +1927,23 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
           }//end if (latexMode == LATEX_MODE_TEXT)
           PreferencesController* preferencesController = [PreferencesController sharedController];
           NSAttributedString* latexSourceCodeAttributed = !latexSubSourceCode ? nil :
-            [[[NSAttributedString alloc] initWithString:latexSubSourceCode] autorelease];
+            [[NSAttributedString alloc] initWithString:latexSubSourceCode];
           metaData = !latexSourceCodeAttributed ? nil : @{
             @"mode":@(latexMode),
             @"sourceText":latexSourceCodeAttributed,
             @"magnification":@([preferencesController latexisationFontSize])
           };
           result = !metaData ? nil : [self initWithMetaData:metaData useDefaults:useDefaults];
+#ifndef ARC_ENABLED
+        [latexSourceCodeAttributed release];
+#endif
         }//end if (![NSString isNilOrEmpty:latexSourceCode])
       }//end if (!result)
-      if (!result)
+      if (!result) {
+#ifndef ARC_ENABLED
         [self release];
+#endif
+      }
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.html")))
     else if (UTTypeConformsTo((CHBRIDGE CFStringRef)sourceUTI, CFSTR("public.text")))
     {
@@ -2029,8 +2019,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(void) dealloc
 {
   [self dispose];
-  #ifdef ARC_ENABLED
-  #else
+  #ifndef ARC_ENABLED
   [super dealloc];
   #endif
 }
@@ -2039,8 +2028,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 -(void) dispose
 {
   [[self class] cancelPreviousPerformRequestsWithTarget:self];
-  #ifdef ARC_ENABLED
-  #else
+  #ifndef ARC_ENABLED
   [self->exportPrefetcher release];
   #endif
   self->exportPrefetcher = nil;
@@ -2179,8 +2167,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self willChangeValueForKey:@"pdfCachedImage"];
   @synchronized(self)
   {
-    #ifdef ARC_ENABLED
-    #else
+    #ifndef ARC_ENABLED
     [self->pdfCachedImage release];
     #endif
     self->pdfCachedImage = nil;
@@ -2211,8 +2198,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
           [equationData setPrimitiveValue:self forKey:@"equation"];//if managedObjectContext is nil, this is necessary
           [equationData didChangeValueForKey:@"equation"];
         }//end if (equationData)
-        #ifdef ARC_ENABLED
-        #else
+        #ifndef ARC_ENABLED
         [equationData release];
         #endif
       }//end if (!equationData)
@@ -2517,8 +2503,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       }//end for each representation
       if (!hasPdfOrBitmapImageRep)
       {
-        #ifdef ARC_ENABLED
-        #else
+        #ifndef ARC_ENABLED
         [self->pdfCachedImage release];
         #endif
         result = nil;
@@ -2945,11 +2930,11 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [fileHandle writeData:attachedData];
         [fileHandle closeFile];
         NSFileWrapper* fileWrapperOfImage = !attachedFileURL ? nil :
-          [[[NSFileWrapper alloc] initWithURL:attachedFileURL options:0 error:nil] autorelease];
-        NSTextAttachment*   textAttachmentOfImage     = [[[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage] autorelease];
+          [[NSFileWrapper alloc] initWithURL:attachedFileURL options:0 error:nil];
+        NSTextAttachment*   textAttachmentOfImage     = [[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage];
         NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
         NSMutableAttributedString* mutableAttributedStringWithImage =
-          [[[NSMutableAttributedString alloc] initWithAttributedString:attributedStringWithImage] autorelease];
+          [[NSMutableAttributedString alloc] initWithAttributedString:attributedStringWithImage];
             
         //changes the baseline of the attachment to align it with the surrounding text
         [mutableAttributedStringWithImage addAttribute:NSFontSizeAttribute
@@ -2964,8 +2949,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
         //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
         unichar invisibleSpace = 0xFEFF;
-        NSString* invisibleSpaceString = [[[NSString alloc] initWithCharacters:&invisibleSpace length:1] autorelease];
-        NSMutableAttributedString* space = [[[NSMutableAttributedString alloc] initWithString:invisibleSpaceString] autorelease];
+        NSString* invisibleSpaceString = [[NSString alloc] initWithCharacters:&invisibleSpace length:1];
+        NSMutableAttributedString* space = [[NSMutableAttributedString alloc] initWithString:invisibleSpaceString];
         //[space setAttributes:contextAttributes range:space.range];
         [space addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline)
                       range:space.range];
@@ -2975,6 +2960,13 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         NSData* data = [mutableAttributedStringWithImage dataFromRange:mutableAttributedStringWithImage.range documentAttributes:@{NSDocumentTypeDocumentAttribute:NSRTFDTextDocumentType} error:nil];
         [pboard setData:data forType:NSPasteboardTypeRTFD];
         [[NSFileManager defaultManager] removeItemAtURL:attachedFileURL error:nil];
+#ifndef ARC_ENABLED
+        [fileWrapperOfImage release];
+        [textAttachmentOfImage release];
+        [mutableAttributedStringWithImage release];
+        [invisibleSpaceString release];
+        [space release];
+#endif
       }//end if (!lazyDataProvider)
       break;
   }//end switch(exportFormat)
@@ -3200,6 +3192,15 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(NSString*) computeFileName
 {
+#ifdef ARC_ENABLED
+  NSString* result = [[self title] copy];
+  if (!result || [result isEqualToString:@""])
+    result = [[self titleAuto] copy];
+  if (!result || [result isEqualToString:@""])
+    result = [[[self sourceText] string] copy];
+  result = [[self class] computeFileNameFromContent:result];
+  return result;
+#else
   NSString* result = [[[self title] copy] autorelease];
   if (!result || [result isEqualToString:@""])
     result = [[[self titleAuto] copy] autorelease];
@@ -3207,6 +3208,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     result = [[[[self sourceText] string] copy] autorelease];
   result = [[self class] computeFileNameFromContent:result];
   return result;
+#endif
 }
 //end computeFileName
 

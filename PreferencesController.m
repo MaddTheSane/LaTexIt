@@ -3399,7 +3399,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       {
         if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
         {
-          NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+          NSAlert* alert = [[NSAlert alloc] init];
           alert.messageText = NSLocalizedString(@"The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences", @"");
           [alert addButtonWithTitle:NSLocalizedString(@"Apply preferences", @"")];
           [alert addButtonWithTitle:NSLocalizedString(@"Update preferences", @"")];
@@ -3407,6 +3407,9 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
           alert.informativeText = NSLocalizedString(@"__EXPLAIN_CHANGE_SHORTCUTS__", @"");
           [[[alert buttons] objectAtIndex:2] setKeyEquivalent:[NSString stringWithFormat:@"%c", '\033']];//escape
           NSInteger result = [alert runModal];
+#ifndef ARC_ENABLED
+          [alert release];
+#endif
           if (result == NSAlertFirstButtonReturn)
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS;
           else if (result == NSAlertSecondButtonReturn)
@@ -3467,13 +3470,16 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
           {
             if (authenticationFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_ASK)
             {
-              NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+              NSAlert* alert = [[NSAlert alloc] init];
               alert.messageText = NSLocalizedString(@"New Service shortcuts could not be set", @"");
               alert.informativeText = NSLocalizedString(@"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle", @"");
               [alert addButtonWithTitle:NSLocalizedString(@"Update preferences", @"")];
               [alert addButtonWithTitle:NSLocalizedString(@"Ignore", @"")];
               [[alert.buttons objectAtIndex:1] setKeyEquivalent:[NSString stringWithFormat:@"%c",'\033']];
               NSInteger result = [alert runModal];
+#ifndef ARC_ENABLED
+          [alert release];
+#endif
               if (result == NSAlertFirstButtonReturn)
                  authenticationFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS;
               else

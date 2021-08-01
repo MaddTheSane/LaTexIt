@@ -353,7 +353,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         @try{
           NSError* decodingError = nil;
           historyItems = !uncompressedData ? nil :
-            isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[HistoryItem class] fromData:uncompressedData error:&decodingError] dynamicCastToClass:[NSArray class]] :
+            isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[NSSet setWithObject:[HistoryItem class]] fromData:uncompressedData error:&decodingError] dynamicCastToClass:[NSArray class]] :
             [[NSKeyedUnarchiver unarchiveObjectWithData:uncompressedData] dynamicCastToClass:[NSArray class]];
           if (decodingError != nil)
             DebugLog(0, @"decoding error : %@", decodingError);
@@ -501,8 +501,14 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     [persistentStoreCoordinator setMetadata:@{@"version":applicationVersion} forPersistentStore:persistentStore];
   }//end if (setVersion && persistentStore)
   result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
-  if (!result.undoManager)
-    result.undoManager = [[[NSUndoManager alloc] init] autorelease];
+  if (!result.undoManager) {
+    NSUndoManager *mgr = [[NSUndoManager alloc] init];
+    result.undoManager = mgr;
+#ifdef ARC_ENABLED
+#else
+    [mgr release];
+#endif
+  }
   [result setPersistentStoreCoordinator:persistentStoreCoordinator];
   [result setRetainsRegisteredObjects:YES];
   #ifdef ARC_ENABLED

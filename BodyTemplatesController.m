@@ -208,7 +208,9 @@ static NSDictionary* noneBodyTemplate = nil;
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+#ifndef ARC_ENABLED
   [newObject release];
+#endif
 }
 //end add:
 

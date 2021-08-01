@@ -3139,8 +3139,8 @@ static NSMutableDictionary* cachePaths = nil;
           NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT", @"");
           *error = message;
           [NSApp activateIgnoringOtherApps:YES];
-          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, NSLocalizedString(@"Cancel", @""),
-                                       NSLocalizedString(@"Open in LaTeXiT", @""), nil);
+          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", NSLocalizedString(@"Cancel", @""),
+                                       NSLocalizedString(@"Open in LaTeXiT", @""), nil, message);
           if (choice == NSAlertAlternateReturn)
           {
             NSDocumentController* documentController = [NSDocumentController sharedDocumentController];
@@ -3191,7 +3191,7 @@ static NSMutableDictionary* cachePaths = nil;
   {
     NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration", @"");
     *error = message;
-    NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, @"OK", nil, nil);
+    NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", @"OK", nil, nil, message);
   }
   else
   {
@@ -3502,8 +3502,8 @@ static NSMutableDictionary* cachePaths = nil;
         *error = message;
         
         [NSApp activateIgnoringOtherApps:YES];
-        NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, NSLocalizedString(@"Cancel", @""),
-                                     NSLocalizedString(@"Open in LaTeXiT", @""), nil);
+        NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", NSLocalizedString(@"Cancel", @""),
+                                     NSLocalizedString(@"Open in LaTeXiT", @""), nil, message);
         if (choice == NSAlertAlternateReturn)
         {
           NSEnumerator* enumerator = [errorDocuments objectEnumerator];
@@ -3831,18 +3831,16 @@ static NSMutableDictionary* cachePaths = nil;
       NSInteger choice = NSRunAlertPanel(
         [NSString stringWithFormat:NSLocalizedString(@"Do you want to install the palette %@ ?", @""),
                                    [palettePath lastPathComponent]],
-        [NSString stringWithFormat:NSLocalizedString(@"This palette will be installed into \n%@", @""),
-                                   localizedPalettesFolderPath],
+                                         NSLocalizedString(@"This palette will be installed into \n%@", @""),
         NSLocalizedString(@"Install palette", @""),
-        NSLocalizedString(@"Cancel", @""), nil);
+        NSLocalizedString(@"Cancel", @""), nil, localizedPalettesFolderPath);
       if (choice == NSAlertDefaultReturn)
       {
         BOOL shouldInstall = [[NSFileManager defaultManager] createDirectoryAtPath:palettesFolderPath withIntermediateDirectories:YES attributes:nil error:0];
         if (!shouldInstall)
           NSRunAlertPanel(NSLocalizedString(@"Could not create path", @""),
-                          [NSString stringWithFormat:NSLocalizedString(@"The path %@ could not be created to install a palette in it", @""),
-                                                     palettesFolderPath],
-                          NSLocalizedString(@"OK", @""), nil, nil);
+                          NSLocalizedString(@"The path %@ could not be created to install a palette in it", @""),
+                          NSLocalizedString(@"OK", @""), nil, nil, palettesFolderPath);
                           
         NSString* destinationPath = [palettesFolderPath stringByAppendingPathComponent:[palettePath lastPathComponent]];
         BOOL alreadyExists = [fileManager fileExistsAtPath:destinationPath];
@@ -3851,10 +3849,9 @@ static NSMutableDictionary* cachePaths = nil;
         {
           choice = NSRunAlertPanel(
             [NSString stringWithFormat:NSLocalizedString(@"The palette %@ already exists, do you want to replace it ?", @""), [palettePath lastPathComponent]],
-            [NSString stringWithFormat:NSLocalizedString(@"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents.", @""),
-                                       palettesFolderPath],
+            NSLocalizedString(@"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents.", @""),
              NSLocalizedString(@"Replace", @""),
-             NSLocalizedString(@"Cancel", @""), nil);
+             NSLocalizedString(@"Cancel", @""), nil, palettesFolderPath);
           overwrite |= (choice == NSAlertDefaultReturn);
         }//end if overwrite palette
         
@@ -3864,9 +3861,8 @@ static NSMutableDictionary* cachePaths = nil;
           BOOL success = [fileManager copyItemAtPath:palettePath toPath:destinationPath error:0];
           if (!success)
             NSRunAlertPanel(NSLocalizedString(@"Installation failed", @""),
-                            [NSString stringWithFormat:NSLocalizedString(@"%@ could not be installed as %@", @""),
-                                                                         [palettePath lastPathComponent], destinationPath],
-                            NSLocalizedString(@"OK", @""), nil, nil);
+                            NSLocalizedString(@"%@ could not be installed as %@", @""),
+                            NSLocalizedString(@"OK", @""), nil, nil, [palettePath lastPathComponent], destinationPath);
           ok = success;
         }//end if overwrite
       }//end if install palette

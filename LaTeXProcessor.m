@@ -690,7 +690,9 @@ static LaTeXProcessor* sharedInstance = nil;
               CFRelease(frame);
             if (frameSetter)
               CFRelease(frameSetter);
+#ifndef ARC_ENABLED
             [attributedString release];
+#endif
           }//end if (annotationContentBase64CompleteString.length)
         }//end if (!useFullyGraphicMetadata)
         CGContextFlush(cgPDFContext);
@@ -2499,11 +2501,14 @@ static LaTeXProcessor* sharedInstance = nil;
 
           if ([gsTask terminationStatus] != 0)
           {
-            NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+            NSAlert* alert = [[NSAlert alloc] init];
             alert.messageText = [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@", @""),
                                                        errorString];
             [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
             [alert runModal];
+#ifndef ARC_ENABLED
+            [alert release];
+#endif
           }
           #ifdef ARC_ENABLED
           #else
@@ -2629,11 +2634,14 @@ static LaTeXProcessor* sharedInstance = nil;
 
           if ([svgTask terminationStatus] != 0)
           {
-            NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+            NSAlert* alert = [[NSAlert alloc] init];
             alert.messageText = [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to create the file :\n%@", @""),
                                                        errorString];
             [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
             [alert runModal];
+#ifndef ARC_ENABLED
+            [alert release];
+#endif
           }//end if ([svgTask terminationStatus] != 0)
           #ifdef ARC_ENABLED          
           #else

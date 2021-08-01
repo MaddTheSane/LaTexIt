@@ -24,7 +24,7 @@
                    (objects && [objects count]) ? [objects objectAtIndex:0] : nil;
   result = modelObject ? [modelObject mutableCopy] :
     [[NSDictionary alloc] initWithObjectsAndKeys:
-      @(NO), ServiceRegularExpressionFilterEnabledKey,
+      @NO, ServiceRegularExpressionFilterEnabledKey,
       @"(\\(.*\\))", ServiceRegularExpressionFilterInputPatternKey,
       @"\\1", ServiceRegularExpressionFilterOutputPatternKey,
       nil];
@@ -37,7 +37,9 @@
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
+#ifndef ARC_ENABLED
   [newObject release];
+#endif
 }
 //end add:
 
@@ -86,8 +88,7 @@
   NSMutableAttributedString* result = [[value mutableCopy] autorelease];
   #endif
   NSEnumerator* enumerator = [[self arrangedObjects] objectEnumerator];
-  NSDictionary* filter = nil;
-  while((filter = [enumerator nextObject]))
+  for (NSDictionary* filter in enumerator)
   {
     BOOL enabled = [[filter objectForKey:ServiceRegularExpressionFilterEnabledKey] boolValue];
     if (enabled)

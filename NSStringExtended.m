@@ -302,7 +302,11 @@ NSRegularExpressionOptions convertRKLOptions(RKLRegexOptions options)
     if (component != nil)
       [result addObject:component];
   }//end for each match
+#ifdef ARC_ENABLED
+  return [result copy];
+#else
   return [[result copy] autorelease];
+#endif
 }
 //end componentsMatchedByRegex:options:range:capture:error:
 
@@ -319,7 +323,11 @@ NSRegularExpressionOptions convertRKLOptions(RKLRegexOptions options)
     if (captureComponent != nil)
       [result addObject:captureComponent];
   }//end for each match
+#ifdef ARC_ENABLED
+  return [result copy];
+#else
   return [[result copy] autorelease];
+#endif
 }
 //end componentsMatchedByRegex:options:range:error:
 

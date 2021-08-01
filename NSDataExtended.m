@@ -10,6 +10,7 @@
 
 #define OPENSSL_AVAILABLE 0
 
+// TODO: untangle this whole thing.
 #ifdef ARC_ENABLED
 #if OPENSSL_AVAILABLE
 #import <openssl/bio.h>
@@ -28,6 +29,8 @@
 #import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/ssl.h>//specific to avoid compatibility problem prior MacOS 10.5
 #import </Developer/SDKs/MacOSX10.5.sdk/usr/include/openssl/sha.h>//specific to avoid compatibility problem prior MacOS 10.5
 #endif
+
+#include <CommonCrypto/CommonDigest.h>
 
 @implementation NSData (Extended)
 
@@ -60,9 +63,13 @@
   #else
   NSData* result = nil;
   if ([[NSData class] instancesRespondToSelector:@selector(initWithBase64EncodedString:options:)])
-   result = [[[NSData alloc] initWithBase64EncodedString:base64 options:(encodedWithNewlines ? (NSDataBase64Encoding64CharacterLineLength|NSDataBase64EncodingEndLineWithLineFeed) : 0)] autorelease];
+   result = [[NSData alloc] initWithBase64EncodedString:base64 options:(encodedWithNewlines ? (NSDataBase64Encoding64CharacterLineLength|NSDataBase64EncodingEndLineWithLineFeed) : 0)];
   #endif
+#ifdef ARC_ENABLED
   return result;
+#else
+  return [result autorelease];
+#endif
 }
 //end dataWithBase64:encodedWithNewlines:
 

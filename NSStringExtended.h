@@ -14,7 +14,7 @@
 #if defined(USE_REGEXKITLITE) && USE_REGEXKITLITE
 #import "RegexKitLite.h"
 #else
-enum {
+typedef NS_OPTIONS(uint32_t, RKLRegexOptions) {
   RKLNoOptions             = 0,
   RKLCaseless              = 2,
   RKLComments              = 4,
@@ -22,7 +22,6 @@ enum {
   RKLMultiline             = 8,
   RKLUnicodeWordBoundaries = 256
 };
-typedef uint32_t RKLRegexOptions;
 
 FOUNDATION_EXTERN NSRegularExpressionOptions convertRKLOptions(RKLRegexOptions options);
 
@@ -33,9 +32,9 @@ FOUNDATION_EXTERN NSRegularExpressionOptions convertRKLOptions(RKLRegexOptions o
 -(NSString*) stringByReplacingOccurrencesOfRegex:(NSString*)pattern withString:(NSString*)replacement;
 -(NSString*) stringByReplacingOccurrencesOfRegex:(NSString*)pattern withString:(NSString*)replacement options:(RKLRegexOptions)options range:(NSRange)searchRange error:(NSError**)error;
 -(NSString*) stringByMatching:(NSString*)pattern options:(RKLRegexOptions)options inRange:(NSRange)range capture:(NSInteger)capture error:(NSError**)error;
--(NSArray*) componentsMatchedByRegex:(NSString*)pattern;
--(NSArray*) componentsMatchedByRegex:(NSString*)pattern options:(RKLRegexOptions)options range:(NSRange)searchRange capture:(NSInteger)capture error:(NSError**)error;
--(NSArray*) captureComponentsMatchedByRegex:(NSString*)pattern options:(RKLRegexOptions)options range:(NSRange)range error:(NSError**)error;
+-(NSArray<NSString*>*) componentsMatchedByRegex:(NSString*)pattern;
+-(NSArray<NSString*>*) componentsMatchedByRegex:(NSString*)pattern options:(RKLRegexOptions)options range:(NSRange)searchRange capture:(NSInteger)capture error:(NSError**)error;
+-(NSArray<NSString*>*) captureComponentsMatchedByRegex:(NSString*)pattern options:(RKLRegexOptions)options range:(NSRange)range error:(NSError**)error;
 @end
 
 @interface NSMutableString (RegexKitLiteExtension)

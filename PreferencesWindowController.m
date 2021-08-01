@@ -230,8 +230,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [window setDelegate:(id)self];
   [window setToolbar:toolbar];
   [window setShowsToolbarButton:NO];
-  if ([window respondsToSelector:@selector(setToolbarStyle:)])
+  if (@available(macOS 11.0, *)) {
     [window setToolbarStyle:NSWindowToolbarStyleExpanded];
+  }
   [toolbar setSelectedItemIdentifier:GeneralToolbarItemIdentifier];
   [self toolbarHit:[self->toolbarItems objectForKey:[toolbar selectedItemIdentifier]]];
   [toolbar release];
