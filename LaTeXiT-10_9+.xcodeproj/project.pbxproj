@@ -856,11 +856,11 @@
 		93344CB408251BD500F00A49 /* NSTaskExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTaskExtended.m; sourceTree = "<group>"; };
 		93362C0B15BF500A00EA0679 /* NSWindowExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSWindowExtended.h; sourceTree = "<group>"; };
 		93362C0C15BF500A00EA0679 /* NSWindowExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSWindowExtended.m; sourceTree = "<group>"; };
-		933A1247156C055A00DCC7D4 /* current-version-ja.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-ja.rtf"; path = "Resources/documentation/current-version-ja.rtf"; sourceTree = "<group>"; };
+		933A1247156C055A00DCC7D4 /* current-version-ja.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-ja.rtf"; path = "documentation/current-version-ja.rtf"; sourceTree = "<group>"; };
 		933A73CB0F9B29AE00DFA78B /* NSViewExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSViewExtended.h; sourceTree = "<group>"; };
 		933A73CC0F9B29AE00DFA78B /* NSViewExtended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSViewExtended.m; sourceTree = "<group>"; };
 		933D3A6E13A7D9C1001EBCED /* Latexit-2.6.0.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = "Latexit-2.6.0.xcdatamodel"; sourceTree = "<group>"; };
-		934069D90C058FFB0012A8DB /* Léeme.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Léeme.rtfd"; path = "Resources/documentation/Léeme.rtfd"; sourceTree = "<group>"; };
+		934069D90C058FFB0012A8DB /* Léeme.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Léeme.rtfd"; path = "documentation/Léeme.rtfd"; sourceTree = "<group>"; };
 		934191931280CC38009D3E97 /* TooltipWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TooltipWindow.h; sourceTree = "<group>"; };
 		934191941280CC38009D3E97 /* TooltipWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TooltipWindow.m; sourceTree = "<group>"; };
 		9341922B1281C703009D3E97 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = Automator/CreateEquations/en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -907,7 +907,7 @@
 		934C03400AD0363B007FEC06 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		934C03410AD03648007FEC06 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		934C034D0AD0368D007FEC06 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = de; path = de.lproj/Credits.rtf; sourceTree = "<group>"; };
-		934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lies mich.rtfd"; path = "Resources/documentation/Lies mich.rtfd"; sourceTree = "<group>"; };
+		934C036F0AD03D7B007FEC06 /* Lies mich.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lies mich.rtfd"; path = "documentation/Lies mich.rtfd"; sourceTree = "<group>"; };
 		934D1FD50E5F30FB00BA812B /* AdditionalFilesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionalFilesWindowController.h; sourceTree = "<group>"; };
 		934D1FD60E5F30FB00BA812B /* AdditionalFilesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdditionalFilesWindowController.m; sourceTree = "<group>"; };
 		934D1FD80E5F32F800BA812B /* AdditionalFilesWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdditionalFilesWindowController.xib; sourceTree = SOURCE_ROOT; };
@@ -923,10 +923,10 @@
 		935888E7096048A00068C698 /* ServiceShortcutsTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceShortcutsTextView.h; sourceTree = "<group>"; };
 		935888E8096048A00068C698 /* ServiceShortcutsTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceShortcutsTextView.m; sourceTree = "<group>"; };
 		93596686241D48D5008F8F4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Legacy/LaTeXiT Helper/Base.lproj/MainMenu.xib"; sourceTree = "<group>"; };
-		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "Resources/documentation/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
-		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "Resources/documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
+		935A85EB084F4DEF005724CE /* Licence_CeCILL_V2-fr.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-fr.txt"; path = "documentation/Licence_CeCILL_V2-fr.txt"; sourceTree = "<group>"; };
+		935A85EC084F4DEF005724CE /* Licence_CeCILL_V2-en.txt */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = text; name = "Licence_CeCILL_V2-en.txt"; path = "documentation/Licence_CeCILL_V2-en.txt"; sourceTree = "<group>"; };
 		935AD8710F9E389700B361D8 /* MyDocument.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyDocument.xib; sourceTree = SOURCE_ROOT; };
-		935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LibraryWindowController.xib; sourceTree = SOURCE_ROOT; };
+		935ADA2A0F9EF7AD00B361D8 /* LibraryWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryWindowController.xib; sourceTree = SOURCE_ROOT; };
 		935ADD9C0FA0AFF900B361D8 /* ExportFormatOptionsPanes.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportFormatOptionsPanes.xib; sourceTree = SOURCE_ROOT; };
 		935ADDAC0FA0B0C500B361D8 /* ExportFormatOptionsPanes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportFormatOptionsPanes.h; sourceTree = "<group>"; };
 		935ADDAD0FA0B0C500B361D8 /* ExportFormatOptionsPanes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExportFormatOptionsPanes.m; sourceTree = "<group>"; };
@@ -1072,15 +1072,15 @@
 		939D6B2209C7FEEB0076D19E /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		939E652C0A23D427009308E4 /* LibraryPreviewPanelImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryPreviewPanelImageView.h; sourceTree = "<group>"; };
 		939E652D0A23D427009308E4 /* LibraryPreviewPanelImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryPreviewPanelImageView.m; sourceTree = "<group>"; };
-		93A0FF9D0DABA17800DDBAF4 /* current-version-fr.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-fr.rtf"; path = "Resources/documentation/current-version-fr.rtf"; sourceTree = "<group>"; };
-		93A0FF9E0DABA17800DDBAF4 /* current-version-en.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-en.rtf"; path = "Resources/documentation/current-version-en.rtf"; sourceTree = "<group>"; };
-		93A0FFA90DABA1B500DDBAF4 /* current-version-es.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-es.rtf"; path = "Resources/documentation/current-version-es.rtf"; sourceTree = "<group>"; };
-		93A0FFAA0DABA1B500DDBAF4 /* current-version-de.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-de.rtf"; path = "Resources/documentation/current-version-de.rtf"; sourceTree = "<group>"; };
+		93A0FF9D0DABA17800DDBAF4 /* current-version-fr.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-fr.rtf"; path = "documentation/current-version-fr.rtf"; sourceTree = "<group>"; };
+		93A0FF9E0DABA17800DDBAF4 /* current-version-en.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-en.rtf"; path = "documentation/current-version-en.rtf"; sourceTree = "<group>"; };
+		93A0FFA90DABA1B500DDBAF4 /* current-version-es.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-es.rtf"; path = "documentation/current-version-es.rtf"; sourceTree = "<group>"; };
+		93A0FFAA0DABA1B500DDBAF4 /* current-version-de.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-de.rtf"; path = "documentation/current-version-de.rtf"; sourceTree = "<group>"; };
 		93A35BA2137EB6FE0006DC07 /* LogicTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogicTransformer.h; sourceTree = "<group>"; };
 		93A35BA3137EB6FE0006DC07 /* LogicTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogicTransformer.m; sourceTree = "<group>"; };
-		93A592C807F46075001DF900 /* Licence.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Licence.rtf; path = Resources/documentation/Licence.rtf; sourceTree = "<group>"; };
-		93A592C907F46075001DF900 /* Lisez-moi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lisez-moi.rtfd"; path = "Resources/documentation/Lisez-moi.rtfd"; sourceTree = "<group>"; };
-		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "Resources/documentation/Read Me.rtfd"; sourceTree = "<group>"; };
+		93A592C807F46075001DF900 /* Licence.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Licence.rtf; path = documentation/Licence.rtf; sourceTree = "<group>"; };
+		93A592C907F46075001DF900 /* Lisez-moi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Lisez-moi.rtfd"; path = "documentation/Lisez-moi.rtfd"; sourceTree = "<group>"; };
+		93A592CA07F46075001DF900 /* Read Me.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "Read Me.rtfd"; path = "documentation/Read Me.rtfd"; sourceTree = "<group>"; };
 		93A9FF4B10201DA70061DB60 /* NSObjectTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSObjectTreeNode.m; sourceTree = "<group>"; };
 		93A9FF4C10201DA70061DB60 /* NSObjectTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObjectTreeNode.h; sourceTree = "<group>"; };
 		93A9FF741020436D0061DB60 /* NSOutlineViewExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOutlineViewExtended.h; sourceTree = "<group>"; };
@@ -1114,11 +1114,11 @@
 		93BD14990F967FF200E47097 /* NSUndoManagerDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSUndoManagerDebug.h; sourceTree = "<group>"; };
 		93BD149A0F967FF200E47097 /* NSUndoManagerDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSUndoManagerDebug.m; sourceTree = "<group>"; };
 		93BD64910E8D006200DB341B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		93BDECD519B5B8FE00F2C4AB /* missing-translations.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "missing-translations.rtf"; sourceTree = "<group>"; };
+		93BDECD519B5B8FE00F2C4AB /* missing-translations.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "missing-translations.rtf"; path = "../missing-translations.rtf"; sourceTree = "<group>"; };
 		93BEEB551195BDB40060166A /* DragFilterWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DragFilterWindowController.xib; sourceTree = SOURCE_ROOT; };
 		93BEEB591195BDF20060166A /* DragFilterWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragFilterWindowController.h; sourceTree = "<group>"; };
 		93BEEB5A1195BDF20060166A /* DragFilterWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragFilterWindowController.m; sourceTree = "<group>"; };
-		93C0685C1697230300D20F06 /* お読みください.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "お読みください.rtfd"; path = "Resources/documentation/お読みください.rtfd"; sourceTree = "<group>"; };
+		93C0685C1697230300D20F06 /* お読みください.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = "お読みください.rtfd"; path = "documentation/お読みください.rtfd"; sourceTree = "<group>"; };
 		93C068761697240D00D20F06 /* latexit-changelog-ja.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "latexit-changelog-ja.html"; sourceTree = "<group>"; };
 		93C068781697241400D20F06 /* latexit-sparkle-ja.rss */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "latexit-sparkle-ja.rss"; sourceTree = "<group>"; };
 		93C0EEA20C0A55C500211C5A /* latexit-latex-palette.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "latexit-latex-palette.icns"; sourceTree = "<group>"; };
@@ -1188,8 +1188,8 @@
 		93F87502108864D100995B12 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/PreferencesWindowController.xib; sourceTree = "<group>"; };
 		93F875031088650400995B12 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = Automator/CreateEquations/ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93F9DFCE08A38ECA005DEBF6 /* poisson.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = poisson.pdf; sourceTree = "<group>"; };
-		93FA9A2E156927ED00268E55 /* Leggimi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Leggimi.rtfd; path = Resources/documentation/Leggimi.rtfd; sourceTree = "<group>"; };
-		93FA9A311569280000268E55 /* current-version-it.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-it.rtf"; path = "Resources/documentation/current-version-it.rtf"; sourceTree = "<group>"; };
+		93FA9A2E156927ED00268E55 /* Leggimi.rtfd */ = {isa = PBXFileReference; lastKnownFileType = wrapper.rtfd; name = Leggimi.rtfd; path = documentation/Leggimi.rtfd; sourceTree = "<group>"; };
+		93FA9A311569280000268E55 /* current-version-it.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "current-version-it.rtf"; path = "documentation/current-version-it.rtf"; sourceTree = "<group>"; };
 		93FA9A341569282300268E55 /* latexit-changelog-it.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "latexit-changelog-it.html"; sourceTree = "<group>"; };
 		93FA9A371569282F00268E55 /* latexit-sparkle-it.rss */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "latexit-sparkle-it.rss"; sourceTree = "<group>"; };
 		93FE04E509D2F22600B8B34E /* CompositionConfigurationsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositionConfigurationsTableView.h; sourceTree = "<group>"; };
@@ -1546,7 +1546,7 @@
 				93C068761697240D00D20F06 /* latexit-changelog-ja.html */,
 			);
 			name = Sparkle;
-			path = Resources/sparkle;
+			path = sparkle;
 			sourceTree = "<group>";
 		};
 		931FB053252CD3C7009F8847 /* LaTeXiT App extension XPC Service */ = {
@@ -3068,7 +3068,7 @@
 				93F874F9108863D900995B12 /* ja */,
 			);
 			name = Credits.rtf;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		930255CF07F0C2A800011996 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -3160,7 +3160,7 @@
 				9396B9D7194ED684003CD205 /* ja */,
 			);
 			name = "additional-files-help.rtfd";
-			sourceTree = "<absolute>";
+			sourceTree = SOURCE_ROOT;
 		};
 		9396BA30194EE345003CD205 /* synchronization-scripts-help.rtfd */ = {
 			isa = PBXVariantGroup;
@@ -3173,7 +3173,7 @@
 				9396BA36194EE357003CD205 /* ja */,
 			);
 			name = "synchronization-scripts-help.rtfd";
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		939A64570800281900AE4486 /* ServicesMenu.strings */ = {
 			isa = PBXVariantGroup;
@@ -3252,13 +3252,13 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = "XPC Services/LaTeXiT App extension XPC Service/LaTeXiT App extension XPC Service.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.16.3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -3294,6 +3294,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.appex.xpc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -3333,13 +3334,13 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = "XPC Services/LaTeXiT App extension XPC Service/LaTeXiT App extension XPC Service.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.16.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -3369,6 +3370,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.appex.xpc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -3380,10 +3382,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = latexit;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2.16.3;
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
@@ -3453,11 +3455,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = latexit;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2.16.3;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
@@ -3611,10 +3613,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2.16.3;
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
 					"\"$(SRCROOT)/Frameworks\"",
@@ -3666,10 +3668,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2.16.3;
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					Frameworks,
 					"\"$(SRCROOT)/Frameworks\"",
@@ -3751,13 +3753,13 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT_AppExtension/LaTeXiT_AppExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.16.3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -3839,13 +3841,13 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = LaTeXiT_AppExtension/LaTeXiT_AppExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.16.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -3881,6 +3883,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.appex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -3920,13 +3923,13 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = "XPC Services/LaTeXiT XPC Service/LaTeXiT XPC Service.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.16.3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -3962,6 +3965,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.xpc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -4001,13 +4005,13 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = "XPC Services/LaTeXiT XPC Service/LaTeXiT XPC Service.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 2.16.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4037,6 +4041,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.xpc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -4048,10 +4053,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = latexit;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2.16.3;
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
@@ -4105,11 +4110,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = latexit;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2.16.3;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 7SFX84GNR7;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Frameworks\"",
