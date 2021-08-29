@@ -1179,5 +1179,26 @@
 				sparkle:dsaSignature="MCwCFCe2qFNud4kS1Fk3cHkc6betIsj3AhQSKd8aMYUtRG4NtZjzvE4R6/ueQQ=="
 			/>
     </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.16.4</guid>
+      <title>Version 2.16.4</title>
+      <description><![CDATA[
+        <ul>
+          <li>Fixed library importation broken by some security enforcements in MacOS;</li>
+          <li>better error reporting when history or library cannot be created on invalid path.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-en.html#version-2.16.4</sparkle:releaseNotesLink>
+			<pubDate>Wed, 04 Aug 2021 11:08:32 +0200</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_16_4.dmg"
+				sparkle:version="2.16.4"
+                   sparkle:shortVersionString="2.16.4"
+				type="application/octet-stream"
+				length="11687552"
+				sparkle:dsaSignature="MCwCFFPBBztgNmvj4lKpqOXSLas5d6+iAhRRDcPDeUBZ32hlU3uRKtAhTxmsnw=="
+			/>
+    </item>
   </channel>
 </rss>

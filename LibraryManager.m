@@ -793,10 +793,12 @@ static LibraryManager* sharedManagerInstance = nil;
 -(NSManagedObjectContext*) managedObjectContextAtPath:(NSString*)path setVersion:(BOOL)setVersion
 {
   NSManagedObjectContext* result = nil;
+  BOOL pathExists = [[NSFileManager defaultManager] isReadableFileAtPath:path];
   NSPersistentStoreCoordinator* persistentStoreCoordinator =
     [[NSPersistentStoreCoordinator alloc]
       initWithManagedObjectModel:[[LaTeXProcessor sharedLaTeXProcessor] managedObjectModel]];
   id persistentStore = nil;
+  NSError* loadError = nil;
   @try{
     NSURL* storeURL = !path ? nil : [NSURL fileURLWithPath:path];
     NSError* error = nil;
@@ -810,22 +812,45 @@ static LibraryManager* sharedManagerInstance = nil;
     persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                         configuration:nil URL:storeURL options:options error:&error];
     if (error)
-      {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
-    if (!persistentStore)
+    {
+      DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);
+    }//end if (error)
+    if (!persistentStore && pathExists)
     {
       NSError* error = nil;
       [self _migrateLatexitManagedModel:path];
       persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                           configuration:nil URL:storeURL options:options error:&error];
       if (error)
-        {DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);}
-    }//end if (!persistentStore)
+      {
+        DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);
+        loadError = [[error copy] autorelease];
+      }
+    }//end if (!persistentStore && pathExists)
   }//end @try
   @catch(NSException* e){
     DebugLog(0, @"exception : %@", e);
+    loadError = [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSLocalizedFailureReasonErrorKey:e.reason}];
   }//end @catch
   @finally{
   }//end @finally
+  
+  if (!persistentStore && !loadError)
+  {
+    NSString* reason = [NSString stringWithFormat:NSLocalizedString(@"The library cannot be opened at path <%@>", @""), path];
+    loadError = [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSLocalizedFailureReasonErrorKey:reason}];
+  }//end if (!persistentStore && !loadError)
+  
+  if (loadError && [NSThread isMainThread])
+  {
+    NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+    alert.alertStyle = NSAlertStyleWarning;
+    alert.messageText = NSLocalizedString(@"The library cannot be opened", @"");
+    alert.informativeText = loadError.localizedDescription;
+    [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
+    [alert runModal];
+  }//end if (loadError && [NSThread isMainThread])
+  
   NSString* version = [[persistentStoreCoordinator metadataForPersistentStore:persistentStore] valueForKey:@"version"];
   if ([version compare:@"2.0.0" options:NSNumericSearch] > 0){
   }

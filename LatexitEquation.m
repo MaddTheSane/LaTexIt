@@ -577,6 +577,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         _result = [[NSSet alloc] initWithObjects:
           [NSArray class], [NSMutableArray class],
           [NSDictionary class], [NSMutableDictionary class],
+          [NSSet class], [NSMutableSet class],
           [NSData class], [NSMutableData class],
           [NSString class], [NSMutableString class],
           [NSAttributedString class], [NSMutableAttributedString class],
