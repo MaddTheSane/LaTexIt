@@ -97,8 +97,8 @@ NSString* makeStringDifferent(NSString* string, NSArray* otherStrings, BOOL* did
 NS_INLINE NSRect NSRectDelta(NSRect rect, CGFloat deltaX, CGFloat deltaY, CGFloat deltaWidth, CGFloat deltaHeight)
 {return NSMakeRect(rect.origin.x+deltaX, rect.origin.y+deltaY, rect.size.width+deltaWidth, rect.size.height+deltaHeight);}
 
-NS_INLINE NSRect NSRectChange(NSRect rect, BOOL setX, float newX, BOOL setY, float newY,
-                                             BOOL setWidth, float newWidth, BOOL setHeight, float newHeight)
+NS_INLINE NSRect NSRectChange(NSRect rect, BOOL setX, CGFloat newX, BOOL setY, CGFloat newY,
+                                             BOOL setWidth, CGFloat newWidth, BOOL setHeight, CGFloat newHeight)
 {return NSMakeRect(setX ? newX : rect.origin.x, setY ? newY : rect.origin.y,
                    setWidth ? newWidth : rect.size.width, setHeight ? newHeight : rect.size.height);}
 

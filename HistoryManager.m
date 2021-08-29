@@ -489,7 +489,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       if (error)
       {
         DebugLog(0, @"error : %@, NSDetailedErrors : %@", error, [error userInfo]);
-        loadError = [[error copy] autorelease];
+        loadError = [error copy];
       }
     }//end if (!persistentStore && pathExists)
   }//end @try
@@ -508,7 +508,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   
   if (loadError && [NSThread isMainThread])
   {
-    NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+    NSAlert* alert = [[NSAlert alloc] init];
     alert.alertStyle = NSAlertStyleWarning;
     alert.messageText = NSLocalizedString(@"The history cannot be opened", @"");
     alert.informativeText = loadError.localizedDescription;
