@@ -206,6 +206,10 @@
 "Migrating history to new format" = "Migration de l'historique vers un nouveau format";
 "Migrating library to new format" = "Migration de la bibliothèque vers un nouveau format";
 "+temp. file" = "+fichier temp.";
+"The history cannot be opened" = "L'historique ne peut être ouverte";
+"The library cannot be opened" = "La bibliothèque ne peut être ouverte";
+"The history cannot be opened at path <%@>" = "L'historique ne peut être ouverte à l'emplacement <%@>";
+"The library cannot be opened at path <%@>" = "La bibliothèque ne peut être ouverte à l'emplacement <%@>";
 
 /* Save / Back sync */
 "File type" = "Type de fichier";

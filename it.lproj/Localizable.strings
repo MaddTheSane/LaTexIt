@@ -205,6 +205,10 @@
 "Migrating history to new format" = "Migrazione della cronologia ad un nuovo formato";
 "Migrating library to new format" = "Migrazione della libreria ad un nuovo formato";
 "+temp. file" = "+temp. file";
+"The history cannot be opened" = "La cronologia non può essere aperta";
+"The library cannot be opened" = "La libreria non può essere aperta";
+"The history cannot be opened at path <%@>" = "La cronologia non può essere aperta al percorso <%@>";
+"The library cannot be opened at path <%@>" = "La libreria non può essere aperta al percorso <%@>";
 
 /* Save / Back sync */
 "File type" = "File type";
