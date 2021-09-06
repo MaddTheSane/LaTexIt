@@ -25,6 +25,7 @@
 #import "NSUserDefaultsControllerExtended.h"
 #import "NSWorkspaceExtended.h"
 #import "Utils.h"
+#import "BorderlessPanel.h"
 
 @interface HistoryWindowController (PrivateAPI)
 -(void) clearAll:(BOOL)undoable;
@@ -52,7 +53,9 @@
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:HistoryDisplayPreviewPanelKey];
-  [super dealloc]; 
+#ifndef ARC_ENABLED
+  [super dealloc];
+#endif
 }
 //end dealloc
 

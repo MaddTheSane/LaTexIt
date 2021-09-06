@@ -7,22 +7,22 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface NSArray (Extended)
+@interface NSArray<__covariant ObjectType> (Extended)
 
--(id) firstObject;
--(id) firstObjectIdenticalTo:(id)object;
--(id) firstObjectNotIdenticalTo:(id)object;
+-(ObjectType) firstObject;
+-(ObjectType) firstObjectIdenticalTo:(id)object;
+-(ObjectType) firstObjectNotIdenticalTo:(id)object;
 
 //checks if the array contains an object, based on adress comparison, not isEqual:
 -(BOOL) containsObjectIdenticalTo:(id)object;
 
 //returns a copy of the receiver in the reversed order
--(NSArray*) reversed;
+-(NSArray<ObjectType>*) reversed;
 
--(NSArray*) arrayByAddingObject:(id)object atIndex:(NSUInteger)index;
--(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index;
+-(NSArray<ObjectType>*) arrayByAddingObject:(ObjectType)object atIndex:(NSUInteger)index;
+-(NSArray<ObjectType>*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index;
 
--(NSArray*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
+-(NSArray<ObjectType>*) filteredArrayWithItemsOfClass:(Class)aClass exactClass:(BOOL)exactClass;
 
 -(id) copyDeep;
 -(id) copyDeepWithZone:(NSZone*)zone;
