@@ -34,13 +34,11 @@
 -(id)   init;//NSTemporaryDirectory() as workingDirectory
 -(id)   initWithWorkingDirectory:(NSString*)workingDirectory;
 -(void) setEnvironment:(NSDictionary*)environment;
--(void) setLaunchPath:(NSString*)launchPath;
 -(void) setArguments:(NSArray*)arguments;
--(void) setCurrentDirectoryPath:(NSString*)currentDirectoryPath;
 -(NSDictionary*) environment;
--(NSString*)     launchPath;
 -(NSArray*)      arguments;
--(NSString*)     currentDirectoryPath;
+@property (copy) NSString *currentDirectoryPath;
+@property (copy) NSString *launchPath;
 -(BOOL) isUsingLoginShell;
 -(void) setUsingLoginShell:(BOOL)value;
 

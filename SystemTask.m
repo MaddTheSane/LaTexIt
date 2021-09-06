@@ -20,6 +20,8 @@
 #include <crt_externs.h>
 
 @implementation SystemTask
+@synthesize currentDirectoryPath;
+@synthesize launchPath;
 
 -(id) initWithWorkingDirectory:(NSString*)aWorkingDirectory
 {
@@ -29,36 +31,32 @@
   self->workingDirectory = [aWorkingDirectory copy];
   self->tmpStdinFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdin.XXXXXXXX" extension:@"log"  outFilePath:&localString
                                                                 workingDirectory:self->workingDirectory];
-  self->tmpStdinFilePath = localString;
+  self->tmpStdinFilePath = RETAINOBJ(localString);
   #ifdef ARC_ENABLED
   #else
   [self->tmpStdinFileHandle retain];
-  [self->tmpStdinFilePath   retain];
   #endif
   self->tmpStdoutFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stdout.XXXXXXXX" extension:@"log"  outFilePath:&localString
 
                                                         workingDirectory:self->workingDirectory];
-  self->tmpStdoutFilePath = localString;
+  self->tmpStdoutFilePath = RETAINOBJ(localString);
   #ifdef ARC_ENABLED
   #else
   [self->tmpStdoutFileHandle retain];
-  [self->tmpStdoutFilePath   retain];
   #endif
   self->tmpStderrFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-stderr.XXXXXXXX" extension:@"log"  outFilePath:&localString
                                                                 workingDirectory:self->workingDirectory];
-  self->tmpStderrFilePath = localString;
+  self->tmpStderrFilePath = RETAINOBJ(localString);
   #ifdef ARC_ENABLED
   #else
   [self->tmpStderrFileHandle retain];
-  [self->tmpStderrFilePath   retain];
   #endif
   self->tmpScriptFileHandle = [[NSFileManager defaultManager] temporaryFileWithTemplate:@"latexit-task-script.XXXXXXXX" extension:@"sh"  outFilePath:&localString
                                                                 workingDirectory:self->workingDirectory];
-  self->tmpScriptFilePath = localString;
+  self->tmpScriptFilePath = RETAINOBJ(localString);
   #ifdef ARC_ENABLED
   #else
   [self->tmpScriptFileHandle retain];
-  [self->tmpScriptFilePath   retain];
   #endif
   self->runningLock = [[NSLock alloc] init];
   return self;
@@ -82,10 +80,10 @@
   #endif
   if (DebugLogLevel < 1)
   {
-    unlink([self->tmpStdinFilePath UTF8String]);
-    unlink([self->tmpStdoutFilePath UTF8String]);
-    unlink([self->tmpStderrFilePath UTF8String]);
-    unlink([self->tmpScriptFilePath UTF8String]);
+    unlink([self->tmpStdinFilePath fileSystemRepresentation]);
+    unlink([self->tmpStdoutFilePath fileSystemRepresentation]);
+    unlink([self->tmpStderrFilePath fileSystemRepresentation]);
+    unlink([self->tmpScriptFilePath fileSystemRepresentation]);
   }//end if (DebugLogLevel < 1)
   #ifdef ARC_ENABLED
   #else
@@ -99,8 +97,8 @@
   [self->tmpScriptFileHandle release];
   [self->runningLock release];
   [self->workingDirectory release];
-  [super dealloc];
   #endif
+  SUPERDEALLOC;
 }
 //end dealloc
 
@@ -112,17 +110,6 @@
   [self->environment release];
   #endif
   self->environment = theEnvironment;
-}
-//end setEnvironment:
-
--(void) setLaunchPath:(NSString*)path
-{
-  #ifdef ARC_ENABLED
-  #else
-  [path retain];
-  [self->launchPath release];
-  #endif
-  self->launchPath = path;
 }
 //end setEnvironment:
 
@@ -142,28 +129,11 @@
   self->isUsingLoginShell = value;
 }
 
--(void) setCurrentDirectoryPath:(NSString*)directoryPath
-{
-  #ifdef ARC_ENABLED
-  #else
-  [directoryPath retain];
-  [self->currentDirectoryPath release];
-  #endif
-  self->currentDirectoryPath = directoryPath;
-}
-//end setCurrentDirectoryPath:
-
 -(NSDictionary*) environment
 {
   return self->environment;
 }
 //end environment
-
--(NSString*) launchPath
-{
-  return self->launchPath;
-}
-//end launchPath
 
 -(NSArray*) arguments
 {
@@ -176,12 +146,6 @@
   return self->isUsingLoginShell;
 }
 //end isUsingLoginShell
-
--(NSString*) currentDirectoryPath
-{
-  return self->currentDirectoryPath;
-}
-//end currentDirectoryPath
 
 -(void) setTimeOut:(NSTimeInterval)value
 {

@@ -90,11 +90,8 @@ static NSDictionary* noneBodyTemplate = nil;
            beginData, @"head",
            endData, @"tail",
            nil];
-  #ifdef ARC_ENABLED
-  #else
-  [beginString release];
-  [endString release];
-  #endif
+  RELEASEOBJ(beginString);
+  RELEASEOBJ(endString);
   return result;
 }
 //end bodyTemplateDictionaryEncodedForEnvironment:
@@ -208,9 +205,7 @@ static NSDictionary* noneBodyTemplate = nil;
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
-#ifndef ARC_ENABLED
-  [newObject release];
-#endif
+  RELEASEOBJ(newObject);
 }
 //end add:
 

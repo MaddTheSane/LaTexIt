@@ -62,11 +62,7 @@ static NSMutableSet* createdTemporaryPaths = nil;
       *outFilePath = createdPath;
     free(tmpString);
   }
-  #ifdef ARC_ENABLED
-  return fileHandle;
-  #else
-  return [fileHandle autorelease];
-  #endif
+  return AUTORELEASEOBJ(fileHandle);
 }
 //end temporaryFileWithTemplate:extension:outFilePath:
 

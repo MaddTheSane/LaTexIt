@@ -73,11 +73,7 @@
 
 -(NSArray*) arrayByAddingObject:(id)object atIndex:(NSUInteger)index
 {
-  #ifdef ARC_ENABLED
-  NSMutableArray* result = [self mutableCopy];
-  #else
-  NSMutableArray* result = [[self mutableCopy] autorelease];
-  #endif
+  NSMutableArray* result = AUTORELEASEOBJ([self mutableCopy]);
   [result insertObject:object atIndex:index];
   return result;
 }
@@ -85,11 +81,7 @@
 
 -(NSArray*) arrayByMovingObjectsAtIndices:(NSIndexSet*)indices toIndex:(NSUInteger)index
 {
-  #ifdef ARC_ENABLED
-  NSMutableArray* result = [self mutableCopy];
-  #else
-  NSMutableArray* result = [[self mutableCopy] autorelease];
-  #endif
+  NSMutableArray* result = AUTORELEASEOBJ([self mutableCopy]);
   [result moveObjectsAtIndices:indices toIndex:index];
   return result;
 }
@@ -116,11 +108,7 @@
         [result addObject:object];
     }
   }//end if (!exactClass)
-  #ifdef ARC_ENABLED
-  result = [result copy];
-  #else
-  result = [[result copy] autorelease];
-  #endif
+  result = AUTORELEASEOBJ([result copy]);
   return result;
 }
 //end filteredArrayWithItemsOfClass:exactClass:
@@ -136,16 +124,10 @@
     id copyOfObject =
       [object respondsToSelector:@selector(copyDeepWithZone:)] ? [object copyDeepWithZone:zone] : [object copyWithZone:zone];
     [clone addObject:copyOfObject];
-    #ifdef ARC_ENABLED
-    #else
-    [copyOfObject release];
-    #endif
+    RELEASEOBJ(copyOfObject);
   }//end for each object
   NSArray* immutableClone = [[NSArray allocWithZone:zone] initWithArray:clone];
-  #ifdef ARC_ENABLED
-  #else
-  [clone release];
-  #endif
+  RELEASEOBJ(clone);
   return immutableClone;
 }
 //end copyDeepWithZone:
@@ -163,10 +145,7 @@
          ? [object mutableCopyDeepWithZone:zone]
          : ([object respondsToSelector:@selector(mutableCopyWithZone:)] ? [object mutableCopyWithZone:zone] : [object copyWithZone:zone]);
     [clone addObject:copyOfObject];
-    #ifdef ARC_ENABLED
-    #else
-    [copyOfObject release];
-    #endif
+    RELEASEOBJ(copyOfObject);
   }//end for each object
   return clone;
 }

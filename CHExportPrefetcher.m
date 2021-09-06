@@ -50,21 +50,12 @@
   {
     [self->cache setObject:self->isFetchingData forKey:@(exportFormat)];
   }//end @synchronized(self->cache)
-  #ifdef ARC_ENABLED
   [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
      [NSDictionary dictionaryWithObjectsAndKeys:
        @(exportFormat), @"exportFormat",
-       [pdfData copy], @"pdfData",
+       AUTORELEASEOBJ([pdfData copy]), @"pdfData",
        [NSMutableDictionary dictionary], @"alertInformationWrapper",
        nil]];
-  #else
-  [NSApplication detachDrawingThread:@selector(_fetchForFormat:) toTarget:self withObject:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-       @(exportFormat), @"exportFormat",
-       [[pdfData copy] autorelease], @"pdfData",
-       [NSMutableDictionary dictionary], @"alertInformationWrapper",
-       nil]];
-  #endif
 }
 //end prefetchForFormat:
 

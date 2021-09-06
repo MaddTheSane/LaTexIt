@@ -119,10 +119,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 -(void) dealloc
 {
   [[self class] releaseIdentifier:self->uniqueId];
-  #ifdef ARC_ENABLED
-  #else
-  [super dealloc];
-  #endif
+  SUPERDEALLOC;
 }
 //end dealloc
 
@@ -285,11 +282,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   DebugLog(1, @"synchronized = %d", synchronized);
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
-  NSMutableArray* result = [[NSMutableArray alloc] initWithCapacity:[input count]];
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
+  NSMutableArray* result = AUTORELEASEOBJ([[NSMutableArray alloc] initWithCapacity:[input count]]);
 
   NSDictionary* parameters = [self parameters];
   latex_mode_t equationMode = (latex_mode_t)[[parameters objectForKey:@"equationMode"] integerValue];
@@ -350,18 +343,18 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         {//keep it if it is a file text
           NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:string];
           #ifdef ARC_ENABLED
-          if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
+          if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeFlatRTFD))
             [filteredInput addObject:object];
-          else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.rtf")))
+          else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeRTF))
             [filteredInput addObject:object];
-          else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
+          else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeText))
             [filteredInput addObject:object];
           #else
-          if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
+          if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeFlatRTFD))
             [filteredInput addObject:object];
-          else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
+          else if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeRTF))
             [filteredInput addObject:object];
-          else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
+          else if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeText))
             [filteredInput addObject:object];
           #endif
         }//end if (!isDirectory)
@@ -544,10 +537,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     if (*errorInfo)
       DebugLog(0, @"%@", [*errorInfo objectForKey:OSAScriptErrorMessage]);
   }//end if (didEncounterError && [errorStrings count] && errorInfo)
-  #ifdef ARC_ENABLED
-  #else
-  [uniqueIdentifiers release];
-  #endif
+  RELEASEOBJ(uniqueIdentifiers);
 	return result;
 }
 //end runWithInput:fromAction:error:
@@ -585,10 +575,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         NSAttributedString* attributedString =
           [[NSAttributedString alloc] initWithRTFD:fileData documentAttributes:0];
         fullText = [attributedString string];
-        #ifdef ARC_ENABLED
-        #else
-        [attributedString release];
-        #endif
+        RELEASEOBJ(attributedString);
       }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
       #ifdef ARC_ENABLED
       else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.rtf")))
@@ -599,10 +586,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
         NSAttributedString* attributedString =
           [[NSAttributedString alloc] initWithRTF:fileData documentAttributes:0];
         fullText = [attributedString string];
-        #ifdef ARC_ENABLED
-        #else
-        [attributedString release];
-        #endif
+        RELEASEOBJ(attributedString);
       }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
       #ifdef ARC_ENABLED
       else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
@@ -611,10 +595,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       #endif
         fullText = [NSString stringWithContentsOfFile:object guessEncoding:&encoding error:error];
       result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
-      #ifdef ARC_ENABLED
-      #else
-      [fileData release];
-      #endif
+      RELEASEOBJ(fileData);
     }//end if ([[NSFileManager defaultManager] fileExistsAtPath:object isDirectory:&isDirectory])
     else //(if !path)
     {
@@ -638,24 +619,18 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       NSAttributedString* attributedString =
         [[NSAttributedString alloc] initWithRTFD:fileData documentAttributes:0];
       fullText = [attributedString string];
-      #ifdef ARC_ENABLED
-      #else
-      [attributedString release];
-      #endif
+      RELEASEOBJ(attributedString);
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("com.apple.flat-rtfd")))
     #ifdef ARC_ENABLED
-    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.rtf")))
+    else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, kUTTypeRTF))
     #else
-    else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
+    else if (UTTypeConformsTo((CFStringRef)sourceUTI, kUTTypeRTF))
     #endif
     {
       NSAttributedString* attributedString =
         [[NSAttributedString alloc] initWithRTF:fileData documentAttributes:0];
       fullText = [attributedString string];
-      #ifdef ARC_ENABLED
-      #else
-      [attributedString release];
-      #endif
+      RELEASEOBJ(attributedString);
     }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.rtf")))
     #ifdef ARC_ENABLED
     else if (UTTypeConformsTo((__bridge CFStringRef)sourceUTI, CFSTR("public.text")))
@@ -664,10 +639,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     #endif
       fullText = [NSString stringWithContentsOfURL:object guessEncoding:&encoding error:error];
     result = [NSString stringWithFormat:@"latexit-automator-%lu", (unsigned long)++self->uniqueId];
-    #ifdef ARC_ENABLED
-    #else
-    [fileData release];
-    #endif
+    RELEASEOBJ(fileData);
   }//end if ([object isKindOfClass:[NSURL class]])
 
   //analyze fullText

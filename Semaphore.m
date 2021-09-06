@@ -24,10 +24,7 @@
   error = error ? error : pthread_mutex_init(&self->mutex, &self->mutex_attr);
   if (error)
   {
-    #ifdef ARC_ENABLED
-    #else
-    [self autorelease];
-    #endif
+    AUTORELEASEOBJNORETURN(self);
     self = nil;
     return nil;
   }
@@ -48,10 +45,7 @@
   pthread_cond_destroy(&self->cond);
   pthread_mutexattr_destroy(&self->mutex_attr);
   pthread_mutex_destroy(&self->mutex);
-  #ifdef ARC_ENABLED
-  #else
-  [super dealloc];
-  #endif
+  SUPERDEALLOC;
 }
 //end dealloc
 
