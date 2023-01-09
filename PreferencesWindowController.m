@@ -1261,47 +1261,47 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSImage* image = nil;
     if ([itemIdentifier isEqualToString:GeneralToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"generalToolbarItem"];
+      image = [NSImage imageNamed:NSImageNamePreferencesGeneral];
       label = NSLocalizedString(@"General", @"");
     }
     else if ([itemIdentifier isEqualToString:EditionToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"editionToolbarItem"];
+      image = [NSImage imageNamed:@"toolbarItems/edition"];
       label = NSLocalizedString(@"Edition", @"");
     }
     else if ([itemIdentifier isEqualToString:TemplatesToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"templatesToolbarItem"];
+      image = [NSImage imageNamed:@"toolbarItems/templates"];
       label = NSLocalizedString(@"Templates", @"");
     }
     else if ([itemIdentifier isEqualToString:CompositionToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"compositionToolbarItem"];
+      image = [NSImage imageNamed:@"toolbarItems/composition"];
       label = NSLocalizedString(@"Composition", @"");
     }
     else if ([itemIdentifier isEqualToString:LibraryToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"libraryToolbarItem"];
+      image = [NSImage imageNamed:@"toolbarItems/library"];
       label = NSLocalizedString(@"Library", @"");
     }
     else if ([itemIdentifier isEqualToString:HistoryToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"historyToolbarItem"];
+      image = [NSImage imageNamed:@"toolbarItems/history"];
       label = NSLocalizedString(@"History", @"");
     }
     else if ([itemIdentifier isEqualToString:ServiceToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"serviceToolbarItem"];
+      image = [NSImage imageNamed:@"toolbarItems/service"];
       label = NSLocalizedString(@"Service", @"");
     }
     else if ([itemIdentifier isEqualToString:AdvancedToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"advancedToolbarItem"];
+      image = [NSImage imageNamed:NSImageNameAdvanced];
       label = NSLocalizedString(@"Advanced", @"");
     }
     else if ([itemIdentifier isEqualToString:WebToolbarItemIdentifier])
     {
-      image = [NSImage imageNamed:@"webToolbarItem"];
+      image = [NSImage imageNamed:@"toolbarItems/web"];
       label = NSLocalizedString(@"Web", @"");
     }
     else if ([itemIdentifier isEqualToString:PluginsToolbarItemIdentifier])
