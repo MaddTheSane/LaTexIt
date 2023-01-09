@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/05/05.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 
 //This the library outline view, with some added methods to manage the selection
 
@@ -949,8 +949,7 @@
       LatexitEquation* latexitEquation = [[representedObject dynamicCastToClass:[LibraryEquation class]] equation];
       cellImage = (currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) ? nil : [latexitEquation pdfCachedImage];
       cellTextBackgroundColor = [latexitEquation backgroundColor];
-      NSColor* greyLevelColor = [cellTextBackgroundColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]];
-      cellDrawsBackground = (cellTextBackgroundColor != nil) && ([greyLevelColor whiteComponent] != 1.0f);
+      cellDrawsBackground = cellTextBackgroundColor && ![cellTextBackgroundColor isConsideredWhite];
       if ((currentLibraryRowType == LIBRARY_ROW_IMAGE_AND_TEXT) && ![cell isHighlighted])
         cellTextColor = [latexitEquation color];
     }//end if ([representedObject isKindOfClass:[LibraryEquation class]])

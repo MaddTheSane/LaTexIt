@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 1/04/05.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 
 //The preferences controller centralizes the management of the preferences pane
 
@@ -159,14 +159,36 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   else if (object == [[PreferencesController sharedController] serviceRegularExpressionFiltersController])
     [self textDidChange:
       [NSNotification notificationWithName:NSTextDidChangeNotification object:self->serviceRegularExpressionsTestInputTextView]];
-  else if ((object == [NSUserDefaultsController sharedUserDefaultsController]) &&
-           [keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]])
+  else if (object == [NSUserDefaultsController sharedUserDefaultsController])
   {
-    [self->compositionConfigurationsCurrentPopUpButton selectItemAtIndex:[[PreferencesController sharedController] compositionConfigurationsDocumentIndex]];
-    [self updateProgramArgumentsToolTips];
-  }
+    if ([keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]])
+    {
+      [self->compositionConfigurationsCurrentPopUpButton selectItemAtIndex:[[PreferencesController sharedController] compositionConfigurationsDocumentIndex]];
+      [self updateProgramArgumentsToolTips];
+    }//end if ([keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]])
+    else if ([keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:DragExportTypeKey]] ||
+             [keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:DragExportSvgPdfToSvgPathKey]] ||
+             [keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:DragExportSvgPdfToCairoPathKey]])
+    {
+      [self updateControls];
+    }//end if ([keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:DragExportSvgPdfToSvgPathKey]] || [keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:DragExportSvgPdfToCairoPathKey]])
+  }//end if (object == [NSUserDefaultsController sharedUserDefaultsController])
 }
 //end observeValueForKeyPath:ofObject:change:context:
+
+-(void) updateControls
+{
+  PreferencesController* preferencesController = [PreferencesController sharedController];
+  export_format_t exportFormat = [preferencesController exportFormatPersistent];
+  BOOL isSVG = (exportFormat == EXPORT_FORMAT_SVG);
+  NSString* path1 = [[PreferencesController sharedController] exportSvgPdfToSvgPath];
+  NSString* path2 = [[PreferencesController sharedController] exportSvgPdfToCairoPath];
+  FileExistsTransformer* transformer = [FileExistsTransformer transformerWithDirectoryAllowed:NO];
+  BOOL ok1 = [[[transformer transformedValue:path1] dynamicCastToClass:[NSNumber class]] boolValue];
+  BOOL ok2 = [[[transformer transformedValue:path2] dynamicCastToClass:[NSNumber class]] boolValue];
+  [self->generalExportFormatSvgWarning setHidden:(!isSVG || ok1 || ok2)];
+}
+//end updateControls
 
 -(void) awakeFromNib
 {
@@ -239,6 +261,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   NSUserDefaultsController* userDefaultsController = [NSUserDefaultsController sharedUserDefaultsController];
   PreferencesController* preferencesController = [PreferencesController sharedController];
 
+  NSString* NSHidden2Binding = [NSHiddenBinding stringByAppendingString:@"2"];
+  
   //General
   [self->generalExportFormatPopupButton addItemWithTitle:NSLocalizedString(@"PDF vector format", @"")
     tag:(NSInteger)EXPORT_FORMAT_PDF];
@@ -300,21 +324,28 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [IsNotEqualToTransformer transformerWithReference:@(EXPORT_FORMAT_JPEG)], NSValueTransformerBindingOption, nil]];
   [self->generalExportFormatSvgWarning setTitle:
-    NSLocalizedString(@"Warning : pdf2svg was not found", @"")];
+    NSLocalizedString(@"Warning : pdf2svg or pdftocairo was not found", @"")];
   [self->generalExportFormatSvgWarning sizeToFit];
   [self->generalExportFormatSvgWarning centerInSuperviewHorizontally:YES vertically:NO];
   [self->generalExportFormatSvgWarning setTextColor:[NSColor redColor]];
-  [self->generalExportFormatSvgWarning bind:NSHiddenBinding toObject:userDefaultsController
+  /*[self->generalExportFormatSvgWarning bind:NSHiddenBinding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [IsNotEqualToTransformer transformerWithReference:@(EXPORT_FORMAT_SVG)],
       NSValueTransformerBindingOption, nil]];
-  NSString* NSHidden2Binding = [NSHiddenBinding stringByAppendingString:@"2"];
   [self->generalExportFormatSvgWarning bind:NSHidden2Binding toObject:userDefaultsController
     withKeyPath:[userDefaultsController adaptedKeyPath:DragExportSvgPdfToSvgPathKey]
     options:[NSDictionary dictionaryWithObjectsAndKeys:
       [FileExistsTransformer transformerWithDirectoryAllowed:NO],
-      NSValueTransformerBindingOption, nil]];
+      NSValueTransformerBindingOption, nil]];*/
+  [userDefaultsController addObserver:self forKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey]
+    options:NSKeyValueObservingOptionNew context:nil];
+  [userDefaultsController addObserver:self forKeyPath:[userDefaultsController adaptedKeyPath:DragExportSvgPdfToSvgPathKey]
+    options:NSKeyValueObservingOptionNew context:nil];
+  [userDefaultsController addObserver:self forKeyPath:[userDefaultsController adaptedKeyPath:DragExportSvgPdfToCairoPathKey]
+    options:NSKeyValueObservingOptionNew context:nil];
+  [self observeValueForKeyPath:[userDefaultsController adaptedKeyPath:DragExportTypeKey] ofObject:userDefaultsController
+    change:nil context:nil];
 
   [self->generalExportFormatMathMLWarning setTitle:
     NSLocalizedString(@"Warning : the XML::LibXML perl module was not found", @"")];
@@ -1397,6 +1428,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   [self->generalExportFormatOptionsPanes setJpegQualityPercent:[[PreferencesController sharedController] exportJpegQualityPercent]];
   [self->generalExportFormatOptionsPanes setJpegBackgroundColor:[[PreferencesController sharedController] exportJpegBackgroundColor]];
   [self->generalExportFormatOptionsPanes setSvgPdfToSvgPath:[[PreferencesController sharedController] exportSvgPdfToSvgPath]];
+  [self->generalExportFormatOptionsPanes setSvgPdfToCairoPath:[[PreferencesController sharedController] exportSvgPdfToCairoPath]];
   [self->generalExportFormatOptionsPanes setTextExportPreamble:[[PreferencesController sharedController] exportTextExportPreamble]];
   [self->generalExportFormatOptionsPanes setTextExportEnvironment:[[PreferencesController sharedController] exportTextExportEnvironment]];
   [self->generalExportFormatOptionsPanes setTextExportBody:[[PreferencesController sharedController] exportTextExportBody]];
@@ -1435,6 +1467,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
     {
       [preferencesController setExportSvgPdfToSvgPath:[self->generalExportFormatOptionsPanes svgPdfToSvgPath]];
+      [preferencesController setExportSvgPdfToCairoPath:[self->generalExportFormatOptionsPanes svgPdfToCairoPath]];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
     else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel])
     {
@@ -1452,6 +1485,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     {
       [preferencesController setExportPDFMetaDataInvisibleGraphicsEnabled:[self->generalExportFormatOptionsPanes pdfMetaDataInvisibleGraphicsEnabled]];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsPDFPanel])
+    else
+      DebugLog(1, @"unknown exportFormatOptions panel");
   }//end if (ok)
   [NSApp endSheet:exportFormatOptionsPanel];
   [exportFormatOptionsPanel orderOut:self];
@@ -1846,6 +1881,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     BOOL isGsAvailable = NO;
     BOOL isPsToPdfAvailable = NO;
     BOOL isPdfToSvgAvailable = NO;
+    BOOL isPdfToCairoAvailable = NO;
     [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
                                        @[@"pdflatex"], @"executableNames",
                                        [NSValue valueWithPointer:&isPdfLaTeXAvailable], @"monitor", nil]];
@@ -1904,6 +1940,13 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
       [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
                                                   @[@"pdf2svg"], @"executableNames",
                                                   [NSValue valueWithPointer:&isPdfToSvgAvailable], @"monitor", nil]];
+    [appController _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToCairoPathKey, @"path",
+                                       @[@"pdftocairo"], @"executableNames",
+                                       [NSValue valueWithPointer:&isPdfToCairoAvailable], @"monitor", nil]];
+    if (!isPdfToSvgAvailable)
+      [appController _findPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToCairoPathKey, @"path",
+                                                  @[@"pdftocairo"], @"executableNames",
+                                                  [NSValue valueWithPointer:&isPdfToCairoAvailable], @"monitor", nil]];
     
     [configuration setObject:@(YES) forKey:@"allowUIAlertOnFailure"];
     [configuration setObject:@(YES) forKey:@"allowUIFindOnFailure"];

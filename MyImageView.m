@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -49,7 +49,7 @@ NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
 NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 static const CGFloat rgba1_light[4] = {0.95f, 0.95f, 0.95f, 1.0f};
-static const CGFloat rgba1_dark[4] = {0.5f, 0.5f, 0.5f, 1.0f};
+static const CGFloat rgba1_dark[4] = {0.66f, 0.66f, 0.66f, 1.0f};
 static const CGFloat rgba2_light[4] = {0.68f, 0.68f, 0.68f, 1.f};
 static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
 
@@ -245,8 +245,7 @@ typedef NSInteger NSDraggingContext;
 {
   //we remove the background color if it is set to white. Useful for the history table view alternating white/blue rows
   [self->backgroundColor autorelease];
-  NSColor* greyLevelColor = newColor ? [newColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]] : [NSColor whiteColor];
-  self->backgroundColor = ([greyLevelColor whiteComponent] == 1.0f) ? nil : [newColor retain];
+  self->backgroundColor = [newColor isConsideredWhite] ? nil : [newColor copy];
 
   [self setNeedsDisplay:YES];
   if (updateHistoryItem && self->pdfData)
@@ -686,6 +685,8 @@ typedef NSInteger NSDraggingContext;
                                          forFile:filePath options:NSExclude10_4ElementsIconCreationOption];
         }//end if ((exportFormat != EXPORT_FORMAT_PNG) &&(exportFormat != EXPORT_FORMAT_TIFF) && (exportFormat != EXPORT_FORMAT_JPEG))
         NSString* fileName = [filePath lastPathComponent];
+        if (!fileName)
+          DebugLog(0, @"namesOfPromisedFilesDroppedAtDestination : nil file name");
         [names addObject:fileName];
       }//end if (![fileManager fileExistsAtPath:filePath])
     }//end if (extension)
@@ -709,6 +710,8 @@ typedef NSInteger NSDraggingContext;
     NSString* extension = getFileExtensionForExportFormat(exportFormat);
     result = [filePrefix stringByAppendingPathExtension:extension];
   }//end if (self->pdfData)
+  if (!result)
+    DebugLog(0, @"filePromiseProvider: nil result for pdfData %p", self->pdfData);
   return result;
 }
 //end filePromiseProvider:fileNameForType:
@@ -716,6 +719,8 @@ typedef NSInteger NSDraggingContext;
 -(void) filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider writePromiseToURL:(NSURL*)url completionHandler:(void (^)(NSError * _Nullable errorOrNil))completionHandler
 {
   NSURL* destination = [NSURL fileURLWithPath:[[url path] stringByDeletingLastPathComponent]];
+  if (!destination)
+    DebugLog(0, @"filePromiseProvider:writePromiseToURL: nil destination for url %@", url);
   [self namesOfPromisedFilesDroppedAtDestination:destination];
   completionHandler(nil);
 }

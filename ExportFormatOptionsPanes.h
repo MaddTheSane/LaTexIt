@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/04/09.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -29,13 +29,17 @@
   id       exportFormatOptionsJpegPanelDelegate;
 
   IBOutlet NSPanel*     exportFormatOptionsSvgPanel;
-  IBOutlet NSBox*       exportFormatOptionsSvgBox;
+  IBOutlet NSBox*       exportFormatOptionsSvgPdfToSvgBox;
   IBOutlet NSTextField* exportFormatOptionsSvgPdfToSvgPathTextField;
   IBOutlet NSButton*    exportFormatOptionsSvgPdfToSvgPathModifyButton;
+  IBOutlet NSBox*       exportFormatOptionsSvgPdfToCairoBox;
+  IBOutlet NSTextField* exportFormatOptionsSvgPdfToCairoPathTextField;
+  IBOutlet NSButton*    exportFormatOptionsSvgPdfToCairoPathModifyButton;
   IBOutlet NSButton*    exportFormatOptionsSvgOKButton;
   IBOutlet NSButton*    exportFormatOptionsSvgCancelButton;
   
   NSString* svgPdfToSvgPath;
+  NSString* svgPdfToCairoPath;
   id        exportFormatOptionsSvgPanelDelegate;
   
   IBOutlet NSPanel*  exportFormatOptionsTextPanel;
@@ -92,6 +96,8 @@
 -(NSPanel*)  exportFormatOptionsSvgPanel;
 -(NSString*) svgPdfToSvgPath;
 -(void)      setSvgPdfToSvgPath:(NSString*)value;
+-(NSString*) svgPdfToCairoPath;
+-(void)      setSvgPdfToCairoPath:(NSString*)value;
 -(id)        exportFormatOptionsSvgPanelDelegate;
 -(void)      setExportFormatOptionsSvgPanelDelegate:(id)delegate;
 
@@ -123,6 +129,7 @@
 -(void)      setExportFormatOptionsPDFPanelDelegate:(id)delegate;
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender;
+-(IBAction) svgPdfToCairoPathModify:(id)sender;
 
 -(IBAction) close:(id)sender;
 

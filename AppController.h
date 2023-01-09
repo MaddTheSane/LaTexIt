@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -58,6 +58,7 @@
   BOOL isPsToPdfAvailable;
   BOOL isColorStyAvailable;
   BOOL isPdfToSvgAvailable;
+  BOOL isPdfToCairoAvailable;
   BOOL isPerlWithLibXMLAvailable;
 
   AdditionalFilesWindowController*           additionalFilesWindowController;
@@ -181,6 +182,7 @@
 -(BOOL) isPsToPdfAvailable;
 -(BOOL) isColorStyAvailable;
 -(BOOL) isPdfToSvgAvailable;
+-(BOOL) isPdfToCairoAvailable;
 -(BOOL) isPerlWithLibXMLAvailable;
 
 //if the marginWindowController is not loaded, just use the user defaults values

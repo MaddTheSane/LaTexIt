@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesController.h"
@@ -51,6 +51,7 @@ NSString* DragExportPDFWOFGsWriteEngineKey                    = @"DragExportPDFW
 NSString* DragExportPDFWOFGsPDFCompatibilityLevelKey          = @"DragExportPDFWOFGsPDFCompatibilityLevel";
 NSString* DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey = @"DragExportPDFWOFMetadataInvisibleGraphicsEnabled";
 NSString* DragExportSvgPdfToSvgPathKey                        = @"DragExportSvgPdfToSvgPath";
+NSString* DragExportSvgPdfToCairoPathKey                      = @"DragExportSvgPdfToCairoPath";
 NSString* DragExportTextExportPreambleKey                     = @"DragExportTextExportPreambleKey";
 NSString* DragExportTextExportEnvironmentKey                  = @"DragExportTextExportEnvironmentKey";
 NSString* DragExportTextExportBodyKey                         = @"DragExportTextExportBodyKey";
@@ -280,6 +281,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
              @"pdfwrite", DragExportPDFWOFGsWriteEngineKey,
              @"1.5", DragExportPDFWOFGsPDFCompatibilityLevelKey,
              @"", DragExportSvgPdfToSvgPathKey,
+             @"", DragExportSvgPdfToCairoPathKey,
              @(YES), DragExportPDFMetadataInvisibleGraphicsEnabledKey,
              @(YES), DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey,
              @(YES), DragExportTextExportPreambleKey,
@@ -898,6 +900,34 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     #endif
 }
 //end setExportSvgPdfToSvgPath:
+
+-(NSString*) exportSvgPdfToCairoPath
+{
+  NSString* result = nil;
+  if (self->isLaTeXiT)
+    result = [[NSUserDefaults standardUserDefaults] stringForKey:DragExportSvgPdfToCairoPathKey];
+  else
+    #ifdef ARC_ENABLED
+    result = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToCairoPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    #else
+    result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToCairoPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
+    #endif
+  return result;
+}
+//end exportSvgPdfToCairoPath
+
+-(void) setExportSvgPdfToCairoPath:(NSString*)value
+{
+  if (self->isLaTeXiT)
+    [[NSUserDefaults standardUserDefaults] setObject:value forKey:DragExportSvgPdfToCairoPathKey];
+  else
+    #ifdef ARC_ENABLED
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToCairoPathKey, (CHBRIDGE const void*)value, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    #else
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToCairoPathKey, value, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    #endif
+}
+//end setExportSvgPdfToCairoPath:
 
 -(BOOL) exportTextExportPreamble
 {

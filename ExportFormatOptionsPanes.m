@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 23/04/09.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import "ExportFormatOptionsPanes.h"
@@ -64,6 +64,19 @@
   #endif
 }
 //end dealloc
+
+-(NSString*) debugDescription
+{
+  return [NSString stringWithFormat:@"ExportFormatOptionsPanes:\n{exportFormatOptionsSvgPanel=%@, exportFormatOptionsSvgPanelDelegate=%@}", self->exportFormatOptionsSvgPanel, self->exportFormatOptionsSvgPanelDelegate];
+}
+-(NSString*) description
+{
+  return [self debugDescription];
+}
+-(NSString*) descriptionWithLocale:(id)aLocale
+{
+  return [self description];
+}
 
 -(void) awakeFromNib
 {
@@ -135,26 +148,38 @@
     NSMakePoint([self->exportFormatOptionsJpegOKButton frame].origin.x-12-[self->exportFormatOptionsJpegCancelButton frame].size.width,
                 [self->exportFormatOptionsJpegCancelButton frame].origin.y)];
 
-  [self->exportFormatOptionsSvgBox setTitle:LocalLocalizedString(@"Path to pdf2svg", @"")];
+  [self->exportFormatOptionsSvgPdfToSvgBox setTitle:LocalLocalizedString(@"Path to pdf2svg", @"")];
   [self->exportFormatOptionsSvgPdfToSvgPathModifyButton setTitle:[NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Change", @"")]];
-  [self->exportFormatOptionsSvgOKButton setTitle:LocalLocalizedString(@"OK", @"")];
-  [self->exportFormatOptionsSvgCancelButton setTitle:LocalLocalizedString(@"Cancel", @"")];
   [self->exportFormatOptionsSvgPdfToSvgPathModifyButton sizeToFit];
-  [self->exportFormatOptionsSvgOKButton sizeToFit];
-  [self->exportFormatOptionsSvgCancelButton sizeToFit];
   [self->exportFormatOptionsSvgPdfToSvgPathModifyButton setFrameOrigin:
-    NSMakePoint([self->exportFormatOptionsSvgBox frame].size.width-16-
+    NSMakePoint([self->exportFormatOptionsSvgPdfToSvgBox frame].size.width-16-
                 [self->exportFormatOptionsSvgPdfToSvgPathModifyButton frame].size.width,
                 [self->exportFormatOptionsSvgPdfToSvgPathModifyButton frame].origin.y)];
   [self->exportFormatOptionsSvgPdfToSvgPathTextField setFrameSize:
     NSMakeSize([self->exportFormatOptionsSvgPdfToSvgPathModifyButton frame].origin.x-8-10,
                [self->exportFormatOptionsSvgPdfToSvgPathTextField frame].size.height)];
+  [self->exportFormatOptionsSvgPdfToCairoBox setTitle:LocalLocalizedString(@"Path to pdftocairo", @"")];
+  [self->exportFormatOptionsSvgPdfToCairoPathModifyButton setTitle:[NSString stringWithFormat:@"%@...", LocalLocalizedString(@"Change", @"")]];
+  [self->exportFormatOptionsSvgPdfToCairoPathModifyButton sizeToFit];
+  [self->exportFormatOptionsSvgPdfToCairoPathModifyButton setFrameOrigin:
+    NSMakePoint([self->exportFormatOptionsSvgPdfToCairoBox frame].size.width-16-
+                [self->exportFormatOptionsSvgPdfToCairoPathModifyButton frame].size.width,
+                [self->exportFormatOptionsSvgPdfToCairoPathModifyButton frame].origin.y)];
+  [self->exportFormatOptionsSvgPdfToCairoPathTextField setFrameSize:
+    NSMakeSize([self->exportFormatOptionsSvgPdfToCairoPathModifyButton frame].origin.x-8-10,
+               [self->exportFormatOptionsSvgPdfToCairoPathTextField frame].size.height)];
+  [self->exportFormatOptionsSvgOKButton setTitle:LocalLocalizedString(@"OK", @"")];
+  [self->exportFormatOptionsSvgCancelButton setTitle:LocalLocalizedString(@"Cancel", @"")];
+  [self->exportFormatOptionsSvgOKButton sizeToFit];
+  [self->exportFormatOptionsSvgCancelButton sizeToFit];
   [self->exportFormatOptionsSvgCancelButton setFrameSize:
     NSMakeSize(MAX(90, [self->exportFormatOptionsSvgCancelButton frame].size.width),
                [self->exportFormatOptionsSvgCancelButton frame].size.height)];
   [self->exportFormatOptionsSvgOKButton setFrameSize:[self->exportFormatOptionsSvgCancelButton frame].size];
   [self->exportFormatOptionsSvgOKButton setFrameOrigin:
-    NSMakePoint(NSMaxX([self->exportFormatOptionsSvgBox frame])-[self->exportFormatOptionsSvgOKButton frame].size.width,
+    NSMakePoint(MAX(
+      NSMaxX([self->exportFormatOptionsSvgPdfToSvgBox frame])-[self->exportFormatOptionsSvgOKButton frame].size.width,
+      NSMaxX([self->exportFormatOptionsSvgPdfToCairoBox frame])-[self->exportFormatOptionsSvgOKButton frame].size.width),
                 [self->exportFormatOptionsSvgOKButton frame].origin.y)];
   [self->exportFormatOptionsSvgCancelButton setFrameOrigin:
     NSMakePoint([self->exportFormatOptionsSvgOKButton frame].origin.x-12-[self->exportFormatOptionsSvgCancelButton frame].size.width,
@@ -252,6 +277,10 @@
   
   [self->exportFormatOptionsSvgPdfToSvgPathTextField bind:NSValueBinding toObject:self withKeyPath:@"svgPdfToSvgPath" options:nil];
   [self->exportFormatOptionsSvgPdfToSvgPathTextField bind:NSTextColorBinding toObject:self withKeyPath:@"svgPdfToSvgPath"
+    options:colorForFileExistsBindingOptions];
+
+  [self->exportFormatOptionsSvgPdfToCairoPathTextField bind:NSValueBinding toObject:self withKeyPath:@"svgPdfToCairoPath" options:nil];
+  [self->exportFormatOptionsSvgPdfToCairoPathTextField bind:NSTextColorBinding toObject:self withKeyPath:@"svgPdfToCairoPath"
     options:colorForFileExistsBindingOptions];
 
   [self->exportFormatOptionsTextExportPreambleButton bind:NSValueBinding toObject:self withKeyPath:@"textExportPreamble" options:nil];
@@ -353,6 +382,28 @@
 }
 //end setSvgPdfToSvgPath:
 
+-(NSString*) svgPdfToCairoPath
+{
+  return self->svgPdfToCairoPath;
+}
+//end svgPdfToCairoPath
+
+-(void) setSvgPdfToCairoPath:(NSString*)value
+{
+  #ifdef ARC_ENABLED
+  #else
+  [value retain];
+  #endif
+  [self willChangeValueForKey:@"svgPdfToCairoPath"];
+  #ifdef ARC_ENABLED
+  #else
+  [self->svgPdfToCairoPath release];
+  #endif
+  self->svgPdfToCairoPath = value;
+  [self didChangeValueForKey:@"svgPdfToCairoPath"];
+}
+//end setSvgPdfToCairoPath:
+
 -(id) exportFormatOptionsSvgPanelDelegate
 {
   return self->exportFormatOptionsSvgPanelDelegate;
@@ -367,21 +418,49 @@
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender
 {
-  NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-  [openPanel setResolvesAliases:YES];
-  NSString* filePath = [self svgPdfToSvgPath];
-  NSString* filename =[filePath lastPathComponent];
-  NSString* directory = [filePath stringByDeletingLastPathComponent];
-  NSInteger result = 0;
-  [openPanel setDirectoryURL:(!directory ? nil : [NSURL fileURLWithPath:directory isDirectory:YES])];
-  [openPanel setNameFieldStringValue:filename];
-  if (result == NSFileHandlingPanelOKButton)
+  if (sender == self->exportFormatOptionsSvgPdfToSvgPathTextField)
+    [self setSvgPdfToSvgPath:self->exportFormatOptionsSvgPdfToSvgPathTextField.stringValue];
+  else
   {
-    filePath = [[openPanel URL] path];
-    [self setSvgPdfToSvgPath:filePath];
-  }//end if (result == NSFileHandlingPanelOKButton)
+    NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+    [openPanel setResolvesAliases:YES];
+    NSString* filePath = [self svgPdfToSvgPath];
+    NSString* filename = [filePath lastPathComponent];
+    NSString* directory = [filePath stringByDeletingLastPathComponent];
+    [openPanel setDirectoryURL:(!directory ? nil : [NSURL fileURLWithPath:directory isDirectory:YES])];
+    [openPanel setNameFieldStringValue:filename];
+    NSModalResponse result = [openPanel runModal];
+    if (result == NSModalResponseOK)
+    {
+      filePath = [[openPanel URL] path];
+      [self setSvgPdfToSvgPath:filePath];
+    }//end if (result == NSModalResponseOK)
+  }
 }
 //end svgPdfToSvgPathModify:
+
+-(IBAction) svgPdfToCairoPathModify:(id)sender
+{
+  if (sender == self->exportFormatOptionsSvgPdfToCairoPathTextField)
+    [self setSvgPdfToCairoPath:self->exportFormatOptionsSvgPdfToCairoPathTextField.stringValue];
+  else
+  {
+    NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+    [openPanel setResolvesAliases:YES];
+    NSString* filePath = [self svgPdfToCairoPath];
+    NSString* filename = [filePath lastPathComponent];
+    NSString* directory = [filePath stringByDeletingLastPathComponent];
+    [openPanel setDirectoryURL:(!directory ? nil : [NSURL fileURLWithPath:directory isDirectory:YES])];
+    [openPanel setNameFieldStringValue:filename];
+    NSModalResponse result = [openPanel runModal];
+    if (result == NSModalResponseOK)
+    {
+      filePath = [[openPanel URL] path];
+      [self setSvgPdfToCairoPath:filePath];
+    }//end if (result == NSModalResponseOK)
+  }
+}
+//end svgPdfToCairoPathModify:
 
 #pragma mark TEXT
 

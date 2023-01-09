@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -1639,8 +1639,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         [self->lowerBoxControlsBoxLatexModeSegmentedControl setSelected:NO forSegment:[self->lowerBoxControlsBoxLatexModeSegmentedControl selectedSegment]];
     }//end if ([latexitEquation mode] == LATEX_MODE_AUTO)
     NSColor* latexitEquationBackgroundColor = [latexitEquation backgroundColor];
-    NSColor* greyLevelLatexitEquationBackgroundColor = latexitEquationBackgroundColor ? [latexitEquationBackgroundColor colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]] : [NSColor whiteColor];
-    latexitEquationBackgroundColor = ([greyLevelLatexitEquationBackgroundColor whiteComponent] == 1.0f) ? nil : latexitEquationBackgroundColor;
+    latexitEquationBackgroundColor = [latexitEquationBackgroundColor isConsideredWhite] ? nil : latexitEquationBackgroundColor;
     NSColor* colorFromUserDefaults = [preferencesController documentImageViewBackgroundColor];
     if (!latexitEquationBackgroundColor)
       latexitEquationBackgroundColor = colorFromUserDefaults;
@@ -2821,8 +2820,11 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
           @(YES), @"synchronizeEnvironment",
           @(YES), @"synchronizeBody",
           nil]];
+  NSView* accessoryViewParent = [[[NSView alloc] initWithFrame:NSZeroRect] autorelease];
+  [accessoryViewParent setAutoresizingMask:NSViewMinXMargin|NSViewWidthSizable|NSViewHeightSizable];
+
   NSBox* accessoryView = [[[NSBox alloc] initWithFrame:NSZeroRect] autorelease];
-  [accessoryView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+  [accessoryView setAutoresizingMask:NSViewMinXMargin|NSViewWidthSizable|NSViewHeightSizable];
   [accessoryView setTitlePosition:NSNoTitle];
   [accessoryView setBorderType:NSNoBorder];
   NSButton* synchronizeEnabledCheckBox = [[[NSButton alloc] initWithFrame:NSZeroRect] autorelease];
@@ -2859,13 +2861,16 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [synchronizeEnabledCheckBox setFrameOrigin:NSMakePoint(8, CGRectGetMaxY(NSRectToCGRect([synchronizePreambleCheckBox frame]))+4)];
   [accessoryView sizeToFit];
   
+  [accessoryViewParent addSubview:accessoryView];
+  [accessoryViewParent setFrameSize:[accessoryView frame].size];
+  
   NSSavePanel* panel = [NSSavePanel savePanel];
   [panel setCanCreateDirectories:YES];
   [panel setCanSelectHiddenExtension:YES];
   [panel setAllowedFileTypes:@[@"tex"]];
   [panel setAllowsOtherFileTypes:YES];
   [panel setExtensionHidden:NO];
-  [panel setAccessoryView:accessoryView];
+  [panel setAccessoryView:accessoryViewParent];
   panel.nameFieldStringValue = [NSLocalizedString(@"Untitled", @"") stringByAppendingPathExtension:@"tex"];
   [panel beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse result) {
     BOOL synchronizeEnabled =

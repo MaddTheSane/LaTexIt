@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -36,12 +36,14 @@
   CGFloat         saveAccessoryViewOptionsJpegQualityPercent;
   NSColor*        saveAccessoryViewOptionsJpegBackgroundColor;
   NSString*       saveAccessoryViewOptionsSvgPdfToSvgPath;
+  NSString*       saveAccessoryViewOptionsSvgPdfToCairoPath;
   BOOL            saveAccessoryViewOptionsTextExportPreamble;
   BOOL            saveAccessoryViewOptionsTextExportEnvironment;
   BOOL            saveAccessoryViewOptionsTextExportBody;
   NSString*       saveAccessoryViewOptionsPDFWofGSWriteEngine;
   NSString*       saveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel;
   BOOL            saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
+  BOOL            saveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled;
   
   NSSavePanel* currentSavePanel;
   NSArray* nibTopLevelObjects;
@@ -67,6 +69,8 @@
 -(void)            setSaveAccessoryViewOptionsJpegBackgroundColor:(NSColor*)value;
 -(NSString*)       saveAccessoryViewOptionsSvgPdfToSvgPath;
 -(void)            setSaveAccessoryViewOptionsSvgPdfToSvgPath:(NSString*)value;
+-(NSString*)       saveAccessoryViewOptionsSvgPdfToCairoPath;
+-(void)            setSaveAccessoryViewOptionsSvgPdfToCairoPath:(NSString*)value;
 -(BOOL)            saveAccessoryViewOptionsTextExportPreamble;
 -(void)            setSaveAccessoryViewOptionsTextExportPreamble:(BOOL)value;
 -(BOOL)            saveAccessoryViewOptionsTextExportEnvironment;
@@ -79,6 +83,8 @@
 -(void)            setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:(NSString*)value;
 -(BOOL)            saveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled;
 -(void)            setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:(BOOL)value;
+-(BOOL)            saveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled;
+-(void)            setSaveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled:(BOOL)value;
 
 -(NSSavePanel*) currentSavePanel;
 -(void) setCurrentSavePanel:(NSSavePanel*)value;

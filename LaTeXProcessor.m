@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import "LaTeXProcessor.h"
@@ -175,6 +175,7 @@ static LaTeXProcessor* sharedInstance = nil;
         NSString* temporaryPathFileName = @"latexit-paths";
         NSString* temporaryPathFilePath = [[[NSWorkspace sharedWorkspace] temporaryDirectory] stringByAppendingPathComponent:temporaryPathFileName];
         NSString* systemCall = [NSString stringWithFormat:@". /etc/profile && /bin/echo \"$PATH\" >| %@", temporaryPathFilePath];
+        
         int error = system([systemCall UTF8String]);
         NSError* nserror = nil;
         NSStringEncoding encoding = NSUTF8StringEncoding;
@@ -194,7 +195,7 @@ static LaTeXProcessor* sharedInstance = nil;
             @"/sw/usr/bin", @"/sw/usr/sbin",
             @"/sw/local/bin", @"/sw/local/sbin",
             @"/sw/usr/local/bin", @"/sw/usr/local/sbin",
-            @"/opt/local/bin", @"/opt/local/sbin"];
+            @"/opt/local/bin", @"/opt/local/sbin",];
         [self->unixBins addObjectsFromArray:usualBins];
 
         //add ~/.MacOSX/environment.plist
@@ -220,9 +221,12 @@ static LaTeXProcessor* sharedInstance = nil;
             [processEnvironmentPaths setArray:components];
         }//end if (pathEnv)
 
+
         NSMutableArray* allBins = [NSMutableArray arrayWithArray:self->unixBins];
         [allBins addObjectsFromArray:macOSXEnvironmentPaths];
         [allBins addObjectsFromArray:processEnvironmentPaths];
+        [self->unixBins addObject:[NSHomeDirectory() stringByAppendingPathComponent:@"bin"]];//~/bin
+        
         NSMutableArray* allBinsUniqued = [NSMutableArray arrayWithCapacity:[allBins count]];
         NSMutableSet* allBinsEncountered = [NSMutableSet setWithCapacity:[allBins count]];
         NSEnumerator* enumerator = [allBins objectEnumerator];
@@ -1591,8 +1595,12 @@ static LaTeXProcessor* sharedInstance = nil;
   [systemTask setTimeOut:120];
   [systemTask setCurrentDirectoryPath:workingDirectory];
   [systemTask setLaunchPath:executablePath];
-  [systemTask setArguments:[defaultArguments arrayByAddingObjectsFromArray:
-    [NSArray arrayWithObjects:@"-file-line-error", @"-interaction", @"nonstopmode", texFileArg, nil]]];
+  if ([executablePath endsWith:@"tectonic" options:NSCaseInsensitiveSearch])
+    [systemTask setArguments:[defaultArguments arrayByAddingObjectsFromArray:
+      [NSArray arrayWithObjects:texFileArg, nil]]];
+  else
+    [systemTask setArguments:[defaultArguments arrayByAddingObjectsFromArray:
+      [NSArray arrayWithObjects:@"-file-line-error", @"-interaction", @"nonstopmode", texFileArg, nil]]];
   [systemTask setEnvironment:fullEnvironment];
   [customString appendString:[NSString stringWithFormat:@"\n--------------- %@ %@ ---------------\n%@\n",
                                                         NSLocalizedString(@"processing", @""),
@@ -2284,11 +2292,13 @@ static LaTeXProcessor* sharedInstance = nil;
       NSString* psToPdfPath      = [compositionConfiguration compositionConfigurationProgramPathPsToPdf];
       NSArray*  psToPdfArguments = [compositionConfiguration compositionConfigurationProgramArgumentsPsToPdf];
       NSString* pdf2svgPath      = [preferencesController exportSvgPdfToSvgPath];
+      NSString* pdftocairoPath      = [preferencesController exportSvgPdfToCairoPath];
 
       DebugLog(1, @"gsPath = %@", gsPath);
       DebugLog(1, @"gsArguments = %@", gsArguments);
       DebugLog(1, @"psToPdfPath = %@", psToPdfPath);
       DebugLog(1, @"psToPdfArguments = %@", psToPdfArguments);
+      DebugLog(1, @"pdf2svgPath = %@", pdf2svgPath);
       DebugLog(1, @"format = %@", @(format));
       if (format == EXPORT_FORMAT_PDF)
       {
@@ -2609,8 +2619,16 @@ static LaTeXProcessor* sharedInstance = nil;
           [svgTask setUsingLoginShell:useLoginShell];
           [svgTask setCurrentDirectoryPath:temporaryDirectory];
           [svgTask setEnvironment:self->globalExtraEnvironment];
-          [svgTask setLaunchPath:pdf2svgPath];
-          [svgTask setArguments:[NSArray arrayWithObjects:pdfFilePath, tmpSvgFilePath, nil]];
+          if ([[NSFileManager defaultManager] fileExistsAtPath:pdftocairoPath])
+          {
+            [svgTask setLaunchPath:pdftocairoPath];
+            [svgTask setArguments:[NSArray arrayWithObjects:@"-svg", pdfFilePath, tmpSvgFilePath, nil]];
+          }//end if ([[NSFileManager defaultManager] fileExistsAtPath:pdftocairoPath])
+          else if ([[NSFileManager defaultManager] fileExistsAtPath:pdf2svgPath])
+          {
+            [svgTask setLaunchPath:pdf2svgPath];
+            [svgTask setArguments:[NSArray arrayWithObjects:pdfFilePath, tmpSvgFilePath, nil]];
+          }//end if ([[NSFileManager defaultManager] fileExistsAtPath:pdf2svgPath])
           [svgTask launch];
           [svgTask waitUntilExit];
         }
