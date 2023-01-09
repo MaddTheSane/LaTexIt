@@ -47,7 +47,7 @@ NS_INLINE BOOL isMacOS10_13OrAbove(void) {return (floor(NSAppKitVersionNumber) >
 NS_INLINE BOOL isMacOS10_14OrAbove(void) {return (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_13);}
 NS_INLINE BOOL isMacOS10_15OrAbove(void) {return (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_14);}
 
-extern NSString* NSAppearanceDidChangeNotification;
+extern const NSNotificationName NSAppearanceDidChangeNotification;
 
 NS_INLINE          char  IsBetween_c(char inf, char x, char sup) {return (inf <= x) && (x <= sup);}
 NS_INLINE unsigned char  IsBetween_uc(unsigned char inf, unsigned char x, unsigned char sup) {return (inf <= x) && (x <= sup);}
@@ -77,9 +77,10 @@ NS_INLINE      CGFloat Clip_cgf(CGFloat inf, CGFloat x, CGFloat sup) {return (x<
 NS_INLINE         double Clip_d(double inf, double x, double sup) {return (x<inf) ? inf : (sup<x) ? sup : x;}
 
 NSString* GetMySVGPboardType(void);
-NSString* GetWebURLsWithTitlesPboardType(void);
+NSPasteboardType GetWebURLsWithTitlesPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
 NSString* getUTIForExportFormat(export_format_t exportFormat);
+UTType* getContentTypeForExportFormat(export_format_t exportFormat) API_AVAILABLE(macos(11.0));
 NSString* getFileExtensionForExportFormat(export_format_t exportFormat);
 
 FOUNDATION_EXTERN int EndianI_BtoN(int x);

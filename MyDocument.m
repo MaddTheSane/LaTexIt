@@ -473,11 +473,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end setDocumentTitle:
 
--(document_style_t) documentStyle
-{
-  return self->documentStyle;
-}
-//end documentStyle
+@synthesize documentStyle;
 
 -(void) setDocumentStyle:(document_style_t)value
 {
@@ -1310,12 +1306,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end latexizeAndExport:
 
--(latex_mode_t) latexModeApplied
-{
-  latex_mode_t result = self->latexModeApplied;
-  return result;
-}
-//end latexModeApplied
+@synthesize latexModeApplied;
 
 -(IBAction) changeLatexModeAuto:(id)sender
 {
@@ -1339,12 +1330,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end setLatexModeApplied:
 
--(latex_mode_t) latexModeRequested
-{
-  latex_mode_t result = self->latexModeRequested;
-  return result;
-}
-//end latexModeRequested
+@synthesize latexModeRequested;
 
 -(void) setLatexModeRequested:(latex_mode_t)value
 {
@@ -1464,18 +1450,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end setPreambleVisible:
 
--(BOOL) shouldApplyToPasteboardAfterLatexization
-{
-  BOOL result = self->shouldApplyToPasteboardAfterLatexization;
-  return result;
-}
-//end shouldApplyToPasteboardAfterLatexization
-
--(void) setShouldApplyToPasteboardAfterLatexization:(BOOL)value
-{
-  self->shouldApplyToPasteboardAfterLatexization = value;
-}
-//end setShouldApplyToPasteboardAfterLatexization:
+@synthesize shouldApplyToPasteboardAfterLatexization;
 
 -(LatexitEquation*) latexitEquationWithCurrentStateTransient:(BOOL)transient
 {
@@ -1554,19 +1529,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end applyString:
 
--(LibraryEquation*) lastAppliedLibraryEquation
-{
-  return self->lastAppliedLibraryEquation;
-}
-//end lastAppliedLibraryEquation
-
--(void) setLastAppliedLibraryEquation:(LibraryEquation*)value
-{
-  [value retain];
-  [self->lastAppliedLibraryEquation release];
-  self->lastAppliedLibraryEquation = value;
-}
-//end setLastAppliedLibraryEquation:
+@synthesize lastAppliedLibraryEquation;
 
 //updates the document according to the given library file
 -(void) applyLibraryEquation:(LibraryEquation*)libraryEquation
@@ -1971,10 +1934,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 //end _setLogTableViewVisible:
 
 //returns the linkBack link
--(LinkBack*) linkBackLink
-{
-  return self->linkBackLink;
-}
+@synthesize linkBackLink;
 //end linkBackLink
 
 //sets up a new linkBack link
@@ -2003,11 +1963,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end setLinkBackLink:
 
--(BOOL) linkBackAllowed
-{
-  BOOL result = self->linkBackAllowed;
-  return result;
-}
+@synthesize linkBackAllowed;
 //end linkBackAllowed
 
 -(void) setLinkBackAllowed:(BOOL)value
@@ -2024,11 +1980,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end setLinkBackAllowed:
 
--(LibraryEquation*) linkedLibraryEquation
-{
-  return self->linkedLibraryEquation;
-}
-//end linkedLibraryEquation
+@synthesize linkedLibraryEquation;
 
 -(void) setLinkedLibraryEquation:(LibraryEquation*)libraryEquation
 {
@@ -2172,11 +2124,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 }
 //end descriptionForScript:
 
--(BOOL) isReducedTextArea
-{
-  return isReducedTextArea;
-}
-//end isReducedTextArea
+@synthesize reducedTextArea=isReducedTextArea;
 
 -(void) setReducedTextArea:(BOOL)reduce
 {

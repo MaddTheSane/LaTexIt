@@ -3028,9 +3028,6 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   switch(exportFormat)
   {
     case EXPORT_FORMAT_PDF:
-      extension = @"pdf";
-      uti = (NSString*)kUTTypePDF;
-      break;
     case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
       extension = @"pdf";
       uti = (NSString*)kUTTypePDF;

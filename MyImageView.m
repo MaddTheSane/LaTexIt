@@ -45,20 +45,13 @@
 #import <Quartz/Quartz.h>
 
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
-NSString* CopyCurrentImageNotification = @"CopyCurrentImageNotification";
-NSString* ImageDidChangeNotification = @"ImageDidChangeNotification";
+NSString* const CopyCurrentImageNotification = @"CopyCurrentImageNotification";
+NSString* const ImageDidChangeNotification = @"ImageDidChangeNotification";
 
 static const CGFloat rgba1_light[4] = {0.95f, 0.95f, 0.95f, 1.0f};
 static const CGFloat rgba1_dark[4] = {0.66f, 0.66f, 0.66f, 1.0f};
 static const CGFloat rgba2_light[4] = {0.68f, 0.68f, 0.68f, 1.f};
 static const CGFloat rgba2_dark[4] = {0.15f, 0.15f, 0.15f, 1.0f};
-
-@interface NSScroller (Bridge10_7)
--(NSInteger) scrollerStyle;
-@end
-@interface NSEvent (Bridge10_6)
--(CGFloat) magnification;
-@end
 
 @interface TransparentView : NSView
 @end

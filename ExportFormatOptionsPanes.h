@@ -85,48 +85,32 @@
 
 -(id) initWithLoadingFromNib;
 
--(NSPanel*) exportFormatOptionsJpegPanel;
--(CGFloat)  jpegQualityPercent;
--(void)     setJpegQualityPercent:(CGFloat)value;
--(NSColor*) jpegBackgroundColor;
--(void)     setJpegBackgroundColor:(NSColor*)value;
--(id)       exportFormatOptionsJpegPanelDelegate;
--(void)     setExportFormatOptionsJpegPanelDelegate:(id)delegate;
+@property (readonly, assign) NSPanel *exportFormatOptionsJpegPanel;
+@property CGFloat jpegQualityPercent;
+@property (copy) NSColor *jpegBackgroundColor;
+@property (assign) id exportFormatOptionsJpegPanelDelegate;
 
--(NSPanel*)  exportFormatOptionsSvgPanel;
--(NSString*) svgPdfToSvgPath;
--(void)      setSvgPdfToSvgPath:(NSString*)value;
--(NSString*) svgPdfToCairoPath;
--(void)      setSvgPdfToCairoPath:(NSString*)value;
--(id)        exportFormatOptionsSvgPanelDelegate;
--(void)      setExportFormatOptionsSvgPanelDelegate:(id)delegate;
+@property (readonly, assign) NSPanel *exportFormatOptionsSvgPanel;
+@property (copy) NSString *svgPdfToSvgPath;
+@property (copy) NSString *svgPdfToCairoPath;
+@property (assign) id exportFormatOptionsSvgPanelDelegate;
 
--(NSPanel*)  exportFormatOptionsTextPanel;
--(NSBox*)    exportFormatOptionsTextBox;
--(BOOL)      textExportPreamble;
--(void)      setTextExportPreamble:(BOOL)value;
--(BOOL)      textExportEnvironment;
--(void)      setTextExportEnvironment:(BOOL)value;
--(BOOL)      textExportBody;
--(void)      setTextExportBody:(BOOL)value;
--(id)        exportFormatOptionsTextPanelDelegate;
--(void)      setExportFormatOptionsTextPanelDelegate:(id)delegate;
+@property (readonly, assign) NSPanel *exportFormatOptionsTextPanel;
+@property (readonly, assign) NSBox *exportFormatOptionsTextBox;
+@property BOOL textExportPreamble;
+@property BOOL textExportEnvironment;
+@property BOOL textExportBody;
+@property (assign) id exportFormatOptionsTextPanelDelegate;
 
--(NSPanel*)  exportFormatOptionsPDFWofPanel;
--(NSString*) pdfWofGSWriteEngine;
--(void)      setPdfWofGSWriteEngine:(NSString*)value;
--(NSString*) pdfWofGSPDFCompatibilityLevel;
--(void)      setPdfWofGSPDFCompatibilityLevel:(NSString*)value;
--(BOOL)      pdfWofMetaDataInvisibleGraphicsEnabled;
--(void)      setPdfWofMetaDataInvisibleGraphicsEnabled:(BOOL)value;
--(id)        exportFormatOptionsPDFWofPanelDelegate;
--(void)      setExportFormatOptionsPDFWofPanelDelegate:(id)delegate;
+@property (readonly, assign) NSPanel *exportFormatOptionsPDFWofPanel;
+@property (copy) NSString *pdfWofGSWriteEngine;
+@property (copy) NSString *pdfWofGSPDFCompatibilityLevel;
+@property BOOL pdfWofMetaDataInvisibleGraphicsEnabled;
+@property (assign) id exportFormatOptionsPDFWofPanelDelegate;
 
--(NSPanel*)  exportFormatOptionsPDFPanel;
--(BOOL)      pdfMetaDataInvisibleGraphicsEnabled;
--(void)      setPdfMetaDataInvisibleGraphicsEnabled:(BOOL)value;
--(id)        exportFormatOptionsPDFPanelDelegate;
--(void)      setExportFormatOptionsPDFPanelDelegate:(id)delegate;
+@property (readonly, assign) NSPanel *exportFormatOptionsPDFPanel;
+@property BOOL pdfMetaDataInvisibleGraphicsEnabled;
+@property (assign) id exportFormatOptionsPDFPanelDelegate;
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender;
 -(IBAction) svgPdfToCairoPathModify:(id)sender;

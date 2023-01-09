@@ -24,7 +24,7 @@
 @class MySplitView;
 @class PropertyStorage;
 
-@interface MyDocument : NSDocument <VDKQueueDelegate>
+@interface MyDocument : NSDocument <VDKQueueDelegate, NSWindowDelegate, NSSplitViewDelegate>
 {
   IBOutlet NSBox*               upperBox;
   IBOutlet NSBox*               upperImageBox;
@@ -100,10 +100,8 @@
 }
 
 //interface changing
--(BOOL) isReducedTextArea;
--(void) setReducedTextArea:(BOOL)reduce;
--(document_style_t) documentStyle;
--(void) setDocumentStyle:(document_style_t)value;
+@property (nonatomic, getter=isReducedTextArea) BOOL reducedTextArea;
+@property (nonatomic) document_style_t documentStyle;
 -(void) toggleDocumentStyle;
 
 -(IBAction) changeLatexModeAuto:(id)sender;
@@ -135,21 +133,18 @@
 -(void) setNullId;//useful for dummy document of AppController
 -(void) setDocumentTitle:(NSString*)title;
 
--(LibraryEquation*) lastAppliedLibraryEquation;
--(void) setLastAppliedLibraryEquation:(LibraryEquation*)value;
+@property (retain) LibraryEquation *lastAppliedLibraryEquation;
 
 -(latex_mode_t) detectLatexMode;
--(latex_mode_t) latexModeApplied;
--(void) setLatexModeApplied:(latex_mode_t)value;
--(latex_mode_t) latexModeRequested;
--(void) setLatexModeRequested:(latex_mode_t)value;
+@property (nonatomic) latex_mode_t latexModeApplied;
+@property (nonatomic) latex_mode_t latexModeRequested;
 -(void) setColor:(NSColor*)color;
 -(void) setMagnification:(CGFloat)magnification;
 
 //updates interface according to whether the latexisation is possible or not
 -(void) updateGUIfromSystemAvailabilities;
 //tells whether the document is currently performing a latexisation
--(BOOL) isBusy;
+@property (nonatomic, readonly, getter=isBusy) BOOL busy;
 -(void) setBusyIdentifier:(NSString*)value;
 
 -(void) setFont:(NSFont*)font;//changes the font of both preamble and sourceText views
@@ -158,13 +153,12 @@
 
 -(void) setBodyTemplate:(NSDictionary*)bodyTemplate moveCursor:(BOOL)moveCursor;
 
--(BOOL) canReexport;
--(BOOL) hasImage;
--(BOOL) isPreambleVisible;
+@property (readonly) BOOL canReexport;
+@property (readonly) BOOL hasImage;
+@property (readonly, getter=isPreambleVisible) BOOL preambleVisible;
 -(void) setPreambleVisible:(BOOL)visible animate:(BOOL)animate;
 
--(BOOL) shouldApplyToPasteboardAfterLatexization;
--(void) setShouldApplyToPasteboardAfterLatexization:(BOOL)value;
+@property BOOL shouldApplyToPasteboardAfterLatexization;
 
 //text actions in the first responder
 -(NSString*) selectedTextFromRange:(NSRange*)outRange;
@@ -180,13 +174,10 @@
 -(void) triggerSmartHistoryFeature;
 
 //linkback live link management
--(LinkBack*) linkBackLink;
--(void) setLinkBackLink:(LinkBack*)link;
--(BOOL) linkBackAllowed;
--(void) setLinkBackAllowed:(BOOL)value;
+@property (nonatomic, retain) LinkBack *linkBackLink;
+@property (nonatomic) BOOL linkBackAllowed;
 
--(LibraryEquation*) linkedLibraryEquation;
--(void) setLinkedLibraryEquation:(LibraryEquation*)libraryEquation;
+@property (nonatomic, retain) LibraryEquation *linkedLibraryEquation;
 -(void) closeLinkedLibraryEquation:(LibraryEquation*)libraryEquation;
 
 //NSWindowDelegate
@@ -195,7 +186,7 @@
 -(void) splitViewDidResizeSubviews:(NSNotification*)notification;
 
 //backsync file
--(BOOL) hasBackSyncFile;
+@property (readonly) BOOL hasBackSyncFile;
 -(void) closeBackSyncFile;
 -(void) openBackSyncFile:(NSString*)path options:(NSDictionary*)options;
 -(IBAction) save:(id)sender;

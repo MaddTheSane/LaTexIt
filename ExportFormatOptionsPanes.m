@@ -27,23 +27,14 @@
   #endif
 
   self->jpegQualityPercent  = 90.f;
-  #ifdef ARC_ENABLED
-  self->jpegBackgroundColor = [NSColor whiteColor];
-  #else
-  self->jpegBackgroundColor = [[NSColor whiteColor] retain];
-  #endif
+  self.jpegBackgroundColor = [NSColor whiteColor];
 
   self->textExportPreamble = YES;
   self->textExportEnvironment = YES;
   self->textExportBody = YES;
   
-  #ifdef ARC_ENABLED
-  self->pdfWofGSWriteEngine = @"pdfwrite";
-  self->pdfWofGSPDFCompatibilityLevel = @"1.5";
-  #else
-  self->pdfWofGSWriteEngine = [@"pdfwrite" copy];
-  self->pdfWofGSPDFCompatibilityLevel = [@"1.5" copy];
-  #endif
+  self.pdfWofGSWriteEngine = @"pdfwrite";
+  self.pdfWofGSPDFCompatibilityLevel = @"1.5";
   self->pdfWofMetaDataInvisibleGraphicsEnabled = YES;
   
   self->pdfMetaDataInvisibleGraphicsEnabled = YES;
@@ -298,123 +289,17 @@
 
 #pragma mark JPEG
 
--(NSPanel*) exportFormatOptionsJpegPanel
-{
-  return self->exportFormatOptionsJpegPanel;
-}
-//end exportFormatOptionsJpegPanel
-
--(CGFloat) jpegQualityPercent
-{
-  return self->jpegQualityPercent;
-}
-//end jpegQualityPercent
-
--(void) setJpegQualityPercent:(CGFloat)value
-{
-  [self willChangeValueForKey:@"jpegQualityPercent"];
-  self->jpegQualityPercent = value;
-  [self didChangeValueForKey:@"jpegQualityPercent"];
-}
-//end setJpegQualityPercent:
-
--(NSColor*) jpegBackgroundColor
-{
-  return self->jpegBackgroundColor;
-}
-//end jpegBackgroundColor
-
--(void) setJpegBackgroundColor:(NSColor*)value
-{
-  #ifdef ARC_ENABLED
-  #else
-  [value retain];
-  #endif
-  [self willChangeValueForKey:@"jpegBackgroundColor"];
-  #ifdef ARC_ENABLED
-  #else
-  [self->jpegBackgroundColor release];
-  #endif
-  self->jpegBackgroundColor = value;
-  [self didChangeValueForKey:@"jpegBackgroundColor"];
-}
-//end setJpegBackgroundColor:
-
--(id) exportFormatOptionsJpegPanelDelegate
-{
-  return self->exportFormatOptionsJpegPanelDelegate;
-}
-//end exportFormatOptionsJpegPanelDelegate
-
--(void) setExportFormatOptionsJpegPanelDelegate:(id)delegate
-{
-  self->exportFormatOptionsJpegPanelDelegate = delegate;
-}
-//end setExportFormatOptionsJpegPanelDelegate:
+@synthesize exportFormatOptionsJpegPanel;
+@synthesize jpegQualityPercent;
+@synthesize jpegBackgroundColor;
+@synthesize exportFormatOptionsJpegPanelDelegate;
 
 #pragma mark SVG
 
--(NSPanel*) exportFormatOptionsSvgPanel
-{
-  return self->exportFormatOptionsSvgPanel;
-}
-//end exportFormatOptionsSvgPanel
-
--(NSString*) svgPdfToSvgPath
-{
-  return self->svgPdfToSvgPath;
-}
-//end svgPdfToSvgPath
-
--(void) setSvgPdfToSvgPath:(NSString*)value
-{
-  #ifdef ARC_ENABLED
-  #else
-  [value retain];
-  #endif
-  [self willChangeValueForKey:@"svgPdfToSvgPath"];
-  #ifdef ARC_ENABLED
-  #else
-  [self->svgPdfToSvgPath release];
-  #endif
-  self->svgPdfToSvgPath = value;
-  [self didChangeValueForKey:@"svgPdfToSvgPath"];
-}
-//end setSvgPdfToSvgPath:
-
--(NSString*) svgPdfToCairoPath
-{
-  return self->svgPdfToCairoPath;
-}
-//end svgPdfToCairoPath
-
--(void) setSvgPdfToCairoPath:(NSString*)value
-{
-  #ifdef ARC_ENABLED
-  #else
-  [value retain];
-  #endif
-  [self willChangeValueForKey:@"svgPdfToCairoPath"];
-  #ifdef ARC_ENABLED
-  #else
-  [self->svgPdfToCairoPath release];
-  #endif
-  self->svgPdfToCairoPath = value;
-  [self didChangeValueForKey:@"svgPdfToCairoPath"];
-}
-//end setSvgPdfToCairoPath:
-
--(id) exportFormatOptionsSvgPanelDelegate
-{
-  return self->exportFormatOptionsSvgPanelDelegate;
-}
-//end exportFormatOptionsSvgPanelDelegate
-
--(void) setExportFormatOptionsSvgPanelDelegate:(id)delegate
-{
-  self->exportFormatOptionsSvgPanelDelegate = delegate;
-}
-//end setExportFormatOptionsSvgPanelDelegate:
+@synthesize exportFormatOptionsSvgPanel;
+@synthesize svgPdfToSvgPath;
+@synthesize svgPdfToCairoPath;
+@synthesize exportFormatOptionsSvgPanelDelegate;
 
 -(IBAction) svgPdfToSvgPathModify:(id)sender
 {
@@ -464,183 +349,26 @@
 
 #pragma mark TEXT
 
--(NSPanel*) exportFormatOptionsTextPanel
-{
-  return self->exportFormatOptionsTextPanel;
-}
-//end exportFormatOptionsTextPanel
-
--(NSBox*) exportFormatOptionsTextBox
-{
-  return self->exportFormatOptionsTextBox;
-}
-//end exportFormatOptionsTextBox
-
--(BOOL) textExportPreamble
-{
-  return self->textExportPreamble;
-}
-//end textExportPreamble
-
--(void) setTextExportPreamble:(BOOL)value
-{
-  [self willChangeValueForKey:@"textExportPreamble"];
-  self->textExportPreamble = value;
-  [self didChangeValueForKey:@"textExportPreamble"];
-}
-//end setTextExportPreamble:
-
--(BOOL) textExportEnvironment
-{
-  return self->textExportEnvironment;
-}
-//end textExportEnvironment
-
--(void) setTextExportEnvironment:(BOOL)value
-{
-  [self willChangeValueForKey:@"textExportEnvironment"];
-  self->textExportEnvironment = value;
-  [self didChangeValueForKey:@"textExportEnvironment"];
-}
-//end setTextExportEnvironment:
-
--(BOOL) textExportBody
-{
-  return self->textExportBody;
-}
-//end textExportBody
-
--(void) setTextExportBody:(BOOL)value
-{
-  [self willChangeValueForKey:@"textExportBody"];
-  self->textExportBody = value;
-  [self didChangeValueForKey:@"textExportBody"];
-}
-//end setTextExportBody:
-
--(id) exportFormatOptionsTextPanelDelegate
-{
-  return self->exportFormatOptionsTextPanelDelegate;
-}
-//end exportFormatOptionsTextPanelDelegate
-
--(void) setExportFormatOptionsTextPanelDelegate:(id)delegate
-{
-  self->exportFormatOptionsTextPanelDelegate = delegate;
-}
-//end setExportFormatOptionsTextPanelDelegate:
+@synthesize exportFormatOptionsTextPanel;
+@synthesize exportFormatOptionsTextBox;
+@synthesize textExportPreamble;
+@synthesize textExportEnvironment;
+@synthesize textExportBody;
+@synthesize exportFormatOptionsTextPanelDelegate;
 
 #pragma mark PDF Wof
 
--(NSPanel*) exportFormatOptionsPDFWofPanel
-{
-  return self->exportFormatOptionsPDFWofPanel;
-}
-//end exportFormatOptionsPDFWofPanel
-
--(NSString*) pdfWofGSWriteEngine
-{
-  return self->pdfWofGSWriteEngine;
-}
-//end pdfWofGSWriteEngine
-
--(void) setPdfWofGSWriteEngine:(NSString*)value
-{
-#ifdef ARC_ENABLED
-#else
-  [value retain];
-#endif
-  [self willChangeValueForKey:@"pdfWofGSWriteEngine"];
-#ifdef ARC_ENABLED
-#else
-  [self->pdfWofGSWriteEngine release];
-#endif
-  self->pdfWofGSWriteEngine = value;
-  [self didChangeValueForKey:@"pdfWofGSWriteEngine"];
-}
-//end setPdfWofGSWriteEngine:
-
--(NSString*) pdfWofGSPDFCompatibilityLevel
-{
-  return self->pdfWofGSPDFCompatibilityLevel;
-}
-//end pdfWofGSPDFCompatibilityLevel
-
--(void) setPdfWofGSPDFCompatibilityLevel:(NSString*)value
-{
-  #ifdef ARC_ENABLED
-  #else
-  [value retain];
-  #endif
-  [self willChangeValueForKey:@"pdfWofGSPDFCompatibilityLevel"];
-  #ifdef ARC_ENABLED
-  #else
-  [self->pdfWofGSPDFCompatibilityLevel release];
-  #endif
-  self->pdfWofGSPDFCompatibilityLevel = value;
-  [self didChangeValueForKey:@"pdfWofGSPDFCompatibilityLevel"];
-}
-//end setPdfWofGSPDFCompatibilityLevel:
-
--(BOOL) pdfWofMetaDataInvisibleGraphicsEnabled
-{
-  return self->pdfWofMetaDataInvisibleGraphicsEnabled;
-}
-//end pdfWofMetaDataInvisibleGraphicsEnabled
-
--(void) setPdfWofMetaDataInvisibleGraphicsEnabled:(BOOL)value
-{
-  [self willChangeValueForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"];
-  self->pdfWofMetaDataInvisibleGraphicsEnabled = value;
-  [self didChangeValueForKey:@"pdfWofMetaDataInvisibleGraphicsEnabled"];
-}
-//end setPdfWofMetaDataInvisibleGraphicsEnabled
-
--(id) exportFormatOptionsPDFWofPanelDelegate
-{
-  return self->exportFormatOptionsPDFWofPanelDelegate;
-}
-//end exportFormatOptionsPDFWofPanelDelegate
-
--(void) setExportFormatOptionsPDFWofPanelDelegate:(id)delegate
-{
-  self->exportFormatOptionsPDFWofPanelDelegate = delegate;
-}
-//end setExportFormatOptionsPDFWofPanelDelegate:
+@synthesize exportFormatOptionsPDFWofPanel;
+@synthesize pdfWofGSWriteEngine;
+@synthesize pdfWofGSPDFCompatibilityLevel;
+@synthesize pdfWofMetaDataInvisibleGraphicsEnabled;
+@synthesize exportFormatOptionsPDFWofPanelDelegate;
 
 #pragma mark PDF
 
--(NSPanel*) exportFormatOptionsPDFPanel
-{
-  return self->exportFormatOptionsPDFPanel;
-}
-//end exportFormatOptionsPDFPanel
-
--(BOOL) pdfMetaDataInvisibleGraphicsEnabled
-{
-  return self->pdfMetaDataInvisibleGraphicsEnabled;
-}
-//end pdfMetaDataInvisibleGraphicsEnabled
-
--(void) setPdfMetaDataInvisibleGraphicsEnabled:(BOOL)value
-{
-  [self willChangeValueForKey:@"pdfMetaDataInvisibleGraphicsEnabled"];
-  self->pdfMetaDataInvisibleGraphicsEnabled = value;
-  [self didChangeValueForKey:@"pdfMetaDataInvisibleGraphicsEnabled"];
-}
-//end setPdfMetaDataInvisibleGraphicsEnabled
-
--(id) exportFormatOptionsPDFPanelDelegate
-{
-  return self->exportFormatOptionsPDFPanelDelegate;
-}
-//end exportFormatOptionsPDFfPanelDelegate
-
--(void) setExportFormatOptionsPDFPanelDelegate:(id)delegate
-{
-  self->exportFormatOptionsPDFPanelDelegate = delegate;
-}
-//end setExportFormatOptionsPDFPanelDelegate:
+@synthesize exportFormatOptionsPDFPanel;
+@synthesize pdfMetaDataInvisibleGraphicsEnabled;
+@synthesize exportFormatOptionsPDFPanelDelegate;
 
 #pragma mark ALL
 

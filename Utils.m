@@ -10,6 +10,7 @@
 
 #import "NSObjectExtended.h"
 #import "NSStringExtended.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 int DebugLogLevel = 0;
 
@@ -17,7 +18,7 @@ int DebugLogLevel = 0;
 
 #import <objc/objc-runtime.h>
 
-NSString* NSAppearanceDidChangeNotification = @"NSAppearanceDidChangeNotification";
+NSString* const NSAppearanceDidChangeNotification = @"NSAppearanceDidChangeNotification";
 
 static NSString* MyWebURLsWithTitlesPboardType = nil;
 
@@ -88,6 +89,44 @@ NSString* getUTIForExportFormat(export_format_t exportFormat)
   return result;
 }
 //end getUTIForExportFormat()
+
+UTType* getContentTypeForExportFormat(export_format_t exportFormat)
+{
+  UTType* result = nil;
+  switch(exportFormat)
+  {
+    case EXPORT_FORMAT_PDF:
+    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+      result = UTTypePDF;
+      break;
+    case EXPORT_FORMAT_EPS:
+      result = [UTType typeWithIdentifier:@"com.adobe.encapsulated-​postscript"];
+      break;
+    case EXPORT_FORMAT_TIFF:
+      result = UTTypeTIFF;
+      break;
+    case EXPORT_FORMAT_PNG:
+      result = UTTypePNG;
+      break;
+    case EXPORT_FORMAT_JPEG:
+      result = UTTypeJPEG;
+      break;
+    case EXPORT_FORMAT_MATHML:
+      result = UTTypeHTML;
+      break;
+    case EXPORT_FORMAT_SVG:
+      result = UTTypeSVG;
+      break;
+    case EXPORT_FORMAT_TEXT:
+      result = UTTypePlainText;
+      break;
+    case EXPORT_FORMAT_RTFD:
+      result = UTTypeRTFD;
+      break;
+  }//end switch(exportFormat)
+  return result;
+}
+//end getContentTypeForExportFormat()
 
 NSString* getFileExtensionForExportFormat(export_format_t exportFormat)
 {

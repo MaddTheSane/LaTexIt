@@ -33,7 +33,7 @@
 @class PropertyStorage;
 @class SUUpdater;
 
-@interface AppController : NSObject <LinkBackServerDelegate> {
+@interface AppController : NSObject <LinkBackServerDelegate, NSApplicationDelegate, NSMenuItemValidation> {
   IBOutlet NSMenuItem*    editCopyImageAsMenuItem;
   IBOutlet NSWindow*      readmeWindow;
   IBOutlet NSTextView*    readmeTextView;

@@ -13,8 +13,8 @@
 #import "LaTeXiTSharedTypes.h"
 
 //responds to a copy event, even if the Command-C was triggered in another view (like the library view)
-extern NSString* CopyCurrentImageNotification;
-extern NSString* ImageDidChangeNotification;
+extern const NSNotificationName CopyCurrentImageNotification;
+extern const NSNotificationName ImageDidChangeNotification;
 
 @class LatexitEquation;
 @class LinkBack;
