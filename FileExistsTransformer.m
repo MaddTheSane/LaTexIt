@@ -3,10 +3,12 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 27/04/09.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import "FileExistsTransformer.h"
+
+#import "Utils.h"
 
 @implementation FileExistsTransformer
 
@@ -60,6 +62,7 @@
   id result = nil;
   BOOL isDirectory = NO;
   BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:value isDirectory:&isDirectory];
+  DebugLog(1, @"check %@ => %@", value, @(exists));
   result = @(exists && (!isDirectory || self->directoryAllowed));
   return result;
 }

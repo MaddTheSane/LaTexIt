@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -37,10 +37,13 @@
                 <outlet property="exportFormatOptionsPDFWofMetadataBox" destination="169" id="208"/>
                 <outlet property="exportFormatOptionsPDFWofOKButton" destination="125" id="157"/>
                 <outlet property="exportFormatOptionsPDFWofPanel" destination="122" id="156"/>
-                <outlet property="exportFormatOptionsSvgBox" destination="50" id="64"/>
                 <outlet property="exportFormatOptionsSvgCancelButton" destination="49" id="72"/>
                 <outlet property="exportFormatOptionsSvgOKButton" destination="48" id="73"/>
                 <outlet property="exportFormatOptionsSvgPanel" destination="46" id="65"/>
+                <outlet property="exportFormatOptionsSvgPdfToCairoBox" destination="MNm-WQ-qfr" id="MWE-JS-8uO"/>
+                <outlet property="exportFormatOptionsSvgPdfToCairoPathModifyButton" destination="Z1t-9x-iXU" id="Bef-Ki-f5N"/>
+                <outlet property="exportFormatOptionsSvgPdfToCairoPathTextField" destination="5Jc-6d-3ru" id="kPC-Vu-lh8"/>
+                <outlet property="exportFormatOptionsSvgPdfToSvgBox" destination="50" id="t1V-ot-cyY"/>
                 <outlet property="exportFormatOptionsSvgPdfToSvgPathModifyButton" destination="51" id="66"/>
                 <outlet property="exportFormatOptionsSvgPdfToSvgPathTextField" destination="52" id="67"/>
                 <outlet property="exportFormatOptionsTextBox" destination="101" id="116"/>
@@ -83,7 +86,7 @@ Gw
                         <rect key="frame" x="17" y="56" width="369" height="151"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <view key="contentView" id="l3k-mP-biv">
-                            <rect key="frame" x="3" y="3" width="363" height="132"/>
+                            <rect key="frame" x="4" y="5" width="361" height="130"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8">
@@ -205,16 +208,16 @@ DQ
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="46" userLabel="svgPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="427" y="427" width="403" height="124"/>
+            <rect key="contentRect" x="427" y="427" width="403" height="210"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="47">
-                <rect key="frame" x="0.0" y="0.0" width="403" height="124"/>
+                <rect key="frame" x="0.0" y="0.0" width="403" height="210"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="49">
                         <rect key="frame" x="229" y="12" width="82" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="55">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -227,44 +230,9 @@ Gw
                             <outlet property="nextKeyView" destination="48" id="78"/>
                         </connections>
                     </button>
-                    <box fixedFrame="YES" title="Path to pdf2svg" translatesAutoresizingMaskIntoConstraints="NO" id="50">
-                        <rect key="frame" x="17" y="56" width="369" height="64"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="FDR-Sg-0dy">
-                            <rect key="frame" x="3" y="3" width="363" height="45"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="52">
-                                    <rect key="frame" x="11" y="13" width="249" height="22"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="53">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <connections>
-                                        <outlet property="nextKeyView" destination="51" id="76"/>
-                                    </connections>
-                                </textField>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="51">
-                                    <rect key="frame" x="262" y="7" width="92" height="32"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="push" title="Change" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="54">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="svgPdfToSvgPathModify:" target="-2" id="68"/>
-                                        <outlet property="nextKeyView" destination="49" id="77"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </view>
-                        <font key="titleFont" metaFont="label" size="12"/>
-                    </box>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="48">
                         <rect key="frame" x="311" y="12" width="78" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="56">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -274,13 +242,100 @@ DQ
                         </buttonCell>
                         <connections>
                             <action selector="close:" target="-2" id="69"/>
-                            <outlet property="nextKeyView" destination="52" id="79"/>
+                            <outlet property="nextKeyView" destination="47" id="93r-Dn-tv1"/>
                         </connections>
                     </button>
+                    <box fixedFrame="YES" title="Path to pdf2cairo" translatesAutoresizingMaskIntoConstraints="NO" id="MNm-WQ-qfr">
+                        <rect key="frame" x="17" y="126" width="369" height="64"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <view key="contentView" id="mbu-Lm-gtF">
+                            <rect key="frame" x="4" y="5" width="361" height="43"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z1t-9x-iXU">
+                                    <rect key="frame" x="262" y="5" width="92" height="32"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="push" title="Change" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jiw-3t-Jac">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="svgPdfToCairoPathModify:" target="-2" id="fkm-rj-1IE"/>
+                                        <outlet property="nextKeyView" destination="50" id="234-Nb-Wx5"/>
+                                    </connections>
+                                </button>
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Jc-6d-3ru">
+                                    <rect key="frame" x="11" y="11" width="249" height="22"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Swg-7Z-uO1">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <action selector="svgPdfToCairoPathModify:" target="-2" id="1YQ-5J-j22"/>
+                                        <outlet property="nextKeyView" destination="Z1t-9x-iXU" id="n7Z-BG-hkD"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                            <connections>
+                                <outlet property="nextKeyView" destination="5Jc-6d-3ru" id="Dgw-tf-h8Y"/>
+                            </connections>
+                        </view>
+                        <font key="titleFont" metaFont="label" size="12"/>
+                        <connections>
+                            <outlet property="nextKeyView" destination="mbu-Lm-gtF" id="0zw-nc-SKl"/>
+                        </connections>
+                    </box>
+                    <box fixedFrame="YES" title="Path to pdf2svg" translatesAutoresizingMaskIntoConstraints="NO" id="50">
+                        <rect key="frame" x="17" y="56" width="369" height="64"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <view key="contentView" id="FDR-Sg-0dy">
+                            <rect key="frame" x="4" y="5" width="361" height="43"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="52">
+                                    <rect key="frame" x="11" y="11" width="249" height="22"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="53">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <action selector="svgPdfToSvgPathModify:" target="-2" id="BoD-S4-Oh8"/>
+                                        <outlet property="nextKeyView" destination="51" id="76"/>
+                                    </connections>
+                                </textField>
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="51">
+                                    <rect key="frame" x="262" y="5" width="92" height="32"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <buttonCell key="cell" type="push" title="Change" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="54">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="svgPdfToSvgPathModify:" target="-2" id="68"/>
+                                        <outlet property="nextKeyView" destination="49" id="v6X-Wv-BXA"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <connections>
+                                <outlet property="nextKeyView" destination="52" id="KYM-sL-YcG"/>
+                            </connections>
+                        </view>
+                        <font key="titleFont" metaFont="label" size="12"/>
+                        <connections>
+                            <outlet property="nextKeyView" destination="FDR-Sg-0dy" id="zfj-xk-HtH"/>
+                        </connections>
+                    </box>
                 </subviews>
+                <connections>
+                    <outlet property="nextKeyView" destination="MNm-WQ-qfr" id="0jz-0S-J5K"/>
+                </connections>
             </view>
             <connections>
-                <outlet property="initialFirstResponder" destination="52" id="80"/>
+                <outlet property="initialFirstResponder" destination="5Jc-6d-3ru" id="i4L-jA-nHK"/>
             </connections>
             <point key="canvasLocation" x="14" y="-137"/>
         </window>
@@ -327,11 +382,11 @@ DQ
                         <rect key="frame" x="17" y="56" width="376" height="82"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <view key="contentView" id="C0C-yM-81v">
-                            <rect key="frame" x="3" y="3" width="370" height="76"/>
+                            <rect key="frame" x="4" y="5" width="368" height="74"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="109">
-                                    <rect key="frame" x="15" y="49" width="127" height="18"/>
+                                    <rect key="frame" x="15" y="47" width="127" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Export preamble" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="110">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -339,7 +394,7 @@ DQ
                                     </buttonCell>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="111">
-                                    <rect key="frame" x="15" y="29" width="147" height="18"/>
+                                    <rect key="frame" x="15" y="27" width="147" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Export environment" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="112">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -347,7 +402,7 @@ DQ
                                     </buttonCell>
                                 </button>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="113">
-                                    <rect key="frame" x="15" y="9" width="147" height="18"/>
+                                    <rect key="frame" x="15" y="7" width="147" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Export body" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="114">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -360,7 +415,6 @@ DQ
                     </box>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-122" y="-394"/>
         </window>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="122" userLabel="pdfWofPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES"/>
@@ -405,11 +459,11 @@ DQ
                         <rect key="frame" x="17" y="108" width="439" height="96"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="UFy-Vr-Trq">
-                            <rect key="frame" x="3" y="3" width="433" height="77"/>
+                            <rect key="frame" x="4" y="5" width="431" height="75"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="140">
-                                    <rect key="frame" x="183" y="44" width="121" height="26"/>
+                                    <rect key="frame" x="183" y="42" width="121" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="pdfwrite" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="143" id="141">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -433,7 +487,7 @@ DQ
                                     </textFieldCell>
                                 </textField>
                                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="148">
-                                    <rect key="frame" x="183" y="14" width="121" height="26"/>
+                                    <rect key="frame" x="183" y="12" width="121" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="1.5" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="153" id="151">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -464,11 +518,11 @@ DQ
                         <rect key="frame" x="17" y="48" width="439" height="56"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="lvj-TT-8HC">
-                            <rect key="frame" x="3" y="3" width="433" height="37"/>
+                            <rect key="frame" x="4" y="5" width="431" height="35"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="166">
-                                    <rect key="frame" x="15" y="11" width="228" height="18"/>
+                                    <rect key="frame" x="15" y="9" width="228" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Add invisible graphic commands" bezelStyle="regularSquare" imagePosition="left" alignment="justified" state="on" inset="2" id="167">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -481,7 +535,6 @@ DQ
                     </box>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-258" y="-694"/>
         </window>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="172" userLabel="pdfPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES"/>
@@ -526,11 +579,11 @@ DQ
                         <rect key="frame" x="17" y="57" width="429" height="56"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Vd0-L7-ixR">
-                            <rect key="frame" x="3" y="3" width="423" height="37"/>
+                            <rect key="frame" x="4" y="5" width="421" height="35"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="196">
-                                    <rect key="frame" x="15" y="11" width="228" height="18"/>
+                                    <rect key="frame" x="15" y="9" width="228" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Add invisible graphic commands" bezelStyle="regularSquare" imagePosition="left" alignment="justified" state="on" inset="2" id="197">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

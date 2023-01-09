@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/05/05.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 
 //This file is an extension of the NSColor class
 
@@ -24,5 +24,7 @@
 
 -(NSColor*) darker:(CGFloat)factor;
 -(NSColor*) lighter:(CGFloat)factor;
+
+-(BOOL) isConsideredWhite;
 
 @end

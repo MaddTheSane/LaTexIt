@@ -3,7 +3,7 @@
 //  Automator_CreateEquations
 //
 //  Created by Pierre Chatelier on 24/09/08.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import "Automator_CreateEquations.h"
@@ -145,6 +145,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     CGFloat exportJpegQualityPercent = [preferencesController exportJpegQualityPercent];
     NSData* exportJpegBackgroundColorAsData = [preferencesController exportJpegBackgroundColorData];
     NSString* exportSvgPdfToSvgPath = [preferencesController exportSvgPdfToSvgPath];
+    NSString* exportSvgPdfToCairoPath = [preferencesController exportSvgPdfToCairoPath];
     BOOL exportTextExportPreamble = [preferencesController exportTextExportPreamble];
     BOOL exportTextExportEnvironment = [preferencesController exportTextExportEnvironment];
     BOOL exportTextExportBody = [preferencesController exportTextExportBody];
@@ -153,6 +154,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     [dict setObject:@(exportJpegQualityPercent) forKey:@"exportJpegQualityPercent"];
     [dict setObject:exportJpegBackgroundColorAsData forKey:@"exportJpegBackgroundColor"];
     [dict setObject:exportSvgPdfToSvgPath forKey:@"exportSvgPdfToSvgPath"];
+    [dict setObject:exportSvgPdfToCairoPath forKey:@"exportSvgPdfToCairoPath"];
     [dict setObject:@(exportTextExportPreamble) forKey:@"exportTextExportPreamble"];
     [dict setObject:@(exportTextExportEnvironment) forKey:@"exportTextExportEnvironment"];
     [dict setObject:@(exportTextExportBody) forKey:@"exportTextExportBody"];
@@ -300,7 +302,6 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   NSData*  exportJpegBackgroundColorData = [parameters objectForKey:@"exportJpegBackgroundColor"];
   NSColor* exportJpegBackgroundColor = !exportJpegBackgroundColorData ? [NSColor whiteColor] :
                                        [NSColor colorWithData:exportJpegBackgroundColorData];
-  //NSColor* exportSvgPdfToSvgPath = [parameters objectForKey:@"exportSvgPdfToSvgPath"];
   BOOL exportTextExportPreamble = [[[parameters objectForKey:@"exportTextExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue];
   BOOL exportTextExportEnvironment = [[[parameters objectForKey:@"exportTextExportEnvironment"] dynamicCastToClass:[NSNumber class]] boolValue];
   BOOL exportTextExportBody = [[[parameters objectForKey:@"exportTextExportBody"] dynamicCastToClass:[NSNumber class]] boolValue];
@@ -678,8 +679,6 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
     ok = [[NSFileManager defaultManager] isExecutableFileAtPath:[[preferencesController compositionConfigurationDocument] compositionConfigurationProgramPathGs]] &&
          [[NSFileManager defaultManager] isExecutableFileAtPath:[[preferencesController compositionConfigurationDocument] compositionConfigurationProgramPathPsToPdf]];
-  /*else if ([sender tag] == EXPORT_FORMAT_SVG)
-    ok = [[NSFileManager defaultManager] isExecutableFileAtPath:[preferencesController exportSvgPdfToSvgPath]];*/
   return ok;
 }
 //end validateMenuItem:
@@ -699,6 +698,8 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     [NSColor colorWithData:[[self parameters] objectForKey:@"exportJpegBackgroundColor"]]];
   [self->generalExportFormatOptionsPanes setSvgPdfToSvgPath:
     [[self parameters] objectForKey:@"exportSvgPdfToSvgPath"]];
+  [self->generalExportFormatOptionsPanes setSvgPdfToCairoPath:
+    [[self parameters] objectForKey:@"exportSvgPdfToCairoPath"]];
   [self->generalExportFormatOptionsPanes setTextExportPreamble:
    [[[[self parameters] objectForKey:@"exportTextExportPreamble"] dynamicCastToClass:[NSNumber class]] boolValue]];
   [self->generalExportFormatOptionsPanes setTextExportEnvironment:
@@ -735,6 +736,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
     {
       [[self parameters] setObject:[self->generalExportFormatOptionsPanes svgPdfToSvgPath] forKey:@"exportSvgPdfToSvgPath"];
+      [[self parameters] setObject:[self->generalExportFormatOptionsPanes svgPdfToCairoPath] forKey:@"exportSvgPdfToCairoPath"];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
     else if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsTextPanel])
     {

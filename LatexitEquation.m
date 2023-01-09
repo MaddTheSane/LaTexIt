@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
@@ -786,7 +786,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Preamble (ESannop"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [preambleString rangeOfString:@"ESannopend"];
@@ -813,7 +813,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/EscapedPreamble (ESannoep"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       preambleString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [preambleString rangeOfString:@"ESannoepend"];
@@ -835,7 +835,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Type (EEtype"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       modeAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [modeAsString rangeOfString:@"EEtypeend"];
@@ -851,7 +851,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Subject (ESannot"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       [sourceString appendString:[testArray objectAtIndex:1]];
       NSRange range = [sourceString rangeOfString:@"ESannotend"];
@@ -874,7 +874,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/EscapedSubject (ESannoes"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       [sourceString setString:@""];
       [sourceString appendString:[testArray objectAtIndex:1]];
@@ -918,7 +918,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Magnification (EEmag"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       pointSizeAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [pointSizeAsString rangeOfString:@"EEmagend"];
@@ -932,7 +932,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Color (EEcol"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       colorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [colorAsString rangeOfString:@"EEcolend"];
@@ -949,7 +949,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/BKColor (EEbkc"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       bkColorAsString = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [bkColorAsString rangeOfString:@"EEbkcend"];
@@ -965,7 +965,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Baseline (EEbas"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       baselineAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [baselineAsString rangeOfString:@"EEbasend"];
@@ -978,7 +978,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     testArray = [dataAsString componentsSeparatedByString:@"/Title (EEtitle"];
     if (testArray && ([testArray count] >= 2))
     {
-      DebugLog(1, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
+      DebugLog(2, @"[testArray objectAtIndex:1] = %@", [testArray objectAtIndex:1]);
       isLaTeXiTPDF |= YES;
       titleAsString  = [NSMutableString stringWithString:[testArray objectAtIndex:1]];
       NSRange range = [titleAsString rangeOfString:@"EEtitleend"];
@@ -2438,8 +2438,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 
 -(void) setBackgroundColor:(NSColor*)value
 {
-  NSColor* grayLevelColor = [value colorUsingColorSpace:[NSColorSpace deviceGrayColorSpace]];
-  value = ([grayLevelColor whiteComponent] == 1.0f) ? nil : value;
+  value = [value isConsideredWhite] ? nil : value;
   [self beginUpdate];
   self->annotateDataDirtyState |= objectDiffers(value, [self backgroundColor]);
   [self willChangeValueForKey:@"backgroundColor"];

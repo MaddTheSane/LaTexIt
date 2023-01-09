@@ -256,6 +256,7 @@
 "Quality" = "Calitat";
 "Background color" = "Color de fondo";
 "Path to pdf2svg" = "Ruta de pdf2svg";
+"Path to pdftocairo" = "Ruta de pdftocairo";
 "Format" = "Formato";
 "Change" = "Cambiar";
 "Options" = "Opciones";
@@ -263,7 +264,8 @@
 "Include background color" = "Incluir color de fondo";
 "Warning : jpeg does not manage transparency" = "Atención: JPEG nos soporta la transparencia";
 "Warning : pdf2svg path is invalid" = "Atención : La ruta de pdf2svg no es válida";
-"Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
+"Warning : pdftocairo path is invalid" = "Atención : La ruta de pdftocairo no es válida";
+"Warning : pdf2svg or pdftocairo was not found" = "Warning : pdf2svg or pdftocairo was not found";
 "Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
 
 "Ghostscript options" = "Ghostscript options";

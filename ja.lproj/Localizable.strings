@@ -255,6 +255,7 @@
 "Quality" = "品質";
 "Background color" = "背景色";
 "Path to pdf2svg" = "pdf2svg のパス";
+"Path to pdfdtocairo" = "pdfdtocairo のパス";
 "Format" = "フォーマット";
 "Change" = "変更";
 "Options" = "オプション";
@@ -262,7 +263,8 @@
 "Include background color" = "背景色を含める";
 "Warning : jpeg does not manage transparency" = "警報 : JPEGの背景は透明になりません。";
 "Warning : pdf2svg path is invalid" = "警報 : pdf2svg のパスが正しくありません";
-"Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
+"Warning : pdftocairo path is invalid" = "警報 : pdftocairo のパスが正しくありません";
+"Warning : pdf2svg or pdftocairo was not found" = "Warning : pdf2svg or pdftocairo was not found";
 "Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
 
 "Ghostscript options" = "Ghostscript options";

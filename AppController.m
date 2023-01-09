@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -106,6 +106,8 @@
 -(void) _serviceDeLatexisation:(NSPasteboard*)pboard userData:(NSString*)userData error:(NSString**)error;
 
 -(MyDocument*) documentForLink:(LinkBack*)link;
+
++(void) detachAsync:(BOOL)async selector:(SEL)selector toTarget:(id)target withObject:(nullable id)argument;
 @end
 
 @implementation AppController
@@ -184,7 +186,7 @@ static NSMutableDictionary* cachePaths = nil;
     [self _setEnvironment:[[LaTeXProcessor sharedLaTeXProcessor] extraEnvironment]];//performs a setenv()
 
     [self beginCheckUpdates];
-    Semaphore* configurationSemaphore = [[Semaphore alloc] initWithValue:7];
+    Semaphore* configurationSemaphore = [[Semaphore alloc] init];
     NSDictionary* configuration = nil;
     configuration = [NSDictionary dictionaryWithObjectsAndKeys:
       @(NO), @"checkOnlyIfNecessary",
@@ -196,42 +198,66 @@ static NSMutableDictionary* cachePaths = nil;
     /*
     [PluginsManager sharedManager];//create out of thread
     */
-    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+    BOOL async = (DebugLogLevel<1);
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPdfLatexPathKey, @"path",
                                                                  @[@"pdflatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfLaTeXAvailable], @"monitor", nil]];
-    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationXeLatexPathKey, @"path",
                                                                  @[@"xelatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isXeLaTeXAvailable], @"monitor", nil]];
-    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+                                                                 
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLuaLatexPathKey, @"path",
                                                                  @[@"lualatex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLuaLaTeXAvailable], @"monitor", nil]];
-    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+                                                                 
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationLatexPathKey, @"path",
                                                                  @[@"latex"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isLaTeXAvailable], @"monitor", nil]];
-    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+                                                                 
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationDviPdfPathKey, @"path",
                                                                  @[@"dvipdf"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isDviPdfAvailable], @"monitor", nil]];
-    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+                                                                 
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationGsPathKey, @"path",
                                                                  @[@"gs-noX11", @"gs"], @"executableNames",
                                                                  @"ghostscript", @"executableDisplayName",
                                                                  [NSValue valueWithPointer:&self->isGsAvailable], @"monitor", nil]];
-    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+                                                                 
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:CompositionConfigurationPsToPdfPathKey, @"path",
                                                                  @[@"ps2pdf"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPsToPdfAvailable], @"monitor", nil]];
-    /*[NSApplication detachDrawingThread:@selector(_checkColorStyWithConfiguration:) toTarget:self
+    /*
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkColorStyWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:@"color.sty", @"path",
-                                                                 [NSValue valueWithPointer:&self->isColorStyAvailable], @"monitor", nil]];*/
-    [NSApplication detachDrawingThread:@selector(_checkPathWithConfiguration:) toTarget:self
+                                                                 [NSValue valueWithPointer:&self->isColorStyAvailable], @"monitor", nil]];
+    */
+    
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkPathWithConfiguration:) toTarget:self
       withObject:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToSvgPathKey, @"path",
                                                                  @[@"pdf2svg"], @"executableNames",
                                                                  [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil]];
+                                                                 
+    [configurationSemaphore V];
+    [[self class] detachAsync:async selector:@selector(_checkPathWithConfiguration:) toTarget:self
+      withObject:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToCairoPathKey, @"path",
+                                                                 @[@"pdftocairo"], @"executableNames",
+                                                                 [NSValue valueWithPointer:&self->isPdfToCairoAvailable], @"monitor", nil]];
 
     //check perlWithLibXMLAvailable
     {
@@ -291,6 +317,11 @@ static NSMutableDictionary* cachePaths = nil;
                                                                  @(NO), @"allowUIAlertOnFailure",
                                                                  @(NO), @"allowUIFindOnFailure",
                                                                  [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil]];
+    [self _checkPathWithConfiguration:[configuration dictionaryByAddingObjectsAndKeys:DragExportSvgPdfToCairoPathKey, @"path",
+                                                                 @[@"pdftocairo"], @"executableNames",
+                                                                 @(NO), @"allowUIAlertOnFailure",
+                                                                 @(NO), @"allowUIFindOnFailure",
+                                                                 [NSValue valueWithPointer:&self->isPdfToCairoAvailable], @"monitor", nil]];
 
     //export to EPS needs ghostscript to be available
     PreferencesController* preferencesController = [PreferencesController sharedController];
@@ -299,7 +330,7 @@ static NSMutableDictionary* cachePaths = nil;
       [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
     if ((exportFormat == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS) && (!self->isGsAvailable || !self->isPsToPdfAvailable))
       [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
-    if ((exportFormat == EXPORT_FORMAT_SVG) && !self->isPdfToSvgAvailable)
+    if ((exportFormat == EXPORT_FORMAT_SVG) && !self->isPdfToSvgAvailable && !self->isPdfToCairoAvailable)
       [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
     if ((exportFormat == EXPORT_FORMAT_MATHML) && !self->isPerlWithLibXMLAvailable)
       [preferencesController setExportFormatPersistent:EXPORT_FORMAT_PDF];
@@ -326,6 +357,8 @@ static NSMutableDictionary* cachePaths = nil;
     NSUserDefaultsController* userDefaultsController = [NSUserDefaultsController sharedUserDefaultsController];
     [userDefaultsController addObserver:self
       forKeyPath:[userDefaultsController adaptedKeyPath:DragExportSvgPdfToSvgPathKey] options:0 context:nil];
+    [userDefaultsController addObserver:self
+      forKeyPath:[userDefaultsController adaptedKeyPath:DragExportSvgPdfToCairoPathKey] options:0 context:nil];
 
     //declares the service. The service will be called on a dummy document (myDocumentServiceProvider), which is lazily created
     //when first used
@@ -500,6 +533,10 @@ static NSMutableDictionary* cachePaths = nil;
       DragExportSvgPdfToSvgPathKey, @"path",
       [NSValue valueWithPointer:&self->isPdfToSvgAvailable], @"monitor", nil],
       DragExportSvgPdfToSvgPathKey,
+    [NSDictionary dictionaryWithObjectsAndKeys:
+      DragExportSvgPdfToCairoPathKey, @"path",
+      [NSValue valueWithPointer:&self->isPdfToCairoAvailable], @"monitor", nil],
+      DragExportSvgPdfToCairoPathKey,
     nil];
   NSDictionary* configuration = [NSDictionary dictionaryWithObjectsAndKeys:
     @(YES), @"checkOnlyIfNecessary",
@@ -905,7 +942,7 @@ static NSMutableDictionary* cachePaths = nil;
     if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
       ok &= self->isGsAvailable && self->isPsToPdfAvailable;
     if ([sender tag] == EXPORT_FORMAT_SVG)
-      ok &= self->isPdfToSvgAvailable;
+      ok &= self->isPdfToSvgAvailable || self->isPdfToCairoAvailable;
     if ([sender tag] == EXPORT_FORMAT_MATHML)
       ok &= self->isPerlWithLibXMLAvailable;
     if ([sender tag] == -1)//default
@@ -2032,6 +2069,7 @@ static NSMutableDictionary* cachePaths = nil;
       }//end @synchronized(cachePaths)
     }//end if (path)
   }//end if (!path && prefixes)
+  DebugLog(1, @"programName=>%@", path);
   return path;  
 }
 //end _findUnixProgram:inPrefixes:
@@ -2045,9 +2083,12 @@ static NSMutableDictionary* cachePaths = nil;
   {
     [cachePaths objectForKey:programName];
   }//end @synchronized(cachePaths)
+  DebugLog(1, @"1)programName=>%@, prefixes:%@", path, prefixes);
+  
   if (!path)
     path = [self _findUnixProgram:programName inPrefixes:prefixes];
-
+  DebugLog(1, @"2)programName=>%@", path);
+  
   if (!path) //if it is not...
   {
     //try to find it thanks to a "which" command
@@ -2062,10 +2103,12 @@ static NSMutableDictionary* cachePaths = nil;
       [whichTask waitUntilExit];
       NSData* data = [whichTask dataForStdOutput];
       path = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+      DebugLog(1, @"3)programName=>%@", path);
       if ([path length])
       {
         path = [path stringByDeletingLastPathComponent];
         path = [path stringByAppendingPathComponent:programName];
+        DebugLog(1, @"4)programName=>%@", path);
       }
     }
     @catch(NSException* e) {
@@ -2173,6 +2216,12 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end isPdfToSvgAvailable
 
+-(BOOL) isPdfToCairoAvailable
+{
+  return self->isPdfToCairoAvailable;
+}
+//end isPdfToCairoAvailable
+
 -(BOOL) isPerlWithLibXMLAvailable
 {
   return self->isPerlWithLibXMLAvailable;
@@ -2191,6 +2240,7 @@ static NSMutableDictionary* cachePaths = nil;
   @synchronized(preferencesController){
     proposedPath  = !pathKey ? nil : 
                     [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] ? [preferencesController exportSvgPdfToSvgPath] :
+                    [pathKey isEqualToString:DragExportSvgPdfToCairoPathKey] ? [preferencesController exportSvgPdfToCairoPath] :
                     [[preferencesController compositionConfigurationDocument] objectForKey:pathKey];
     useLoginShell = [[[preferencesController compositionConfigurationDocument] objectForKey:CompositionConfigurationUseLoginShellKey] boolValue];
   }//end @synchronized(preferencesController)
@@ -2205,12 +2255,16 @@ static NSMutableDictionary* cachePaths = nil;
     if (![fileManager fileExistsAtPath:proposedPath isDirectory:&isDirectory] || isDirectory ||
         ![fileManager isExecutableFileAtPath:proposedPath])
       proposedPath = [self findUnixProgram:executableName tryPrefixes:prefixes environment:[[LaTeXProcessor sharedLaTeXProcessor] extraEnvironment] useLoginShell:useLoginShell];
-    if ([fileManager fileExistsAtPath:proposedPath])
+    DebugLog(1, @"proposedPath:%@", proposedPath);
+    found = [fileManager fileExistsAtPath:proposedPath];
+    DebugLog(1, @"found:%@", @(found));
+    if (found)
     {
-      found = YES;
       @synchronized(preferencesController){
         if ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey])
           [preferencesController setExportSvgPdfToSvgPath:proposedPath];
+        else if ([pathKey isEqualToString:DragExportSvgPdfToCairoPathKey])
+          [preferencesController setExportSvgPdfToCairoPath:proposedPath];
         else if (pathKey)
           [preferencesController setCompositionConfigurationDocumentProgramPath:proposedPath forKey:pathKey];
       }//end @synchronized(preferencesController)
@@ -2233,6 +2287,7 @@ static NSMutableDictionary* cachePaths = nil;
   BOOL shouldCheck =
     !pathKey ||
     [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] ||
+    [pathKey isEqualToString:DragExportSvgPdfToCairoPathKey] ||
     ([pathKey isEqualToString:CompositionConfigurationPdfLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_PDFLATEX))) ||
     ([pathKey isEqualToString:CompositionConfigurationXeLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_XELATEX))) ||
     ([pathKey isEqualToString:CompositionConfigurationLuaLatexPathKey] && (!checkOnlyIfNecessary || (compositionMode == COMPOSITION_MODE_LUALATEX))) ||
@@ -2248,6 +2303,7 @@ static NSMutableDictionary* cachePaths = nil;
       @synchronized(preferencesController){
         pathProposed = !pathKey ? nil :
           [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] ? [preferencesController exportSvgPdfToSvgPath] :
+          [pathKey isEqualToString:DragExportSvgPdfToCairoPathKey] ? [preferencesController exportSvgPdfToCairoPath] :
           [[preferencesController compositionConfigurationDocument] objectForKey:pathKey];
       }
       BOOL pathProposedIsEmpty = !pathProposed || [pathProposed isEqualToString:@""];
@@ -2256,15 +2312,22 @@ static NSMutableDictionary* cachePaths = nil;
                 [[NSFileManager defaultManager] fileExistsAtPath:pathProposed isDirectory:&isDirectory] && !isDirectory &&
                 [[NSFileManager defaultManager] isExecutableFileAtPath:pathProposed];
       //currently, the only check is the option -v, at least to see if the program can be executed
+      DebugLog(1, @"_checkPathWithConfiguration:%@", configuration);
       NSString* options = (!pathKey || [pathKey isEqualToString:DragExportSvgPdfToSvgPathKey]
+                                    || [pathKey isEqualToString:DragExportSvgPdfToCairoPathKey]
                                     || [pathKey isEqualToString:CompositionConfigurationPsToPdfPathKey]) ? @"" : @"-v";
       NSString* command = [NSString stringWithFormat:@"%@ %@ 1>|/dev/null 2>&1", pathProposed, options];
+      DebugLog(1, @"_checkPathWithConfiguration=>command <%@>%@", command, ok ? @"" : @" (won't even try)");
       int error = !ok ? 127 : system([command UTF8String]);
+      DebugLog(1, @"_checkPathWithConfiguration=>command error <%@>", @(error));
       BOOL useExitStatus = (pathKey != nil);
       error = (!ok || WIFSIGNALED(error) || !WIFEXITED(error) || WIFSTOPPED(error)) ? 127 :
               (!useExitStatus ? 0 : WEXITSTATUS(error));
       ok = ok &&
-           ((error < 127) || ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] && (error == ((unsigned char)-2))));
+           ((error < 127) ||
+            ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey] && (error == ((unsigned char)-2))) ||
+            ([pathKey isEqualToString:DragExportSvgPdfToCairoPathKey] && (error == ((unsigned char)-2))));
+      DebugLog(1, @"_checkPathWithConfiguration=>command ok ? <%@>", @(ok));
       *monitor = ok;
 
       NSDictionary* recursiveConfiguration =
@@ -2332,6 +2395,8 @@ static NSMutableDictionary* cachePaths = nil;
               @synchronized(preferencesController){
                 if ([pathKey isEqualToString:DragExportSvgPdfToSvgPathKey])
                   [preferencesController setExportSvgPdfToSvgPath:pathKey];
+                else if ([pathKey isEqualToString:DragExportSvgPdfToCairoPathKey])
+                  [preferencesController setExportSvgPdfToCairoPath:pathKey];
                 else if (pathKey)
                   [preferencesController setCompositionConfigurationDocumentProgramPath:filepath forKey:pathKey];
               }//end @synchronized(preferencesController)
@@ -3871,5 +3936,14 @@ static NSMutableDictionary* cachePaths = nil;
   return ok;
 }
 //end installLatexPalette:
+
++(void) detachAsync:(BOOL)async selector:(SEL)selector toTarget:(id)target withObject:(nullable id)argument
+{
+  if (async)
+    [NSApplication detachDrawingThread:selector toTarget:target withObject:argument];
+  else
+    [target performSelector:selector withObject:argument];
+}
+//end detach:toTarget:withObject:async:
 
 @end

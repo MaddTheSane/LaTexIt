@@ -1200,5 +1200,25 @@
 				sparkle:dsaSignature="MCwCFFPBBztgNmvj4lKpqOXSLas5d6+iAhRRDcPDeUBZ32hlU3uRKtAhTxmsnw=="
 			/>
     </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.16.5</guid>
+      <title>Version 2.16.5</title>
+      <description><![CDATA[
+        <ul>
+          <li>Support pdftocairo for SVG export.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-ja.html#version-2.16.5</sparkle:releaseNotesLink>
+			<pubDate>Thu, 15 Dec 2022 20:27:44 +0100</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_16_5.dmg"
+				sparkle:version="2.16.5"
+                   sparkle:shortVersionString="2.16.5"
+				type="application/octet-stream"
+				length="11716952"
+				sparkle:dsaSignature="MCwCFEJHfHchqdXUPlPdtnOk91NnQT+MAhRHiqnZDUvU6PVN75aWIkHYYdn4Cg=="
+			/>
+    </item>
   </channel>
 </rss>

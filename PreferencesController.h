@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -24,6 +24,7 @@ extern NSString* DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey;
 extern NSString* DragExportPDFMetadataInvisibleGraphicsEnabledKey;
 
 extern NSString* DragExportSvgPdfToSvgPathKey;
+extern NSString* DragExportSvgPdfToCairoPathKey;
 extern NSString* DragExportTextExportPreambleKey;
 extern NSString* DragExportTextExportEnvironmentKey;
 extern NSString* DragExportTextExportBodyKey;
@@ -195,6 +196,8 @@ extern NSString* SynchronizationAdditionalScriptsKey;
 -(void)            setExportJpegQualityPercent:(CGFloat)value;
 -(NSString*)       exportSvgPdfToSvgPath;
 -(void)            setExportSvgPdfToSvgPath:(NSString*)value;
+-(NSString*)       exportSvgPdfToCairoPath;
+-(void)            setExportSvgPdfToCairoPath:(NSString*)value;
 -(BOOL)            exportTextExportPreamble;
 -(void)            setExportTextExportPreamble:(BOOL)value;
 -(BOOL)            exportTextExportEnvironment;

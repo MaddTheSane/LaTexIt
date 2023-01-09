@@ -21,7 +21,8 @@
 "Options" = "Optionen";
 "Warning : jpeg does not manage transparency" = "Warnung: JPEG unterstützt keine Transparenz";
 "Warning : pdf2svg path is invalid" = "Warning : Der Pfad zu pdf2svg ist ungültig";
-"Warning : pdf2svg was not found" = "Warning : pdf2svg was not found";
+"Warning : pdftocairo path is invalid" = "Warning : Der Pfad zu pdftocairo ist ungültig";
+"Warning : pdf2svg or pdftocairo was not found" = "Warning : pdf2svg or pdftocairo was not found";
 "Warning : the XML::LibXML perl module was not found" = "Warning : the XML::LibXML perl module was not found";
 
 "JPEG Quality" = "JPEG Qualität";
@@ -33,6 +34,7 @@
 "Quality" = "Qualität";
 "Background color" = "Hintergrundfarbe";
 "Path to pdf2svg" = "Pfad zu pdf2svg";
+"Path to pdftocairo" = "Pfad zu pdftocairo";
 "Format" = "Format";
 "Change" = "Ändern";
 

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import "DocumentExtraPanelsController.h"
@@ -35,6 +35,7 @@
   self->saveAccessoryViewOptionsJpegQualityPercent  = [preferencesController exportJpegQualityPercent];
   self->saveAccessoryViewOptionsJpegBackgroundColor = [[preferencesController exportJpegBackgroundColor] retain];
   self->saveAccessoryViewOptionsSvgPdfToSvgPath     = [[preferencesController exportSvgPdfToSvgPath] retain];
+  self->saveAccessoryViewOptionsSvgPdfToCairoPath     = [[preferencesController exportSvgPdfToCairoPath] retain];
   self->saveAccessoryViewOptionsTextExportPreamble         = [preferencesController exportTextExportPreamble];
   self->saveAccessoryViewOptionsTextExportEnvironment      = [preferencesController exportTextExportEnvironment];
   self->saveAccessoryViewOptionsTextExportBody             = [preferencesController exportTextExportBody];
@@ -48,11 +49,13 @@
 {
   [self removeObserver:self forKeyPath:@"saveAccessoryViewExportFormat"];
   [self removeObserver:self forKeyPath:@"saveAccessoryViewOptionsSvgPdfToSvgPath"];
+  [self removeObserver:self forKeyPath:@"saveAccessoryViewOptionsSvgPdfToCairoPath"];
   [self->saveAccessoryViewPopupFormat unbind:NSSelectedTagBinding];
   [self->saveAccessoryViewScalePercentTextField unbind:NSValueBinding];
   [self->saveAccessoryViewExportFormatOptionsPanes release];
   [self->saveAccessoryViewOptionsJpegBackgroundColor release];
   [self->saveAccessoryViewOptionsSvgPdfToSvgPath release];
+  [self->saveAccessoryViewOptionsSvgPdfToCairoPath release];
   [self->saveAccessoryView release]; //release the extra retain count
   [self->nibTopLevelObjects release];
   [super dealloc];
@@ -90,7 +93,7 @@
   [self->saveAccessoryViewJpegWarning setTitle:
     LocalLocalizedString(@"Warning : jpeg does not manage transparency", @"")];
   [self->saveAccessoryViewSvgWarning setTitle:
-    LocalLocalizedString(@"Warning : pdf2svg was not found", @"")];
+    LocalLocalizedString(@"Warning : pdf2svg or pdftocairo was not found", @"")];
   [self->saveAccessoryViewSvgWarning setTextColor:[NSColor redColor]];
   [self->saveAccessoryViewMathMLWarning setTitle:
    LocalLocalizedString(@"Warning : the XML::LibXML perl module was not found", @"")];
@@ -137,6 +140,8 @@
   [self observeValueForKeyPath:@"saveAccessoryViewExportFormat" ofObject:self change:nil context:nil];
   [self addObserver:self forKeyPath:@"saveAccessoryViewOptionsSvgPdfToSvgPath" options:0 context:nil];
   [self observeValueForKeyPath:@"saveAccessoryViewOptionsSvgPdfToSvgPath" ofObject:self change:nil context:nil];
+  [self addObserver:self forKeyPath:@"saveAccessoryViewOptionsSvgPdfToCairoPath" options:0 context:nil];
+  [self observeValueForKeyPath:@"saveAccessoryViewOptionsSvgPdfToCairoPath" ofObject:self change:nil context:nil];
 }
 //end awakeFromNib
 
@@ -257,6 +262,24 @@
 }
 //end setSaveAccessoryViewOptionsSvgPdfToSvgPath:
 
+-(NSString*) saveAccessoryViewOptionsSvgPdfToCairoPath
+{
+  return self->saveAccessoryViewOptionsSvgPdfToCairoPath;
+}
+//end saveAccessoryViewOptionsSvgPdfToCairoPath
+
+-(void) setSaveAccessoryViewOptionsSvgPdfToCairoPath:(NSString*)value
+{
+  if (value != self->saveAccessoryViewOptionsSvgPdfToCairoPath)
+  {
+    [self willChangeValueForKey:@"saveAccessoryViewOptionsSvgPdfToCairoPath"];
+    [self->saveAccessoryViewOptionsSvgPdfToCairoPath release];
+    self->saveAccessoryViewOptionsSvgPdfToCairoPath = [value copy];
+    [self didChangeValueForKey:@"saveAccessoryViewOptionsSvgPdfToCairoPath"];
+  }//end if (value != self->saveAccessoryViewOptionsSvgPdfToCairoPath)
+}
+//end setSaveAccessoryViewOptionsSvgPdfToCairoPath:
+
 -(BOOL) saveAccessoryViewOptionsTextExportPreamble
 {
   return self->saveAccessoryViewOptionsTextExportPreamble;
@@ -333,6 +356,18 @@
 }
 //end setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:
 
+-(BOOL) saveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled
+{
+  return self->saveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled;
+}
+//end saveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled
+
+-(void) setSaveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled:(BOOL)value
+{
+  self->saveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled = value;
+}
+//end setSaveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled:
+
 -(NSSavePanel*) currentSavePanel
 {
   return self->currentSavePanel;
@@ -400,14 +435,17 @@
     [self->saveAccessoryViewSvgWarning setHidden:
       (!isSvgFormat ||
        ([[NSFileManager defaultManager]
-         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath isDirectory:&isDirectory] && !isDirectory))];
+         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath isDirectory:&isDirectory] && !isDirectory) ||
+       ([[NSFileManager defaultManager]
+         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToCairoPath isDirectory:&isDirectory] && !isDirectory)
+      )];
     [self->saveAccessoryViewMathMLWarning setHidden:
      (!isMathMLFormat || [[AppController appController] isPerlWithLibXMLAvailable])];
     if (isJpegFormat)
       [self->currentSavePanel setAllowedFileTypes:@[@"jpg", @"jpeg"]];
     [self->currentSavePanel setAllowedFileTypes:[NSArray arrayWithObjects:extension, nil]];
   }//end if ([keyPath isEqualToString:@"saveAccessoryViewExportFormat"])
-  else if ([keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToSvgPath"])
+  else if ([keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToSvgPath"] || [keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToCairoPath"])
   {
     export_format_t exportFormat = self->saveAccessoryViewExportFormat;
     BOOL isSvgFormat = (exportFormat == EXPORT_FORMAT_SVG);
@@ -415,8 +453,11 @@
     [self->saveAccessoryViewSvgWarning setHidden:
       (!isSvgFormat ||
        ([[NSFileManager defaultManager]
-         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath isDirectory:&isDirectory] && !isDirectory))];
-  }//end if ([keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToSvgPath"])
+         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath isDirectory:&isDirectory] && !isDirectory) ||
+       ([[NSFileManager defaultManager]
+         fileExistsAtPath:self->saveAccessoryViewOptionsSvgPdfToCairoPath isDirectory:&isDirectory] && !isDirectory)
+       )];
+  }//end if ([keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToSvgPath"] || [keyPath isEqualToString:@"saveAccessoryViewOptionsSvgPdfToCairoPath"])
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
@@ -439,6 +480,7 @@
   [self->saveAccessoryViewExportFormatOptionsPanes setJpegQualityPercent:self->saveAccessoryViewOptionsJpegQualityPercent];
   [self->saveAccessoryViewExportFormatOptionsPanes setJpegBackgroundColor:self->saveAccessoryViewOptionsJpegBackgroundColor];
   [self->saveAccessoryViewExportFormatOptionsPanes setSvgPdfToSvgPath:self->saveAccessoryViewOptionsSvgPdfToSvgPath];
+  [self->saveAccessoryViewExportFormatOptionsPanes setSvgPdfToCairoPath:self->saveAccessoryViewOptionsSvgPdfToCairoPath];
   [self->saveAccessoryViewExportFormatOptionsPanes setTextExportPreamble:self->saveAccessoryViewOptionsTextExportPreamble];
   [self->saveAccessoryViewExportFormatOptionsPanes setTextExportEnvironment:self->saveAccessoryViewOptionsTextExportEnvironment];
   [self->saveAccessoryViewExportFormatOptionsPanes setTextExportBody:self->saveAccessoryViewOptionsTextExportBody];
@@ -460,21 +502,44 @@
 {
   if (ok)
   {
+    PreferencesController* preferencesController = [PreferencesController sharedController];
     if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsJpegPanel])
     {
       [self setSaveAccessoryViewOptionsJpegQualityPercent:[self->saveAccessoryViewExportFormatOptionsPanes jpegQualityPercent]];
       [self setSaveAccessoryViewOptionsJpegBackgroundColor:[self->saveAccessoryViewExportFormatOptionsPanes jpegBackgroundColor]];
+      [preferencesController setExportJpegQualityPercent:[self->saveAccessoryViewExportFormatOptionsPanes jpegQualityPercent]];
+      [preferencesController setExportJpegBackgroundColor:[self->saveAccessoryViewExportFormatOptionsPanes jpegBackgroundColor]];
     }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsJpegPanel])
     else if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsSvgPanel])
     {
       [self setSaveAccessoryViewOptionsSvgPdfToSvgPath:[self->saveAccessoryViewExportFormatOptionsPanes svgPdfToSvgPath]];
+      [self setSaveAccessoryViewOptionsSvgPdfToCairoPath:[self->saveAccessoryViewExportFormatOptionsPanes svgPdfToCairoPath]];
+      [preferencesController setExportSvgPdfToSvgPath:[self->saveAccessoryViewExportFormatOptionsPanes svgPdfToSvgPath]];
+      [preferencesController setExportSvgPdfToCairoPath:[self->saveAccessoryViewExportFormatOptionsPanes svgPdfToCairoPath]];
     }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsSvgPanel])
+    else if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsTextPanel])
+    {
+      [self setSaveAccessoryViewOptionsTextExportPreamble:[self->saveAccessoryViewExportFormatOptionsPanes textExportPreamble]];
+      [self setSaveAccessoryViewOptionsTextExportEnvironment:[self->saveAccessoryViewExportFormatOptionsPanes textExportEnvironment]];
+      [self setSaveAccessoryViewOptionsTextExportBody:[self->saveAccessoryViewExportFormatOptionsPanes textExportBody]];
+      [preferencesController setExportTextExportPreamble:[self->saveAccessoryViewExportFormatOptionsPanes textExportPreamble]];
+      [preferencesController setExportTextExportEnvironment:[self->saveAccessoryViewExportFormatOptionsPanes textExportEnvironment]];
+      [preferencesController setExportTextExportBody:[self->saveAccessoryViewExportFormatOptionsPanes textExportBody]];
+    }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsTextPanel])
     else if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsPDFWofPanel])
     {
       [self setSaveAccessoryViewOptionsPDFWofGSWriteEngine:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofGSWriteEngine]];
       [self setSaveAccessoryViewOptionsPDFWofGSPDFCompatibilityLevel:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofGSPDFCompatibilityLevel]];
       [self setSaveAccessoryViewOptionsPDFWofMetaDataInvisibleGraphicsEnabled:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofMetaDataInvisibleGraphicsEnabled]];
+      [preferencesController setExportPDFWOFGsWriteEngine:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofGSWriteEngine]];
+      [preferencesController setExportPDFWOFGsPDFCompatibilityLevel:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofGSPDFCompatibilityLevel]];
+      [preferencesController setExportPDFWOFMetaDataInvisibleGraphicsEnabled:[self->saveAccessoryViewExportFormatOptionsPanes pdfWofMetaDataInvisibleGraphicsEnabled]];
     }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsPDFWofPanel])
+    else if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsPDFPanel])
+    {
+      [self setSaveAccessoryViewOptionsPDFMetaDataInvisibleGraphicsEnabled:[self->saveAccessoryViewExportFormatOptionsPanes pdfMetaDataInvisibleGraphicsEnabled]];
+      [preferencesController setExportPDFMetaDataInvisibleGraphicsEnabled:[self->saveAccessoryViewExportFormatOptionsPanes pdfMetaDataInvisibleGraphicsEnabled]];
+    }//end if (exportFormatOptionsPanel == [self->saveAccessoryViewExportFormatOptionsPanes exportFormatOptionsPDFPanel])
   }//end if (ok)
   [NSApp stopModal];
   [exportFormatOptionsPanel orderOut:self];
@@ -488,8 +553,6 @@
     ok = [[AppController appController] isGsAvailable];
   else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
     ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPsToPdfAvailable];
-  /*else if ([sender tag] == EXPORT_FORMAT_SVG)
-    ok = [[AppController appController] isPdfToSvgAvailable];*/
   return ok;
 }
 //end validateMenuItem:

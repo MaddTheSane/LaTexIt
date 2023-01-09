@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2021 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
 //
 
 #import "DragFilterWindowController.h"
@@ -61,9 +61,11 @@
     NSLocalizedString(@"PDF w.o.f.", @"")];
 
   BOOL isPdfToSvgAvailable = [[AppController appController] isPdfToSvgAvailable];
-  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setEnabled:isPdfToSvgAvailable];
-  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setToolTip:isPdfToSvgAvailable ? nil :
-    [NSString stringWithFormat:NSLocalizedString(@"%@ is required", @""), @"pdf2svg"]];
+  BOOL isPdfToCairoAvailable = [[AppController appController] isPdfToCairoAvailable];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setEnabled:isPdfToSvgAvailable || isPdfToCairoAvailable];
+  [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_SVG] setToolTip:
+    isPdfToSvgAvailable || isPdfToCairoAvailable ? nil :
+    [NSString stringWithFormat:NSLocalizedString(@"%@ is required", @""), @"pdf2svg/pdftocairo"]];
   
   BOOL isPerlWithLibXMLAvailable = [[AppController appController] isPerlWithLibXMLAvailable];
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_MATHML] setEnabled:isPerlWithLibXMLAvailable];
