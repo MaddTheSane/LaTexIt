@@ -13,6 +13,7 @@
   NSColor* backgroundColor;
 }
 
+@property (copy) NSColor *backgroundColor;
 -(void) setBackgroundColor:(NSColor*)color;
 -(NSColor*) backgroundColor;
 

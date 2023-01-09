@@ -14,10 +14,10 @@
   NSString* uti;
 }
 
-+(id) dragFileWrapperWithFileName:(NSString*)filename uti:(NSString*)uti;
++(instancetype) dragFileWrapperWithFileName:(NSString*)filename uti:(NSString*)uti;
 
 -(id) initWithFileName:(NSString*)filename uti:(NSString*)uti;
--(NSString*) fileName;
--(NSString*) uti;
+@property (readonly, copy) NSString *fileName;
+@property (readonly, copy) NSString *uti;
 
 @end

@@ -14,7 +14,7 @@
 @class LibraryEquation;
 @class MyDocument;
 
-@interface LibraryView : NSOutlineView {
+@interface LibraryView : NSOutlineView <NSMenuItemValidation> {
   LibraryController* libraryController;
   library_row_t      libraryRowType;
   BOOL               willEdit;
@@ -22,10 +22,9 @@
   BOOL               shouldRedrag;
 }
 
--(LibraryController*) libraryController;
+@property (readonly, retain) LibraryController *libraryController;
 
--(library_row_t) libraryRowType;
--(void) setLibraryRowType:(library_row_t)type;
+@property (nonatomic) library_row_t libraryRowType;
 
 -(void) expandOutlineItems;
 

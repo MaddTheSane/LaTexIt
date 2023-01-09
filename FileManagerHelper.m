@@ -71,7 +71,7 @@
 }
 //end wakeUpDestructionThread
 
--(void) addSelfDestructingFile:(NSString*)path timeInterval:(double)timeInterval
+-(void) addSelfDestructingFile:(NSString*)path timeInterval:(NSTimeInterval)timeInterval
 {
   [self addSelfDestructingFile:path dueDate:[[NSDate date] dateByAddingTimeInterval:timeInterval]];
 }

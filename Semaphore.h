@@ -18,7 +18,7 @@
   volatile NSUInteger value;
 }
 
--(id) initWithValue:(NSUInteger)initialValue; //designated initializer
+-(id) initWithValue:(NSUInteger)initialValue NS_DESIGNATED_INITIALIZER; //designated initializer
 -(id) init;//init with value 0
 
 -(void) P:(NSUInteger)n;

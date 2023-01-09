@@ -17,9 +17,10 @@
   volatile BOOL threadsShouldRun;
 }
 
-+(id) defaultManager;
++(FileManagerHelper*) defaultManager;
+@property (class, readonly, retain) FileManagerHelper *defaultManager;
 
--(void) addSelfDestructingFile:(NSString*)path timeInterval:(double)timeInterval;
+-(void) addSelfDestructingFile:(NSString*)path timeInterval:(NSTimeInterval)timeInterval;
 -(void) addSelfDestructingFile:(NSString*)path dueDate:(NSDate*)dueDate;
 
 @end

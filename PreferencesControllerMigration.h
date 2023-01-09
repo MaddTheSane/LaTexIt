@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString* Old_CheckForNewVersionsKey;
+extern NSString* const Old_CheckForNewVersionsKey;
 
 @interface PreferencesController (Migration)
 

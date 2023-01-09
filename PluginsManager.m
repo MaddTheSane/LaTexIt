@@ -112,17 +112,15 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
   NSFileManager* fileManager        =  [NSFileManager defaultManager];                           
   NSMutableArray* allPluginsEntries = [NSMutableArray array];
   NSEnumerator* domainPathsEnumerator = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask , YES) objectEnumerator];
-  NSString* domainPath = nil;
-  while((domainPath = [domainPathsEnumerator nextObject]))
+  for(NSString* domainPath in domainPathsEnumerator)
   {
     NSString* domainName = domainPath;
     NSArray* pathComponents = [NSArray arrayWithObjects:domainPath, @"Application Support", [[NSWorkspace sharedWorkspace] applicationName], @"PlugIns", nil];
     NSString* directoryPath = [NSString pathWithComponents:pathComponents];
-    NSArray* pluginsPath  = [fileManager contentsOfDirectoryAtPath:directoryPath error:0];
-    NSMutableArray* pluginsFullPaths = [NSMutableArray arrayWithCapacity:[pluginsPath count]];
-    NSEnumerator* pluginsEnumerator = [pluginsPath objectEnumerator];
+    NSArray<NSString*>* pluginsPath  = [fileManager contentsOfDirectoryAtPath:directoryPath error:0];
+    NSMutableArray<NSString*>* pluginsFullPaths = [NSMutableArray arrayWithCapacity:[pluginsPath count]];
     NSString* file = nil;
-    while((file = [pluginsEnumerator nextObject]))
+    for(file in pluginsPath)
     {
       file = [directoryPath stringByAppendingPathComponent:file];
       BOOL isDirectory = NO;
@@ -137,14 +135,11 @@ static PluginsManager* sharedManagerInstance = nil; //the (private) singleton
   }//end for each domain
   
   //we got all the palettes
-  NSEnumerator* pluginsEntriesEnumerator = [allPluginsEntries objectEnumerator];
-  NSDictionary* pluginEntry = nil;
-  while((pluginEntry = [pluginsEntriesEnumerator nextObject]))
+  for(NSDictionary* pluginEntry in allPluginsEntries)
   {
     //NSString* domainName = [pluginEntry objectForKey:@"domainName"];
     NSEnumerator* pluginsPathEnumerator = [[pluginEntry objectForKey:@"paths"] objectEnumerator];
-    NSString* pluginFilePath = nil;
-    while((pluginFilePath = [pluginsPathEnumerator nextObject]))
+    for(NSString* pluginFilePath in pluginsPathEnumerator)
     {
       Plugin* plugin = [[Plugin alloc] initWithPath:pluginFilePath];
       if (plugin)

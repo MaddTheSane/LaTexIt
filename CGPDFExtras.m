@@ -27,7 +27,7 @@ static void arrayCallback(CGPDFScannerRef inScanner, void* userInfo)
     {
       CFStringRef cfStringPart = CGPDFStringCopyTextString(pdfString);
       #ifdef ARC_ENABLED
-      NSString* stringPart = !cfStringPart ? nil : (CHBRIDGE NSString*)cfStringPart;
+      NSString* stringPart = !cfStringPart ? nil : CFBridgingRelease(cfStringPart);
       [string appendString:stringPart];
       #else
       NSString* stringPart = !cfStringPart ? nil : (NSString*)CFMakeCollectable(cfStringPart);
@@ -48,7 +48,7 @@ static void stringCallback(CGPDFScannerRef inScanner, void *userInfo)
   {
     CFStringRef cfStringPart = CGPDFStringCopyTextString(pdfString);
     #ifdef ARC_ENABLED
-    NSString* stringPart = !cfStringPart ? nil : (CHBRIDGE NSString*)cfStringPart;
+    NSString* stringPart = !cfStringPart ? nil : CFBridgingRelease(cfStringPart);
     [string appendString:stringPart];
     #else
     NSString* stringPart = !cfStringPart ? nil : (NSString*)CFMakeCollectable(cfStringPart);

@@ -98,13 +98,13 @@
 
 -(id) initWithCoder:(NSCoder*)coder
 {
-  return [self initWithValue:[[[coder decodeObjectForKey:@"value"] dynamicCastToClass:[NSNumber class]] unsignedIntegerValue]];
+  return [self initWithValue:[coder decodeIntegerForKey:@"value"]];
 }
 //end initWithCoder:
 
 -(void) encodeWithCoder:(NSCoder*)coder
 {
-  [coder encodeObject:@([self R]) forKey:@"value"];
+  [coder encodeInteger:[self R] forKey:@"value"];
 }
 //end encodeWithCoder:
 

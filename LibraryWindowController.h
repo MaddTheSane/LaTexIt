@@ -14,7 +14,7 @@
 @class LibraryView;
 @class LibraryPreviewPanelImageView;
 
-@interface LibraryWindowController : NSWindowController <NSTableViewDelegate, NSTextViewDelegate> {
+@interface LibraryWindowController : NSWindowController <NSTableViewDelegate, NSTextViewDelegate, NSMenuItemValidation> {
   IBOutlet NSSearchField*                librarySearchField;
   IBOutlet NSButton*                     importCurrentButton;
   IBOutlet ImagePopupButton*             actionButton;

@@ -17,7 +17,7 @@
 -(void) safeInsertObjects:(NSArray*)objects;
 -(void) safeDeleteObject:(NSManagedObject*)object;
 -(void) safeDeleteObjects:(NSArray*)objects;
--(NSUInteger) countForEntity:(NSEntityDescription*)entity error:(NSError**)error predicateFormat:(NSString*)predicateFormat,...;
+-(NSUInteger) countForEntity:(NSEntityDescription*)entity error:(NSError**)error predicateFormat:(NSString*)predicateFormat,... NS_FORMAT_FUNCTION(3, 4);
 -(NSManagedObject*) managedObjectForURIRepresentation:(NSURL*)url;
 -(NSUInteger) myCountForFetchRequest:(NSFetchRequest *)request error:(NSError **)error;
 

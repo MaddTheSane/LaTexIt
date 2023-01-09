@@ -23,46 +23,26 @@
 
 -(id) initWithFileName:(NSString*)aFileName uti:(NSString*)aUti
 {
-  if (!(self = [super init]))
-    return nil;
-  self->fileName = [aFileName copy];
-  self->uti      = [aUti copy];
+  if (self = [super init]) {
+    self->fileName = [aFileName copy];
+    self->uti      = [aUti copy];
+  }
   return self;
 }
 //end initWithFileName:
 
+#ifndef ARC_ENABLED
 -(void) dealloc
 {
-  #ifdef ARC_ENABLED
-  #else
   [self->fileName release];
   [self->uti release];
   [super dealloc];
-  #endif
 }
 //end dealloc
+#endif
 
--(NSString*) fileName
-{
-  #ifdef ARC_ENABLED
-  NSString* result = [self->fileName copy];
-  #else
-  NSString* result = [[self->fileName copy] autorelease];
-  #endif
-  return result;
-}
-//end fileName
-
--(NSString*) uti
-{
-  #ifdef ARC_ENABLED
-  NSString* result = [self->uti copy];
-  #else
-  NSString* result = [[self->uti copy] autorelease];
-  #endif
-  return result;
-}
-//end uti
+@synthesize fileName;
+@synthesize uti;
 
 -(NSArray*) writableTypesForPasteboard:(NSPasteboard*)pasteboard
 {

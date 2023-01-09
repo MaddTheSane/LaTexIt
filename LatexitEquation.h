@@ -10,7 +10,7 @@
 
 #import "LaTeXiTSharedTypes.h" //for latex_mode_t
 
-extern NSString* LatexitEquationsPboardType;
+extern const NSPasteboardType LatexitEquationsPboardType NS_SWIFT_NAME(latexitEquations);
 
 @class CHExportPrefetcher;
 
@@ -37,7 +37,8 @@ extern NSString* LatexitEquationsPboardType;
 
 +(NSEntityDescription*) entity;
 
-+(NSSet*) allowedSecureDecodedClasses;
++(NSSet<Class>*) allowedSecureDecodedClasses;
+@property (readonly, copy, class) NSSet<Class> *allowedSecureDecodedClasses;
 
 +(void) pushManagedObjectContext:(NSManagedObjectContext*)context;
 +(NSManagedObjectContext*) currentManagedObjectContext;
@@ -50,44 +51,34 @@ extern NSString* LatexitEquationsPboardType;
 //constructors
 +(BOOL) latexitEquationPossibleWithUTI:(NSString*)uti;
 +(BOOL) latexitEquationPossibleWithData:(NSData*)data sourceUTI:(NSString*)sourceUTI;
-+(NSArray*) latexitEquationsWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
-+(id) latexitEquationWithMetaData:(NSDictionary*)someData useDefaults:(BOOL)useDefaults;
-+(id) latexitEquationWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
-+(id) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
-+(id) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
++(NSArray<LatexitEquation*>*) latexitEquationsWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
++(instancetype) latexitEquationWithMetaData:(NSDictionary*)someData useDefaults:(BOOL)useDefaults;
++(instancetype) latexitEquationWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
++(instancetype) latexitEquationWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
++(instancetype) latexitEquationWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                      color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date mode:(latex_mode_t)aMode
                      backgroundColor:(NSColor*)backgroundColor
                      title:(NSString*)aTitle;
--(id) initWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults;
--(id) initWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
--(id) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
--(id) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
+-(instancetype) initWithMetaData:(NSDictionary*)metaData useDefaults:(BOOL)useDefaults;
+-(instancetype) initWithData:(NSData*)someData sourceUTI:(NSString*)sourceUTI useDefaults:(BOOL)useDefaults;
+-(instancetype) initWithPDFData:(NSData*)someData useDefaults:(BOOL)useDefaults;
+-(instancetype) initWithPDFData:(NSData*)someData preamble:(NSAttributedString*)aPreamble sourceText:(NSAttributedString*)aSourceText
                                            color:(NSColor*)aColor pointSize:(double)aPointSize date:(NSDate*)date
                                             mode:(latex_mode_t)aMode backgroundColor:(NSColor*)backgroundColor
                                             title:(NSString*)aTitle;
 -(void) dispose;
 
 //accessors
--(NSData*) pdfData;
--(void) setPdfData:(NSData*)value;
--(NSAttributedString*) preamble;
--(void) setPreamble:(NSAttributedString*)value;
--(NSAttributedString*) sourceText;
--(void) setSourceText:(NSAttributedString*)value;
--(NSColor*) color;
--(void) setColor:(NSColor*)value;
--(double) baseline;
--(void) setBaseline:(double)value;
--(double) pointSize;
--(void) setPointSize:(double)value;
--(NSDate*) date;
--(void) setDate:(NSDate*)value;
--(latex_mode_t) mode;
--(void) setMode:(latex_mode_t)value;
--(NSColor*) backgroundColor;
--(void) setBackgroundColor:(NSColor*)value;
--(NSString*) title;
--(void) setTitle:(NSString*)value;
+@property (nonatomic, copy) NSData *pdfData;
+@property (nonatomic, copy) NSAttributedString *preamble;
+@property (nonatomic, copy) NSAttributedString *sourceText;
+@property (nonatomic, copy) NSColor *color;
+@property (nonatomic) double baseline;
+@property (nonatomic) double pointSize;
+@property (nonatomic, copy) NSDate *date;
+@property (nonatomic) latex_mode_t mode;
+@property (nonatomic, copy) NSColor *backgroundColor;
+@property (nonatomic, copy) NSString *title;
 
 //transient
 -(NSImage*) pdfCachedImage;
@@ -96,8 +87,8 @@ extern NSString* LatexitEquationsPboardType;
 //on the fly
 +(NSString*)    latexModeToString:(latex_mode_t)mode;
 +(latex_mode_t) latexModeFromString:(NSString*)modeAsString;
--(NSString*) modeAsString;
--(NSString*) string;
+@property (readonly, copy) NSString *modeAsString;
+@property (readonly, copy) NSString *string;
 -(NSAttributedString*) encapsulatedSource;//the body, with \[...\], $...$ or nothing according to the mode
 
 //utils
@@ -110,7 +101,7 @@ extern NSString* LatexitEquationsPboardType;
 -(void) reannotatePDFDataUsingPDFKeywords:(BOOL)usingPDFKeywords;
 -(void) writeToPasteboard:(NSPasteboard *)pboard exportFormat:(export_format_t)exportFormat isLinkBackRefresh:(BOOL)isLinkBackRefresh lazyDataProvider:(id)lazyDataProvider options:(NSDictionary*)options;
 -(id) plistDescription;
--(id) initWithDescription:(id)description;
+-(instancetype) initWithDescription:(id)description;
 -(CHExportPrefetcher*) exportPrefetcher;
 
 -(NSString*) computeFileName;

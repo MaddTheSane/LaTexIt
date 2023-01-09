@@ -9,9 +9,10 @@
 #import <Cocoa/Cocoa.h>
 
 
-@protocol LaTeXiTPluginProtocol
+@protocol LaTeXiTPluginProtocol <NSObject>
 
 -(NSImage*) icon;
+@property (readonly, copy) NSImage *icon;
 -(void) importConfigurationPanelIntoView:(NSView*)view;
 -(void) dropConfigurationPanel;
 

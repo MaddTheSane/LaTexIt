@@ -11,10 +11,6 @@
 #import "NSImageExtended.h"
 #import "NSObjectExtended.h"
 
-@interface NSImageRep (Bridge10_6)
-- (BOOL)drawInRect:(NSRect)dstSpacePortionRect fromRect:(NSRect)srcSpacePortionRect operation:(NSCompositingOperation)op fraction:(CGFloat)requestedAlpha respectFlipped:(BOOL)respectContextIsFlipped hints:(NSDictionary *)hints;
-@end
-
 
 @implementation LibraryPreviewPanelImageView
 
@@ -25,19 +21,7 @@
 }
 //end dealloc
 
--(void) setBackgroundColor:(NSColor*)color
-{
-  [color retain];
-  [self->backgroundColor release];
-  self->backgroundColor = color;
-}
-//end setBackgroundColor:
-
--(NSColor*) backgroundColor
-{
-  return self->backgroundColor;
-}
-//end backgroundColor
+@synthesize backgroundColor;
 
 -(void) drawRect:(NSRect)rect
 {
@@ -45,8 +29,9 @@
 
   if ([self isDarkMode])
   {
-    CGFloat gray[4] = {0.5f, 0.5f, 0.5f, 1.f};
-    [[NSColor colorWithCalibratedRed:gray[0] green:gray[1] blue:gray[2] alpha:gray[3]] set];
+//    CGFloat gray[4] = {0.5f, 0.5f, 0.5f, 1.f};
+    [[NSColor colorWithCalibratedWhite:0.5 alpha:1.0] set];
+//    [[NSColor colorWithCalibratedRed:gray[0] green:gray[1] blue:gray[2] alpha:gray[3]] set];
     NSRectFill(bounds);
   }//end if ([self isDarkMode])
 

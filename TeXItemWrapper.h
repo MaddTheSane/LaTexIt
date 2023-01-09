@@ -22,16 +22,12 @@
 
 -(id) initWithItem:(NSDictionary*)aData;
 
--(NSString*) title;
--(NSDictionary*) data;
--(BOOL) enabled;
--(void) setEnabled:(BOOL)value;
--(BOOL) checked;
--(void) setChecked:(BOOL)value;
--(NSInteger) importState;
--(void) setImportState:(NSInteger)value;
--(LatexitEquation*) equation;
--(void) setEquation:(LatexitEquation*)value;
+@property (readonly, copy) NSString *title;
+@property (readonly, retain) NSDictionary *data;
+@property BOOL enabled;
+@property BOOL checked;
+@property NSInteger importState;
+@property (retain) LatexitEquation *equation;
 
 @end
 

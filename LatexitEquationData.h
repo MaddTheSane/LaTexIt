@@ -16,7 +16,6 @@
 +(NSEntityDescription*) entity;
 
 //accessors
--(NSData*) pdfData;
--(void) setPdfData:(NSData*)value;
+@property (nonatomic, copy) NSData *pdfData;
 
 @end

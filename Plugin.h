@@ -13,7 +13,7 @@
 @interface Plugin : NSObject<LaTeXiTPluginProtocol> {
   NSBundle* bundle;
   NSImage*  cachedImage;
-  id<NSObject,LaTeXiTPluginProtocol> principalClassInstance;
+  id<LaTeXiTPluginProtocol> principalClassInstance;
 }
 
 -(id) initWithPath:(NSString*)path;

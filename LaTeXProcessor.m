@@ -39,7 +39,7 @@
 
 #include <dlfcn.h>
 
-NSString* LatexizationDidEndNotification = @"LatexizationDidEndNotification";
+NSString*const LatexizationDidEndNotification = @"LatexizationDidEndNotification";
 
 //In MacOS 10.4.0, 10.4.1 and 10.4.2, these constants are declared but not defined in the PDFKit.framework!
 //So I define them myself, but it is ugly. I expect next versions of MacOS to fix that

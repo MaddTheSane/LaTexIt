@@ -25,15 +25,12 @@
 -(id) initWithParent:(LibraryItem*)parent equation:(LatexitEquation*)equation insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 
 -(void) dispose;
--(BOOL) customKVOEnabled;
--(void) setCustomKVOEnabled:(BOOL)value;
--(BOOL) customKVOInhibited;
--(void) setCustomKVOInhibited:(BOOL)value;
+@property (nonatomic) BOOL customKVOEnabled;
+@property (nonatomic) BOOL customKVOInhibited;
 
 -(void) setTitle:(NSString*)value;//redefined to set title of equation with the same value
 
--(LatexitEquation*) equation;
--(void) setEquation:(LatexitEquation*)equation;
+@property (nonatomic, assign) LatexitEquation *equation;
 
 -(id) plistDescription;
 

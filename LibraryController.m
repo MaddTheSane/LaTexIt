@@ -29,13 +29,13 @@
 
 #import "Utils.h"
 
-@interface LibraryController (PrivateAPI)
+@interface LibraryController ()
 -(NSFetchRequest*) rootFetchRequest;
 -(NSArray*) flattenedGroupItems;
 -(BOOL) outlineView:(NSOutlineView*)outlineView isSelfMoveDrop:(id<NSDraggingInfo>)info;
 @end
 
-@implementation LibraryController (PrivateAPI)
+@implementation LibraryController
 
 -(NSFetchRequest*) rootFetchRequest
 {
@@ -101,10 +101,6 @@
 }
 //end outlineView:isSelfMoveDrop:
 
-@end
-
-@implementation LibraryController
-
 -(void) dealloc
 {
   [self->rootItemsCache release];
@@ -127,11 +123,7 @@
 }
 //end undoManager
 
--(NSPredicate*) filterPredicate
-{
-  return [[self->filterPredicate retain] autorelease];
-}
-//end filterPredicate:
+@synthesize filterPredicate;
 
 -(void) setFilterPredicate:(NSPredicate*)value
 {

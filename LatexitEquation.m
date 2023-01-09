@@ -514,7 +514,7 @@ static void CHCGPDFOperatorCallback_y(CGPDFScannerRef scanner, void *info)
 }
 //end CHCGPDFOperatorCallback_y()
 
-NSString* LatexitEquationsPboardType = @"LatexitEquationsPboardType";
+NSString* const LatexitEquationsPboardType = @"LatexitEquationsPboardType";
 
 static NSEntityDescription* cachedEntity = nil;
 static NSMutableArray*      managedObjectContextStackInstance = nil;
@@ -2143,6 +2143,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end isUpdating
 
+@dynamic pdfData;
+
 -(NSData*) pdfData
 {
   NSData* result = nil;
@@ -2210,6 +2212,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end setPdfData:
 
+@dynamic preamble;
+
 -(NSAttributedString*) preamble
 {
   NSAttributedString* result = nil;
@@ -2249,6 +2253,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self endUpdate];
 }
 //end setPreamble:
+
+@dynamic sourceText;
 
 -(NSAttributedString*) sourceText
 {
@@ -2290,6 +2296,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end setSourceText:
 
+@dynamic color;
+
 -(NSColor*) color
 {
   NSColor* result = nil;
@@ -2330,6 +2338,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end setColor:
 
+@dynamic baseline;
+
 -(double) baseline
 {
   double result = 0;
@@ -2350,6 +2360,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self endUpdate];
 }
 //end setBaseline:
+
+@dynamic pointSize;
 
 -(double) pointSize
 {
@@ -2372,6 +2384,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
 }
 //end setPointSize:
 
+@dynamic date;
+
 -(NSDate*) date
 {
   NSDate* result = nil;
@@ -2391,6 +2405,8 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   [self endUpdate];
 }
 //end setDate:
+
+@dynamic mode;
 
 -(latex_mode_t)mode
 {

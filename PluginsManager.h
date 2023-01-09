@@ -7,14 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "Plugin.h"
 
 @interface PluginsManager : NSObject {
-  NSMutableArray* plugins;
+  NSMutableArray<Plugin*>* plugins;
 }
 
 +(PluginsManager*) sharedManager;
+@property (class, readonly, retain) PluginsManager *sharedManager;
 
--(NSArray*) plugins;
+@property (readonly, copy) NSArray<Plugin*>*plugins;
 
 @end

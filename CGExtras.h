@@ -3,7 +3,11 @@
 
 #import <Quartz/Quartz.h>
 
+#if NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES
+#define CGRectFromNSRect(rect) (rect)
+#else
 CG_INLINE CGRect CGRectFromNSRect(NSRect rect) {return CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);}
+#endif
 
 //Path
 void CGContextAddRoundedRect(CGContextRef context, CGRect rect, CGFloat ovalWidth, CGFloat ovalHeight);
@@ -16,14 +20,14 @@ CG_INLINE CGFloat CGBlendLinear(CGFloat t, CFNumberRef parameter)
 CG_INLINE CGFloat CGBlendPow(CGFloat t, CFNumberRef parameter)
                   {CGFloat value; CFNumberGetValue(parameter, kCFNumberFloatType, &value); return pow(t, value);}
 
-typedef void* CGBlendColorsRef;
+typedef struct blend_colors_s* CGBlendColorsRef;
 CGBlendColorsRef CGBlendColorsCreateCGF(CGColorRef colors[], NSUInteger nbColors, blendFunction_t blendFunction, CGFloat blendFunctionParameter);
 CGBlendColorsRef CGBlendColorsCreate(CGColorRef colors[], NSUInteger nbColors, blendFunction_t blendFunction, CFNumberRef blendFunctionParameter);
 CGBlendColorsRef CGBlendColorsRetain(CGBlendColorsRef blendColors);
 void CGBlendColorsRelease(CGBlendColorsRef blendColors);
 
 //Shadings
-extern CGFunctionCallbacks CGBlendColorsFunctionCallBacks;
+extern const CGFunctionCallbacks CGBlendColorsFunctionCallBacks;
 
 //Color conversions
 void    RGB2HLS(CGFloat r, CGFloat g, CGFloat b, CGFloat* pH, CGFloat* pL, CGFloat* pS);

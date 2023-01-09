@@ -24,7 +24,7 @@ void CGContextAddRoundedRect(CGContextRef context, CGRect rect, CGFloat ovalWidt
 
 //----------------- Blend colors --------------------
 
-typedef struct {
+typedef struct blend_colors_s {
   NSUInteger refCount;
   CGColorRef* colors;
   NSUInteger nbColors;
@@ -35,7 +35,7 @@ typedef struct {
 CGBlendColorsRef CGBlendColorsCreateCGF(CGColorRef colors[], NSUInteger nbColors, blendFunction_t blendFunction, CGFloat blendFunctionParameter)
 {
   CGBlendColorsRef result = 0;
-  CFNumberRef number = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType, &blendFunctionParameter);
+  CFNumberRef number = CFBridgingRetain(@(blendFunctionParameter));
   result = CGBlendColorsCreate(colors, nbColors, blendFunction, number);
   CFRelease(number);
   return result;
@@ -117,7 +117,7 @@ static void CGColorBlendColorsFunctionCallBack(void* info, const CGFloat* inData
 }
 //end CGColorBlendFunctionCallBack()
 
-CGFunctionCallbacks CGBlendColorsFunctionCallBacks = {0, &CGColorBlendColorsFunctionCallBack, &CGColorBlendColorsFunctionReleaseCallBack};
+const CGFunctionCallbacks CGBlendColorsFunctionCallBacks = {0, &CGColorBlendColorsFunctionCallBack, &CGColorBlendColorsFunctionReleaseCallBack};
 
 //---------------- Color conversions ----------------------
 

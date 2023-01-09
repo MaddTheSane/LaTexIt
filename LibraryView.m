@@ -38,7 +38,7 @@
 #import "PreferencesController.h"
 #import "Utils.h"
 
-@interface LibraryView (PrivateAPI)
+@interface LibraryView () <NSOutlineViewDelegate>
 -(NSImage*) iconForRepresentedObject:(id)representedObject;
 -(void)     activateSelectedItem:(BOOL)makeLink;
 -(void)     performProgrammaticDragCancellation:(id)context;
@@ -60,8 +60,8 @@
 -(void) awakeFromNib
 {
   self->libraryController = [[LibraryController alloc] init];
-  [self setDelegate:(id)self];
-  [self setDataSource:(id)self->libraryController];
+  [self setDelegate:self];
+  [self setDataSource:self->libraryController];
 
   [self bind:@"libraryRowType" toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:LibraryViewRowTypeKey] options:nil];
@@ -80,11 +80,7 @@
 }
 //end dealloc
 
--(LibraryController*) libraryController
-{
-  return self->libraryController;
-}
-//end libraryController
+@synthesize libraryController;
 
 -(NSImage*) iconForRepresentedObject:(id)representedObject
 {
@@ -119,11 +115,7 @@
 }
 //end expandOutlineItems
 
--(library_row_t) libraryRowType
-{
-  return self->libraryRowType;
-}
-//end libraryRowType
+@synthesize libraryRowType;
 
 -(void) setLibraryRowType:(library_row_t)type
 {

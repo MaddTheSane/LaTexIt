@@ -23,8 +23,7 @@
 
 -(id) initWithParent:(LibraryItem*)parent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 
--(BOOL)       isExpanded;
--(void)       setExpanded:(BOOL)value;
+@property (getter=isExpanded) BOOL expanded;
 -(NSSet*)     children:(NSPredicate*)predicate;
 -(NSArray*)   childrenOrdered:(NSPredicate*)predicate;
 -(NSUInteger) childrenCount:(NSPredicate*)predicate;

@@ -10,7 +10,7 @@
 
 @class LibraryGroupItem;
 
-@interface LibraryController : NSObject {
+@interface LibraryController : NSObject <NSOutlineViewDataSource> {
   NSFetchRequest* rootFetchRequest;
   NSArray*        currentlyDraggedItems;
   NSPredicate*    filterPredicate;
@@ -20,8 +20,7 @@
 -(NSManagedObjectContext*) managedObjectContext;
 -(NSUndoManager*) undoManager;
 
--(void) setFilterPredicate:(NSPredicate*)filterPredicate;
--(NSPredicate*) filterPredicate;
+@property (nonatomic, retain) NSPredicate *filterPredicate;
 
 -(NSArray*) rootItems:(NSPredicate*)predicate;
 -(void) invalidateRootItemsCache;

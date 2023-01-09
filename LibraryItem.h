@@ -29,29 +29,27 @@
 
 +(NSEntityDescription*) entity;
 
-+(NSSet*) allowedSecureDecodedClasses;
++(NSSet<Class>*) allowedSecureDecodedClasses;
 
 -(id) initWithParent:(LibraryItem*)parent insertIntoManagedObjectContext:(NSManagedObjectContext*)managedObjectContext;
 -(void) dispose;
 
 -(BOOL) dummyPropertyToForceUIRefresh;
 
--(NSString*)    title;
--(void)         setTitle:(NSString*)value;
--(void)         setBestTitle;//computes best title in current context
--(LibraryItem*) parent;
--(void)         setParent:(LibraryItem*)parent;
--(NSUInteger)   sortIndex;
--(void)         setSortIndex:(NSUInteger)value;
--(NSString*)    comment;
--(void)         setComment:(NSString*)value;
+@property (nonatomic, copy) NSString *title;
+//! computes best title in current context
+-(void)         setBestTitle;
+
+@property (nonatomic, assign) LibraryItem *parent;
+@property (nonatomic) NSUInteger sortIndex;
+@property (nonatomic, copy) NSString *comment;
 
 -(NSArray*) brothersIncludingMe:(BOOL)includingMe;
--(NSArray*) titlePath;
+@property (readonly, copy) NSArray<NSString*> *titlePath;
 
 //for readable export
 -(id) plistDescription;
 +(LibraryItem*) libraryItemWithDescription:(id)description;
--(id) initWithDescription:(id)description;
+-(instancetype) initWithDescription:(id)description;
 
 @end
