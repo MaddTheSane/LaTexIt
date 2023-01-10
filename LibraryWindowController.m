@@ -125,7 +125,7 @@ static int kExportContext = 0;
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a document", @"") action:@selector(openEquation:) keyEquivalent:@""] setTarget:self];
   menuItem = [actionMenu addItemWithTitle:NSLocalizedString(@"Open the equation in a linked document", @"") action:@selector(openLinkedEquation:) keyEquivalent:@""];
   [menuItem setTarget:self];
-  [menuItem setKeyEquivalentModifierMask:NSAlternateKeyMask];
+  [menuItem setKeyEquivalentModifierMask:NSEventModifierFlagOption];
   [menuItem setAlternate:YES];
   [actionMenu addItem:[NSMenuItem separatorItem]];
   [[actionMenu addItemWithTitle:NSLocalizedString(@"Add a folder", @"") action:@selector(newFolder:) keyEquivalent:@""] setTarget:self];
@@ -996,7 +996,7 @@ static int kExportContext = 0;
   {
     NSOpenPanel* openPanel = [sheet dynamicCastToClass:[NSOpenPanel class]];
     library_import_option_t import_option = (library_import_option_t)[importOptionPopUpButton selectedTag];
-    if (returnCode == NSOKButton)
+    if (returnCode == NSModalResponseOK)
     {
       BOOL ok = [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option parent:nil];
       if (!ok)
@@ -1014,12 +1014,12 @@ static int kExportContext = 0;
         [self->libraryView reloadData];
         [self->libraryView scrollRowToVisible:[self->libraryView numberOfRows]-1];
       }
-    }//end if (returnCode == NSOKButton)
+    }//end if (returnCode == NSModalResponseOK)
   }//end if (contextInfo == &kImportContext)
   else if (contextInfo == &kExportContext)
   {
     NSSavePanel* theSavePanel = [sheet dynamicCastToClass:[NSSavePanel class]];
-    if (returnCode == NSFileHandlingPanelOKButton)
+    if (returnCode == NSModalResponseOK)
     {
       BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
       NSArray* selectedLibraryItems = [self->libraryView selectedItems];
@@ -1037,7 +1037,7 @@ static int kExportContext = 0;
           alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"")
                  defaultButton:NSLocalizedString(@"OK", @"")
                alternateButton:nil otherButton:nil
-     informativeTextWithFormat:nil];
+     informativeTextWithFormat:@""];
        [alert runModal];
       }//end if (ok)
     }

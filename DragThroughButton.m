@@ -194,7 +194,7 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
     currentState;
   if (currentState != nextState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];
-  return NSDragOperationAll;
+  return NSDragOperationEvery;
 }
 //end draggingEntered:
 
@@ -210,7 +210,7 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
     currentState;
   if (currentState != nextState)
     [self performSelector:@selector(checkLastMove:) withObject:nil afterDelay:self->delay];
-  return NSDragOperationAll;
+  return NSDragOperationEvery;
 }
 //end draggingExited:
 

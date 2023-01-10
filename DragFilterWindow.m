@@ -12,7 +12,7 @@
 
 -(id) initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
 {
-  windowStyle = NSBorderlessWindowMask;
+  windowStyle = NSWindowStyleMaskBorderless;
   if (!(self = [super initWithContentRect:contentRect styleMask:windowStyle backing:bufferingType defer:deferCreation]))
     return nil;
   [self setBackgroundColor:[NSColor clearColor]];
@@ -23,7 +23,7 @@
 
 -(id) initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation screen:(NSScreen*)screen
 {
-  windowStyle = NSBorderlessWindowMask;
+  windowStyle = NSWindowStyleMaskBorderless;
   if (!(self = [super initWithContentRect:contentRect styleMask:windowStyle backing:bufferingType defer:deferCreation screen:screen]))
     return nil;
   [self setBackgroundColor:[NSColor clearColor]];

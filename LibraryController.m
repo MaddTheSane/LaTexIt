@@ -316,7 +316,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
 
   if ([libraryItems count])
   {
-    self->currentlyDraggedItems = (pasteBoard == [NSPasteboard pasteboardWithName:NSDragPboard]) ? libraryItems : nil;
+    self->currentlyDraggedItems = (pasteBoard == [NSPasteboard pasteboardWithName:NSPasteboardNameDrag]) ? libraryItems : nil;
     NSMutableArray* wrappedLibraryItems = [NSMutableArray arrayWithCapacity:[libraryItems count]];
     NSEnumerator* enumerator = [libraryItems objectEnumerator];
     LibraryItem* libraryItem = nil;

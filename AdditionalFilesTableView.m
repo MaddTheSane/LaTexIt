@@ -259,7 +259,7 @@
   [openPanel setCanSelectHiddenExtension:YES];
   [openPanel setResolvesAliases:YES];
   [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
-    if (result == NSOKButton)
+    if (result == NSModalResponseOK)
     {
       NSArray* urls = [openPanel URLs];
       NSMutableArray* fileNames = [NSMutableArray arrayWithCapacity:[urls count]];
@@ -280,7 +280,7 @@
         while((object = [enumerator nextObject]))
           [self->filesWithExtrasController addObject:object];
       }//end if (!self->isDefaultTableView)
-    }//end if (result == NSOKButton)
+    }//end if (result == NSModalResponseOK)
   }];
 }
 //end openPanelDidEnd:returnCode:contextInfo:

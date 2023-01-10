@@ -59,10 +59,10 @@ static NSArray* WellKnownLatexKeywords = nil;
       NSString*  keywordsPlistPath = [[NSBundle mainBundle] pathForResource:@"latex-keywords" ofType:@"plist"];
       NSData*    dataKeywordsPlist = [NSData dataWithContentsOfFile:keywordsPlistPath options:NSUncachedRead error:nil];
       NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
-      NSString* errorString = nil;
-      NSDictionary* plist = [NSPropertyListSerialization propertyListFromData:dataKeywordsPlist
-                                                             mutabilityOption:NSPropertyListImmutable
-                                                                       format:&format errorDescription:&errorString];
+      NSError* errorString = nil;
+      NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:dataKeywordsPlist
+                                                                      options:NSPropertyListImmutable
+                                                                       format:&format error:&errorString];
       NSString* version = [plist objectForKey:@"version"];
       //we can check the version...
       if (!version || [version compare:@"1.9.0" options:NSCaseInsensitiveSearch|NSNumericSearch] == NSOrderedAscending)
@@ -288,11 +288,47 @@ static NSArray* WellKnownLatexKeywords = nil;
     if (adaptedRange.location != NSNotFound)
       adaptedRange.length = adaptedRange.length+tabsCount*[tabToSpacesString length]-tabsCount;
   }//end if (tabToSpacesString != nil)
-  [self insertText:aString];
+  [self insertText:aString replacementRange:NSMakeRange(self.string.length, 0)];
   if (adaptedRange.location != NSNotFound)
     [self setSelectedRange:NSIntersectionRange(adaptedRange, self.textStorage.range)];
 }
 //end insertText:
+
+-(void)insertText:(id)aString replacementRange:(NSRange)replacementRange
+{
+  NSString* tabToSpacesString = [self spacesString];
+  if (!tabToSpacesString){//do nothing
+  }
+  else if ([aString isKindOfClass:[NSString class]])
+    aString = [aString stringByReplacingOccurrencesOfRegex:@"\t" withString:tabToSpacesString];
+  else if ([aString isKindOfClass:[NSAttributedString class]])
+  {
+    NSMutableAttributedString* attributedString = [[aString mutableCopy] autorelease];
+    [attributedString setAttributes:nil range:attributedString.range];
+    NSRange range = [[attributedString string] rangeOfString:@"\t"];
+    while(range.location != NSNotFound)
+    {
+      [attributedString replaceCharactersInRange:range withString:tabToSpacesString];
+      range.location += [tabToSpacesString length];
+      range.length = [attributedString length]-range.location;
+      range = [[attributedString string] rangeOfString:@"\t" options:0 range:range];
+    }//while(range.location != NSNotFound)
+    aString = attributedString;
+  }//end if ([aString isKindOfClass:[NSAttributedString class]])
+  
+  NSString* aStringString =
+    [aString isKindOfClass:[NSString class]] ? aString :
+    [aString isKindOfClass:[NSAttributedString class]] ? [aString string] :
+    nil;
+  if ([aStringString length])
+  {
+    unichar character = [aStringString characterAtIndex:[aStringString length]-1];
+    self->lastCharacterEnablesAutoCompletion =
+      ([[NSCharacterSet letterCharacterSet] characterIsMember:character]) ||
+      ([[NSCharacterSet alphanumericCharacterSet] characterIsMember:character]);
+  }//end if ([aStringString length])
+  [super insertText:aString replacementRange:replacementRange];
+}
 
 -(void) insertText:(id)aString
 {
@@ -618,7 +654,8 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSColor* color = [NSColor colorWithData:[pboard dataForType:NSColorPboardType]];
     NSColor* rgbColor = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
     [self insertText:[NSString stringWithFormat:@"\\color[rgb]{%f,%f,%f}", 
-                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]]];
+                       [rgbColor redComponent], [rgbColor greenComponent], [rgbColor blueComponent]]
+    replacementRange:NSMakeRange(self.string.length, 0)];
   }
   else if ((type = [pboard availableTypeFromArray:
         [NSArray arrayWithObjects:LibraryItemsWrappedPboardType, LibraryItemsArchivedPboardType, LatexitEquationsPboardType, NSPDFPboardType, nil]]))
@@ -730,11 +767,11 @@ static NSArray* WellKnownLatexKeywords = nil;
       [NSString stringWithContentsOfFile:lastFilePath guessEncoding:&encoding error:&error];
       
     if (equationSourceAttributedString)
-      [self insertText:equationSourceAttributedString];
+      [self insertText:equationSourceAttributedString replacementRange:NSMakeRange(self.string.length, 0)];
     else if (rtfContent)
-      [self insertText:rtfContent];
+      [self insertText:rtfContent replacementRange:NSMakeRange(self.string.length, 0)];
     else if (plainTextContent)
-      [self insertText:plainTextContent];
+      [self insertText:plainTextContent replacementRange:NSMakeRange(self.string.length, 0)];
     
     if (uti)
       CFRelease(uti);
@@ -807,7 +844,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     {
       NSString* pdfString = CGPDFDocumentCreateStringRepresentationFromData(pdfWrapperData);
       if (pdfString)
-        [self insertText:pdfString];
+        [self insertText:pdfString replacementRange:NSMakeRange(self.string.length, 0)];
       done = YES;
     }
     else
@@ -815,7 +852,7 @@ static NSArray* WellKnownLatexKeywords = nil;
         NSMutableAttributedString* attributedString = [[NSMutableAttributedString alloc] initWithRTFD:rtfdData documentAttributes:&docAttributes];
       [attributedString setAttributes:nil range:attributedString.range];
       if (attributedString)
-        [self insertText:attributedString];
+        [self insertText:attributedString replacementRange:NSMakeRange(self.string.length, 0)];
       [attributedString release];
       //[super paste:sender];
       done = YES;
@@ -829,7 +866,7 @@ static NSArray* WellKnownLatexKeywords = nil;
     NSMutableAttributedString* attributedString = [[[NSMutableAttributedString alloc] initWithRTF:rtfData documentAttributes:&docAttributes] autorelease];
     [attributedString setAttributes:nil range:attributedString.range];
     if (attributedString)
-      [self insertText:attributedString];
+      [self insertText:attributedString replacementRange:NSMakeRange(self.string.length, 0)];
     //[super paste:sender];
     done = YES;
   }//end @"NSRTFPboardType"
@@ -883,7 +920,7 @@ static NSArray* WellKnownLatexKeywords = nil;
   self->lastCharacterEnablesAutoCompletion = NO;
   NSString* characters = [theEvent characters];
   NSString* charactersIgnoringModifiers = [theEvent charactersIgnoringModifiers];
-  NSInteger flags = [theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
+  NSInteger flags = [theEvent modifierFlags] & NSEventModifierFlagDeviceIndependentFlagsMask;
   if (![charactersIgnoringModifiers isEqualToString:@""])
   {
     unichar character = [charactersIgnoringModifiers characterAtIndex:0];
@@ -949,7 +986,7 @@ static NSArray* WellKnownLatexKeywords = nil;
       if (!left)  left  = @"";
       if (!right) right = @"";
       if (range.location == NSNotFound)
-        [self insertText:[left stringByAppendingString:right]];
+        [self insertText:[left stringByAppendingString:right] replacementRange:NSMakeRange(self.string.length, 0)];
       else
       {
         NSString* selectedText = [[self string] substringWithRange:range];

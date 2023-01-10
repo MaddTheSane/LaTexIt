@@ -188,21 +188,18 @@
   
   //we got all the palettes
   NSMutableArray* palettesAsDictionariesByBundle = [NSMutableArray array];
-  NSEnumerator* palettesEnumerator = [allPalettes objectEnumerator];
-  NSDictionary* paletteInBundle = nil;
-  while((paletteInBundle = [palettesEnumerator nextObject]))
+  for(NSDictionary* paletteInBundle in allPalettes)
   {
     NSString* domainName = [paletteInBundle objectForKey:@"domainName"];
     NSMutableArray* palettesAsDictionaries = [NSMutableArray array];
     NSEnumerator* palettesPathEnumerator = [[paletteInBundle objectForKey:@"paths"] objectEnumerator];
-    NSString* paletteFilePath = nil;
-    while((paletteFilePath = [palettesPathEnumerator nextObject]))
+    for(NSString* paletteFilePath in palettesPathEnumerator)
     {
       NSBundle* bundle = [NSBundle bundleWithPath:paletteFilePath];
-      NSData*   infoPlistData = [NSData dataWithContentsOfFile:[bundle pathForResource:@"Info" ofType:@"plist"] options:NSUncachedRead error:nil];
+      NSURL*    infoPlistURL = [bundle URLForResource:@"Info" withExtension:@"plist"];
       NSPropertyListFormat format;
-      id plist = !infoPlistData ? nil :
-        [NSPropertyListSerialization propertyListFromData:infoPlistData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+      id plist = !infoPlistURL ? nil :
+        [NSPropertyListSerialization propertyListWithStream:[[[NSInputStream alloc] initWithURL:infoPlistURL] autorelease] options:NSPropertyListImmutable format:&format error:nil];
       if ([plist isKindOfClass:[NSDictionary class]])
       {
         NSString* paletteName = [plist objectForKey:@"name"];
@@ -277,9 +274,7 @@
 
   [self->orderedPalettes release];
   self->orderedPalettes = [[NSMutableArray alloc] init];
-  NSEnumerator* enumerator = [palettesAsDictionariesByBundle objectEnumerator];
-  NSArray* orderedPalettesInBundle = nil;
-  while((orderedPalettesInBundle = [enumerator nextObject]))
+  for(NSArray* orderedPalettesInBundle in palettesAsDictionariesByBundle)
     [self->orderedPalettes addObjectsFromArray:orderedPalettesInBundle];
 }
 //end _loadPalettes
@@ -366,7 +361,7 @@
     NSInteger nbRows    = (nbItems/numberOfItemsPerRow+1)+(nbItems%numberOfItemsPerRow ? 0 : -1);
     PaletteCell* prototype = [[[PaletteCell alloc] initImageCell:nil] autorelease];
     [prototype setImageAlignment:NSImageAlignCenter];
-    [prototype setImageScaling:NSScaleToFit];
+    [prototype setImageScaling:NSImageScaleAxesIndependently];
     while([matrix numberOfRows])
       [matrix removeRow:0];
     [matrix setPrototype:prototype];

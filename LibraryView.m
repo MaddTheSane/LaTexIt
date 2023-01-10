@@ -187,12 +187,12 @@
 -(void) mouseDown:(NSEvent*)theEvent
 {
   self->willEdit = NO;
-  if ([theEvent modifierFlags] & NSControlKeyMask)
+  if ([theEvent modifierFlags] & NSEventModifierFlagControl)
   {
     NSMenu* popupMenu = [(LibraryWindowController*)[[self window] windowController] actionMenu];
     [NSMenu popUpContextMenu:popupMenu withEvent:theEvent forView:self];
   }
-  else if ([theEvent modifierFlags] & (NSCommandKeyMask | NSShiftKeyMask))
+  else if ([theEvent modifierFlags] & (NSEventModifierFlagCommand | NSEventModifierFlagShift))
     [super mouseDown:theEvent];
   else //if click without relevant modifiers
   {
@@ -218,7 +218,7 @@
     }//end if ([theEvent clickCount] == 1)
     else if ([theEvent clickCount] == 2)
     {
-      [self activateSelectedItem:(([theEvent modifierFlags] & NSAlternateKeyMask) != 0)];
+      [self activateSelectedItem:(([theEvent modifierFlags] & NSEventModifierFlagOption) != 0)];
     }//end if ([theEvent clickCount] == 2)
     else if ([theEvent clickCount] == 3)
     {
@@ -310,7 +310,7 @@
       [self edit:self];
   }
   else if (keyCode == 49) //space
-    [self activateSelectedItem:(([theEvent modifierFlags] & NSAlternateKeyMask) != 0)];
+    [self activateSelectedItem:(([theEvent modifierFlags] & NSEventModifierFlagOption) != 0)];
   else
     [super interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
 }

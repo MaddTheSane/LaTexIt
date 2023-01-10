@@ -60,7 +60,7 @@
   [super drawRect:aRect];
   NSImage* imageToDisplay = isDown ? [self alternateImage] : [self image];
   NSSize size = [imageToDisplay size];
-  [imageToDisplay drawInRect:[self bounds] fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0];
+  [imageToDisplay drawInRect:[self bounds] fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositingOperationSourceOver fraction:1.0];
 }
 
 @end

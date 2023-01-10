@@ -202,7 +202,7 @@
 
 -(void) _savePanelDidEnd:(NSSavePanel*)theSavePanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
-  if (returnCode == NSFileHandlingPanelOKButton)
+  if (returnCode == NSModalResponseOK)
   {
     BOOL onlySelection = ([exportOnlySelectedButton state] == NSOnState);
     NSArray* selectedHistoryItems = [[[self->historyView historyItemsController] arrangedObjects] objectsAtIndexes:[self->historyView selectedRowIndexes]];
@@ -265,7 +265,7 @@
 -(void) _openPanelDidEnd:(NSOpenPanel*)openPanel returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
   history_import_option_t import_option = (history_import_option_t)[self->importOptionPopUpButton selectedTag];
-  if (returnCode == NSOKButton)
+  if (returnCode == NSModalResponseOK)
   {
     BOOL ok = [[HistoryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option];
     if (!ok)
@@ -282,7 +282,7 @@
       [[[HistoryManager sharedManager] managedObjectContext] processPendingChanges];
       [self->historyView reloadData];
     }
-  }//end if (returnCode == NSOKButton)
+  }//end if (returnCode == NSModalResponseOK)
 }
 //end _openPanelDidEnd:returnCode:contextInfo;
 

@@ -501,16 +501,16 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [self->upperImageBox setFrame:NSMakeRect(0, 0, superviewFrame.size.width-zoomBoxFrame.size.width, superviewFrame.size.height)];
       [self->upperBoxZoomBox  setFrame:NSMakeRect(superviewFrame.size.width-zoomBoxFrame.size.width, 0, zoomBoxFrame.size.width, superviewFrame.size.height)];
       
-      [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) horizontalScroller] setControlSize:NSMiniControlSize];
-      [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) verticalScroller]   setControlSize:NSMiniControlSize];
-      [[(NSScrollView*)[[[self->upperBoxImageView superview] superview] dynamicCastToClass:[NSScrollView class]] verticalScroller] setControlSize:NSMiniControlSize];
+      [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) horizontalScroller] setControlSize:NSControlSizeMini];
+      [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) verticalScroller]   setControlSize:NSControlSizeMini];
+      [[(NSScrollView*)[[[self->upperBoxImageView superview] superview] dynamicCastToClass:[NSScrollView class]] verticalScroller] setControlSize:NSControlSizeMini];
       
       superviewFrame = [self->lowerBox frame];
       [self->lowerBoxSplitView setFrame:NSMakeRect(0,  34, superviewFrame.size.width, superviewFrame.size.height-34)];
       [self->lowerBoxSplitView setDividerThickness:0.];
       NSScrollView* sourceTextScrollView = (NSScrollView*)[[self->lowerBoxSourceTextView superview] superview];
-      [[sourceTextScrollView  horizontalScroller] setControlSize:NSMiniControlSize];
-      [[sourceTextScrollView  verticalScroller]   setControlSize:NSMiniControlSize];
+      [[sourceTextScrollView  horizontalScroller] setControlSize:NSControlSizeMini];
+      [[sourceTextScrollView  verticalScroller]   setControlSize:NSControlSizeMini];
       [self->lowerBoxChangePreambleButton setFrameOrigin:NSMakePoint(0, superviewFrame.size.height-[self->lowerBoxChangePreambleButton frame].size.height)];
       [self->lowerBoxControlsBox setFrame:NSMakeRect(0,  0, superviewFrame.size.width, 34)];
 
@@ -518,36 +518,36 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         NSMakeRect(0, 18, [[self->lowerBoxControlsBoxLatexModeView superview] frame].size.width, 16);
       [self->lowerBoxControlsBoxLatexModeView setFrame:lowerBoxControlsBoxLatexModeViewFrame];
       superviewFrame = [self->lowerBoxControlsBoxLatexModeView frame];
-      [[self->lowerBoxControlsBoxLatexModeAutoButton cell] setControlSize:NSMiniControlSize];
-      [self->lowerBoxControlsBoxLatexModeAutoButton setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
+      [[self->lowerBoxControlsBoxLatexModeAutoButton cell] setControlSize:NSControlSizeMini];
+      [self->lowerBoxControlsBoxLatexModeAutoButton setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeMini]]];
       [self->lowerBoxControlsBoxLatexModeAutoButton sizeToFit];
       [self->lowerBoxControlsBoxLatexModeAutoButton setFrameOrigin:NSZeroPoint];
       [self->lowerBoxControlsBoxLatexModeAutoButton centerInSuperviewHorizontally:NO vertically:YES];
-      [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setControlSize:NSMiniControlSize];
-      [self->lowerBoxControlsBoxLatexModeSegmentedControl setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
+      [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setControlSize:NSControlSizeMini];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeMini]]];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl sizeToFitWithSegmentWidth:floor(superviewFrame.size.width-8-NSMaxX([self->lowerBoxControlsBoxLatexModeAutoButton frame]))/[self->lowerBoxControlsBoxLatexModeSegmentedControl segmentCount] useSameSize:YES];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl setFrameOrigin:NSMakePoint(NSMaxX([self->lowerBoxControlsBoxLatexModeAutoButton frame]), 0)];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl centerInSuperviewHorizontally:NO vertically:YES];
-      [[self->lowerBoxControlsBoxFontSizeLabel cell] setControlSize:NSMiniControlSize];
-      [self->lowerBoxControlsBoxFontSizeLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
+      [[self->lowerBoxControlsBoxFontSizeLabel cell] setControlSize:NSControlSizeMini];
+      [self->lowerBoxControlsBoxFontSizeLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeMini]]];
       [self->lowerBoxControlsBoxFontSizeLabel sizeToFit];
-      [[self->lowerBoxControlsBoxFontSizeTextField cell] setControlSize:NSMiniControlSize];
-      [self->lowerBoxControlsBoxFontSizeTextField setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
+      [[self->lowerBoxControlsBoxFontSizeTextField cell] setControlSize:NSControlSizeMini];
+      [self->lowerBoxControlsBoxFontSizeTextField setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeMini]]];
       [self->lowerBoxControlsBoxFontSizeTextField sizeToFit];
       [self->lowerBoxControlsBoxFontSizeLabel setFrameOrigin:NSMakePoint(0, ([self->lowerBoxControlsBoxFontSizeTextField frame].size.height-[self->lowerBoxControlsBoxFontSizeLabel frame].size.height)/2)];
       [self->lowerBoxControlsBoxFontSizeTextField setFrameOrigin:NSMakePoint(NSMaxX([self->lowerBoxControlsBoxFontSizeLabel frame])+2, 0)];
-      [[self->lowerBoxControlsBoxFontColorLabel cell] setControlSize:NSMiniControlSize];
-      [self->lowerBoxControlsBoxFontColorLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
+      [[self->lowerBoxControlsBoxFontColorLabel cell] setControlSize:NSControlSizeMini];
+      [self->lowerBoxControlsBoxFontColorLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeMini]]];
       [self->lowerBoxControlsBoxFontColorLabel sizeToFit];
-      [[self->lowerBoxControlsBoxFontColorWell cell] setControlSize:NSMiniControlSize];
+      [[self->lowerBoxControlsBoxFontColorWell cell] setControlSize:NSControlSizeMini];
       [self->lowerBoxControlsBoxFontColorWell setFrame:NSRectChange([self->lowerBoxControlsBoxFontColorWell frame], NO, 0, YES, 0, YES, 2*[self->lowerBoxControlsBoxFontSizeTextField frame].size.height, YES, [self->lowerBoxControlsBoxFontSizeTextField frame].size.height)];
       [self->lowerBoxControlsBoxFontColorLabel setFrameOrigin:
         NSMakePoint(NSMaxX([self->lowerBoxControlsBoxFontSizeTextField frame])+2,
                     ([self->lowerBoxControlsBoxFontColorWell frame].size.height-[self->lowerBoxControlsBoxFontColorLabel frame].size.height)/2)];
       [self->lowerBoxControlsBoxFontColorWell setFrameOrigin:NSMakePoint(NSMaxX([self->lowerBoxControlsBoxFontColorLabel frame]), 0)];
 
-      [[self->lowerBoxLatexizeButton cell] setControlSize:NSMiniControlSize];
-      [self->lowerBoxLatexizeButton setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
+      [[self->lowerBoxLatexizeButton cell] setControlSize:NSControlSizeMini];
+      [self->lowerBoxLatexizeButton setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeMini]]];
       [self->lowerBoxLatexizeButton sizeToFit];
       NSRect lowerBoxLatexizeButtonFrame = [self->lowerBoxLatexizeButton frame];
       [self->lowerBoxLatexizeButton setFrame:NSMakeRect(superviewFrame.size.width-lowerBoxLatexizeButtonFrame.size.width,
@@ -562,7 +562,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
                                                  
       NSPanel* miniWindow =
         [[MyDocumentPanel alloc] initWithContentRect:[[window contentView] frame]
-                                   styleMask:NSTitledWindowMask|NSUtilityWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask
+                                   styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskUtilityWindow|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable
                                      backing:NSBackingStoreBuffered defer:NO];
       [miniWindow setReleasedWhenClosed:YES];
       [miniWindow setDelegate:(id)self];
@@ -616,16 +616,16 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         [self->upperImageBox setFrame:NSMakeRect(20, 0, superviewFrame.size.width-20-zoomBoxFrame.size.width, superviewFrame.size.height-16)];
         [self->upperBoxZoomBox  setFrame:NSMakeRect(superviewFrame.size.width-zoomBoxFrame.size.width, 0, zoomBoxFrame.size.width, superviewFrame.size.height-16)];
         
-        [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) horizontalScroller] setControlSize:NSRegularControlSize];
-        [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) verticalScroller]   setControlSize:NSRegularControlSize];
-        [[(NSScrollView*)[[[self->upperBoxImageView superview] superview] dynamicCastToClass:[NSScrollView class]] verticalScroller] setControlSize:NSRegularControlSize];
+        [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) horizontalScroller] setControlSize:NSControlSizeRegular];
+        [[((NSScrollView*)[[self->upperBoxLogTableView superview] superview]) verticalScroller]   setControlSize:NSControlSizeRegular];
+        [[(NSScrollView*)[[[self->upperBoxImageView superview] superview] dynamicCastToClass:[NSScrollView class]] verticalScroller] setControlSize:NSControlSizeRegular];
 
         superviewFrame = [self->lowerBox frame];
         NSScrollView* sourceTextScrollView = (NSScrollView*)[[self->lowerBoxSourceTextView superview] superview];
         [self->lowerBoxSplitView setFrame:NSMakeRect(20+1,  80, superviewFrame.size.width-2*(20+1), superviewFrame.size.height-80)];
         [self->lowerBoxSplitView setDividerThickness:-1];
-        [[sourceTextScrollView  horizontalScroller] setControlSize:NSRegularControlSize];
-        [[sourceTextScrollView  verticalScroller]   setControlSize:NSRegularControlSize];
+        [[sourceTextScrollView  horizontalScroller] setControlSize:NSControlSizeRegular];
+        [[sourceTextScrollView  verticalScroller]   setControlSize:NSControlSizeRegular];
         superviewFrame = [self->lowerBoxSplitView frame];
         [sourceTextScrollView setFrame:NSMakeRect(0, 0, superviewFrame.size.width, superviewFrame.size.height)];
         superviewFrame = [self->lowerBox frame];
@@ -639,34 +639,34 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [self->lowerBoxControlsBoxLatexModeView setFrame:NSMakeRect(0, 48, 342, 32)];
       [self->lowerBoxControlsBoxLatexModeView centerInSuperviewHorizontally:YES vertically:NO];
       superviewFrame = [self->lowerBoxControlsBoxLatexModeView frame];
-      [[self->lowerBoxControlsBoxLatexModeAutoButton cell] setControlSize:NSSmallControlSize];
-      [self->lowerBoxControlsBoxLatexModeAutoButton setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]]];
+      [[self->lowerBoxControlsBoxLatexModeAutoButton cell] setControlSize:NSControlSizeSmall];
+      [self->lowerBoxControlsBoxLatexModeAutoButton setFont:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeSmall]]];
       [self->lowerBoxControlsBoxLatexModeAutoButton sizeToFit];
       [self->lowerBoxControlsBoxLatexModeAutoButton setFrameOrigin:NSMakePoint(6, 0)];
       [self->lowerBoxControlsBoxLatexModeAutoButton centerInSuperviewHorizontally:NO vertically:YES];
-      [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setControlSize:NSRegularControlSize];
-      [self->lowerBoxControlsBoxLatexModeSegmentedControl setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
+      [[self->lowerBoxControlsBoxLatexModeSegmentedControl cell] setControlSize:NSControlSizeRegular];
+      [self->lowerBoxControlsBoxLatexModeSegmentedControl setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]]];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl sizeToFitWithSegmentWidth:(self->lowerBoxControlsBoxLatexModeSegmentedControlMinimumSize.width-8)/[self->lowerBoxControlsBoxLatexModeSegmentedControl segmentCount] useSameSize:YES];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl setFrameSize:self->lowerBoxControlsBoxLatexModeSegmentedControlMinimumSize];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl setFrameOrigin:NSMakePoint(NSMaxX([self->lowerBoxControlsBoxLatexModeAutoButton frame])+6, 0)];
       [self->lowerBoxControlsBoxLatexModeSegmentedControl centerInSuperviewHorizontally:NO vertically:YES];
-      [[self->lowerBoxControlsBoxFontSizeLabel cell] setControlSize:NSRegularControlSize];
-      [self->lowerBoxControlsBoxFontSizeLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
+      [[self->lowerBoxControlsBoxFontSizeLabel cell] setControlSize:NSControlSizeRegular];
+      [self->lowerBoxControlsBoxFontSizeLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]]];
       [self->lowerBoxControlsBoxFontSizeLabel sizeToFit];
-      [[self->lowerBoxControlsBoxFontSizeTextField cell] setControlSize:NSRegularControlSize];
-      [self->lowerBoxControlsBoxFontSizeTextField setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
+      [[self->lowerBoxControlsBoxFontSizeTextField cell] setControlSize:NSControlSizeRegular];
+      [self->lowerBoxControlsBoxFontSizeTextField setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]]];
       [self->lowerBoxControlsBoxFontSizeTextField sizeToFit];
       [self->lowerBoxControlsBoxFontSizeLabel setFrameOrigin:NSMakePoint(20, 15)];
       [self->lowerBoxControlsBoxFontSizeTextField setFrameOrigin:NSMakePoint(NSMaxX([self->lowerBoxControlsBoxFontSizeLabel frame])+4, 12)];
-      [[self->lowerBoxControlsBoxFontColorLabel cell] setControlSize:NSRegularControlSize];
-      [self->lowerBoxControlsBoxFontColorLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
+      [[self->lowerBoxControlsBoxFontColorLabel cell] setControlSize:NSControlSizeRegular];
+      [self->lowerBoxControlsBoxFontColorLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]]];
       [self->lowerBoxControlsBoxFontColorLabel sizeToFit];
-      [[self->lowerBoxControlsBoxFontColorWell cell] setControlSize:NSRegularControlSize];
+      [[self->lowerBoxControlsBoxFontColorWell cell] setControlSize:NSControlSizeRegular];
       [self->lowerBoxControlsBoxFontColorLabel setFrameOrigin:NSMakePoint(NSMaxX([self->lowerBoxControlsBoxFontSizeTextField frame])+10, 15)];
       [self->lowerBoxControlsBoxFontColorWell setFrame:NSMakeRect(NSMaxX([self->lowerBoxControlsBoxFontColorLabel frame])+4, 10, 52, 26)];
 
-      [[self->lowerBoxLatexizeButton cell] setControlSize:NSRegularControlSize];
-      [self->lowerBoxLatexizeButton setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
+      [[self->lowerBoxLatexizeButton cell] setControlSize:NSControlSizeRegular];
+      [self->lowerBoxLatexizeButton setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]]];
       [self->lowerBoxLatexizeButton sizeToFit];
       superviewFrame = [[self->lowerBoxControlsBoxLatexModeView superview] frame];
       NSRect lowerBoxLatexizeButtonFrame = [self->lowerBoxLatexizeButton frame];
@@ -686,7 +686,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       {
         NSWindow* normalWindow =
           [[MyDocumentWindow alloc] initWithContentRect:[window frame]
-                                     styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask
+                                     styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable
                                        backing:NSBackingStoreBuffered defer:NO];
         [normalWindow setReleasedWhenClosed:YES];
         [normalWindow setDelegate:(id)self];
@@ -1129,7 +1129,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [self->lowerBoxControlsBoxFontColorWell deactivate];
       [[[AppController appController] whiteColorWarningWindow] center];
       NSInteger result = [NSApp runModalForWindow:[[AppController appController] whiteColorWarningWindow]];
-      if (result == NSCancelButton)
+      if (result == NSModalResponseCancel)
         mustProcess = NO;
     }
   }//end if (runBegin && mustProcess)
@@ -1729,7 +1729,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
     [currentSavePanel setNameFieldStringValue:file];
     [currentSavePanel beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse result) {
       DocumentExtraPanelsController* controller = [self lazyDocumentExtraPanelsController:YES];
-      if ((result == NSOKButton) && [self->upperBoxImageView image])
+      if ((result == NSModalResponseOK) && [self->upperBoxImageView image])
       {
         export_format_t exportFormat = [controller saveAccessoryViewExportFormat];
         NSString* filePath = [[currentSavePanel URL] path];
@@ -1737,7 +1737,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
                    scaleAsPercent:[controller saveAccessoryViewScalePercent]
                         jpegColor:[controller saveAccessoryViewOptionsJpegBackgroundColor] jpegQuality:[controller saveAccessoryViewOptionsJpegQualityPercent]
                          filePath:filePath];
-      }//end if ((result == NSOKButton) && [self->upperBoxImageView image])
+      }//end if ((result == NSModalResponseOK) && [self->upperBoxImageView image])
       [controller setCurrentSavePanel:nil];
     }];
   }//end if(![controller currentSavePanel])//not already onscreen
@@ -2828,7 +2828,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [panel beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse result) {
     BOOL synchronizeEnabled =
       [[[self->backSyncOptions objectForKey:@"synchronizeEnabled"] dynamicCastToClass:[NSNumber class]] boolValue];
-    if (result == NSFileHandlingPanelOKButton)
+    if (result == NSModalResponseOK)
     {
       [self closeBackSyncFile];
       NSString* filename = [[panel URL] path];
@@ -2839,7 +2839,7 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
         [self openBackSyncFile:filename options:[self->backSyncOptions dictionary]];
         [self VDKQueue:nil receivedNotification:VDKQueueWriteNotification forPath:self->backSyncFilePath];
       }//end if (synchronizeEnabled)
-    }//end if (result == NSFileHandlingPanelOKButton)
+    }//end if (result == NSModalResponseOK)
   }];
 }
 //end saveAs:

@@ -92,18 +92,18 @@
   [self.fontColorLabel setStringValue:NSLocalizedString(@"Color :", @"")];
   [self.fontColorWell setColor:[NSColor blackColor]];
 
-  [[self.fontSizeLabel cell] setControlSize:NSRegularControlSize];
-  [self.fontSizeLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
+  [[self.fontSizeLabel cell] setControlSize:NSControlSizeRegular];
+  [self.fontSizeLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]]];
   [self.fontSizeLabel sizeToFit];
-  [[self.fontSizeTextField cell] setControlSize:NSRegularControlSize];
-  [self.fontSizeTextField setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
+  [[self.fontSizeTextField cell] setControlSize:NSControlSizeRegular];
+  [self.fontSizeTextField setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]]];
   [self.fontSizeTextField sizeToFit];
   [self.fontSizeLabel setFrameOrigin:NSMakePoint(20, self.fontSizeLabel.frame.origin.y)];
   [self.fontSizeTextField setFrameOrigin:NSMakePoint(NSMaxX([self.fontSizeLabel frame])+4, self.fontSizeTextField.frame.origin.y)];
-  [[self.fontColorLabel cell] setControlSize:NSRegularControlSize];
-  [self.fontColorLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]]];
+  [[self.fontColorLabel cell] setControlSize:NSControlSizeRegular];
+  [self.fontColorLabel setFont:[NSFont controlContentFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]]];
   [self.fontColorLabel sizeToFit];
-  [[self.fontColorWell cell] setControlSize:NSRegularControlSize];
+  [[self.fontColorWell cell] setControlSize:NSControlSizeRegular];
   [self.fontColorLabel setFrameOrigin:NSMakePoint(NSMaxX([self.fontSizeTextField frame])+10, self.fontColorLabel.frame.origin.y)];
   [self.fontColorWell setFrame:NSMakeRect(NSMaxX([self.fontColorLabel frame])+4, self.fontColorWell.frame.origin.y, 52, 26)];
 

@@ -156,7 +156,7 @@
     [wrapImage addRepresentation:[self->image bestImageRepresentationInContext:[NSGraphicsContext currentContext]]];
     [wrapImage drawInRect:NSMakeRect(0.f, 0.f, imageFrame.size.width, imageFrame.size.height)
                    fromRect:NSMakeRect(0.f, 0.f, imageSize.width, imageSize.height)
-                  operation:NSCompositeSourceOver fraction:1.0f];
+                  operation:NSCompositingOperationSourceOver fraction:1.0f];
     [wrapImage release];
     [NSGraphicsContext restoreGraphicsState];
   }//end if image

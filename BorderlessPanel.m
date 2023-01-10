@@ -14,7 +14,7 @@
 -(id) initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)styleMask backing:(NSBackingStoreType)bufferingType
                     defer:(BOOL)deferCreation
 {
-  if ((!(self = [super initWithContentRect:contentRect styleMask:NSBorderlessWindowMask backing:bufferingType defer:deferCreation])))
+  if ((!(self = [super initWithContentRect:contentRect styleMask:NSWindowStyleMaskBorderless backing:bufferingType defer:deferCreation])))
     return nil;
   return self;
 }

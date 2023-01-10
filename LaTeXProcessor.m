@@ -311,8 +311,7 @@ static LaTeXProcessor* sharedInstance = nil;
       pdfDocument = [[PDFDocument alloc] initWithData:data2];
       PDFPage* pdfPage = [pdfDocument pageAtIndex:0];
       pdfAnnotation = !pdfPage ? nil :
-        isMacOS10_13OrAbove() ? [[PDFAnnotationText alloc] initWithBounds:NSZeroRect forType:PDFAnnotationSubtypeText withProperties:nil] :
-        [[PDFAnnotationText alloc] initWithBounds:NSZeroRect];
+         [[PDFAnnotation alloc] initWithBounds:NSZeroRect forType:PDFAnnotationSubtypeText withProperties:nil] ;
       [pdfAnnotation setShouldDisplay:NO];
       [pdfAnnotation setShouldPrint:NO];
       NSDictionary* rootObject =

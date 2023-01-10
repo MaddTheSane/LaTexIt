@@ -180,12 +180,12 @@ typedef NSInteger NSDraggingContext;
       [self->copyAsContextualMenu addItemWithTitle:NSLocalizedString(@"Copy the image as", @"") action:nil keyEquivalent:@""];
     NSMenu* subMenu = [[NSMenu alloc] init];
     [subMenu addItemWithTitle:NSLocalizedString(@"Default Format", @"") target:self action:@selector(copy:)
-                keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask tag:-1];
+                keyEquivalent:@"c" keyEquivalentModifierMask:NSEventModifierFlagCommand|NSEventModifierFlagOption tag:-1];
     [subMenu addItem:[NSMenuItem separatorItem]];
     [subMenu addItemWithTitle:@"PDF" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
                           tag:(NSInteger)EXPORT_FORMAT_PDF];
     [subMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"") target:self action:@selector(copy:)
-                keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask
+                keyEquivalent:@"c" keyEquivalentModifierMask:NSEventModifierFlagCommand|NSEventModifierFlagShift|NSEventModifierFlagOption
                           tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
     [subMenu addItemWithTitle:@"EPS" target:self action:@selector(copy:) keyEquivalent:@"" keyEquivalentModifierMask:0
                           tag:(NSInteger)EXPORT_FORMAT_EPS];
@@ -254,9 +254,9 @@ typedef NSInteger NSDraggingContext;
   if ([charactersIgnoringModifiers length])
   {
     unichar character = [charactersIgnoringModifiers characterAtIndex:0];
-    handlesEvent = ((character == 'T') && ([theEvent modifierFlags] & NSCommandKeyMask)) ||
-                   ((character == 'T') && ([theEvent modifierFlags] & NSCommandKeyMask) && ([theEvent modifierFlags] & NSShiftKeyMask)) ||
-                   ((character == 'L') && ([theEvent modifierFlags] & NSCommandKeyMask) && ([theEvent modifierFlags] & NSShiftKeyMask));
+    handlesEvent = ((character == 'T') && ([theEvent modifierFlags] & NSEventModifierFlagCommand)) ||
+                   ((character == 'T') && ([theEvent modifierFlags] & NSEventModifierFlagCommand) && ([theEvent modifierFlags] & NSEventModifierFlagShift)) ||
+                   ((character == 'L') && ([theEvent modifierFlags] & NSEventModifierFlagCommand) && ([theEvent modifierFlags] & NSEventModifierFlagShift));
     if (handlesEvent)
       [[self->document lowerBoxLatexizeButton] performClick:self];
   }
@@ -377,7 +377,7 @@ typedef NSInteger NSDraggingContext;
 //begins a drag operation
 -(void) mouseDown:(NSEvent*)theEvent
 {
-  if ([theEvent modifierFlags] & NSControlKeyMask)
+  if ([theEvent modifierFlags] & NSEventModifierFlagControl)
     [super mouseDown:theEvent];
   else
     [super mouseDown:theEvent];
@@ -393,7 +393,7 @@ typedef NSInteger NSDraggingContext;
 
 -(void) mouseDragged:(NSEvent*)event
 {
-  if (!self->isDragging && !([event modifierFlags] & NSControlKeyMask))
+  if (!self->isDragging && !([event modifierFlags] & NSEventModifierFlagControl))
   {
     NSImage* iconDragged = [self imageForDrag];
     NSSize   iconSize = [iconDragged size];
@@ -410,7 +410,7 @@ typedef NSInteger NSDraggingContext;
       {
         NSImage* iconDragged = [self imageForDrag];
 
-        NSPasteboard* pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+        NSPasteboard* pboard = [NSPasteboard pasteboardWithName:NSPasteboardNameDrag];
         NSFilePromiseProvider* filePromiseProvider = [[[NSFilePromiseProvider alloc] initWithFileType:(NSString*)kUTTypeData delegate:self] autorelease];
         NSDraggingItem* draggingItem = [[[NSDraggingItem alloc] initWithPasteboardWriter:filePromiseProvider] autorelease];
         draggingItem.imageComponentsProvider = ^NSArray<NSDraggingImageComponent *> * _Nonnull{
@@ -441,7 +441,7 @@ typedef NSInteger NSDraggingContext;
         self->isDragging = NO;
       }//end if (!isMacOS10_15OrAbove())
     }//end if (iconDragged)
-  }//end if (!self->isDragging && !([event modifierFlags] & NSControlKeyMask))
+  }//end if (!self->isDragging && !([event modifierFlags] & NSEventModifierFlagControl))
   [super mouseDragged:event];
 }
 //end mouseDragged:
@@ -465,7 +465,7 @@ typedef NSInteger NSDraggingContext;
   if (self->shouldRedrag)
   {
     NSPasteboard* pboard = session.draggingPasteboard;
-    [self performSelector:@selector(performProgrammaticRedrag:) withObject:(!pboard ? [NSPasteboard pasteboardWithName:NSDragPboard] : pboard) afterDelay:0];
+    [self performSelector:@selector(performProgrammaticRedrag:) withObject:(!pboard ? [NSPasteboard pasteboardWithName:NSPasteboardNameDrag] : pboard) afterDelay:0];
   }//end if (self->shouldRedrag)
 }
 //end draggingSession:endedAtPoint:operation:
@@ -564,7 +564,7 @@ typedef NSInteger NSDraggingContext;
 
 -(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
 {
-  [self performProgrammaticDragCancellation:[NSPasteboard pasteboardWithName:NSDragPboard]];
+  [self performProgrammaticDragCancellation:[NSPasteboard pasteboardWithName:NSPasteboardNameDrag]];
 }
 //end dragFilterWindowController:exportFormatDidChange:
 
@@ -1295,7 +1295,7 @@ typedef NSInteger NSDraggingContext;
       [self->imageRep drawInRect:destRect];
     else
       [[self image] drawInRect:destRect fromRect:NSMakeRect(0, 0, naturalImageSize.width, naturalImageSize.height)
-              operation:NSCompositeSourceOver fraction:1.];
+              operation:NSCompositingOperationSourceOver fraction:1.];
     CGContextRestoreGState(cgContext);
   }//end if (fitToView)
   else//if (!fitToView)
@@ -1370,7 +1370,7 @@ typedef NSInteger NSDraggingContext;
       [self->imageRep drawInRect:destRect];
     else
       [[self image] drawInRect:destRect fromRect:NSMakeRect(0, 0, self->naturalPDFSize.width, self->naturalPDFSize.height)
-              operation:NSCompositeSourceOver fraction:1.];
+              operation:NSCompositingOperationSourceOver fraction:1.];
     CGContextRestoreGState(cgContext);
 
     NSRect documentRect = [self frame];
@@ -1518,8 +1518,8 @@ typedef NSInteger NSDraggingContext;
     }//end if (newSize.width > containerSize)*/
     [scrollView setHasHorizontalScroller:(newSize.width > containerSize.width)];
     [scrollView setHasVerticalScroller:(newSize.height > containerSize.height)];
-    [[scrollView horizontalScroller] setControlSize:NSSmallControlSize];
-    [[scrollView verticalScroller] setControlSize:NSSmallControlSize];
+    [[scrollView horizontalScroller] setControlSize:NSControlSizeSmall];
+    [[scrollView verticalScroller] setControlSize:NSControlSizeSmall];
     [self setFrame:NSMakeRect(0, 0, MAX([scrollView contentSize].width, newSize.width), MAX([scrollView contentSize].height, newSize.height))];
   }//end if (!doNotClipPreview)
 }

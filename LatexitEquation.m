@@ -678,6 +678,31 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
             }
           }//end if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
         }//end if ([annotation isKindOfClass:PDFAnnotationText])
+        else if ([annotation isKindOfClass:[PDFAnnotation class]])
+        {
+          PDFAnnotation* annotationTextCandidate = (PDFAnnotation*)annotation;
+          if (![annotationTextCandidate.type isEqualToString:PDFAnnotationSubtypeText]) {
+            continue;
+          }
+          DebugLog(1, @"annotationTextCandidate = %@", annotationTextCandidate);
+          if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+          {
+            NSString* contents = [annotationTextCandidate contents];
+            NSData* data = !contents ? nil : [NSData dataWithBase64:contents];
+            @try{
+              NSError* decodingError = nil;
+              embeddedInfos = !data ? nil :
+                isMacOS10_13OrAbove() ? [[NSKeyedUnarchiver unarchivedObjectOfClasses:[self allowedSecureDecodedClasses] fromData:data error:&decodingError]  dynamicCastToClass:[NSDictionary class]]:
+                [[NSKeyedUnarchiver unarchiveObjectWithData:data] dynamicCastToClass:[NSDictionary class]];
+              if (decodingError != nil)
+                DebugLog(0, @"decoding error : %@", decodingError);
+              DebugLog(1, @"embeddedInfos = %@", embeddedInfos);
+            }
+            @catch(NSException* e){
+              DebugLog(0, @"exception : %@", e);
+            }
+          }//end if ([[annotationTextCandidate userName] isEqualToString:@"fr.chachatelier.pierre.LaTeXiT"])
+        }//end if ([annotation isKindOfClass:PDFAnnotation])
       }//end for each annotation
     }
     @catch(NSException* e) {

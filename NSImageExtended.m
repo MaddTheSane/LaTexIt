@@ -93,7 +93,7 @@
     [NSGraphicsContext saveGraphicsState];
     BOOL isFlipped = NO;//[self isFlipped];
     [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:isFlipped]];
-    [self drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+    [self drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositingOperationCopy fraction:1.0];
     [NSGraphicsContext restoreGraphicsState];
     CGImageRef img = CGBitmapContextCreateImage(ctx);
     result = !img ? nil : [[NSBitmapImageRep alloc] initWithCGImage:img];
@@ -230,7 +230,7 @@
       NSGraphicsContext* oldContext = [NSGraphicsContext currentContext];
       NSGraphicsContext* newContext = [NSGraphicsContext graphicsContextWithGraphicsPort:cgContext flipped:NO];
       [NSGraphicsContext setCurrentContext:newContext];
-      [self drawInRect:NSRectFromCGRect(bounds) fromRect:NSMakeRect(0, 0, [self size].width, [self size].height) operation:NSCompositeSourceOver fraction:1.0];
+      [self drawInRect:NSRectFromCGRect(bounds) fromRect:NSMakeRect(0, 0, [self size].width, [self size].height) operation:NSCompositingOperationSourceOver fraction:1.0];
       [NSGraphicsContext setCurrentContext:oldContext];
     }//end if (cgContext)
     

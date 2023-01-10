@@ -1582,7 +1582,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [self->applyPreambleToLibraryAlert setMessageText:NSLocalizedString(@"Do you really want to apply that preamble to the library items ?", @"")];
     [self->applyPreambleToLibraryAlert setInformativeText:
       NSLocalizedString(@"Their old preamble will be overwritten. If it was a special preamble that had been tuned to generate them, it will be lost.", @"")];
-    [self->applyPreambleToLibraryAlert setAlertStyle:NSWarningAlertStyle];
+    [self->applyPreambleToLibraryAlert setAlertStyle:NSAlertStyleWarning];
     [self->applyPreambleToLibraryAlert addButtonWithTitle:NSLocalizedString(@"Apply", @"")];
     [self->applyPreambleToLibraryAlert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
   }
@@ -1648,7 +1648,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(IBAction) compositionConfigurationsProgramArgumentsClose:(id)sender
 {
   [self->compositionConfigurationsProgramArgumentsPanel makeFirstResponder:nil];//commit editing
-  [NSApp endSheet:self->compositionConfigurationsProgramArgumentsPanel returnCode:NSOKButton];
+  [NSApp endSheet:self->compositionConfigurationsProgramArgumentsPanel returnCode:NSModalResponseOK];
   [self updateProgramArgumentsToolTips];
 }
 //end compositionConfigurationsProgramArgumentsClose:
@@ -1699,7 +1699,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(IBAction) compositionConfigurationsManagerClose:(id)sender
 {
   [self->compositionConfigurationsManagerPanel makeFirstResponder:nil];//commit editing
-  [NSApp endSheet:self->compositionConfigurationsManagerPanel returnCode:NSOKButton];
+  [NSApp endSheet:self->compositionConfigurationsManagerPanel returnCode:NSModalResponseOK];
   [self observeValueForKeyPath:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]
     ofObject:[NSUserDefaultsController sharedUserDefaultsController] change:nil context:nil];
 }
@@ -1777,7 +1777,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   path = [[NSFileManager defaultManager] fileExistsAtPath:path] ? [path stringByDeletingLastPathComponent] : nil;
   [openPanel setNameFieldStringValue:[filename lastPathComponent]];
   [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
-    if ((result == NSOKButton) && contextInfo)
+    if ((result == NSModalResponseOK) && contextInfo)
     {
       NSTextField* textField = [(NSDictionary*)contextInfo objectForKey:@"textField"];
       NSString*    pathKey   = [(NSDictionary*)contextInfo objectForKey:@"pathKey"];
@@ -1800,7 +1800,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
         else
           [textField setStringValue:path];
       }//end if (filenames && [filenames count])
-    }//end if ((result == NSOKButton) && contextInfo)
+    }//end if ((result == NSModalResponseOK) && contextInfo)
   }];
 }
 //end didEndOpenPanel:returnCode:contextInfo:
@@ -1811,9 +1811,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   {
     self->compositionConfigurationsAdditionalScriptsHelpPanel =
       [[NSPanel alloc] initWithContentRect:NSMakeRect(0, 0, 600, 600)
-                                 styleMask:NSTitledWindowMask | NSClosableWindowMask |
-                                           NSMiniaturizableWindowMask | NSResizableWindowMask |
-                                           NSTexturedBackgroundWindowMask
+                                 styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
+                                           NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable |
+                                           NSWindowStyleMaskTexturedBackground
                                    backing:NSBackingStoreBuffered defer:NO];
     [self->compositionConfigurationsAdditionalScriptsHelpPanel setTitle:NSLocalizedString(@"Help on scripts", @"")];
     [self->compositionConfigurationsAdditionalScriptsHelpPanel center];
@@ -1833,7 +1833,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSString* rtfdFilePath = [[NSBundle mainBundle] pathForResource:@"additional-files-help" ofType:@"rtfd"];
     NSURL* rtfdUrl = !rtfdFilePath ? nil : [NSURL fileURLWithPath:rtfdFilePath];
     NSAttributedString* attributedString = !rtfdUrl ? nil :
-      [[[NSAttributedString alloc] initWithURL:rtfdUrl documentAttributes:0] autorelease];
+    [[[NSAttributedString alloc] initWithURL:rtfdUrl options:@{} documentAttributes:NULL error:NULL] autorelease];
     if (attributedString)
       [[textView textStorage] setAttributedString:attributedString];
     [textView setSelectedRange:NSMakeRange(0, 0)];
@@ -2030,9 +2030,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   {
     self->synchronizationAdditionalScriptsHelpPanel =
     [[NSPanel alloc] initWithContentRect:NSMakeRect(0, 0, 600, 200)
-                               styleMask:NSTitledWindowMask | NSClosableWindowMask |
-                                         NSMiniaturizableWindowMask | NSResizableWindowMask |
-                                         NSTexturedBackgroundWindowMask
+                               styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
+                                         NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable |
+                                         NSWindowStyleMaskTexturedBackground
                                  backing:NSBackingStoreBuffered defer:NO];
     [self->synchronizationAdditionalScriptsHelpPanel setTitle:NSLocalizedString(@"Help on synchronization scripts", @"")];
     [self->synchronizationAdditionalScriptsHelpPanel center];
@@ -2052,7 +2052,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     NSString* rtfdFilePath = [[NSBundle mainBundle] pathForResource:@"synchronization-scripts-help" ofType:@"rtfd"];
     NSURL* rtfdUrl = !rtfdFilePath ? nil : [NSURL fileURLWithPath:rtfdFilePath];
     NSAttributedString* attributedString = !rtfdUrl ? nil :
-    [[[NSAttributedString alloc] initWithURL:rtfdUrl documentAttributes:0] autorelease];
+    [[[NSAttributedString alloc] initWithURL:rtfdUrl options:@{} documentAttributes:NULL error:NULL] autorelease];
     if (attributedString)
       [[textView textStorage] setAttributedString:attributedString];
     [textView setSelectedRange:NSMakeRange(0, 0)];

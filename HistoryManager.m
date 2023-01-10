@@ -339,7 +339,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       NSData* legacyHistoryData = [NSData dataWithContentsOfFile:oldFilePathDat options:NSUncachedRead error:&error];
       if (error) {DebugLog(0, @"error : %@", error);}
       NSPropertyListFormat format;
-      id plist = [NSPropertyListSerialization propertyListFromData:legacyHistoryData mutabilityOption:NSPropertyListImmutable format:&format errorDescription:nil];
+      id plist = [NSPropertyListSerialization propertyListWithData:legacyHistoryData options:NSPropertyListImmutable format:&format error:nil];
       NSData* compressedData = nil;
       if (!plist)
         compressedData = legacyHistoryData;
@@ -525,7 +525,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
     [persistentStoreCoordinator setMetadata:@{@"version":applicationVersion} forPersistentStore:persistentStore];
   }//end if (setVersion && persistentStore)
-  result = !persistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  result = !persistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   if (!result.undoManager) {
     NSUndoManager *mgr = [[NSUndoManager alloc] init];
     result.undoManager = mgr;
@@ -646,14 +646,14 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
           [descriptions addObject:[equation plistDescription]];
         NSString* applicationVersion = [[NSWorkspace sharedWorkspace] applicationVersion];
         NSDictionary* history = !descriptions ? nil : @{@"history":@{@"content":descriptions}, @"version":applicationVersion};
-        NSString* errorDescription = nil;
+        NSError* errorDescription = nil;
         NSData* dataToWrite = !history ? nil :
-          [NSPropertyListSerialization dataFromPropertyList:history format:NSPropertyListBinaryFormat_v1_0 errorDescription:&errorDescription];
+        [NSPropertyListSerialization dataWithPropertyList:history format:NSPropertyListBinaryFormat_v1_0 options: 0 error:&errorDescription];
         if (errorDescription) {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
         {
-          [[NSFileManager defaultManager] setAttributes:@{NSFileHFSCreatorCode:@((unsigned long)'LTXt')} ofItemAtPath:path error:0];
+          [[NSFileManager defaultManager] setAttributes:@{NSFileHFSCreatorCode:@((OSType)'LTXt')} ofItemAtPath:path error:0];
           [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
       }//end case HISTORY_EXPORT_FORMAT_PLIST
@@ -733,10 +733,10 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
   else if ([[path pathExtension] isEqualToString:@"plist"])
   {
     NSData* data = [NSData dataWithContentsOfFile:path options:NSUncachedRead error:nil];
-    NSString* errorDescription = nil;
+    NSError* errorDescription = nil;
     NSPropertyListFormat format = 0;
-    id plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format
-      errorDescription:&errorDescription];
+    id plist = [NSPropertyListSerialization propertyListWithData:data options:NSPropertyListImmutable format:&format
+      error:&errorDescription];
     if (errorDescription)
     {
       DebugLog(0, @"error : %@", errorDescription);
@@ -834,7 +834,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
       oldManagedObjectModel = nil;
     }//end if (!oldPersistentStore)
   }//end for each oldDataModelName
-  NSManagedObjectContext* oldManagedObjectContext = !oldPersistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  NSManagedObjectContext* oldManagedObjectContext = !oldPersistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   [oldManagedObjectContext setUndoManager:nil];
   [oldManagedObjectContext setPersistentStoreCoordinator:oldPersistentStoreCoordinator];
 
@@ -863,7 +863,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
     DebugLog(0, @"exception : %@", e);
   }
 
-  NSManagedObjectContext* newManagedObjectContext = !newPersistentStore ? nil : [[NSManagedObjectContext alloc] init];
+  NSManagedObjectContext* newManagedObjectContext = !newPersistentStore ? nil : [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
   [newManagedObjectContext setUndoManager:nil];
   [newManagedObjectContext setPersistentStoreCoordinator:newPersistentStoreCoordinator];
 
@@ -1017,7 +1017,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
                                progressIndicator:(NSProgressIndicator**)outProgressIndicator
 {
   NSModalSession result = 0;
-  NSWindow* migratingWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 400, 36) styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:YES];
+  NSWindow* migratingWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 400, 36) styleMask:NSWindowStyleMaskTitled backing:NSBackingStoreBuffered defer:YES];
   #ifdef ARC_ENABLED
   NSWindowController* migratingWindowController = [[NSWindowController alloc] initWithWindow:migratingWindow];
   #else

@@ -49,9 +49,9 @@
     NSRectFill(reducedBounds);
   }
   if (![[NSImageRep class] instancesRespondToSelector:@selector(drawInRect:fromRect:operation:fraction:respectFlipped:hints:)])
-    [image drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0];
+    [image drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositingOperationSourceOver fraction:1.0];
   else
-    [[image bestImageRepresentationInContext:[NSGraphicsContext currentContext]] drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    [[image bestImageRepresentationInContext:[NSGraphicsContext currentContext]] drawInRect:reducedBounds fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositingOperationSourceOver fraction:1.0 respectFlipped:YES hints:nil];
   [self setImage:image];
   [image release];
 }

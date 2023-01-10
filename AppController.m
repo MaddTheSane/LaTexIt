@@ -404,13 +404,13 @@ static NSMutableDictionary* cachePaths = nil;
                   
   NSMenu* editCopyImageAsMenu = [self->editCopyImageAsMenuItem submenu];
   [editCopyImageAsMenu addItemWithTitle:NSLocalizedString(@"Default Format", @"") target:self action:@selector(copyAs:)
-                         keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSAlternateKeyMask tag:-1];
+                         keyEquivalent:@"c" keyEquivalentModifierMask:NSEventModifierFlagCommand|NSEventModifierFlagOption tag:-1];
   [editCopyImageAsMenu addItem:[NSMenuItem separatorItem]];
   [editCopyImageAsMenu addItemWithTitle:@"PDF" target:self action:@selector(copyAs:)
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_PDF];
   [editCopyImageAsMenu addItemWithTitle:NSLocalizedString(@"PDF with outlined fonts", @"")
                                  target:self action:@selector(copyAs:)
-                          keyEquivalent:@"c" keyEquivalentModifierMask:NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask
+                          keyEquivalent:@"c" keyEquivalentModifierMask:NSEventModifierFlagCommand|NSEventModifierFlagShift|NSEventModifierFlagOption
                                     tag:(NSInteger)EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS];
   [editCopyImageAsMenu addItemWithTitle:@"EPS" target:self action:@selector(copyAs:)
                           keyEquivalent:@"" keyEquivalentModifierMask:0 tag:(NSInteger)EXPORT_FORMAT_EPS];
@@ -1035,7 +1035,7 @@ static NSMutableDictionary* cachePaths = nil;
     MyDocument* myDocument = (MyDocument*) [self currentDocument];
     ok = (myDocument != nil) && ![myDocument isBusy];// && ([myDocument latexModeApplied] == LATEX_MODE_TEXT);
     if ([sender tag] == ALIGNMENT_MODE_NONE)
-      [sender setKeyEquivalentModifierMask:[sender keyEquivalentModifierMask]|NSAlternateKeyMask];
+      [sender setKeyEquivalentModifierMask:[sender keyEquivalentModifierMask]|NSEventModifierFlagOption];
   }
   else if ([sender action] == @selector(formatComment:))
   {
@@ -1489,7 +1489,7 @@ static NSMutableDictionary* cachePaths = nil;
   [self->openFileTypeOpenPanel setAccessoryView:self->openFileTypeView];
   [self->openFileTypeOpenPanel setDelegate:(id)self];//panel:shouldShowFilename:
   NSInteger result = [self->openFileTypeOpenPanel runModal];
-  if (result == NSOKButton)
+  if (result == NSModalResponseOK)
   {
     NSString* filePath = [[[self->openFileTypeOpenPanel URLs] lastObject] path];
     BOOL synchronizeAvailable =
@@ -1716,7 +1716,7 @@ static NSMutableDictionary* cachePaths = nil;
 
 -(IBAction) returnFromWhiteColorWarningWindow:(id)sender
 {
-  [NSApp stopModalWithCode:([sender tag] == 0) ? NSCancelButton : NSOKButton];
+  [NSApp stopModalWithCode:([sender tag] == 0) ? NSModalResponseCancel : NSModalResponseOK];
   [self->whiteColorWarningWindow close];
 }
 //end returnFromWhiteColorWarningWindow:
@@ -2383,7 +2383,7 @@ static NSMutableDictionary* cachePaths = nil;
           [openPanel setResolvesAliases:NO];
           [openPanel setDirectoryURL:[NSURL fileURLWithPath:@"/usr" isDirectory:YES]];
           NSInteger ret2 = [openPanel runModal];
-          ok = (ret2 == NSOKButton) && ([[openPanel URLs] count]);
+          ok = (ret2 == NSModalResponseOK) && ([[openPanel URLs] count]);
           if (ok)
           {
             NSString* filepath = [[[openPanel URLs] objectAtIndex:0] path];
@@ -2727,7 +2727,7 @@ static NSMutableDictionary* cachePaths = nil;
   {
     NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration", @"");
     *error = message;
-    NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, @"OK", nil, nil);
+    NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", @"OK", nil, nil, message);
   }
   else
   {
@@ -3001,8 +3001,8 @@ static NSMutableDictionary* cachePaths = nil;
           NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT", @"");
           *error = message;
           [NSApp activateIgnoringOtherApps:YES];
-          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), message, NSLocalizedString(@"Cancel", @""),
-                                       NSLocalizedString(@"Open in LaTeXiT", @""), nil);
+          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", NSLocalizedString(@"Cancel", @""),
+                                       NSLocalizedString(@"Open in LaTeXiT", @""), nil, message);
           if (choice == NSAlertAlternateReturn)
           {
             NSDocumentController* documentController = [NSDocumentController sharedDocumentController];

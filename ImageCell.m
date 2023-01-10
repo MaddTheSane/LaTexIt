@@ -98,7 +98,7 @@
   CGContextFillPath(cgContext);
 
   [[self image] drawInRect:destRect fromRect:NSMakeRect(0, 0, naturalImageSize.width, naturalImageSize.height)
-          operation:NSCompositeSourceOver fraction:1.];
+          operation:NSCompositingOperationSourceOver fraction:1.];
   CGContextRestoreGState(cgContext);
   
   CGContextSetRGBFillColor(cgContext, 0, 0, 0, 0);

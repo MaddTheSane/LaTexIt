@@ -366,7 +366,7 @@
   if (self->shouldRedrag)
   {
     NSPasteboard* pboard = session.draggingPasteboard;
-    [self performSelector:@selector(performProgrammaticRedrag:) withObject:(!pboard ? [NSPasteboard pasteboardWithName:NSDragPboard] : pboard) afterDelay:0];
+    [self performSelector:@selector(performProgrammaticRedrag:) withObject:(!pboard ? [NSPasteboard pasteboardWithName:NSPasteboardNameDrag] : pboard) afterDelay:0];
   }//end if (self->shouldRedrag)
 }
 //end draggingSession:endedAtPoint:operation:
