@@ -818,7 +818,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="3Oc-BN-iZy">
                                             <rect key="frame" x="1" y="1" width="512" height="339"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9520" id="1175" customClass="TextShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="522" height="314"/>
@@ -1176,10 +1176,10 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="sVB-Id-Lw5">
                                             <rect key="frame" x="1" y="1" width="407" height="65"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="9572" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-32" width="407" height="97"/>
+                                                    <rect key="frame" x="0.0" y="-63.5" width="407" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1218,10 +1218,10 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="vOS-pK-0o9">
                                             <rect key="frame" x="1" y="1" width="407" height="66"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="9577" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-31" width="407" height="97"/>
+                                                    <rect key="frame" x="0.0" y="-61.5" width="407" height="96.5"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1260,7 +1260,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="NJL-NA-2eV">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9567" customClass="BodyTemplatesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="155" height="132"/>
@@ -1693,10 +1693,10 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="921-4J-1iu">
                                             <rect key="frame" x="1" y="1" width="292" height="73"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9523" id="1069">
-                                                    <rect key="frame" x="0.0" y="0.0" width="303" height="48"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="302.5" height="48"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1737,7 +1737,7 @@ some text &amp; $some maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <tableHeaderView key="headerView" wantsLayer="YES" id="9523">
-                                            <rect key="frame" x="0.0" y="0.0" width="303" height="25"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="302.5" height="25"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
                                     </scrollView>
@@ -1762,7 +1762,7 @@ some text &amp; $some maths$ \\
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="fwu-hg-0R4">
                                                         <rect key="frame" x="1" y="1" width="472" height="98"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="1078">
                                                                 <rect key="frame" x="0.0" y="0.0" width="472" height="98"/>
@@ -1799,7 +1799,7 @@ some text &amp; $some maths$ \\
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="rwQ-E1-sYs">
                                                         <rect key="frame" x="1" y="1" width="472" height="15"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9528" id="1082">
                                                                 <rect key="frame" x="0.0" y="0.0" width="472" height="19"/>
@@ -2283,7 +2283,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="Sf0-uo-rBT">
                                             <rect key="frame" x="1" y="1" width="518" height="130"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9531" id="1030" customClass="ServiceShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="528" height="105"/>
@@ -2410,7 +2410,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="Eqj-sZ-IRq">
                                             <rect key="frame" x="1" y="1" width="518" height="92"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9692" id="9689" customClass="ServiceRegularExpressionFiltersTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="528" height="67"/>
@@ -2496,7 +2496,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="jte-Ju-FUo">
                                             <rect key="frame" x="1" y="1" width="254" height="61"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="9719" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="254" height="61"/>
@@ -2524,7 +2524,7 @@ some text &amp; $some maths$ \\
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="QvB-bh-NS1">
                                             <rect key="frame" x="1" y="1" width="254" height="61"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="9718" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="254" height="61"/>
@@ -2680,7 +2680,7 @@ some text &amp; $some maths$ \\
                                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="k1b-o3-OjC">
                                                         <rect key="frame" x="1" y="1" width="450" height="92"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9747" id="9750">
                                                                 <rect key="frame" x="0.0" y="0.0" width="450" height="67"/>
@@ -2689,7 +2689,7 @@ some text &amp; $some maths$ \\
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                 <tableColumns>
-                                                                    <tableColumn identifier="place" editable="NO" width="368.5" minWidth="221" maxWidth="1000" id="9751">
+                                                                    <tableColumn identifier="place" editable="NO" width="339.5" minWidth="221" maxWidth="1000" id="9751">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Script">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -2804,7 +2804,7 @@ some text &amp; $some maths$ \\
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" id="CIU-bD-ADK">
                                                                     <rect key="frame" x="1" y="1" width="410" height="136"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="9760">
                                                                             <rect key="frame" x="0.0" y="0.0" width="395" height="136"/>
@@ -2841,7 +2841,7 @@ some text &amp; $some maths$ \\
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" id="fLi-rS-Slq">
                                                                     <rect key="frame" x="1" y="1" width="410" height="15"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9767" id="9764">
                                                                             <rect key="frame" x="0.0" y="0.0" width="410" height="19"/>
@@ -3023,9 +3023,8 @@ some text &amp; $some maths$ \\
                 <rect key="frame" x="0.0" y="0.0" width="280" height="226"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="1129">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1129">
                         <rect key="frame" x="20" y="37" width="240" height="169"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="dRp-vz-6G3">
                             <rect key="frame" x="1" y="1" width="238" height="167"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3066,9 +3065,11 @@ some text &amp; $some maths$ \\
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button id="1132">
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="1132">
                         <rect key="frame" x="42" y="9" width="23" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="23" id="avx-mm-fCx"/>
+                        </constraints>
                         <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9505">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -3077,9 +3078,12 @@ some text &amp; $some maths$ \\
                             <outlet property="nextKeyView" destination="1130" id="1139"/>
                         </connections>
                     </button>
-                    <button id="1135">
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="1135">
                         <rect key="frame" x="20" y="9" width="23" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="23" id="31M-EM-7s7"/>
+                            <constraint firstAttribute="height" constant="20" id="gR0-uc-pSG"/>
+                        </constraints>
                         <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9506">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -3088,9 +3092,11 @@ some text &amp; $some maths$ \\
                             <outlet property="nextKeyView" destination="1132" id="1138"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="1153">
-                        <rect key="frame" x="184" y="1" width="82" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1153">
+                        <rect key="frame" x="185" y="1" width="82" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="68" id="m52-JF-T6E"/>
+                        </constraints>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9507">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -3100,6 +3106,21 @@ some text &amp; $some maths$ \\
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="1129" firstAttribute="top" secondItem="1128" secondAttribute="top" constant="20" symbolic="YES" id="9bB-J0-Zmj"/>
+                    <constraint firstItem="1129" firstAttribute="leading" secondItem="1128" secondAttribute="leading" constant="20" symbolic="YES" id="AYO-bi-a66"/>
+                    <constraint firstItem="1129" firstAttribute="leading" secondItem="1135" secondAttribute="leading" id="Gjm-MQ-ktS"/>
+                    <constraint firstItem="1132" firstAttribute="leading" secondItem="1135" secondAttribute="trailing" constant="-1" id="Hwl-pb-juY"/>
+                    <constraint firstItem="1153" firstAttribute="top" secondItem="1129" secondAttribute="bottom" constant="9" id="IVZ-xP-u69"/>
+                    <constraint firstAttribute="bottom" secondItem="1135" secondAttribute="bottom" constant="9" id="Lxm-cl-KTt"/>
+                    <constraint firstAttribute="trailing" secondItem="1153" secondAttribute="trailing" constant="20" symbolic="YES" id="db0-Cw-lyP"/>
+                    <constraint firstItem="1153" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1132" secondAttribute="trailing" constant="8" symbolic="YES" id="fJi-cM-Ccj"/>
+                    <constraint firstAttribute="trailing" secondItem="1129" secondAttribute="trailing" constant="20" symbolic="YES" id="fa5-lf-5gq"/>
+                    <constraint firstItem="1135" firstAttribute="top" secondItem="1129" secondAttribute="bottom" constant="8" symbolic="YES" id="kdp-p4-s6k"/>
+                    <constraint firstAttribute="bottom" secondItem="1153" secondAttribute="bottom" constant="8" id="w13-ea-2RO"/>
+                    <constraint firstItem="1135" firstAttribute="top" secondItem="1132" secondAttribute="top" id="xNK-lk-WTk"/>
+                    <constraint firstItem="1135" firstAttribute="bottom" secondItem="1132" secondAttribute="bottom" id="yZw-T5-m8M"/>
+                </constraints>
             </view>
             <point key="canvasLocation" x="131" y="-1077"/>
         </window>

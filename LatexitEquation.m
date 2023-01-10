@@ -650,7 +650,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     @try{
       pdfDocument = [[PDFDocument alloc] initWithData:someData];
       PDFPage*     pdfPage     = [pdfDocument pageAtIndex:0];
-      NSArray* annotations     = [pdfPage annotations];
+      NSArray<PDFAnnotation*>* annotations     = [pdfPage annotations];
       NSUInteger i = 0;
       DebugLog(1, @"annotations = %@", annotations);
       for(i = 0 ; !embeddedInfos && (i < [annotations count]) ; ++i)

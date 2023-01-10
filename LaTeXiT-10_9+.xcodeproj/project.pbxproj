@@ -57,6 +57,7 @@
 /* End PBXAppleScriptBuildPhase section */
 
 /* Begin PBXBuildFile section */
+		552441FC296D75A20071E081 /* latexit.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9328604307F4505F009BF03D /* latexit.icns */; };
 		558813762678A05000CA4738 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558813752678A05000CA4738 /* Media.xcassets */; };
 		558813782678AD8B00CA4738 /* app-icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558813772678AD8B00CA4738 /* app-icon.xcassets */; };
 		558813792678AD8B00CA4738 /* app-icon.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 558813772678AD8B00CA4738 /* app-icon.xcassets */; };
@@ -2470,6 +2471,7 @@
 				932E61920F5DB24D002B3136 /* defaultPreamble.rtf in Resources */,
 				933B5F470F5F10060069E5B4 /* Latexit-2.4.0.xcdatamodel in Resources */,
 				93D231F91018332700768782 /* textShortcuts.plist in Resources */,
+				552441FC296D75A20071E081 /* latexit.icns in Resources */,
 				9341922E1281C70C009D3E97 /* Localizable.strings in Resources */,
 				93ECCA68137F070B00F0CB1B /* ExportFormatOptionsPanes.xib in Resources */,
 				936B925313898EE3007C8AF4 /* LaTeXMathML.js in Resources */,
@@ -3271,11 +3273,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					XPC,
 					Services/Common,
 				);
 				INFOPLIST_FILE = "XPC Services/LaTeXiT App extension XPC Service/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "LaTeXiT App extension XPC Service";
 				MARKETING_VERSION = 2.16.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -3349,11 +3353,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					XPC,
 					Services/Common,
 				);
 				INFOPLIST_FILE = "XPC Services/LaTeXiT App extension XPC Service/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "LaTeXiT App extension XPC Service";
 				MARKETING_VERSION = 2.16.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -3415,6 +3421,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
 					"\"$(SRCROOT)/Frameworks/RegexKitLite\"",
@@ -3422,6 +3429,9 @@
 					Services/Common,
 				);
 				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3486,6 +3496,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
 					"\"$(SRCROOT)/Frameworks/RegexKitLite\"",
@@ -3493,6 +3504,9 @@
 					Services/Common,
 				);
 				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3642,8 +3656,11 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2005-2022, Pierre Chatelier, All Rights Reserved.";
+				INFOPLIST_KEY_NSPrincipalClass = Automator_CreateEquations;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3698,8 +3715,11 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Automator/CreateEquations/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2005-2022, Pierre Chatelier, All Rights Reserved.";
+				INFOPLIST_KEY_NSPrincipalClass = Automator_CreateEquations;
 				INSTALL_PATH = "$(HOME)/Library/Automator";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3783,11 +3803,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					../XPC,
 					Services/Common,
 				);
 				INFOPLIST_FILE = LaTeXiT_AppExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "LaTeXiT App Extension";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -3867,11 +3889,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					../XPC,
 					Services/Common,
 				);
 				INFOPLIST_FILE = LaTeXiT_AppExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "LaTeXiT App Extension";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -3956,11 +3980,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					XPC,
 					Services/Common,
 				);
 				INFOPLIST_FILE = "XPC Services/LaTeXiT XPC Service/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "LaTeXiT XPC Service";
 				MARKETING_VERSION = 2.16.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -4034,11 +4060,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					XPC,
 					Services/Common,
 				);
 				INFOPLIST_FILE = "XPC Services/LaTeXiT XPC Service/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "LaTeXiT XPC Service";
 				MARKETING_VERSION = 2.16.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -4099,7 +4127,12 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MARKETING_VERSION = 2.16.5;
 				OTHER_CFLAGS = "";
@@ -4154,7 +4187,12 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MARKETING_VERSION = 2.16.5;
 				OTHER_CFLAGS = "";

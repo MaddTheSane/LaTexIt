@@ -654,7 +654,7 @@ static HistoryManager* sharedManagerInstance = nil; //the (private) singleton
         if (ok)
         {
           [[NSFileManager defaultManager] setAttributes:@{NSFileHFSCreatorCode:@((OSType)'LTXt')} ofItemAtPath:path error:0];
-          [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
+          [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
       }//end case HISTORY_EXPORT_FORMAT_PLIST
       break;

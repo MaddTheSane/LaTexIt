@@ -317,16 +317,16 @@ static LibraryManager* sharedManagerInstance = nil;
         NSDictionary* library = !descriptions ? nil : @{
           @"library":[NSDictionary dictionaryWithObjectsAndKeys:descriptions, @"content", nil],
           @"version":applicationVersion};
-        NSString* errorDescription = nil;
+        NSError* errorDescription = nil;
         NSData* dataToWrite = !library ? nil :
-          [NSPropertyListSerialization dataFromPropertyList:library format:NSPropertyListBinaryFormat_v1_0 errorDescription:&errorDescription];
+        [NSPropertyListSerialization dataWithPropertyList:library format:NSPropertyListBinaryFormat_v1_0 options:0 error:&errorDescription];
         if (errorDescription)
           {DebugLog(0, @"errorDescription : %@", errorDescription);}
         ok = [dataToWrite writeToFile:path atomically:YES];
         if (ok)
         {
           [[NSFileManager defaultManager] setAttributes:@{NSFileHFSCreatorCode:@((unsigned long)'LTXt')} ofItemAtPath:path error:0];
-          [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib.icns"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
+          [[NSWorkspace sharedWorkspace] setIcon:[NSImage imageNamed:@"latexit-lib"] forFile:path options:NSExclude10_4ElementsIconCreationOption];
         }//end if file has been created
       }//end case LIBRARY_EXPORT_FORMAT_PLIST
       break;

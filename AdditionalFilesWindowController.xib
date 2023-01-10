@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,35 +18,33 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Additional Files" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="3" customClass="PalettePanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="368" width="214" height="142"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1129"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <value key="minSize" type="size" width="214" height="85"/>
             <view key="contentView" id="4">
                 <rect key="frame" x="0.0" y="0.0" width="214" height="142"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView focusRingType="none" fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5">
-                        <rect key="frame" x="8" y="38" width="199" height="96"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" ambiguous="YES" id="GS2-gj-mSY">
-                            <rect key="frame" x="1" y="1" width="197" height="94"/>
+                    <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5">
+                        <rect key="frame" x="8" y="38" width="196" height="92"/>
+                        <clipView key="contentView" id="GS2-gj-mSY">
+                            <rect key="frame" x="1" y="1" width="194" height="90"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" id="8" customClass="AdditionalFilesTableView">
-                                    <rect key="frame" x="0.0" y="0.0" width="197" height="94"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="196" height="90"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="filepath" editable="NO" width="194" minWidth="40" maxWidth="1000" id="10">
+                                        <tableColumn identifier="filepath" editable="NO" width="184" minWidth="40" maxWidth="1000" id="10">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                <font key="font" metaFont="message" size="11"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -61,56 +59,74 @@
                                 </tableView>
                             </subviews>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="7">
-                            <rect key="frame" x="1" y="119" width="223" height="15"/>
+                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="7">
+                            <rect key="frame" x="1" y="75" width="194" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="6">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="6">
                             <rect key="frame" x="224" y="1" width="15" height="118"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <button toolTip="supprimer l'élément sélectionné" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="14">
+                    <button toolTip="supprimer l'élément sélectionné" translatesAutoresizingMaskIntoConstraints="NO" id="14">
                         <rect key="frame" x="30" y="10" width="23" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="17">
+                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="17">
                             <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" size="18" name="Monaco"/>
+                            <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <button toolTip="ajouter un élément" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="15">
+                    <button toolTip="ajouter un élément" translatesAutoresizingMaskIntoConstraints="NO" id="15">
                         <rect key="frame" x="8" y="10" width="23" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="16">
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="Pao-7W-qFp"/>
+                        </constraints>
+                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="16">
                             <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" size="13" name="Monaco"/>
+                            <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
                             <outlet property="nextKeyView" destination="14" id="18"/>
                         </connections>
                     </button>
-                    <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="35" customClass="ImagePopupButton">
+                    <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="35" customClass="ImagePopupButton">
                         <rect key="frame" x="52" y="10" width="34" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <popUpButtonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" pullsDown="YES" preferredEdge="maxY" selectedItem="38" id="36">
+                        <constraints>
+                            <constraint firstAttribute="width" constant="34" id="dEd-3G-YgX"/>
+                        </constraints>
+                        <popUpButtonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" inset="2" pullsDown="YES" preferredEdge="maxY" selectedItem="38" id="36">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="37">
                                 <items>
-                                    <menuItem id="38"/>
+                                    <menuItem image="NSActionTemplate" hidden="YES" id="38"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
                     </popUpButton>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="5" firstAttribute="leading" secondItem="15" secondAttribute="leading" id="3Fb-35-Ynm"/>
+                    <constraint firstItem="14" firstAttribute="top" secondItem="35" secondAttribute="top" id="72A-B9-R76"/>
+                    <constraint firstItem="5" firstAttribute="top" secondItem="4" secondAttribute="top" constant="8" id="FLO-Vd-W3d"/>
+                    <constraint firstItem="5" firstAttribute="leading" secondItem="4" secondAttribute="leading" constant="8" id="KAp-oO-7g3"/>
+                    <constraint firstItem="35" firstAttribute="leading" secondItem="15" secondAttribute="trailing" constant="21" id="NNj-gl-V6l"/>
+                    <constraint firstItem="5" firstAttribute="centerX" secondItem="4" secondAttribute="centerX" id="Sy6-fH-iRa"/>
+                    <constraint firstItem="35" firstAttribute="leading" secondItem="14" secondAttribute="trailing" constant="-1" id="UfQ-zm-RmR"/>
+                    <constraint firstAttribute="bottom" secondItem="15" secondAttribute="bottom" constant="10" id="YJw-IA-Y8X"/>
+                    <constraint firstItem="14" firstAttribute="bottom" secondItem="35" secondAttribute="bottom" id="ZD8-aW-ole"/>
+                    <constraint firstItem="15" firstAttribute="top" secondItem="14" secondAttribute="top" id="aCo-Pb-zML"/>
+                    <constraint firstItem="15" firstAttribute="top" secondItem="5" secondAttribute="bottom" constant="8" symbolic="YES" id="dks-Le-4XP"/>
+                    <constraint firstItem="15" firstAttribute="bottom" secondItem="14" secondAttribute="bottom" id="mHy-Eq-zHH"/>
+                    <constraint firstItem="14" firstAttribute="leading" secondItem="4" secondAttribute="leading" constant="30" id="oGs-Ap-Sbk"/>
+                    <constraint firstItem="14" firstAttribute="leading" secondItem="15" secondAttribute="trailing" constant="-1" id="pRW-yl-hK2"/>
+                </constraints>
             </view>
             <point key="canvasLocation" x="131" y="150"/>
         </window>
     </objects>
     <resources>
-        <image name="add" width="23" height="22"/>
-        <image name="add-pressed" width="23" height="22"/>
-        <image name="remove" width="23" height="22"/>
-        <image name="remove-pressed" width="23" height="22"/>
+        <image name="NSActionTemplate" width="20" height="20"/>
+        <image name="NSAddTemplate" width="18" height="17"/>
+        <image name="NSRemoveTemplate" width="18" height="5"/>
     </resources>
 </document>
