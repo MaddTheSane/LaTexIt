@@ -1450,8 +1450,11 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsPDFWofPanel];
   else if (format == EXPORT_FORMAT_PDF)
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsPDFPanel];
-  if (panelToOpen)
-    [NSApp beginSheet:panelToOpen modalForWindow:[self window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+  if (panelToOpen) {
+    [self.window beginSheet:panelToOpen completionHandler:^(NSModalResponse returnCode) {
+      // do nothing
+    }];
+  }
 }
 //end openOptionsForDragExport:
 
@@ -1489,7 +1492,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     else
       DebugLog(1, @"unknown exportFormatOptions panel");
   }//end if (ok)
-  [NSApp endSheet:exportFormatOptionsPanel];
+  [self.window endSheet:exportFormatOptionsPanel];
   [exportFormatOptionsPanel orderOut:self];
 }
 //end exportFormatOptionsPanel:didCloseWithOK:
@@ -1542,24 +1545,24 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(IBAction) preamblesValueResetDefault:(id)sender
 {
-    NSBeginAlertSheet(NSLocalizedString(@"Reset preamble", @""),
-                      NSLocalizedString(@"Reset preamble", @""),
-                      NSLocalizedString(@"Cancel", @""),
-                      nil, [self window], self,
-                      @selector(_preamblesValueResetDefault:returnCode:contextInfo:), nil, NULL,
-                      NSLocalizedString(@"Are you sure you want to reset the preamble ?\nThis operation is irreversible.", @""));
-}
-//end preamblesValueResetDefault:
-
--(void) _preamblesValueResetDefault:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-  if (returnCode == NSAlertDefaultReturn)
-  {
-    [self->preamblesValueTextView setValue:[PreamblesController defaultLocalizedPreambleValueAttributedString] forKey:NSAttributedStringBinding];
-    [[[PreferencesController sharedController] preamblesController]
-      setValue:[NSKeyedArchiver archivedDataWithRootObject:[PreamblesController defaultLocalizedPreambleValueAttributedString]]
-      forKeyPath:@"selection.value"];
-  }//end if (returnCode == NSAlertDefaultReturn)
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Reset preamble", @"");
+  alert.informativeText = NSLocalizedString(@"Are you sure you want to reset the preamble ?\nThis operation is irreversible.", @"");
+  NSButton *desAction = [alert addButtonWithTitle:NSLocalizedString(@"Reset preamble", @"")];
+  if (@available(macOS 11.0, *)) {
+    desAction.hasDestructiveAction = YES;
+  }
+  [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+  [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+    if (returnCode == NSAlertFirstButtonReturn)
+    {
+      [self->preamblesValueTextView setValue:[PreamblesController defaultLocalizedPreambleValueAttributedString] forKey:NSAttributedStringBinding];
+      [[[PreferencesController sharedController] preamblesController]
+       setValue:[NSKeyedArchiver archivedDataWithRootObject:[PreamblesController defaultLocalizedPreambleValueAttributedString]]
+       forKeyPath:@"selection.value"];
+    }//end if (returnCode == NSAlertDefaultReturn)
+    [alert release];
+  }];
 }
 //end _clearHistorySheetDidEnd:returnCode:contextInfo:
 
@@ -1639,8 +1642,9 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
     [self->compositionConfigurationsProgramArgumentsAddButton bind:NSEnabledBinding toObject:controller withKeyPath:@"canAdd" options:nil];
     [self->compositionConfigurationsProgramArgumentsRemoveButton bind:NSEnabledBinding toObject:controller withKeyPath:@"canRemove" options:nil];
     [self->compositionConfigurationsProgramArgumentsTableView setController:controller];
-    [NSApp beginSheet:self->compositionConfigurationsProgramArgumentsPanel modalForWindow:[self window] modalDelegate:self
-      didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:nil];
+    [self.window beginSheet:self->compositionConfigurationsProgramArgumentsPanel completionHandler:^(NSModalResponse returnCode) {
+      [self sheetDidEnd:self->compositionConfigurationsProgramArgumentsPanel returnCode:returnCode contextInfo:NULL];
+    }];
   }
 }
 //end compositionConfigurationsProgramArgumentsOpen:
@@ -1648,7 +1652,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(IBAction) compositionConfigurationsProgramArgumentsClose:(id)sender
 {
   [self->compositionConfigurationsProgramArgumentsPanel makeFirstResponder:nil];//commit editing
-  [NSApp endSheet:self->compositionConfigurationsProgramArgumentsPanel returnCode:NSModalResponseOK];
+  [self.window endSheet:self->compositionConfigurationsProgramArgumentsPanel returnCode:NSModalResponseOK];
   [self updateProgramArgumentsToolTips];
 }
 //end compositionConfigurationsProgramArgumentsClose:
@@ -1689,8 +1693,11 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
   NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
   if ((sender != self->compositionConfigurationsCurrentPopUpButton) || !IsBetween_nsi(1, selectedIndex+1, (signed)[compositionConfigurations count]))
-    [NSApp beginSheet:self->compositionConfigurationsManagerPanel modalForWindow:[self window] modalDelegate:self
-      didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:nil];
+  {
+    [self.window beginSheet:self->compositionConfigurationsManagerPanel completionHandler:^(NSModalResponse returnCode) {
+      [self sheetDidEnd:self->compositionConfigurationsManagerPanel returnCode:returnCode contextInfo:NULL];
+    }];
+  }
   else
     [preferencesController setCompositionConfigurationsDocumentIndex:selectedIndex];
 }
@@ -1699,7 +1706,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 -(IBAction) compositionConfigurationsManagerClose:(id)sender
 {
   [self->compositionConfigurationsManagerPanel makeFirstResponder:nil];//commit editing
-  [NSApp endSheet:self->compositionConfigurationsManagerPanel returnCode:NSModalResponseOK];
+  [self.window endSheet:self->compositionConfigurationsManagerPanel returnCode:NSModalResponseOK];
   [self observeValueForKeyPath:[NSUserDefaultsController adaptedKeyPath:CompositionConfigurationDocumentIndexKey]
     ofObject:[NSUserDefaultsController sharedUserDefaultsController] change:nil context:nil];
 }
@@ -1844,19 +1851,13 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 -(IBAction) compositionConfigurationsCurrentReset:(id)sender
 {
-  NSAlert* alert = 
-    [NSAlert alertWithMessageText:NSLocalizedString(@"Do you really want to reset the paths ?", @"")
-      defaultButton:NSLocalizedString(@"OK", @"")
-      alternateButton:NSLocalizedString(@"Cancel", @"")
-      otherButton:nil
-        informativeTextWithFormat:NSLocalizedString(@"Invalid paths will be replaced by the result of auto-detection", @"")];
-  [alert beginSheetModalForWindow:[self window] modalDelegate:self didEndSelector:@selector(compositionConfigurationsCurrentResetDidEnd:returnCode:contextInfo:) contextInfo:0];
-}
-//end compositionConfigurationsCurrentReset:
-
--(void) compositionConfigurationsCurrentResetDidEnd:(NSAlert*)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-  if (returnCode == NSAlertDefaultReturn)
+  NSAlert* alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Do you really want to reset the paths ?", @"");
+  alert.informativeText = NSLocalizedString(@"Invalid paths will be replaced by the result of auto-detection", @"");
+  [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
+  [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+  [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse returnCode) {
+  if (returnCode == NSAlertFirstButtonReturn)
   {
     PreferencesController* preferencesController = [PreferencesController sharedController];
     [preferencesController setCompositionConfigurationDocumentProgramPath:@"" forKey:CompositionConfigurationPdfLatexPathKey];
@@ -1974,6 +1975,8 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
                                                 @[@"ps2pdf"], @"executableNames",
                                                 [NSValue valueWithPointer:&isPsToPdfAvailable], @"monitor", nil]];
   }//end if (returnCode == NSAlertDefaultReturn)
+    [alert release];
+  }];
 }
 //end compositionConfigurationsCurrentReset:
 

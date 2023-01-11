@@ -371,12 +371,6 @@
 }
 //end draggingSession:endedAtPoint:operation:
 
--(void) draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
-{
-  [self draggingSession:nil endedAtPoint:aPoint operation:operation];
-}
-//end draggedImage:endedAt:operation:
-
 -(void) dragImage:(NSImage*)image at:(NSPoint)at offset:(NSSize)offset event:(NSEvent*)event
        pasteboard:(NSPasteboard*)pasteboard source:(id)object slideBack:(BOOL)slideBack
 {
@@ -436,13 +430,6 @@
   return result;
 }
 //end draggingSession:sourceOperationMaskForDraggingContext:
-
--(NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
-{
-  NSDragOperation result = [self draggingSession:nil sourceOperationMaskForDraggingContext:(isLocal ? NSDraggingContextWithinApplication : NSDraggingContextOutsideApplication)];
-  return result;
-}
-//end draggingSourceOperationMaskForLocal:
 
 -(void) dragFilterWindowController:(DragFilterWindowController*)dragFilterWindowController exportFormatDidChange:(export_format_t)exportFormat
 {

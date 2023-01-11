@@ -316,8 +316,8 @@ extern NSString* const SynchronizationAdditionalScriptsKey;
 -(NSString*)                 encapsulationSelected;
 -(EncapsulationsController*) encapsulationsController;
 
--(NSArray*)                   additionalFilesPaths;
--(void)                       setAdditionalFilesPaths:(NSArray*)value;
+-(NSArray<NSString*>*)        additionalFilesPaths;
+-(void)                       setAdditionalFilesPaths:(NSArray<NSString*>*)value;
 -(AdditionalFilesController*) additionalFilesController;
 
 -(BOOL)                                        synchronizationNewDocumentsEnabled;

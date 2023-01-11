@@ -27,10 +27,9 @@
 #import "Utils.h"
 #import "BorderlessPanel.h"
 
-@interface HistoryWindowController (PrivateAPI)
+@interface HistoryWindowController (/*PrivateAPI*/)
 -(void) clearAll:(BOOL)undoable;
 -(void) applicationWillBecomeActive:(NSNotification*)aNotification;
--(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
 -(void) _openPanelDidEnd:(NSOpenPanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 -(void) _savePanelDidEnd:(NSSavePanel*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo;
 -(IBAction) relatexizeRefreshGUI:(id)sender;
@@ -153,34 +152,32 @@
 
 -(IBAction) clearHistory:(id)sender
 {
+  NSAlert *alert = [[NSAlert alloc] init];
+  alert.messageText = NSLocalizedString(@"Clear History", @"");
+  alert.informativeText = NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.", @"");
+  NSButton *desButton = [alert addButtonWithTitle:NSLocalizedString(@"Clear History", @"")];
+  if (@available(macOS 11.0, *)) {
+    desButton.hasDestructiveAction = YES;
+  }
+  [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
   if ([[self window] isVisible])
   {
-    NSBeginAlertSheet(NSLocalizedString(@"Clear History", @""),
-                      NSLocalizedString(@"Clear History", @""),
-                      NSLocalizedString(@"Cancel", @""),
-                      nil, [self window], self,
-                      @selector(_clearHistorySheetDidEnd:returnCode:contextInfo:), nil, NULL,
-                      NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.", @""));
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+      if (returnCode == NSAlertFirstButtonReturn) {
+        [self clearAll:NO];
+      }
+      [alert release];
+    }];
   }
   else
   {
-    NSInteger returnCode =
-      NSRunAlertPanel(NSLocalizedString(@"Clear History", @""),
-                      NSLocalizedString(@"Are you sure you want to clear the whole history ?\nThis operation is irreversible.", @""),
-                      NSLocalizedString(@"Clear History", @""),
-                      NSLocalizedString(@"Cancel", @""), nil);
-    if (returnCode == NSAlertDefaultReturn)
+    NSInteger returnCode = [alert runModal];
+    if (returnCode == NSAlertFirstButtonReturn)
       [self clearAll:NO];
+    [alert release];
   }
 }
 //end clearHistory:
-
--(void) _clearHistorySheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-  if (returnCode == NSAlertDefaultReturn)
-    [self clearAll:NO];
-}
-//end _clearHistorySheetDidEnd:returnCode:contextInfo:
 
 -(IBAction) saveAs:(id)sender
 {
@@ -210,12 +207,10 @@
                                               format:(history_export_format_t)[exportFormatPopUpButton selectedTag]];
     if (!ok)
     {
-      NSAlert* alert = [NSAlert
-        alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"")
-               defaultButton:NSLocalizedString(@"OK", @"")
-             alternateButton:nil otherButton:nil
-   informativeTextWithFormat:nil];
+      NSAlert* alert = [[NSAlert alloc] init];
+      alert.messageText = NSLocalizedString(@"An error occured while saving.", @"");
      [alert runModal];
+      [alert release];
     }//end if (ok)
   }
   [self->savePanel release];
@@ -270,12 +265,11 @@
     BOOL ok = [[HistoryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option];
     if (!ok)
     {
-      NSAlert* alert = [NSAlert
-        alertWithMessageText:NSLocalizedString(@"Loading error", @"")
-               defaultButton:NSLocalizedString(@"OK", @"")
-             alternateButton:nil otherButton:nil
-   informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"")];
+      NSAlert* alert = [[NSAlert alloc] init];
+      alert.messageText = NSLocalizedString(@"Loading error", @"");
+      alert.informativeText = NSLocalizedString(@"The file does not appear to be a valid format", @"");
      [alert runModal];
+      [alert release];
     }
     else
     {
@@ -424,7 +418,9 @@
     [self->relatexizeProgressIndicator startAnimation:self];
     [self->relatexizeAbortButton setTarget:self];
     [self->relatexizeAbortButton setAction:@selector(relatexizeAbort:)];
-    [NSApp beginSheet:self->relatexizeWindow modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:0];
+    [self.window beginSheet:self->relatexizeWindow completionHandler:^(NSModalResponse returnCode) {
+      [self sheetDidEnd:self->relatexizeWindow returnCode:returnCode contextInfo:NULL];
+    }];
     [self->relatexizeTimer release];
     self->relatexizeTimer = [[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(relatexizeRefreshGUI:) userInfo:nil repeats:YES] retain];
     [self relatexizeRefreshGUI:self];
@@ -459,11 +455,7 @@
   id flattenedItem = nil;
   while(!self->relatexizeAbortMonitor && ((flattenedItem = [enumerator nextObject])))
   {
-    #ifdef ARC_ENABLED
     @autoreleasepool {
-    #else
-    NSAutoreleasePool* ap = [[NSAutoreleasePool alloc] init];
-    #endif
     @try{
       LatexitEquation* latexitEquation = [flattenedItem dynamicCastToClass:[LatexitEquation class]];
       if (latexitEquation)
@@ -492,14 +484,10 @@
     @catch(NSException* e){
       DebugLog(0, @"exception : <%@>", e);
     }
-    #ifdef ARC_ENABLED
     }//@autoreleasepool
-    #else
-    [ap release];
-    #endif
   }//end for each libraryItem
   [self->relatexizeMonitor unlockWithCondition:1];
-  [NSApp performSelectorOnMainThread:@selector(endSheet:) withObject:self->relatexizeWindow waitUntilDone:NO];
+  [self.window performSelectorOnMainThread:@selector(endSheet:) withObject:self->relatexizeWindow waitUntilDone:NO];
 }
 //end relatexizeItemsThreadFunction:
 

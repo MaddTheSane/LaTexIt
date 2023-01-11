@@ -50,15 +50,11 @@
 -(BOOL) closeApplicationWithBundleIdentifier:(NSString*)bundleIdentifier
 {
   BOOL result = NO;
-  NSArray* runningApplications =
-    [NSRunningApplication performSelector:@selector(runningApplicationsWithBundleIdentifier:) withObject:bundleIdentifier];
-  NSEnumerator* enumerator = [runningApplications objectEnumerator];
-  id runningApplication = nil;
-  while((runningApplication = [enumerator nextObject]))
+  NSArray<NSRunningApplication*>* runningApplications =
+    [NSRunningApplication runningApplicationsWithBundleIdentifier:bundleIdentifier];
+  for(NSRunningApplication *runningApplication in runningApplications)
   {
-    SEL terminateSelector = NSSelectorFromString(@"terminate");
-    [runningApplication performSelector:terminateSelector];
-    result |= YES;
+    result |= [runningApplication terminate];
   }
   return result;
 }

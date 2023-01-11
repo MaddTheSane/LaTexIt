@@ -515,7 +515,9 @@ static int kExportContext = 0;
     [self->relatexizeProgressIndicator startAnimation:self];
     [self->relatexizeAbortButton setTarget:self];
     [self->relatexizeAbortButton setAction:@selector(relatexizeAbort:)];
-    [NSApp beginSheet:self->relatexizeWindow modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:0];
+    [self.window beginSheet:self->relatexizeWindow completionHandler:^(NSModalResponse returnCode) {
+      [self sheetDidEnd:self->relatexizeWindow returnCode:returnCode contextInfo:NULL];
+    }];
     [self->relatexizeTimer release];
     self->relatexizeTimer = [[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(relatexizeRefreshGUI:) userInfo:nil repeats:YES] retain];
     [self relatexizeRefreshGUI:self];
@@ -593,7 +595,7 @@ static int kExportContext = 0;
     #endif
   }//end for each libraryItem
   [self->relatexizeMonitor unlockWithCondition:1];
-  [NSApp performSelectorOnMainThread:@selector(endSheet:) withObject:self->relatexizeWindow waitUntilDone:NO];
+  [self.window performSelectorOnMainThread:@selector(endSheet:) withObject:self->relatexizeWindow waitUntilDone:NO];
 }
 //end relatexizeItemsThreadFunction:
 
@@ -612,13 +614,13 @@ static int kExportContext = 0;
       BOOL cancel = NO;
       if (libraryItem && [document lastAppliedLibraryEquation] && (libraryItem != [document lastAppliedLibraryEquation]))
       {
-        NSAlert* alert =
-          [NSAlert alertWithMessageText:NSLocalizedString(@"You may not be updating the good equation", @"")
-                          defaultButton:NSLocalizedString(@"Update the equation", @"")
-                        alternateButton:NSLocalizedString(@"Cancel", @"")
-                            otherButton:nil
-              informativeTextWithFormat:NSLocalizedString(@"You changed the library selection since the last equation was imported into the editor", @"")];
-         cancel = ([alert runModal] == NSAlertAlternateReturn);
+        NSAlert* alert = [[NSAlert alloc] init];
+        alert.messageText = NSLocalizedString(@"You may not be updating the good equation", @"");
+        alert.informativeText = NSLocalizedString(@"You changed the library selection since the last equation was imported into the editor", @"");
+        [alert addButtonWithTitle:NSLocalizedString(@"Update the equation", @"")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+         cancel = ([alert runModal] == NSAlertSecondButtonReturn);
+        [alert release];
       }
 
       if (!cancel)
@@ -921,8 +923,9 @@ static int kExportContext = 0;
 
     [self->importTeXOptions release];
     self->importTeXOptions = [options copy];
-    [NSApp beginSheet:self->importTeXPanel modalForWindow:[self window] modalDelegate:self
-       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:0];
+    [self.window beginSheet:self->importTeXPanel completionHandler:^(NSModalResponse returnCode) {
+      [self sheetDidEnd:self->importTeXPanel returnCode:returnCode contextInfo:NULL];
+    }];
   }//end if ([texItems count] > 0)
 }
 //end importTeXItems:
@@ -961,29 +964,22 @@ static int kExportContext = 0;
 {
   LibraryManager* libraryManager = [LibraryManager sharedManager];
   NSNumber* importOption = [[self->importTeXOptions objectForKey:@"importOption"] dynamicCastToClass:[NSNumber class]];
-  #ifdef ARC_ENABLED
+  BOOL souldImport;
   @autoreleasepool {
-  #else
-  NSAutoreleasePool* ap1 = [[NSAutoreleasePool alloc] init];
-  #endif
   NSArray* itemsToRemove = nil;
   if (importOption && ([importOption integerValue] == LIBRARY_IMPORT_OVERWRITE))
     itemsToRemove = [libraryManager allItems];
   [self->importTeXOptions release];
   self->importTeXOptions = nil;
 
-  BOOL souldImport = (sender == self->importTeXImportButton);
+  souldImport = (sender == self->importTeXImportButton);
   if (souldImport)
     [self performImportTeXItems:sender];
   
   if (itemsToRemove)
     [libraryManager removeItems:itemsToRemove];
-  #ifdef ARC_ENABLED
   }//end @autoreleasepool
-  #else
-  [ap1 release];
-  #endif
-  [NSApp endSheet:self->importTeXPanel returnCode:(souldImport ? 1 : 0)];
+  [self.window endSheet:self->importTeXPanel returnCode:(souldImport ? 1 : 0)];
   [self->importTeXArrayController removeObserver:self forKeyPath:@"arrangedObjects.checked"];
   [self->importTeXArrayController release];
   self->importTeXArrayController = nil;
@@ -1001,12 +997,11 @@ static int kExportContext = 0;
       BOOL ok = [[LibraryManager sharedManager] loadFrom:[[[openPanel URLs] lastObject] path] option:import_option parent:nil];
       if (!ok)
       {
-        NSAlert* alert = [NSAlert
-          alertWithMessageText:NSLocalizedString(@"Loading error", @"")
-                 defaultButton:NSLocalizedString(@"OK", @"")
-               alternateButton:nil otherButton:nil
-     informativeTextWithFormat:NSLocalizedString(@"The file does not appear to be a valid format", @"")];
+        NSAlert* alert = [[NSAlert alloc] init];
+        alert.messageText = NSLocalizedString(@"Loading error", @"");
+        alert.informativeText = NSLocalizedString(@"The file does not appear to be a valid format", @"");
        [alert runModal];
+        [alert release];
       }
       else
       {
@@ -1033,12 +1028,11 @@ static int kExportContext = 0;
                                                options:options];
       if (!ok)
       {
-        NSAlert* alert = [NSAlert
-          alertWithMessageText:NSLocalizedString(@"An error occured while saving.", @"")
-                 defaultButton:NSLocalizedString(@"OK", @"")
-               alternateButton:nil otherButton:nil
-     informativeTextWithFormat:@""];
+        NSAlert* alert = [[NSAlert alloc] init];
+        alert.messageText = NSLocalizedString(@"An error occured while saving.", @"");
+        alert.informativeText = @"";
        [alert runModal];
+        [alert release];
       }//end if (ok)
     }
     [self->savePanel release];

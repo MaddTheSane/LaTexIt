@@ -1111,14 +1111,14 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
 
   if (runBegin && !mustProcess)
   {
-    NSAlert* alert = 
-      [NSAlert alertWithMessageText:NSLocalizedString(@"Empty LaTeX body", @"")
-                      defaultButton:NSLocalizedString(@"Process anyway", @"")
-                    alternateButton:NSLocalizedString(@"Cancel", @"")
-                        otherButton:nil
-          informativeTextWithFormat:NSLocalizedString(@"You did not type any text in the body. The result will certainly be empty.", @"")];
+    NSAlert* alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Empty LaTeX body", @"");
+    alert.informativeText = NSLocalizedString(@"You did not type any text in the body. The result will certainly be empty.", @"");
+    [alert addButtonWithTitle:NSLocalizedString(@"Process anyway", @"")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
      NSInteger result = [alert runModal];
-     mustProcess = (result == NSAlertDefaultReturn);
+     mustProcess = (result == NSAlertFirstButtonReturn);
+    [alert release];
   }//end if (runBegin && !mustProcess)
   
   if (runBegin && mustProcess)

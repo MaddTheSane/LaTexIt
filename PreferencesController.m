@@ -764,7 +764,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] stringForKey:DragExportPDFWOFGsWriteEngineKey];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFGsWriteEngineKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFGsWriteEngineKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFGsWriteEngineKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -792,7 +792,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] stringForKey:DragExportPDFWOFGsPDFCompatibilityLevelKey];
   else
 #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
 #else
   result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFGsPDFCompatibilityLevelKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
 #endif
@@ -821,7 +821,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey];
   else
   #ifdef ARC_ENABLED
-    number = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
   #else
   number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFWOFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
   #endif
@@ -851,7 +851,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportPDFMetadataInvisibleGraphicsEnabledKey];
   else
   #ifdef ARC_ENABLED
-    number = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
   #else
   number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportPDFMetadataInvisibleGraphicsEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
   #endif
@@ -880,7 +880,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] stringForKey:DragExportSvgPdfToSvgPathKey];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToSvgPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToSvgPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToSvgPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -908,7 +908,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] stringForKey:DragExportSvgPdfToCairoPathKey];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToCairoPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToCairoPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportSvgPdfToCairoPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -937,7 +937,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportTextExportPreambleKey];
   else
     #ifdef ARC_ENABLED
-    number = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportTextExportPreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportTextExportPreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportTextExportPreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -967,7 +967,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportTextExportEnvironmentKey];
   else
     #ifdef ARC_ENABLED
-    number = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportTextExportEnvironmentKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportTextExportEnvironmentKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportTextExportEnvironmentKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -997,7 +997,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportTextExportBodyKey];
   else
     #ifdef ARC_ENABLED
-    number = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportTextExportBodyKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportTextExportBodyKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportTextExportBodyKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1027,7 +1027,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportScaleAsPercentKey];
   else
     #ifdef ARC_ENABLED
-    number = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportScaleAsPercentKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportScaleAsPercentKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportScaleAsPercentKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1057,7 +1057,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DragExportIncludeBackgroundColorKey];
   else
 #ifdef ARC_ENABLED
-    number = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportIncludeBackgroundColorKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportIncludeBackgroundColorKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
 #else
   number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DragExportIncludeBackgroundColorKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
 #endif
@@ -1087,7 +1087,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DefaultDoNotClipPreviewKey];
   else
     #ifdef ARC_ENABLED
-    number = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultDoNotClipPreviewKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultDoNotClipPreviewKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultDoNotClipPreviewKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1148,7 +1148,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     number = [[NSUserDefaults standardUserDefaults] objectForKey:DefaultPointSizeKey];
   else
     #ifdef ARC_ENABLED
-    number = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultPointSizeKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    number = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultPointSizeKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     number = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultPointSizeKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1225,7 +1225,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] dataForKey:DefaultImageViewBackgroundKey];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultImageViewBackgroundKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultImageViewBackgroundKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultImageViewBackgroundKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1263,7 +1263,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] dataForKey:DefaultFontKey];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultFontKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultFontKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)DefaultFontKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1315,7 +1315,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] dataForKey:key];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1367,7 +1367,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] dataForKey:key];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1419,7 +1419,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] dataForKey:key];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1471,7 +1471,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] dataForKey:key];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1523,7 +1523,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] dataForKey:key];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1575,7 +1575,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] dataForKey:key];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)key, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -1654,7 +1654,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] boolForKey:EditionTabKeyInsertsSpacesCountKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)EditionTabKeyInsertsSpacesCountKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) unsignedIntegerValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)EditionTabKeyInsertsSpacesCountKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) unsignedIntegerValue];
     #else
     result = [[NSMakeCollectable((NSData*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)EditionTabKeyInsertsSpacesCountKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] unsignedIntegerValue];
     #endif
@@ -1829,7 +1829,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   NSDictionary* result = nil;
   NSArray* bodyTemplates = [self bodyTemplates];
   NSInteger bodyTemplateServiceIndex = [self bodyTemplateServiceIndex];
-  NSDictionary* bodyTemplate = (0<=bodyTemplateServiceIndex) && ((unsigned)bodyTemplateServiceIndex<[bodyTemplates count]) ?
+  NSDictionary* bodyTemplate = (0<=bodyTemplateServiceIndex) && ((NSUInteger)bodyTemplateServiceIndex<[bodyTemplates count]) ?
                            [bodyTemplates objectAtIndex:bodyTemplateServiceIndex] : nil;
   result = !bodyTemplate? nil : [NSDictionary dictionaryWithDictionary:bodyTemplate];
   return result;
@@ -1872,7 +1872,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   if (compositionsController)
   {
     NSUInteger result2 = [compositionsController selectionIndex];
-    result = (result2 == NSNotFound) ? -1 : (signed)result2;
+    result = (result2 == NSNotFound) ? -1 : (NSInteger)result2;
   }
   else
   {
@@ -1923,7 +1923,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 -(void) setCompositionConfigurationDocument:(NSDictionary*)value
 {
   NSMutableArray* configurations = [[self compositionConfigurations] mutableCopy];
-  NSUInteger selectedIndex = (unsigned)Clip_nsi(0, [self compositionConfigurationsDocumentIndex], (signed)[configurations count]);
+  NSUInteger selectedIndex = (NSUInteger)Clip_nsi(0, [self compositionConfigurationsDocumentIndex], (NSInteger)[configurations count]);
   if (selectedIndex < [configurations count])
   {
     [configurations replaceObjectAtIndex:selectedIndex withObject:value];
@@ -1963,7 +1963,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] boolForKey:ServiceUsesHistoryKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceUsesHistoryKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceUsesHistoryKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceUsesHistoryKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
     #endif
@@ -1978,7 +1978,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] boolForKey:HistoryDeleteOldEntriesEnabledKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)HistoryDeleteOldEntriesEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)HistoryDeleteOldEntriesEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)HistoryDeleteOldEntriesEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
     #endif
@@ -1993,7 +1993,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] objectForKey:HistoryDeleteOldEntriesLimitKey];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)HistoryDeleteOldEntriesLimitKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)HistoryDeleteOldEntriesLimitKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)HistoryDeleteOldEntriesLimitKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -2008,7 +2008,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] boolForKey:HistorySmartEnabledKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)HistorySmartEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)HistorySmartEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)HistorySmartEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
     #endif
@@ -2136,7 +2136,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalLeftMarginKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalLeftMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) floatValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalLeftMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) floatValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalLeftMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] floatValue];
     #endif
@@ -2161,10 +2161,10 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   CGFloat result = 0;
   if (self->isLaTeXiT)
-    result = [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalRightMarginKey];
+    result = [[NSUserDefaults standardUserDefaults] doubleForKey:AdditionalRightMarginKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalRightMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) floatValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalRightMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) doubleValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalRightMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] floatValue];
     #endif
@@ -2192,7 +2192,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalTopMarginKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalTopMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) floatValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalTopMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) floatValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalTopMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] floatValue];
     #endif
@@ -2203,7 +2203,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 -(void) setMarginsAdditionalTop:(CGFloat)value
 {
   if (self->isLaTeXiT)
-    [[NSUserDefaults standardUserDefaults] setFloat:value forKey:AdditionalTopMarginKey];
+    [[NSUserDefaults standardUserDefaults] setDouble:value forKey:AdditionalTopMarginKey];
   else
     #ifdef ARC_ENABLED
     CFPreferencesSetAppValue((CHBRIDGE CFStringRef)AdditionalTopMarginKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
@@ -2217,10 +2217,10 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   CGFloat result = 0;
   if (self->isLaTeXiT)
-    result = [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalBottomMarginKey];
+    result = [[NSUserDefaults standardUserDefaults] doubleForKey:AdditionalBottomMarginKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalBottomMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) floatValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalBottomMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) doubleValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalBottomMarginKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] floatValue];
     #endif
@@ -2334,7 +2334,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] boolForKey:SynchronizationNewDocumentsEnabledKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
     #endif
@@ -2363,7 +2363,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   else//if (!self->isLaTeXiT)
   {
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
     #else
     result = [[NSMakeCollectable(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizePreambleKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
     #endif
@@ -2392,7 +2392,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] boolForKey:SynchronizationNewDocumentsSynchronizeEnvironmentKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeEnvironmentKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeEnvironmentKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeEnvironmentKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
     #endif
@@ -2420,7 +2420,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] boolForKey:SynchronizationNewDocumentsSynchronizeBodyKey];
   else
     #ifdef ARC_ENABLED
-    result = [(CHBRIDGE NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeBodyKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
+    result = [(__bridge_transfer NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeBodyKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey) boolValue];
     #else
     result = [[NSMakeCollectable((NSNumber*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsSynchronizeBodyKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease] boolValue];
     #endif
@@ -2448,7 +2448,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] stringForKey:SynchronizationNewDocumentsPathKey];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationNewDocumentsPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -2533,7 +2533,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       result = [[NSUserDefaults standardUserDefaults] dictionaryForKey:SynchronizationAdditionalScriptsKey];
     else
       #ifdef ARC_ENABLED
-      result = (CHBRIDGE NSDictionary*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationAdditionalScriptsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationAdditionalScriptsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       result = [NSMakeCollectable((NSDictionary*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)SynchronizationAdditionalScriptsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -2613,7 +2613,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     frameAsString = [[NSUserDefaults standardUserDefaults] stringForKey:LatexPaletteFrameKey];
   else
     #ifdef ARC_ENABLED
-    frameAsString = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LatexPaletteFrameKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    frameAsString = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LatexPaletteFrameKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     frameAsString = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LatexPaletteFrameKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -2693,7 +2693,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     result = [[NSUserDefaults standardUserDefaults] stringForKey:LibraryPathKey];
   else
     #ifdef ARC_ENABLED
-    result = (CHBRIDGE NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LibraryPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LibraryPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     #else
     result = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LibraryPathKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
     #endif
@@ -2772,7 +2772,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     else
     {
       #ifdef ARC_ENABLED
-      NSArray* editionTextShortcuts = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)TextShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      NSArray* editionTextShortcuts = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)TextShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       NSArray* editionTextShortcuts = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)TextShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -2797,7 +2797,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       result = [[NSUserDefaults standardUserDefaults] arrayForKey:TextShortcutsKey];
     else
       #ifdef ARC_ENABLED
-      result = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)TextShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)TextShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       result = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)TextShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -2821,7 +2821,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     else
     {
       #ifdef ARC_ENABLED
-      NSArray* preambles =(CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)PreamblesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      NSArray* preambles =CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)PreamblesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       NSArray* preambles =[NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)PreamblesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -2849,7 +2849,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       result = [[NSUserDefaults standardUserDefaults] arrayForKey:PreamblesKey];
     else
       #ifdef ARC_ENABLED
-      result = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)PreamblesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)PreamblesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       result = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)PreamblesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -2873,7 +2873,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     else
     {
       #ifdef ARC_ENABLED
-      NSArray* bodyTemplates = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)BodyTemplatesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      NSArray* bodyTemplates = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)BodyTemplatesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       NSArray* bodyTemplates = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)BodyTemplatesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -2900,7 +2900,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       result = [[NSUserDefaults standardUserDefaults] arrayForKey:BodyTemplatesKey];
     else
       #ifdef ARC_ENABLED
-      result = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)BodyTemplatesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)BodyTemplatesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       result = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)BodyTemplatesKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -2924,7 +2924,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     else
     {
       #ifdef ARC_ENABLED
-      NSArray* compositionConfigurations = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)CompositionConfigurationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      NSArray* compositionConfigurations = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)CompositionConfigurationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       NSArray* compositionConfigurations = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)CompositionConfigurationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -2955,7 +2955,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       result = [[NSUserDefaults standardUserDefaults] arrayForKey:CompositionConfigurationsKey];
     else
       #ifdef ARC_ENABLED
-      result = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)CompositionConfigurationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)CompositionConfigurationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       result = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)CompositionConfigurationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -2979,7 +2979,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     else
     {
       #ifdef ARC_ENABLED
-      NSArray* serviceShortcuts = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      NSArray* serviceShortcuts = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       NSArray* serviceShortcuts = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -3004,7 +3004,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       result = [[NSUserDefaults standardUserDefaults] arrayForKey:ServiceShortcutsKey];
     else
       #ifdef ARC_ENABLED
-      result = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       result = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceShortcutsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -3028,7 +3028,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     else
     {
       #ifdef ARC_ENABLED
-      NSArray* serviceRegularExpressionFilters = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceRegularExpressionFiltersKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      NSArray* serviceRegularExpressionFilters = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceRegularExpressionFiltersKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       NSArray* serviceRegularExpressionFilters = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceRegularExpressionFiltersKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -3053,7 +3053,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       result = [[NSUserDefaults standardUserDefaults] arrayForKey:ServiceRegularExpressionFiltersKey];
     else
       #ifdef ARC_ENABLED
-      result = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceRegularExpressionFiltersKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceRegularExpressionFiltersKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       result = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)ServiceRegularExpressionFiltersKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -3076,7 +3076,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     else
     {
       #ifdef ARC_ENABLED
-      NSArray* additionalFilesPaths = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalFilesPathsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      NSArray* additionalFilesPaths = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalFilesPathsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       NSArray* additionalFilesPaths = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalFilesPathsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -3101,7 +3101,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       result = [[NSUserDefaults standardUserDefaults] arrayForKey:AdditionalFilesPathsKey];
     else
       #ifdef ARC_ENABLED
-      result = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalFilesPathsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalFilesPathsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       result = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)AdditionalFilesPathsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -3127,7 +3127,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     else
     {
       #ifdef ARC_ENABLED
-      NSArray* encapsulations = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)EncapsulationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      NSArray* encapsulations = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)EncapsulationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       NSArray* encapsulations = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)EncapsulationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -3156,7 +3156,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
       result = [[NSUserDefaults standardUserDefaults] arrayForKey:EncapsulationsKey];
     else
       #ifdef ARC_ENABLED
-      result = (CHBRIDGE NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)EncapsulationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+      result = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)EncapsulationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
       #else
       result = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)EncapsulationsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
       #endif
@@ -3171,15 +3171,15 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   BOOL ok = self->isLaTeXiT;
   if (ok)
   {
-    NSString* infoPlistPath =
-      [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents"] stringByAppendingPathComponent:@"Info.plist"];
-    NSURL* infoPlistURL = !infoPlistPath ? nil : [NSURL fileURLWithPath:infoPlistPath];
+    NSURL* infoPlistURL =
+      [[[[NSBundle mainBundle] bundleURL] URLByAppendingPathComponent:@"Contents"] URLByAppendingPathComponent:@"Info.plist"];
     CFPropertyListFormat format = kCFPropertyListBinaryFormat_v1_0;
     CFErrorRef cfError = nil;
     #ifdef ARC_ENABLED
-    CFPropertyListRef cfInfoPlist = CFPropertyListCreateWithData(kCFAllocatorDefault,
-                                                                 (CHBRIDGE CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
-                                                                 kCFPropertyListMutableContainersAndLeaves, &format, &cfError);
+    NSInputStream *stream = [[NSInputStream alloc] initWithURL:infoPlistURL];
+    CFPropertyListRef cfInfoPlist = CFPropertyListCreateWithStream(kCFAllocatorDefault,
+                                                                   (__bridge CFReadStreamRef)(stream), 0,
+                                                                   kCFPropertyListMutableContainersAndLeaves, &format, &cfError);
     #else
     CFPropertyListRef cfInfoPlist = CFPropertyListCreateWithData(kCFAllocatorDefault,
                                                                  (CFDataRef)[NSData dataWithContentsOfURL:infoPlistURL],
@@ -3529,6 +3529,8 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
     }//end if (cfInfoPlist && !cfError)
     if (cfInfoPlist)
       CFRelease(cfInfoPlist);
+    if (cfError)
+      CFRelease(cfError);
   }//end if (ok)  
   return ok;
 }
