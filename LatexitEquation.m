@@ -2830,7 +2830,14 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
   NSString* extension = getFileExtensionForExportFormat(exportFormat);
-  NSString* uti = getUTIForExportFormat(exportFormat);
+  NSString* uti;
+  
+  if (@available(macOS 11.0, *)) {
+    uti = getContentTypeForExportFormat(exportFormat).identifier;
+  } else {
+    // Fallback on earlier versions
+    uti = getUTIForExportFormat(exportFormat);
+  }
   switch(exportFormat)
   {
     case EXPORT_FORMAT_PDF:

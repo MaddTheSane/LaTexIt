@@ -177,8 +177,8 @@
     [[NSDate date] timeIntervalSinceDate:self->animationStartDate];
   BOOL toVisible = [[timer userInfo] boolValue];
   NSTimeInterval animationDuration = toVisible ? self->animationDurationIn : self->animationDurationOut;
-  timeElapsed = Clip_d(0., timeElapsed, animationDuration);
-  double evolution = !animationDuration ? 1. : Clip_d(0., timeElapsed/animationDuration, 1.);
+  timeElapsed = Clip(0., timeElapsed, animationDuration);
+  double evolution = !animationDuration ? 1. : Clip(0., timeElapsed/animationDuration, 1.);
   if (toVisible)
     [[self window] setAlphaValue:(1-evolution)*self->animationStartAlphaValue+evolution*1.];
   else

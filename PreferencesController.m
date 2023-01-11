@@ -1914,7 +1914,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSDictionary* result = nil;
   NSArray* configurations = [self compositionConfigurations];
-  NSUInteger selectedIndex = (unsigned)Clip_nsi(0, [self compositionConfigurationsDocumentIndex], (signed)[configurations count]);
+  NSUInteger selectedIndex = Clip(0, [self compositionConfigurationsDocumentIndex], [configurations count]);
   result = (selectedIndex < [configurations count]) ? [configurations objectAtIndex:selectedIndex] : nil;
   return result;
 }
@@ -1923,7 +1923,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 -(void) setCompositionConfigurationDocument:(NSDictionary*)value
 {
   NSMutableArray* configurations = [[self compositionConfigurations] mutableCopy];
-  NSUInteger selectedIndex = (NSUInteger)Clip_nsi(0, [self compositionConfigurationsDocumentIndex], (NSInteger)[configurations count]);
+  NSUInteger selectedIndex = Clip(0, [self compositionConfigurationsDocumentIndex], [configurations count]);
   if (selectedIndex < [configurations count])
   {
     [configurations replaceObjectAtIndex:selectedIndex withObject:value];
@@ -2278,7 +2278,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   NSString* result = nil;
   NSArray* encapsulations = [self encapsulations];
-  NSUInteger selectedIndex = (unsigned)Clip_nsi(0, [self encapsulationsSelectedIndex], (signed)[encapsulations count]);
+  NSUInteger selectedIndex = Clip(0, [self encapsulationsSelectedIndex], [encapsulations count]);
   result = (selectedIndex < [encapsulations count]) ? [encapsulations objectAtIndex:selectedIndex] : nil;
   return result;
 }

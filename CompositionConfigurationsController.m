@@ -256,9 +256,9 @@
 {
   NSInteger preambleLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedPreambleIndexKey];
   NSInteger preambleServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedPreambleIndexKey];
-  id preambleLaTeXisation = !IsBetween_nsi(1, preambleLaTeXisationIndex+1, (signed)[[self arrangedObjects] count]) ? nil :
+  id preambleLaTeXisation = !IsBetween(1, preambleLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:preambleLaTeXisationIndex];
-  id preambleService = !IsBetween_nsi(1, preambleServiceIndex+1, (signed)[[self arrangedObjects] count]) ? nil :
+  id preambleService = !IsBetween(1, preambleServiceIndex+1, [[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:preambleServiceIndex];
   [super moveObjectsAtIndices:indices toIndex:index];
   NSUInteger newPreambleLaTeXisationIndex = [[self arrangedObjects] indexOfObject:preambleLaTeXisation];

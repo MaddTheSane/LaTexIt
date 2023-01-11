@@ -88,7 +88,7 @@
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
   NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
-  if (!IsBetween_nsi(1, selectedIndex+1, (signed)[compositionConfigurations count]))
+  if (!IsBetween(1, selectedIndex+1, [compositionConfigurations count]))
   {
     [[AppController appController] showPreferencesPaneWithItemIdentifier:CompositionToolbarItemIdentifier options:nil];
     [[[AppController appController] preferencesWindowController] compositionConfigurationsManagerOpen:sender];

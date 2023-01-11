@@ -1692,7 +1692,7 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSArray* compositionConfigurations = [preferencesController compositionConfigurations];
   NSInteger selectedIndex = [self->compositionConfigurationsCurrentPopUpButton indexOfSelectedItem];
-  if ((sender != self->compositionConfigurationsCurrentPopUpButton) || !IsBetween_nsi(1, selectedIndex+1, (signed)[compositionConfigurations count]))
+  if ((sender != self->compositionConfigurationsCurrentPopUpButton) || !IsBetween(1, selectedIndex+1, [compositionConfigurations count]))
   {
     [self.window beginSheet:self->compositionConfigurationsManagerPanel completionHandler:^(NSModalResponse returnCode) {
       [self sheetDidEnd:self->compositionConfigurationsManagerPanel returnCode:returnCode contextInfo:NULL];

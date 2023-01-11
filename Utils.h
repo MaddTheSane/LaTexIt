@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#include <tgmath.h>
 
 #ifdef ARC_ENABLED
 #define CHBRIDGE __bridge
@@ -23,12 +24,6 @@ extern int DebugLogLevel;
 #define LocalLocalizedString(key, comment) \
 	    [[NSBundle bundleForClass:[self class]] localizedStringForKey:(key) value:@"" table:nil]
 
-#define NSAppKitVersionNumber10_4 824
-#define NSAppKitVersionNumber10_5 949
-#define NSAppKitVersionNumber10_6 1038
-#define NSAppKitVersionNumber10_7 1110
-#define NSAppKitVersionNumber10_8 1187
-#define NSAppKitVersionNumber10_9 1265
 #define NSAppKitVersionNumber10_10 1343
 #define NSAppKitVersionNumber10_11 1404
 #define NSAppKitVersionNumber10_12 1504
@@ -107,3 +102,57 @@ NSRect adaptRectangle(NSRect rectangle, NSRect containerRectangle, BOOL allowSca
 NSComparisonResult compareVersions(NSString* version1, NSString* version2);
 
 void MethodSwizzle(Class aClass, SEL orig_sel, SEL alt_sel, BOOL isInstanceMethod);
+
+#define _LU_ATTRS __attribute__((__overloadable__, __always_inline__))
+#define _LU_ATTRSp __attribute__((__overloadable__))
+
+typedef void _Argument_type_is_not_arithmetic;
+static inline _Argument_type_is_not_arithmetic __lu_promote(...)
+  __attribute__((__unavailable__,__overloadable__));
+static inline char                 _LU_ATTRSp __lu_promote(char);
+static inline unsigned char        _LU_ATTRSp __lu_promote(unsigned char);
+static inline short                _LU_ATTRSp __lu_promote(short);
+static inline unsigned short       _LU_ATTRSp __lu_promote(unsigned short);
+static inline int                  _LU_ATTRSp __lu_promote(int);
+static inline unsigned int         _LU_ATTRSp __lu_promote(unsigned int);
+static inline long                 _LU_ATTRSp __lu_promote(long);
+static inline unsigned long        _LU_ATTRSp __lu_promote(unsigned long);
+static inline float                _LU_ATTRSp __lu_promote(float);
+static inline double               _LU_ATTRSp __lu_promote(double);
+
+#define __lu_promote3(__x, __y, __z) (__typeof__(__lu_promote(__x) + \
+                                                 __lu_promote(__y) + \
+                                                 __lu_promote(__z)))
+
+static inline char _LU_ATTRS __IsBetween(char inf, char x, char sup) {return IsBetween_c(inf, x, sup);}
+static inline unsigned char _LU_ATTRS __IsBetween(unsigned char inf, unsigned char x, unsigned char sup) {return IsBetween_uc(inf, x, sup);}
+static inline short _LU_ATTRS __IsBetween(short inf, short x, short sup) {return IsBetween_s(inf,x,sup);}
+static inline unsigned short _LU_ATTRS __IsBetween(unsigned short inf, unsigned short x, unsigned short sup) {return IsBetween_us(inf,x,sup);}
+static inline int _LU_ATTRS __IsBetween(int inf, int x, int sup) {return IsBetween_i(inf,x,sup);}
+static inline unsigned int _LU_ATTRS __IsBetween(unsigned int inf, unsigned int x, unsigned int sup) {return IsBetween_ui(inf,x,sup);}
+static inline long _LU_ATTRS __IsBetween(long inf, long x, long sup) {return IsBetween_l(inf,x,sup);}
+static inline unsigned long _LU_ATTRS __IsBetween(unsigned long inf, unsigned long x, unsigned long sup) {return IsBetween_ul(inf,x,sup);}
+static inline float _LU_ATTRS __IsBetween(float inf, float x, float sup) {return IsBetween_f(inf,x,sup);}
+static inline double _LU_ATTRS __IsBetween(double inf, double x, double sup) {return IsBetween_d(inf,x,sup);}
+
+static inline char _LU_ATTRS __Clip(char inf, char x, char sup) {return Clip_c(inf, x, sup);}
+static inline unsigned char _LU_ATTRS __Clip(unsigned char inf, unsigned char x, unsigned char sup) {return Clip_uc(inf, x, sup);}
+static inline short _LU_ATTRS __Clip(short inf, short x, short sup) {return Clip_s(inf, x, sup);}
+static inline unsigned short _LU_ATTRS __Clip(unsigned short inf, unsigned short x, unsigned short sup) {return Clip_us(inf, x, sup);}
+static inline int _LU_ATTRS __Clip(int inf, int x, int sup) {return Clip_i(inf, x, sup);}
+static inline unsigned int _LU_ATTRS __Clip(unsigned int inf, unsigned int x, unsigned int sup) {return Clip_ui(inf, x, sup);}
+static inline long _LU_ATTRS __Clip(long inf, long x, long sup) {return Clip_l(inf, x, sup);}
+static inline unsigned long _LU_ATTRS __Clip(unsigned long inf, unsigned long x, unsigned long sup) {return Clip_ul(inf, x, sup);}
+static inline float _LU_ATTRS __Clip(float inf, float x, float sup) {return Clip_f(inf, x, sup);}
+static inline double _LU_ATTRS __Clip(double inf, double x, double sup) {return Clip_d(inf, x, sup);}
+
+#define IsBetween(__x, __y, __z) __IsBetween(__lu_promote3((__x), (__y), (__z))(__x), \
+                                             __lu_promote3((__x), (__y), (__z))(__y), \
+                                             __lu_promote3((__x), (__y), (__z))(__z))
+
+#define Clip(__x, __y, __z) __Clip(__lu_promote3((__x), (__y), (__z))(__x), \
+                                   __lu_promote3((__x), (__y), (__z))(__y), \
+                                   __lu_promote3((__x), (__y), (__z))(__z))
+
+#undef _LU_ATTRS
+#undef _LU_ATTRSp

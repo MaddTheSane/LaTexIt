@@ -214,9 +214,9 @@ static NSDictionary* noneBodyTemplate = nil;
 {
   NSInteger bodyTemplateLaTeXisationIndex = [[NSUserDefaults standardUserDefaults] integerForKey:LatexisationSelectedBodyTemplateIndexKey];
   NSInteger bodyTemplateServiceIndex      = [[NSUserDefaults standardUserDefaults] integerForKey:ServiceSelectedBodyTemplateIndexKey];
-  id bodyTemplateLaTeXisation = !IsBetween_nsi(1, bodyTemplateLaTeXisationIndex+1, (signed)[[self arrangedObjects] count]) ? nil :
+  id bodyTemplateLaTeXisation = !IsBetween(1, bodyTemplateLaTeXisationIndex+1, [[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:bodyTemplateLaTeXisationIndex];
-  id bodyTemplateService = !IsBetween_nsi(1, bodyTemplateServiceIndex+1, (signed)[[self arrangedObjects] count]) ? nil :
+  id bodyTemplateService = !IsBetween(1, bodyTemplateServiceIndex+1, [[self arrangedObjects] count]) ? nil :
     [[self arrangedObjects] objectAtIndex:bodyTemplateServiceIndex];
   [super moveObjectsAtIndices:indices toIndex:index];
   NSUInteger newBodyTemplateLaTeXisationIndex = [[self arrangedObjects] indexOfObject:bodyTemplateLaTeXisation];
