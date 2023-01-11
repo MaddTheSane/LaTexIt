@@ -7,6 +7,7 @@
 //
 
 #import "EncapsulationsController.h"
+#import "ARCBridge.h"
 
 
 @implementation EncapsulationsController
@@ -28,7 +29,7 @@
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
-  [newObject release];
+  RELEASEOBJ(newObject);
 }
 //end add:
 

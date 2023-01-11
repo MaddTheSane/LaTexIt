@@ -43,11 +43,7 @@
     [compData release];
     #endif
   }//end if (data)
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
-  return result;
+  return AUTORELEASEOBJ(result);
 }
 //end zipcompressDeprecated:
 
@@ -86,11 +82,7 @@
     [compData release];
     #endif
   }//end if (data)
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
-  return result;
+  return AUTORELEASEOBJ(result);
 }
 //end zipcompress:level:
 
@@ -155,11 +147,7 @@
     [decompData release];
     #endif
   }//end if (data)
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
-  return result;
+  return AUTORELEASEOBJ(result);
 }
 //end zipuncompressDeprecated:
 
@@ -196,11 +184,7 @@
     [decompData release];
     #endif
   }//end if (data)
-  #ifdef ARC_ENABLED
-  #else
-  [result autorelease];
-  #endif
-  return result;
+  return AUTORELEASEOBJ(result);
 }
 //end zipuncompress:
 

@@ -200,13 +200,8 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
   }
   else
   {
-    #ifdef ARC_ENABLED
     oldLatexitVersion = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_LaTeXiTVersionKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
     newLatexitVersion = CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LaTeXiTVersionKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey));
-    #else
-    oldLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_LaTeXiTVersionKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
-    newLatexitVersion = [NSMakeCollectable((NSString*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)LaTeXiTVersionKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
-    #endif
   }
 
   
@@ -371,7 +366,6 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
       CFPreferencesSetAppValue((CHBRIDGE CFStringRef)oldKey, 0, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #ifdef ARC_ENABLED
       CFPreferencesSetAppValue((CHBRIDGE CFStringRef)newKey, (CHBRIDGE CFPropertyListRef)value, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
-      
       #else
       CFPreferencesSetAppValue((CHBRIDGE CFStringRef)newKey, value, (CHBRIDGE CFStringRef)LaTeXiTAppKey);
       #endif
@@ -450,13 +444,8 @@ static NSString* const Old_CompositionConfigurationAdditionalProcessingScriptsCo
   }
   else
   {
-    #ifdef ARC_ENABLED
     oldServiceShortcutsEnabled = (CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_ServiceShortcutEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)));
     oldServiceShortcutsStrings = (CFBridgingRelease(CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_ServiceShortcutStringsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)));
-    #else
-    oldServiceShortcutsEnabled = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_ServiceShortcutEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
-    oldServiceShortcutsStrings = [NSMakeCollectable((NSArray*)CFPreferencesCopyAppValue((CHBRIDGE CFStringRef)Old_ServiceShortcutStringsKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey)) autorelease];
-    #endif
   }
   
   NSMutableArray* newServiceShortcuts = [NSMutableArray arrayWithCapacity:6];

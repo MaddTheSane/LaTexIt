@@ -580,36 +580,46 @@ static NSMutableDictionary* cachePaths = nil;
     NSString* title =
       [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the library <%@> ?", @""),
                                  [[filename pathComponents] lastObject]];
-    NSAlert* alert = [NSAlert alertWithMessageText:title
-                                     defaultButton:NSLocalizedString(@"Add to the library", @"")
-                                   alternateButton:NSLocalizedString(@"Cancel", @"")
-                                       otherButton:NSLocalizedString(@"Replace the library", @"")
-                         informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the library>, the current library will be lost", @"")];
+    NSAlert* alert = [[NSAlert alloc] init];
+    alert.messageText = title;
+    [alert addButtonWithTitle:NSLocalizedString(@"Add to the library", @"")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+    NSButton *desButton = [alert addButtonWithTitle:NSLocalizedString(@"Replace the library", @"")];
+    if (@available(macOS 11.0, *)) {
+      desButton.hasDestructiveAction = YES;
+    }
+    alert.informativeText = NSLocalizedString(@"If you choose <Replace the library>, the current library will be lost", @"");
     NSInteger confirm = [alert runModal];
-    if (confirm == NSAlertDefaultReturn)
+    if (confirm == NSAlertFirstButtonReturn)
       ok = [[LibraryManager sharedManager] loadFrom:filename option:LIBRARY_IMPORT_MERGE parent:nil];
-    else if (confirm == NSAlertOtherReturn)
+    else if (confirm == NSAlertThirdButtonReturn)
       ok = [[LibraryManager sharedManager] loadFrom:filename option:LIBRARY_IMPORT_OVERWRITE parent:nil];
     else
       ok = YES;
+    [alert release];
   }//end if ([type isEqualTo:@"latexlib", @"library", @"latexhist" or @"plist"])
   else if ([type isEqualTo:@"latexhist"])
   {
     NSString* title =
       [NSString stringWithFormat:NSLocalizedString(@"Do you want to load the history <%@> ?", @""),
                                  [[filename pathComponents] lastObject]];
-    NSAlert* alert = [NSAlert alertWithMessageText:title
-                                     defaultButton:NSLocalizedString(@"Add to the history", @"")
-                                   alternateButton:NSLocalizedString(@"Cancel", @"")
-                                       otherButton:NSLocalizedString(@"Replace the history", @"")
-                         informativeTextWithFormat:NSLocalizedString(@"If you choose <Replace the history>, the current history will be lost", @"")];
+    NSAlert* alert = [[NSAlert alloc] init];
+    alert.messageText = title;
+    [alert addButtonWithTitle:NSLocalizedString(@"Add to the history", @"")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+    NSButton *desButton = [alert addButtonWithTitle:NSLocalizedString(@"Replace the history", @"")];
+    if (@available(macOS 11.0, *)) {
+      desButton.hasDestructiveAction = YES;
+    }
+    alert.informativeText = NSLocalizedString(@"If you choose <Replace the history>, the current history will be lost", @"");
     NSInteger confirm = [alert runModal];
-    if (confirm == NSAlertDefaultReturn)
+    if (confirm == NSAlertFirstButtonReturn)
       ok = [[HistoryManager sharedManager] loadFrom:filename option:HISTORY_IMPORT_MERGE];
-    else if (confirm == NSAlertOtherReturn)
+    else if (confirm == NSAlertThirdButtonReturn)
       ok = [[HistoryManager sharedManager] loadFrom:filename option:HISTORY_IMPORT_OVERWRITE];
     else
       ok = YES;
+    [alert release];
   }//end if ([type isEqualTo:@"latexlib", @"library", @"latexhist" or @"plist"])
   else//latex document
   {
@@ -728,11 +738,11 @@ static NSMutableDictionary* cachePaths = nil;
     stringByAppendingPathComponent:@"Library"]
     stringByAppendingPathComponent:@"Applications"];
   NSString* latexitHelperFilePath = [applicationsPath stringByAppendingPathComponent:@"LaTeXiT Helper.app"];
-  CFURLRef  latexitHelperURL = !latexitHelperFilePath ? 0  :
-    CFURLCreateWithFileSystemPath(0, (CFStringRef)latexitHelperFilePath, kCFURLPOSIXPathStyle, FALSE);
-  OSStatus status = !latexitHelperURL ? -1 : LSRegisterURL(latexitHelperURL, true);
+  NSURL*  latexitHelperURL = !latexitHelperFilePath ? 0  :
+    [NSURL fileURLWithPath:latexitHelperFilePath];
+  OSStatus status = !latexitHelperURL ? -1 : LSRegisterURL((CHBRIDGE CFURLRef)latexitHelperURL, true);
   if (status != noErr)
-    DebugLog(0, @"LSRegisterURL : %ld", (long int)status);
+    DebugLog(0, @"LSRegisterURL : %d", (int)status);
   if ([NSApp respondsToSelector:NSSelectorFromString(@"effectiveAppearance")])
     [NSApp addObserver:self forKeyPath:@"effectiveAppearance" options:NSKeyValueObservingOptionNew context:0];
 
@@ -748,21 +758,23 @@ static NSMutableDictionary* cachePaths = nil;
       {
         NSWorkspaceOpenConfiguration* configuration = [NSWorkspaceOpenConfiguration configuration];
         configuration.activates = NO;
-        NSURL* latexitHelperFileURL = [NSURL fileURLWithPath:latexitHelperFilePath];
-        [[NSWorkspace sharedWorkspace] openApplicationAtURL:latexitHelperFileURL configuration:configuration completionHandler:^(NSRunningApplication * _Nullable app, NSError * _Nullable error) {
+        [[NSWorkspace sharedWorkspace] openApplicationAtURL:latexitHelperURL configuration:configuration completionHandler:^(NSRunningApplication * _Nullable app, NSError * _Nullable error) {
         }];
       }//end if @available(macOS, 10.15)
     }//end if (isMacOS10_15OrAbove())
   }//end if (latexitHelperFilePath && (status == noErr))
 
-  if (latexitHelperURL)
-    CFRelease(latexitHelperURL);
   [LinkBack publishServerWithName:[[NSWorkspace sharedWorkspace] applicationName] delegate:self];
 
   if (self->isGsAvailable && (self->isPdfLaTeXAvailable || self->isLaTeXAvailable || self->isXeLaTeXAvailable || self->isLuaLaTeXAvailable) && !self->isColorStyAvailable)
-    NSRunInformationalAlertPanel(NSLocalizedString(@"color.sty seems to be unavailable", @""),
-                                 NSLocalizedString(@"Without the color.sty package, you won't be able to change the font color", @""),
-                                 @"OK", nil, nil);
+  {
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.alertStyle = NSAlertStyleInformational;
+    alert.messageText = NSLocalizedString(@"color.sty seems to be unavailable", @"");
+    alert.informativeText = NSLocalizedString(@"Without the color.sty package, you won't be able to change the font color", @"");
+    [alert runModal];
+    [alert release];
+  }
 
   PreferencesController* preferencesController = [PreferencesController sharedController];
   NSDictionary* compositionConfiguration = [preferencesController compositionConfigurationDocument];
@@ -1952,10 +1964,12 @@ static NSMutableDictionary* cachePaths = nil;
   BOOL ok = [[NSWorkspace sharedWorkspace] openURL:webSiteURL];
   if (!ok)
   {
-    NSRunAlertPanel(NSLocalizedString(@"Error", @"Error"),
-                   [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.", @""),
-                                              [webSiteURL absoluteString]],
-                    @"OK", nil, nil);
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Error", @"Error");
+    alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.", @""),
+                             [webSiteURL absoluteString]];
+    [alert runModal];
+    [alert release];
   }
 }
 //end openWebSite:
@@ -2162,71 +2176,17 @@ static NSMutableDictionary* cachePaths = nil;
 }
 //end adaptPreambleToCurrentConfiguration:
 
--(BOOL) isGsAvailable
-{
-  return self->isGsAvailable;
-}
-//end isGsAvailable
-
--(BOOL) isDviPdfAvailable
-{
-  return self->isDviPdfAvailable;
-}
-//end isDvipdfAvailable
-
--(BOOL) isPdfLaTeXAvailable
-{
-  return self->isPdfLaTeXAvailable;
-}
-//end isPdfLatexAvailable
-
--(BOOL) isPsToPdfAvailable
-{
-  return self->isPsToPdfAvailable;
-}
-//end isPs2PdfAvailable
-
--(BOOL) isXeLaTeXAvailable
-{
-  return self->isXeLaTeXAvailable;
-}
-//end isXeLatexAvailable
-
--(BOOL) isLuaLaTeXAvailable
-{
-  return self->isLuaLaTeXAvailable;
-}
-//end isLuaLatexAvailable
-
--(BOOL) isLaTeXAvailable
-{
-  return self->isLaTeXAvailable;
-}
-//end isLaTeXAvailable
-
--(BOOL) isColorStyAvailable
-{
-  return self->isColorStyAvailable;
-}
-//end isColorStyAvailable
-
--(BOOL) isPdfToSvgAvailable
-{
-  return self->isPdfToSvgAvailable;
-}
-//end isPdfToSvgAvailable
-
--(BOOL) isPdfToCairoAvailable
-{
-  return self->isPdfToCairoAvailable;
-}
-//end isPdfToCairoAvailable
-
--(BOOL) isPerlWithLibXMLAvailable
-{
-  return self->isPerlWithLibXMLAvailable;
-}
-//end isPerlWithLibXMLAvailable
+@synthesize gsAvailable=isGsAvailable;
+@synthesize dviPdfAvailable=isDviPdfAvailable;
+@synthesize pdfLaTeXAvailable=isPdfLaTeXAvailable;
+@synthesize psToPdfAvailable=isPsToPdfAvailable;
+@synthesize xeLaTeXAvailable= isXeLaTeXAvailable;
+@synthesize luaLaTeXAvailable=isLuaLaTeXAvailable;
+@synthesize laTeXAvailable=isLaTeXAvailable;
+@synthesize colorStyAvailable=isColorStyAvailable;
+@synthesize pdfToSvgAvailable=isPdfToSvgAvailable;
+@synthesize pdfToCairoAvailable=isPdfToCairoAvailable;
+@synthesize perlWithLibXMLAvailable=isPerlWithLibXMLAvailable;
 
 //try to find gs program, searching by its name
 -(void) _findPathWithConfiguration:(id)configuration
@@ -2356,27 +2316,31 @@ static NSMutableDictionary* cachePaths = nil;
         NSString* additionalInfo = ![executableDisplayName isEqualToString:@"ghostscript"] ? @"" :
           [NSString stringWithFormat:@"\n%@",
             NSLocalizedString(@"Unless you have installed X11, you should be sure that you use a version of ghostscript that does not require it (usually gs-nox11 instead of gs).", @"")];
+        NSAlert *alert = [[NSAlert alloc] init];
+        alert.messageText = [NSString stringWithFormat:
+                             NSLocalizedString(@"%@ not found or does not work as expected", @""), executableDisplayName];
+        alert.informativeText = [NSString stringWithFormat:
+                                 NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.%@", @""), executableDisplayName, additionalInfo];
+        if (!allowUIFindOnFailure) {
+          [alert addButtonWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Find %@...", @""), executableDisplayName]];
+          [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+          [alert addButtonWithTitle:NSLocalizedString(@"What's that ?", @"")];
+        }
         NSInteger returnCode =
-          NSRunAlertPanel(
-            [NSString stringWithFormat:
-              NSLocalizedString(@"%@ not found or does not work as expected", @""), executableDisplayName],
-            [NSString stringWithFormat:
-              NSLocalizedString(@"The current configuration of LaTeXiT requires %@ to work.%@", @""), executableDisplayName, additionalInfo],
-            !allowUIFindOnFailure ? @"OK" : [NSString stringWithFormat:NSLocalizedString(@"Find %@...", @""), executableDisplayName],
-            !allowUIFindOnFailure ? nil : NSLocalizedString(@"Cancel", @""),
-            !allowUIFindOnFailure ? nil : NSLocalizedString(@"What's that ?", @""),
-            nil);
-        if (allowUIFindOnFailure && (returnCode == NSAlertOtherReturn))
+          [alert runModal];
+        [alert release];
+        if (allowUIFindOnFailure && (returnCode == NSAlertThirdButtonReturn))
         {
-          returnCode = NSRunAlertPanel(
-            NSLocalizedString(@"What's that ?", @""),
-            NSLocalizedString(@"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part.", @""),
-            NSLocalizedString(@"See help...", @""),
-            NSLocalizedString(@"Cancel", @""),
-            nil);
-          self->shouldOpenInstallLaTeXHelp |= (returnCode == NSAlertDefaultReturn);
+          alert = [[NSAlert alloc] init];
+          alert.messageText = NSLocalizedString(@"What's that ?", @"");
+          alert.informativeText = NSLocalizedString(@"LaTeXiT relies on a functional LaTeX installation. But if you do not know what LaTeX is, you may find it difficult to find and install it. A help section of the documentation is dedicated to that part.", @"");
+          [alert addButtonWithTitle:NSLocalizedString(@"See help...", @"")];
+          [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+          returnCode = [alert runModal];
+          [alert release];
+          self->shouldOpenInstallLaTeXHelp |= (returnCode == NSAlertFirstButtonReturn);
         }//end if (allowUIFindOnFailure && (returnCode == NSAlertOtherReturn))
-        else if (allowUIFindOnFailure && (returnCode == NSAlertDefaultReturn))
+        else if (allowUIFindOnFailure && (returnCode == NSAlertFirstButtonReturn))
         {
           NSFileManager* fileManager = [NSFileManager defaultManager];
           NSOpenPanel* openPanel = [NSOpenPanel openPanel];
@@ -2727,7 +2691,11 @@ static NSMutableDictionary* cachePaths = nil;
   {
     NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration", @"");
     *error = message;
-    NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", @"OK", nil, nil, message);
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Error", @"");
+    alert.informativeText = message;
+    [alert runModal];
+    [alert release];
   }
   else
   {
@@ -3001,9 +2969,14 @@ static NSMutableDictionary* cachePaths = nil;
           NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT", @"");
           *error = message;
           [NSApp activateIgnoringOtherApps:YES];
-          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", NSLocalizedString(@"Cancel", @""),
-                                       NSLocalizedString(@"Open in LaTeXiT", @""), nil, message);
-          if (choice == NSAlertAlternateReturn)
+          NSAlert *alert = [[NSAlert alloc] init];
+          alert.messageText = NSLocalizedString(@"Error", @"");
+          alert.informativeText = message;
+          [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+          [alert addButtonWithTitle:NSLocalizedString(@"Open in LaTeXiT", @"")];
+          NSInteger choice = [alert runModal];
+          [alert release];
+          if (choice == NSAlertSecondButtonReturn)
           {
             NSDocumentController* documentController = [NSDocumentController sharedDocumentController];
             //MyDocument* document = [documentController openUntitledDocumentOfType:@"MyDocumentType" display:YES];
@@ -3204,9 +3177,14 @@ static NSMutableDictionary* cachePaths = nil;
           NSString* message = NSLocalizedString(@"This text is not LaTeX compliant; or perhaps it is a preamble problem ? You can check it in LaTeXiT", @"");
           *error = message;
           [NSApp activateIgnoringOtherApps:YES];
-          NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", NSLocalizedString(@"Cancel", @""),
-                                       NSLocalizedString(@"Open in LaTeXiT", @""), nil, message);
-          if (choice == NSAlertAlternateReturn)
+          NSAlert *alert = [[NSAlert alloc] init];
+          alert.messageText = NSLocalizedString(@"Error", @"");
+          alert.informativeText = message;
+          [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+          [alert addButtonWithTitle:NSLocalizedString(@"Open in LaTeXiT", @"")];
+          NSInteger choice = [alert runModal];
+          [alert release];
+          if (choice == NSAlertSecondButtonReturn)
           {
             NSDocumentController* documentController = [NSDocumentController sharedDocumentController];
             //MyDocument* document = [documentController openUntitledDocumentOfType:@"MyDocumentType" display:YES];
@@ -3256,7 +3234,11 @@ static NSMutableDictionary* cachePaths = nil;
   {
     NSString* message = NSLocalizedString(@"LaTeXiT cannot be run properly, please check its configuration", @"");
     *error = message;
-    NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", @"OK", nil, nil, message);
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Error", @"");
+    alert.informativeText = message;
+    [alert runModal];
+    [alert release];
   }
   else
   {
@@ -3567,19 +3549,22 @@ static NSMutableDictionary* cachePaths = nil;
         *error = message;
         
         [NSApp activateIgnoringOtherApps:YES];
-        NSInteger choice = NSRunAlertPanel(NSLocalizedString(@"Error", @""), @"%@", NSLocalizedString(@"Cancel", @""),
-                                     NSLocalizedString(@"Open in LaTeXiT", @""), nil, message);
-        if (choice == NSAlertAlternateReturn)
+        NSAlert *alert = [[NSAlert alloc] init];
+        alert.messageText = NSLocalizedString(@"Error", @"");
+        alert.informativeText = message;
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Open in LaTeXiT", @"")];
+        NSInteger choice = [alert runModal];
+        [alert release];
+        if (choice == NSAlertSecondButtonReturn)
         {
-          NSEnumerator* enumerator = [errorDocuments objectEnumerator];
-          MyDocument* document = nil;
-          while((document = [enumerator nextObject]))
+          for(MyDocument* document in errorDocuments)
           {
             [document showWindows];
             [[document windowForSheet] makeFirstResponder:[document preferredFirstResponder]];
             [document latexize:self];
           }
-        }//end if (choice == NSAlertAlternateReturn)
+        }//end if (choice == NSAlertSecondButtonReturn)
       }//if there were failures
       
       //Now we must feed the pasteboard
@@ -3803,7 +3788,7 @@ static NSMutableDictionary* cachePaths = nil;
 -(CGFloat) marginsCurrentTopMargin
 {
   CGFloat result = self->marginsWindowController ? [self->marginsWindowController topMargin]
-                          : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalTopMarginKey];
+                          : [[NSUserDefaults standardUserDefaults] doubleForKey:AdditionalTopMarginKey];
   return result;
 }
 //end marginsCurrentTopMargin
@@ -3811,7 +3796,7 @@ static NSMutableDictionary* cachePaths = nil;
 -(CGFloat) marginsCurrentBottomMargin
 {
   CGFloat result = self->marginsWindowController ? [self->marginsWindowController bottomMargin]
-                          : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalBottomMarginKey];
+                          : [[NSUserDefaults standardUserDefaults] doubleForKey:AdditionalBottomMarginKey];
   return result;
 }
 //end marginsCurrentBottomMargin
@@ -3819,7 +3804,7 @@ static NSMutableDictionary* cachePaths = nil;
 -(CGFloat) marginsCurrentLeftMargin
 {
   CGFloat result = self->marginsWindowController ? [self->marginsWindowController leftMargin]
-                          : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalLeftMarginKey];
+                          : [[NSUserDefaults standardUserDefaults] doubleForKey:AdditionalLeftMarginKey];
   return result;
 }
 //end marginsCurrentLeftMargin
@@ -3827,7 +3812,7 @@ static NSMutableDictionary* cachePaths = nil;
 -(CGFloat) marginsCurrentRightMargin
 {
   CGFloat result = self->marginsWindowController ? [self->marginsWindowController rightMargin]
-                          : [[NSUserDefaults standardUserDefaults] floatForKey:AdditionalRightMarginKey];
+                          : [[NSUserDefaults standardUserDefaults] doubleForKey:AdditionalRightMarginKey];
   return result;
 }
 //end marginsCurrentRightMargin
@@ -3835,7 +3820,7 @@ static NSMutableDictionary* cachePaths = nil;
 -(NSArray*) additionalFilesPaths
 {
   NSArray* result = self->additionalFilesWindowController ? [self->additionalFilesWindowController additionalFilesPaths]
-                          : [[NSUserDefaults standardUserDefaults] arrayForKey:AdditionalFilesPathsKey];
+                          : [[NSUserDefaults standardUserDefaults] stringArrayForKey:AdditionalFilesPathsKey];
   if (!result) result = [NSArray array];
   return result;
 }
@@ -3880,9 +3865,13 @@ static NSMutableDictionary* cachePaths = nil;
       [fileManager fileExistsAtPath:[palettePath stringByAppendingPathComponent:@"Resources"] isDirectory:&isDirectory3] && isDirectory3)
     fileIsOk = YES;
   if (!fileIsOk)
-    NSRunAlertPanel(NSLocalizedString(@"Palette installation", @""),
-                    NSLocalizedString(@"It does not appear to be a valid Latex palette package", @""),
-                    NSLocalizedString(@"OK", @""), nil, nil);
+  {
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"Palette installation", @"");
+    alert.informativeText = NSLocalizedString(@"It does not appear to be a valid Latex palette package", @"");
+    [alert runModal];
+    [alert release];
+  }
   else
   {
     NSArray* libraryPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask , YES);
@@ -3893,31 +3882,42 @@ static NSMutableDictionary* cachePaths = nil;
     if (palettesFolderPath)
     {
       NSString* localizedPalettesFolderPath = [[NSFileManager defaultManager] localizedPath:palettesFolderPath];
-      NSInteger choice = NSRunAlertPanel(
-        [NSString stringWithFormat:NSLocalizedString(@"Do you want to install the palette %@ ?", @""),
-                                   [palettePath lastPathComponent]],
-                                         NSLocalizedString(@"This palette will be installed into \n%@", @""),
-        NSLocalizedString(@"Install palette", @""),
-        NSLocalizedString(@"Cancel", @""), nil, localizedPalettesFolderPath);
-      if (choice == NSAlertDefaultReturn)
+      NSAlert *alert = [[NSAlert alloc] init];
+      alert.messageText = [NSString stringWithFormat:NSLocalizedString(@"Do you want to install the palette %@ ?", @""),
+                           [palettePath lastPathComponent]];
+      alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"This palette will be installed into \n%@", @""), localizedPalettesFolderPath];
+      [alert addButtonWithTitle:NSLocalizedString(@"Install palette", @"")];
+      [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+      NSInteger choice = [alert runModal];
+      [alert release];
+      if (choice == NSAlertFirstButtonReturn)
       {
         BOOL shouldInstall = [[NSFileManager defaultManager] createDirectoryAtPath:palettesFolderPath withIntermediateDirectories:YES attributes:nil error:0];
         if (!shouldInstall)
-          NSRunAlertPanel(NSLocalizedString(@"Could not create path", @""),
-                          NSLocalizedString(@"The path %@ could not be created to install a palette in it", @""),
-                          NSLocalizedString(@"OK", @""), nil, nil, palettesFolderPath);
+        {
+          alert = [[NSAlert alloc] init];
+          alert.messageText = NSLocalizedString(@"Could not create path", @"");
+          alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"The path %@ could not be created to install a palette in it", @""), palettesFolderPath];
+          [alert runModal];
+          [alert release];
+        }
                           
         NSString* destinationPath = [palettesFolderPath stringByAppendingPathComponent:[palettePath lastPathComponent]];
         BOOL alreadyExists = [fileManager fileExistsAtPath:destinationPath];
         BOOL overwrite = !alreadyExists;
         if (alreadyExists)
         {
-          choice = NSRunAlertPanel(
-            [NSString stringWithFormat:NSLocalizedString(@"The palette %@ already exists, do you want to replace it ?", @""), [palettePath lastPathComponent]],
-            NSLocalizedString(@"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents.", @""),
-             NSLocalizedString(@"Replace", @""),
-             NSLocalizedString(@"Cancel", @""), nil, palettesFolderPath);
-          overwrite |= (choice == NSAlertDefaultReturn);
+          alert = [[NSAlert alloc] init];
+          alert.messageText = [NSString stringWithFormat:NSLocalizedString(@"The palette %@ already exists, do you want to replace it ?", @""), [palettePath lastPathComponent]];
+          alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"A file or folder with the same name already exists in %@. Replacing it will overwrite its current contents.", @""), palettesFolderPath];
+          NSButton *desButton = [alert addButtonWithTitle:NSLocalizedString(@"Replace", @"")];
+          if (@available(macOS 11.0, *)) {
+            desButton.hasDestructiveAction = YES;
+          }
+          [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+          choice = [alert runModal];
+          [alert release];
+          overwrite |= (choice == NSAlertFirstButtonReturn);
         }//end if overwrite palette
         
         if (overwrite)
@@ -3925,9 +3925,13 @@ static NSMutableDictionary* cachePaths = nil;
           [fileManager removeItemAtPath:destinationPath error:0];
           BOOL success = [fileManager copyItemAtPath:palettePath toPath:destinationPath error:0];
           if (!success)
-            NSRunAlertPanel(NSLocalizedString(@"Installation failed", @""),
-                            NSLocalizedString(@"%@ could not be installed as %@", @""),
-                            NSLocalizedString(@"OK", @""), nil, nil, [palettePath lastPathComponent], destinationPath);
+          {
+            NSAlert *alert = [[NSAlert alloc] init];
+            alert.messageText = NSLocalizedString(@"Installation failed", @"");
+            alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"%@ could not be installed as %@", @""), [palettePath lastPathComponent], destinationPath];
+            [alert runModal];
+            [alert release];
+          }
           ok = success;
         }//end if overwrite
       }//end if install palette

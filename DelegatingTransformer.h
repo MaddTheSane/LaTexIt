@@ -15,14 +15,14 @@
 
 @interface DelegatingTransformer : NSValueTransformer {
   BOOL allowsReverseTransformation;
-  id<DelegatingTransformerDelegate> delegate;
+  __unsafe_unretained id<DelegatingTransformerDelegate> delegate;
   id context;
 }
 
 +(NSString*) name;
 
-+(id) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
--(id) initWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
++(instancetype) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
+-(instancetype) initWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context;
 
 
 @end

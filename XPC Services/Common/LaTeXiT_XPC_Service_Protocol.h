@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol LaTeXiT_XPC_Service_Protocol
+@protocol LaTeXiT_XPC_Service_Protocol <NSObject>
 
 -(void) processTest:(NSString*)string withReply:(void (^)(NSString* string))reply;
 -(void) processLaTeX:(id)plist exportUTI:(NSString*)exportUTI withReply:(void (^)(id plist))reply;

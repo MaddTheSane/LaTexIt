@@ -54,13 +54,7 @@
 -(void) dealloc
 {
   [self->connectionToService invalidate];
-  [self->connectionToService release];
   self.exportedData = nil;
-  [self->pdfData release];
-  [self->equation release];
-  [self->originalUTI release];
-  [self->originalData release];
-  [super dealloc];
 }
 //end dealloc:
 
@@ -157,9 +151,7 @@
     {
       [attachment loadItemForTypeIdentifier:uti options:nil completionHandler:^(id<NSSecureCoding>  _Nullable item, NSError * _Null_unspecified error) {
           NSData* data = [(id)item dynamicCastToClass:[NSData class]];
-          [self->originalData release];
           self->originalData = [data copy];
-          [self->originalUTI release];
           self->originalUTI = [uti copy];
           [self updateImage];
           LatexitEquation* newEquation = !data ? nil : [LatexitEquation latexitEquationWithData:data sourceUTI:uti useDefaults:YES];
@@ -180,7 +172,6 @@
     nil;
   NSImage* newImage = !data ? nil : [[NSImage alloc] initWithData:data];
   self.myImageView.image = newImage;
-  [newImage release];
 }
 //end updateImage
 
@@ -200,7 +191,6 @@
         }
         @catch(NSException* e){
           NSLog(@"exception <%@>", e);
-          [self->connectionToService release];
           self->connectionToService = nil;
         }
       }//end if (!self->connectionToService)
@@ -213,8 +203,7 @@
 {
   if (value != self->equation)
   {
-    [self->equation release];
-    self->equation = [value retain];
+    self->equation = value;
   }//end if (value != self->equation)
   if (self->equation)
   {
@@ -238,7 +227,7 @@
 
 -(NSData*) pdfData
 {
-  NSData* result = [[self->pdfData copy] autorelease];
+  NSData* result = [self->pdfData copy];
   return result;
 }
 //end pdfData
@@ -247,7 +236,6 @@
 {
   if (value != self->pdfData)
   {
-    [self->pdfData release];
     self->pdfData = [value copy];
   }//end if (value != self->pdfData)
 }
@@ -302,8 +290,6 @@
     NSExtensionItem* outputItem = !itemProvider ? nil : [[NSExtensionItem alloc] init];
     outputItem.userInfo = !outputItem ? nil : @{NSExtensionItemAttachmentsKey:@[itemProvider]};
     NSArray* outputItems = !outputItem ? nil : @[outputItem];
-    [outputItem release];
-    [itemProvider release];
     if (outputItems != nil)
       [self.extensionContext completeRequestReturningItems:outputItems completionHandler:nil];
   }//end if (self->exportedData || self->pdfData)

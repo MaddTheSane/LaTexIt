@@ -481,11 +481,7 @@ static LaTeXProcessor* sharedInstance = nil;
     NSString* afterObjCountString = [xrefString stringByMatching:@"xref\\s*[0-9]+\\s+[0-9]+\\s+(.*)" options:RKLDotAll inRange:xrefString.range capture:1 error:0];
 
     NSData* trailerData = (r2.location == NSNotFound) ? nil : [data2 subdataWithRange:r2];
-    #ifdef ARC_ENABLED
-    NSString* trailerString = [[NSString alloc] initWithData:trailerData encoding:NSASCIIStringEncoding];
-    #else
-    NSString* trailerString = [[[NSString alloc] initWithData:trailerData encoding:NSASCIIStringEncoding] autorelease];
-    #endif
+    NSString* trailerString = AUTORELEASEOBJ([[NSString alloc] initWithData:trailerData encoding:NSASCIIStringEncoding]);
     NSString* trailerAfterSize = [trailerString stringByMatching:@"trailer\\s+<<\\s+/Size\\s+[0-9]+(.*)" options:RKLDotAll inRange:trailerString.range capture:1 error:0];
     
     NSUInteger nbObjects = 0;
@@ -495,10 +491,7 @@ static LaTeXProcessor* sharedInstance = nil;
       NSString* s = [[NSString alloc] initWithBytesNoCopy:(unsigned char*)bytes+r1.location length:r2.location-r1.location encoding:NSUTF8StringEncoding freeWhenDone:NO];
       NSArray* components = [s componentsMatchedByRegex:@"^[0-9]+\\s+[0-9]+\\s[^0-9]+$" options:RKLMultiline range:s.range capture:0 error:nil];
       nbObjects = [components count];
-      #ifdef ARC_ENABLED
-      #else
-      [s release];
-      #endif
+      RELEASEOBJ(s);
     }//end if ((r1.location != NSNotFound) && (r2.location != NSNotFound))
     NSUInteger annotationObjectIndex = !nbObjects ? 100000 : nbObjects;
     BOOL useAnnotationObjectIndex = YES;
@@ -896,7 +889,7 @@ static LaTeXProcessor* sharedInstance = nil;
                     additionalFilesPaths:(NSArray*)additionalFilesPaths
                     workingDirectory:(NSString*)workingDirectory fullEnvironment:(NSDictionary*)fullEnvironment
                     uniqueIdentifier:(NSString*)uniqueIdentifier
-                    outFullLog:(NSString**)outFullLog outErrors:(NSArray**)outErrors outPdfData:(NSData**)outPdfData
+                    outFullLog:(NSString**)outFullLog outErrors:(NSArray<NSString*>**)outErrors outPdfData:(NSData**)outPdfData
 {
   NSData* pdfData = nil;
   
@@ -991,10 +984,8 @@ static LaTeXProcessor* sharedInstance = nil;
   
   //add additional files
   NSMutableArray* additionalFilesPathsLinksCreated = [NSMutableArray arrayWithCapacity:[additionalFilesPaths count]];
-  enumerator = [additionalFilesPaths objectEnumerator];
-  NSString* additionalFilePath = nil;
   NSString* outLinkPath = nil;
-  while((additionalFilePath = [enumerator nextObject]))
+  for(NSString* additionalFilePath in additionalFilesPaths)
   {
     [fileManager createLinkInDirectory:workingDirectory toTarget:additionalFilePath linkName:nil outLinkPath:&outLinkPath];
     if (outLinkPath)

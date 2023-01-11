@@ -278,7 +278,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
 }
 //end awakeFromNib
 
--(id) runWithInput:(id)input fromAction:(AMAction*)anAction error:(NSDictionary**)errorInfo
+-(id) runWithInput:(id)input error:(NSError**)errorInfo
 {
   Boolean synchronized = CFPreferencesAppSynchronize((CFStringRef)LaTeXiTAppKey);
   DebugLog(1, @"synchronized = %d", synchronized);
@@ -377,7 +377,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   
   BOOL didEncounterError = NO;
   if (errorInfo && !defaultPreamble)
-    *errorInfo = @{OSAScriptErrorNumber:@(errOSAGeneralError), OSAScriptErrorMessage:LocalLocalizedString(@"No preamble found", @"")};
+    *errorInfo = [NSError errorWithDomain:NSOSStatusErrorDomain code:errOSAGeneralError userInfo:@{OSAScriptErrorNumberKey:@(errOSAGeneralError), OSAScriptErrorMessageKey:LocalLocalizedString(@"No preamble found", @"")}];
 
   NSMutableArray* errorStrings = [NSMutableArray array];
   NSEnumerator* enumerator = [filteredInput objectEnumerator];
@@ -397,7 +397,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
     [uniqueIdentifiers addObject:uniqueIdentifier];
     if (!body && errorInfo && error)
     {
-      *errorInfo = @{OSAScriptErrorNumber:@(errOSAGeneralError), OSAScriptErrorMessage:[error localizedDescription]};
+      *errorInfo = error;
       didEncounterError = YES;
     }//end if (!body && errorInfo && error)
     else if (body)
@@ -534,9 +534,9 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   }//end or each object
   if (didEncounterError && [errorStrings count] && errorInfo)
   {
-    *errorInfo = @{OSAScriptErrorNumber:@(errOSAGeneralError), OSAScriptErrorMessage:[errorStrings componentsJoinedByString:@"\n"]};
+    *errorInfo = [NSError errorWithDomain:NSOSStatusErrorDomain code:errOSAGeneralError userInfo:@{OSAScriptErrorNumber:@(errOSAGeneralError), OSAScriptErrorMessage:[errorStrings componentsJoinedByString:@"\n"]}];
     if (*errorInfo)
-      DebugLog(0, @"%@", [*errorInfo objectForKey:OSAScriptErrorMessage]);
+      DebugLog(0, @"%@", [(*errorInfo).userInfo objectForKey:OSAScriptErrorMessage]);
   }//end if (didEncounterError && [errorStrings count] && errorInfo)
   RELEASEOBJ(uniqueIdentifiers);
 	return result;
@@ -719,8 +719,9 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
   else if (exportFormat == EXPORT_FORMAT_SVG)
     panelToOpen = [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel];
   if (panelToOpen)
-    [NSApp beginSheet:panelToOpen
-       modalForWindow:[self->tabView window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    [[self->tabView window] beginSheet:panelToOpen completionHandler:^(NSModalResponse returnCode) {
+      //do nothing
+    }];
 }
 //end generalExportFormatOptionsOpen:
 
@@ -745,7 +746,7 @@ typedef enum {EQUATION_DESTINATION_ALONGSIDE_INPUT, EQUATION_DESTINATION_TEMPORA
       [[self parameters] setObject:@([self->generalExportFormatOptionsPanes textExportBody]) forKey:@"exportTextExportBody"];
     }//end if (exportFormatOptionsPanel == [self->generalExportFormatOptionsPanes exportFormatOptionsSvgPanel])
   }//end if (ok)
-  [NSApp endSheet:exportFormatOptionsPanel];
+  [[self->tabView window] endSheet:exportFormatOptionsPanel];
   [exportFormatOptionsPanel orderOut:self];
 }
 //end exportFormatOptionsPanel:didCloseWithOK:

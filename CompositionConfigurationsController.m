@@ -17,6 +17,7 @@
 #import "NSDictionaryExtended.h"
 #import "PreferencesController.h"
 #import "Utils.h"
+#import "ARCBridge.h"
 
 @implementation CompositionConfigurationsController
 
@@ -145,8 +146,8 @@
 {
   id newObject = [self newObject];
   [self addObject:newObject];
-  [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
-  [newObject release];
+  [self setSelectedObjects:@[newObject]];
+  RELEASEOBJ(newObject);
 }
 //end add:
 

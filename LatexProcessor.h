@@ -49,10 +49,10 @@ extern const NSNotificationName LatexizationDidEndNotification;
                               title:(NSString*)title
                     leftMargin:(CGFloat)leftMargin rightMargin:(CGFloat)rightMargin
                     topMargin:(CGFloat)topMargin bottomMargin:(CGFloat)bottomMargin
-                    additionalFilesPaths:(NSArray*)additionalFilesPaths
+                    additionalFilesPaths:(NSArray<NSString*>*)additionalFilesPaths
                     workingDirectory:(NSString*)workingDirectory fullEnvironment:(NSDictionary*)fullEnvironment
                     uniqueIdentifier:(NSString*)uniqueIdentifier
-                    outFullLog:(NSString**)outFullLog outErrors:(NSArray**)outErrors outPdfData:(NSData**)outPdfData;
+                    outFullLog:(NSString**)outFullLog outErrors:(NSArray<NSString*>**)outErrors outPdfData:(NSData**)outPdfData;
 
 -(NSRect) computeBoundingBox:(NSString*)filePath workingDirectory:(NSString*)workingDirectory
              fullEnvironment:(NSDictionary*)fullEnvironment compositionConfiguration:(NSDictionary*)compositionConfiguration

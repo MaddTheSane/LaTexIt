@@ -138,7 +138,7 @@
 		931FB0E2252CD4DD009F8847 /* PreamblesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 937D7CE90E48F315006F04E1 /* PreamblesController.m */; };
 		931FB0E3252CD4DD009F8847 /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
 		931FB0EA252CD4E3009F8847 /* SynchronizationAdditionalScriptsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */; };
-		931FB0EB252CD4E3009F8847 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
+		931FB0EB252CD4E3009F8847 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		931FB0F2252CD4F2009F8847 /* DelegatingTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9305E1591016E5E5007058BC /* DelegatingTransformer.m */; };
 		931FB0F9252CD4F6009F8847 /* DictionaryToArrayTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9390CEF90FA78CDA0002100B /* DictionaryToArrayTransformer.m */; };
 		931FB100252CD4F8009F8847 /* DelegatingTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9305E1591016E5E5007058BC /* DelegatingTransformer.m */; };
@@ -365,7 +365,7 @@
 		937920772527B15C00B1AD26 /* ServiceRegularExpressionFiltersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B5ECCE16B6F8C100ECBB7B /* ServiceRegularExpressionFiltersController.m */; };
 		937920782527B15C00B1AD26 /* EncapsulationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93265F0B0FAEBA370060D667 /* EncapsulationsController.m */; };
 		9379207E2527B16400B1AD26 /* ServiceShortcutsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9368E8DE095B184B00B35E30 /* ServiceShortcutsTableView.m */; };
-		9379207F2527B16400B1AD26 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
+		9379207F2527B16400B1AD26 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		937920802527B16400B1AD26 /* SynchronizationAdditionalScriptsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */; };
 		937920862527B17200B1AD26 /* MutableTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 934880CA0FB1CF4800FFACCE /* MutableTransformer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		937920872527B17200B1AD26 /* IndexToIndexesTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 939377A40FA23373007BEAC0 /* IndexToIndexesTransformer.m */; };
@@ -375,10 +375,10 @@
 		9379209F2527B18800B1AD26 /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		937920A02527B18800B1AD26 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E51E40C0711C300BF15A8 /* SystemTask.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		937920B62527B20D00B1AD26 /* LaTeXProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 939D4E031A2A38FB00D4A80C /* LaTeXProcessor.m */; };
-		937920BC2527B21600B1AD26 /* Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9302547E07F0BC6A00011996 /* Compressor.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		937920C22527B22500B1AD26 /* FileManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F5ED4522353BC10079B40C /* FileManagerHelper.m */; };
+		937920BC2527B21600B1AD26 /* Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9302547E07F0BC6A00011996 /* Compressor.m */; };
+		937920C22527B22500B1AD26 /* FileManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F5ED4522353BC10079B40C /* FileManagerHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		937920C82527B22700B1AD26 /* FileManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F5ED4522353BC10079B40C /* FileManagerHelper.m */; };
-		937920CE2527B23A00B1AD26 /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		937920CE2527B23A00B1AD26 /* Semaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = 936C315C0C0DEEA90082F86D /* Semaphore.m */; };
 		937920D42527B24C00B1AD26 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 932E60B10F5DA745002B3136 /* PreferencesController.m */; };
 		937920E02527B2DD00B1AD26 /* BodyTemplatesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DD6392106A392300EDDF82 /* BodyTemplatesController.m */; };
 		937920E12527B2DD00B1AD26 /* CompositionConfigurationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9333DD940FA62F8A00157F00 /* CompositionConfigurationsController.m */; };
@@ -390,8 +390,8 @@
 		937920FB2527B3D700B1AD26 /* DictionaryToArrayTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9390CEF90FA78CDA0002100B /* DictionaryToArrayTransformer.m */; };
 		937920FC2527B3D700B1AD26 /* IndexToIndexesTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 939377A40FA23373007BEAC0 /* IndexToIndexesTransformer.m */; };
 		937921022527B3D800B1AD26 /* DictionaryToArrayTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9390CEF90FA78CDA0002100B /* DictionaryToArrayTransformer.m */; };
-		937921082527B3E000B1AD26 /* MutableTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 934880CA0FB1CF4800FFACCE /* MutableTransformer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		9379210E2527B3E900B1AD26 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E51E40C0711C300BF15A8 /* SystemTask.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		937921082527B3E000B1AD26 /* MutableTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 934880CA0FB1CF4800FFACCE /* MutableTransformer.m */; };
+		9379210E2527B3E900B1AD26 /* SystemTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 930E51E40C0711C300BF15A8 /* SystemTask.m */; };
 		937921142527B3EF00B1AD26 /* TeXItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 93ABA88C2053D44100E60612 /* TeXItemWrapper.m */; };
 		9379211A2527B3F900B1AD26 /* SynchronizationAdditionalScriptsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 939846BA194512CB00FCCD99 /* SynchronizationAdditionalScriptsController.m */; };
 		937921202527B3FC00B1AD26 /* EncapsulationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93265F0B0FAEBA370060D667 /* EncapsulationsController.m */; };
@@ -413,9 +413,9 @@
 		937921852527B66200B1AD26 /* NSFontExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E81AA0087978AD0081B897 /* NSFontExtended.m */; };
 		937921862527B66200B1AD26 /* NSArrayExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D6BA1C082941900081D58A /* NSArrayExtended.m */; };
 		937921872527B66200B1AD26 /* NSColorExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93310170083D1D6400DE67ED /* NSColorExtended.m */; };
-		937921882527B66200B1AD26 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		937921882527B66200B1AD26 /* NSDictionaryExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 935AECEC0CB16ECB001A5067 /* NSDictionaryExtended.m */; };
 		937921892527B66200B1AD26 /* NSDataExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A2C9B10B6C4AC00AAA2CD /* NSDataExtended.m */; };
-		9379218F2527B69500B1AD26 /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		9379218F2527B69500B1AD26 /* PreferencesControllerMigration.m in Sources */ = {isa = PBXBuildFile; fileRef = 938999BC10159DA000A9E04F /* PreferencesControllerMigration.m */; };
 		937921952527B6BB00B1AD26 /* NSUserDefaultsControllerExtended.m in Sources */ = {isa = PBXBuildFile; fileRef = 93937E2F0FA4E05A007BEAC0 /* NSUserDefaultsControllerExtended.m */; };
 		937A39870FE2F1AC000BEE6E /* MySplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 937A39860FE2F1AC000BEE6E /* MySplitView.m */; };
 		937CFAE01B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 937CFADF1B1E3CF1006AD93E /* Latexit-2.7.0.xcdatamodel */; };
@@ -3751,7 +3751,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -3842,7 +3842,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;

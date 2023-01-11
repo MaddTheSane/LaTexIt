@@ -36,7 +36,6 @@
   BOOL fromArchive;
 }
 
--(id) runWithInput:(id)input fromAction:(AMAction*)anAction error:(NSDictionary**)errorInfo;
 -(NSString*) extractFromObject:(id)object preamble:(NSString**)outPeamble body:(NSString**)outBody isFilePath:(BOOL*)isFilePath
                          error:(NSError**)error;
                          

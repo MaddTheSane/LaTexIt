@@ -17,7 +17,7 @@
 @interface LibraryWindowController : NSWindowController <NSTableViewDelegate, NSTextViewDelegate, NSMenuItemValidation> {
   IBOutlet NSSearchField*                librarySearchField;
   IBOutlet NSButton*                     importCurrentButton;
-  IBOutlet ImagePopupButton*             actionButton;
+  IBOutlet NSPopUpButton*             actionButton;
   IBOutlet LibraryView*                  libraryView;
   IBOutlet NSSegmentedControl*           libraryRowTypeSegmentedControl;
   IBOutlet BorderlessPanel*              libraryPreviewPanel;

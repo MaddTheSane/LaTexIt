@@ -7,7 +7,7 @@
 //
 
 #import "DelegatingTransformer.h"
-
+#import "ARCBridge.h"
 
 @implementation DelegatingTransformer
 
@@ -38,8 +38,8 @@
 
 +(id) transformerWithDelegate:(id<DelegatingTransformerDelegate>)delegate context:(id)context
 {
-  id result = [[[[self class] alloc] initWithDelegate:delegate context:context] autorelease];
-  return result;
+  id result = [[[self class] alloc] initWithDelegate:delegate context:context];
+  return AUTORELEASEOBJ(result);
 }
 //end transformerWithReference:
 
@@ -47,18 +47,20 @@
 {
   if ((!(self = [super init])))
     return nil;
-  self->context  = [aContext retain];
+  self->context  = RETAINOBJ(aContext);
   self->delegate = aDelegate;
   return self;
 }
 //end initWithFalseValue:
 
+#ifndef ARC_ENABLED
 -(void) dealloc
 {
   [self->context release];
   [super dealloc];
 }
 //end dealloc
+#endif
 
 -(id) transformedValue:(id)value
 {

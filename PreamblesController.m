@@ -13,6 +13,7 @@
 #import "NSDictionaryExtended.h"
 #import "PreferencesController.h"
 #import "Utils.h"
+#import "ARCBridge.h"
 
 @implementation PreamblesController
 
@@ -157,7 +158,7 @@ static NSAttributedString* defaultLocalizedPreambleValueAttributedString = nil;
   id newObject = [self newObject];
   [self addObject:newObject];
   [self setSelectedObjects:[NSArray arrayWithObjects:newObject, nil]];
-  [newObject release];
+  RELEASEOBJ(newObject);
 }
 //end add:
 

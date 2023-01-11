@@ -102,50 +102,9 @@
 }
 //end dealloc
 
--(void) setEnvironment:(NSDictionary*)theEnvironment
-{
-  #ifdef ARC_ENABLED
-  #else
-  [theEnvironment retain];
-  [self->environment release];
-  #endif
-  self->environment = theEnvironment;
-}
-//end setEnvironment:
-
--(void) setArguments:(NSArray*)args
-{
-  #ifdef ARC_ENABLED
-  #else
-  [args retain];
-  [self->arguments release];
-  #endif
-  self->arguments = args;
-}
-//end setArguments:
-
--(void) setUsingLoginShell:(BOOL)value
-{
-  self->isUsingLoginShell = value;
-}
-
--(NSDictionary*) environment
-{
-  return self->environment;
-}
-//end environment
-
--(NSArray*) arguments
-{
-  return self->arguments;
-}
-//end arguments
-
--(BOOL) isUsingLoginShell
-{
-  return self->isUsingLoginShell;
-}
-//end isUsingLoginShell
+@synthesize environment;
+@synthesize arguments;
+@synthesize usingLoginShell=isUsingLoginShell;
 
 -(void) setTimeOut:(NSTimeInterval)value
 {
@@ -153,11 +112,7 @@
 }
 //end setTimeOut:
 
--(int) terminationStatus
-{
-  return self->terminationStatus;
-}
-//end terminationStatus
+@synthesize terminationStatus;
 
 -(NSString*) equivalentLaunchCommand
 {
@@ -166,8 +121,7 @@
   if (self->environment && [self->environment count])
   {
     NSEnumerator* environmentEnumerator = [self->environment keyEnumerator];
-    NSString* variable = nil;
-    while((variable = [environmentEnumerator nextObject]))
+    for(NSString* variable in environmentEnumerator)
     {
       BOOL isDoubleQuoted = ([variable length] >= 2) && [variable startsWith:@"\"" options:0] && [variable endsWith:@"\"" options:0];
       if ([variable length] && !isDoubleQuoted)
@@ -187,7 +141,7 @@
     if (self->tmpStdoutFilePath && self->tmpStderrFilePath)
       [scriptContent appendFormat:@" 1>|%@ 2>|%@ <%@\n", self->tmpStdoutFilePath, self->tmpStderrFilePath, (self->stdInputData ? self->tmpStdinFilePath : @"/dev/null")];
   }//end if (launchPath)
-  return scriptContent;
+  return AUTORELEASEOBJ([scriptContent copy]);
 }
 //end equivalentLaunchCommand
 
@@ -261,10 +215,9 @@
 {
   #ifdef ARC_ENABLED
   #else
-  [data retain];
   [self->stdInputData release];
   #endif
-  self->stdInputData = data;
+  self->stdInputData = [data copy];
   [self->stdInputData writeToFile:self->tmpStdinFilePath atomically:NO];
 }
 //end setStdInputData:

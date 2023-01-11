@@ -13,7 +13,7 @@
 #import "Semaphore.h"
 #import "Utils.h"
 
-@interface FileManagerHelper (PrivateAPI)
+@interface FileManagerHelper (/*PrivateAPI*/)
 -(void) wakeUpDestructionThread;
 -(void) wakeUpDestructionThread:(NSNumber*)delay;
 @end

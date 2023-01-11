@@ -20,9 +20,9 @@
   NSFileHandle* tmpStderrFileHandle;
   NSFileHandle* tmpScriptFileHandle;
   NSData*       stdInputData;
-  NSDictionary* environment;
+  NSDictionary<NSString*,NSString*>* environment;
   NSString*     launchPath;
-  NSArray*      arguments;
+  NSArray<NSString*>* arguments;
   BOOL          isUsingLoginShell;
   NSString*     currentDirectoryPath;
   NSLock*       runningLock;
@@ -33,23 +33,20 @@
 
 -(id)   init;//NSTemporaryDirectory() as workingDirectory
 -(id)   initWithWorkingDirectory:(NSString*)workingDirectory;
--(void) setEnvironment:(NSDictionary*)environment;
--(void) setArguments:(NSArray*)arguments;
--(NSDictionary*) environment;
--(NSArray*)      arguments;
+@property (copy) NSDictionary<NSString*,NSString*>* environment;
+@property (copy) NSArray<NSString*>* arguments;
 @property (copy) NSString *currentDirectoryPath;
 @property (copy) NSString *launchPath;
--(BOOL) isUsingLoginShell;
--(void) setUsingLoginShell:(BOOL)value;
+@property (getter=isUsingLoginShell) BOOL usingLoginShell;
 
 -(void) setTimeOut:(NSTimeInterval)timeOut;
 -(NSString*) equivalentLaunchCommand;
 -(void) launch;
 -(void) waitUntilExit;
--(int) terminationStatus;
+@property (readonly) int terminationStatus;
 -(void) setStdInputData:(NSData*)data;
--(NSData*) dataForStdOutput;
--(NSData*) dataForStdError;
--(BOOL) hasReachedTimeout;
+@property (nonatomic, copy) NSData* dataForStdOutput;
+@property (nonatomic, copy) NSData* dataForStdError;
+@property (nonatomic, readonly) BOOL hasReachedTimeout;
 
 @end

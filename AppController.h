@@ -173,26 +173,26 @@
 -(NSAttributedString*) preambleServiceAttributedString;
 
 //returns some configuration info
--(BOOL) isPdfLaTeXAvailable;
--(BOOL) isXeLaTeXAvailable;
--(BOOL) isLuaLaTeXAvailable;
--(BOOL) isLaTeXAvailable;
--(BOOL) isDviPdfAvailable;
--(BOOL) isGsAvailable;
--(BOOL) isPsToPdfAvailable;
--(BOOL) isColorStyAvailable;
--(BOOL) isPdfToSvgAvailable;
--(BOOL) isPdfToCairoAvailable;
--(BOOL) isPerlWithLibXMLAvailable;
+@property (readonly, getter=isPdfLaTeXAvailable) BOOL pdfLaTeXAvailable;
+@property (readonly, getter=isXeLaTeXAvailable) BOOL xeLaTeXAvailable;
+@property (readonly, getter=isLuaLaTeXAvailable) BOOL luaLaTeXAvailable;
+@property (readonly, getter=isLaTeXAvailable) BOOL laTeXAvailable;
+@property (readonly, getter=isDviPdfAvailable) BOOL dviPdfAvailable;
+@property (readonly, getter=isGsAvailable) BOOL gsAvailable;
+@property (readonly, getter=isPsToPdfAvailable) BOOL psToPdfAvailable;
+@property (readonly, getter=isColorStyAvailable) BOOL colorStyAvailable;
+@property (readonly, getter=isPdfToSvgAvailable) BOOL pdfToSvgAvailable;
+@property (readonly, getter=isPdfToCairoAvailable) BOOL pdfToCairoAvailable;
+@property (readonly, getter=isPerlWithLibXMLAvailable) BOOL perlWithLibXMLAvailable;
 
 //if the marginWindowController is not loaded, just use the user defaults values
--(CGFloat) marginsCurrentTopMargin;
--(CGFloat) marginsCurrentBottomMargin;
--(CGFloat) marginsCurrentLeftMargin;
--(CGFloat) marginsCurrentRightMargin;
+@property (nonatomic, readonly) CGFloat marginsCurrentTopMargin;
+@property (nonatomic, readonly) CGFloat marginsCurrentBottomMargin;
+@property (nonatomic, readonly) CGFloat marginsCurrentLeftMargin;
+@property (nonatomic, readonly) CGFloat marginsCurrentRightMargin;
 
 //if the additionalFilesWindowController is not loaded, just use the user defaults values
--(NSArray*) additionalFilesPaths;
+-(NSArray<NSString*>*) additionalFilesPaths;
 
 //returns data representing data derived from pdfData, but in the format specified (pdf, eps, tiff, png...)
 -(NSString*) nameOfType:(export_format_t)format;

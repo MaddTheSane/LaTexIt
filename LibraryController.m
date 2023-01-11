@@ -302,8 +302,7 @@ CG_INLINE NSInteger filteredItemSortFunction(id object1, id object2, void* conte
   NSMutableArray* libraryEquations = [NSMutableArray arrayWithCapacity:count];
   NSMutableArray* latexitEquations = [NSMutableArray arrayWithCapacity:count];
   NSEnumerator* enumerator = [minimumItemsCover objectEnumerator];
-  LibraryItem* libraryItem = nil;
-  while((libraryItem = [enumerator nextObject]))
+  for(LibraryItem* libraryItem in minimumItemsCover)
   {
     [libraryItems addObject:libraryItem];
     LibraryEquation* libraryEquation = ![libraryItem isKindOfClass:[LibraryEquation class]] ? nil : (LibraryEquation*)libraryItem;
