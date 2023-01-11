@@ -8,23 +8,27 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSColor (Extended)
 
 //Unfortunately, so far, an NSColor does not know how to transform itself into data, or built itself with data
 //We have to make that by hand
-+(NSColor*) colorWithData:(NSData*)data;
--(NSData*) colorAsData;
++(nullable NSColor*) colorWithData:(nullable NSData*)data;
+@property (readonly, copy, nullable) NSData *colorAsData;
 
 //same thing for color as rgba string (%f %f %f %f)
-+(NSColor*) colorWithRgbaString:(NSString*)string;
--(NSString*) rgbaString;
++(nullable NSColor*) colorWithRgbaString:(nullable NSString*)string;
+@property (readonly, copy) NSString *rgbaString;
 
--(CGFloat) grayLevel;
+@property (readonly) CGFloat grayLevel;
 -(BOOL) isRGBEqualTo:(NSColor*)other;
 
 -(NSColor*) darker:(CGFloat)factor;
 -(NSColor*) lighter:(CGFloat)factor;
 
--(BOOL) isConsideredWhite;
+@property (readonly, getter=isConsideredWhite) BOOL consideredWhite;
 
 @end
+
+NS_ASSUME_NONNULL_END
