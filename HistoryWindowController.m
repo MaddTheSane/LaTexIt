@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 
 #import "HistoryWindowController.h"
@@ -186,6 +186,8 @@
   [self changeHistoryExportFormat:self->exportFormatPopUpButton];
   [self->savePanel setCanSelectHiddenExtension:YES];
   [self->savePanel setAccessoryView:[self->exportAccessoryView retain]];
+  /*if ([self->saxvePanel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
+    [self->savePanel setAccessoryViewDisclosed:NO];*/
   [self->exportOnlySelectedButton setState:NSOffState];
   [self->exportOnlySelectedButton setEnabled:([self->historyView selectedRow] >= 0)];
   [self->savePanel setNameFieldStringValue:NSLocalizedString(@"Untitled", @"")];
@@ -248,6 +250,8 @@
   [openPanel setDelegate:(id)self];
   [openPanel setTitle:NSLocalizedString(@"Import history...", @"")];
   [openPanel setAccessoryView:[self->importAccessoryView retain]];
+  if ([openPanel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
+    [openPanel setAccessoryViewDisclosed:NO];
   [openPanel setAllowedFileTypes:@[@"latexhist", @"plist"]];
   if ([[self window] isVisible])
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {

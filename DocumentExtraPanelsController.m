@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 20/04/09.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 
 #import "DocumentExtraPanelsController.h"
@@ -379,6 +379,8 @@
   [self->currentSavePanel setAccessoryView:nil];
   self->currentSavePanel = value;
   [self->currentSavePanel setAccessoryView:self->saveAccessoryView];
+  /*if ([self->currentSavePanel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
+    [self->currentSavePanel setAccessoryViewDisclosed:NO];*/
   [[self->saveAccessoryView window] setDelegate:(id)self];
 }
 //end setCurrentSavePanel:

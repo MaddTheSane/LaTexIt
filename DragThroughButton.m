@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 07/05/10.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 
 #import "DragThroughButton.h"
@@ -163,8 +163,9 @@ NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateCh
 {
   if ([self isEnabled])
   {
+    NSInteger oldState = [self state];
     [super setState:value];
-    if (!self->remainingSetStateWrapped)
+    if (!self->remainingSetStateWrapped && (oldState != value))
       [[NSNotificationCenter defaultCenter] postNotificationName:DragThroughButtonStateChangedNotification object:self userInfo:nil];
   }//end if ([self isEnabled])
 }

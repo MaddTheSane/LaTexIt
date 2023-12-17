@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/10/08.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 
 #import "LatexitEquation.h"
@@ -2828,6 +2828,10 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         compositionConfiguration:[preferencesController compositionConfigurationDocument]
         uniqueIdentifier:[NSString stringWithFormat:@"%p", self]];
   
+  export_temp_file_t exportTempFileCurrentSession = [[PreferencesController sharedController] exportTempFileCurrentSession];
+  BOOL feedRegularData = (exportTempFileCurrentSession != EXPORT_TEMP_FILE_ONLY);
+  BOOL feedTempFile = (exportTempFileCurrentSession == EXPORT_TEMP_FILE_ADD) || (exportTempFileCurrentSession == EXPORT_TEMP_FILE_ONLY);
+  
   //feeds the right pasteboard according to the type (pdf, eps, tiff, jpeg, png...)
   NSString* extension = getFileExtensionForExportFormat(exportFormat);
   NSString* uti;
@@ -2838,166 +2842,170 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
     // Fallback on earlier versions
     uti = getUTIForExportFormat(exportFormat);
   }
-  switch(exportFormat)
+  if (feedRegularData)
   {
-    case EXPORT_FORMAT_PDF:
-      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypePDF, (NSString*)kUTTypePDF, nil] owner:lazyDataProvider];
-      if (!lazyDataProvider)
-      {
-        [pboard setData:data forType:NSPasteboardTypePDF];
-        [pboard setData:data forType:(NSString*)kUTTypePDF];
-      }//end if (!lazyDataProvider)
-      break;
-    case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
-      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypePDF, (NSString*)kUTTypePDF, nil]
-                 owner:lazyDataProvider ? lazyDataProvider : self];
-      if (data && (!lazyDataProvider || (lazyDataProvider != self)))
-      {
-        [pboard setData:data forType:NSPasteboardTypePDF];
-        [pboard setData:data forType:(NSString*)kUTTypePDF];
-      }//end if (data && (!lazyDataProvider || (lazyDataProvider != self)))
-      break;
-    case EXPORT_FORMAT_EPS:
-      [pboard addTypes:[NSArray arrayWithObjects:NSPostScriptPboardType, @"com.adobe.encapsulated-postscript", nil] owner:lazyDataProvider];
-      if (!lazyDataProvider)
-      {
-        [pboard setData:data forType:NSPostScriptPboardType];
-        [pboard setData:data forType:@"com.adobe.encapsulated-postscript"];
-      }//end if (!lazyDataProvider)
-      break;
-    case EXPORT_FORMAT_PNG:
-      [pboard addTypes:@[(NSString*)kUTTypePNG] owner:lazyDataProvider];
-      if (!lazyDataProvider)
-        [pboard setData:data forType:(NSString*)kUTTypePNG];
-      break;
-    case EXPORT_FORMAT_JPEG:
-      [pboard addTypes:@[(NSString*)kUTTypeJPEG] owner:lazyDataProvider];
-      if (!lazyDataProvider)
-        [pboard setData:data forType:(NSString*)kUTTypeJPEG];
-      break;
-    case EXPORT_FORMAT_TIFF:
-      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeTIFF, (NSString*)kUTTypeTIFF, nil] owner:lazyDataProvider];
-      if (!lazyDataProvider)
-      {
-        [pboard setData:data forType:NSPasteboardTypeTIFF];
-        [pboard setData:data forType:(NSString*)kUTTypeTIFF];
-      }//end if (!lazyDataProvider)
-      break;
-    case EXPORT_FORMAT_MATHML:
-      {
-        extension = @"mathml";//override default HTML
-        uti = @"public.mathml";//override default HTML
-        #ifdef ARC_ENABLED
-        NSString* documentString = !data ? nil : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        #else
-        NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-        #endif
-        NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLMultiline|RKLDotAll|RKLCaseless inRange:documentString.range capture:0 error:0];
-        //[pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeHTML, kUTTypeHTML, nil] owner:lazyDataProvider];
-        [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, kUTTypeText, nil] owner:lazyDataProvider];
-        if (blockquoteString)
+    switch(exportFormat)
+    {
+      case EXPORT_FORMAT_PDF:
+        [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypePDF, (NSString*)kUTTypePDF, nil] owner:lazyDataProvider];
+        if (!lazyDataProvider)
         {
-          NSError* error = nil;
-          NSString* mathString =
-            [blockquoteString stringByReplacingOccurrencesOfRegex:@"<blockquote(.*?)style=(.*?)>(.*?)<math(.*?)>(.*?)</math>(.*)</blockquote>"
-                                                       withString:@"<math$4 style=$2>$3$5</math>"
-                                                          options:RKLMultiline|RKLDotAll|RKLCaseless range:blockquoteString.range error:&error];
-          if (error)
-            DebugLog(1, @"error = <%@>", error);
-          /*if (!lazyDataProvider)
+          [pboard setData:data forType:NSPasteboardTypePDF];
+          [pboard setData:data forType:(NSString*)kUTTypePDF];
+        }//end if (!lazyDataProvider)
+        break;
+      case EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS:
+        [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypePDF, (NSString*)kUTTypePDF, nil]
+                   owner:lazyDataProvider ? lazyDataProvider : self];
+        if (data && (!lazyDataProvider || (lazyDataProvider != self)))
+        {
+          [pboard setData:data forType:NSPasteboardTypePDF];
+          [pboard setData:data forType:(NSString*)kUTTypePDF];
+        }//end if (data && (!lazyDataProvider || (lazyDataProvider != self)))
+        break;
+      case EXPORT_FORMAT_EPS:
+        [pboard addTypes:[NSArray arrayWithObjects:NSPostScriptPboardType, @"com.adobe.encapsulated-postscript", nil] owner:lazyDataProvider];
+        if (!lazyDataProvider)
+        {
+          [pboard setData:data forType:NSPostScriptPboardType];
+          [pboard setData:data forType:@"com.adobe.encapsulated-postscript"];
+        }//end if (!lazyDataProvider)
+        break;
+      case EXPORT_FORMAT_PNG:
+        [pboard addTypes:@[(NSString*)kUTTypePNG] owner:lazyDataProvider];
+        if (!lazyDataProvider)
+          [pboard setData:data forType:(NSString*)kUTTypePNG];
+        break;
+      case EXPORT_FORMAT_JPEG:
+        [pboard addTypes:@[(NSString*)kUTTypeJPEG] owner:lazyDataProvider];
+        if (!lazyDataProvider)
+          [pboard setData:data forType:(NSString*)kUTTypeJPEG];
+        break;
+      case EXPORT_FORMAT_TIFF:
+        [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeTIFF, (NSString*)kUTTypeTIFF, nil] owner:lazyDataProvider];
+        if (!lazyDataProvider)
+        {
+          [pboard setData:data forType:NSPasteboardTypeTIFF];
+          [pboard setData:data forType:(NSString*)kUTTypeTIFF];
+        }//end if (!lazyDataProvider)
+        break;
+      case EXPORT_FORMAT_MATHML:
+        {
+          extension = @"mathml";//override default HTML
+          uti = @"public.mathml";//override default HTML
+          #ifdef ARC_ENABLED
+          NSString* documentString = !data ? nil : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+          #else
+          NSString* documentString = !data ? nil : [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+          #endif
+          NSString* blockquoteString = [documentString stringByMatching:@"<blockquote(.*?)>.*</blockquote>" options:RKLMultiline|RKLDotAll|RKLCaseless inRange:documentString.range capture:0 error:0];
+          //[pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeHTML, kUTTypeHTML, nil] owner:lazyDataProvider];
+          [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, kUTTypeText, nil] owner:lazyDataProvider];
+          if (blockquoteString)
           {
-            [pboard setString:blockquoteString forType:NSHTMLPboardType];
-            [pboard setString:blockquoteString forType:kUTTypeHTML];
-          }//end if (!lazyDataProvider)*/
-          if (!lazyDataProvider)
-          {
-            [pboard setString:(!mathString ? blockquoteString : mathString) forType:NSPasteboardTypeString];
-            [pboard setString:(!mathString ? blockquoteString : mathString) forType:(NSString*)kUTTypeText];
-          }//end if (!lazyDataProvider)
-        }//end if (blockquoteString)
-      }
-      break;
-    case EXPORT_FORMAT_SVG:
-      [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), @"public.svg-image", NSPasteboardTypeString, nil] owner:lazyDataProvider];
-      if (!lazyDataProvider)
-      {
-        [pboard setData:data forType:GetMySVGPboardType()];
-        [pboard setData:data forType:@"public.svg-image"];
-        [pboard setData:data forType:NSPasteboardTypeString];
-      }//end if (!lazyDataProvider)
-      break;
-    case EXPORT_FORMAT_TEXT:
-      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, (NSString*)kUTTypeText, nil] owner:lazyDataProvider];
-      if (!lazyDataProvider)
-      {
-        [pboard setData:data forType:NSPasteboardTypeString];
-        [pboard setData:data forType:(NSString*)kUTTypeText];
-      }//end if (!lazyDataProvider)
-      break;
-    case EXPORT_FORMAT_RTFD:
-      [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeRTFD, nil] owner:lazyDataProvider];
-      if (!lazyDataProvider)
-      {
-        CGFloat newBaseline = 0;
-        BOOL useBaseline = YES;
-        if (useBaseline)
-          newBaseline -= self.baseline;
-          
-        NSString* attachedFilePath = nil;
-        NSFileHandle* fileHandle =
-          [[NSFileManager defaultManager] temporaryFileWithTemplate:[NSString stringWithFormat:@"%@-XXXXXXXX", @"latexit-rtfd-attachement"]
-                                                          extension:@"pdf"
-                                                        outFilePath:&attachedFilePath workingDirectory:NSTemporaryDirectory()];
-        NSURL* attachedFileURL = !attachedFilePath ? nil : [NSURL fileURLWithPath:attachedFilePath];
-        NSData* attachedData = pdfData;
-        [fileHandle writeData:attachedData];
-        [fileHandle closeFile];
-        NSFileWrapper* fileWrapperOfImage = !attachedFileURL ? nil :
-          [[NSFileWrapper alloc] initWithURL:attachedFileURL options:0 error:nil];
-        NSTextAttachment*   textAttachmentOfImage     = [[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage];
-        NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
-        NSMutableAttributedString* mutableAttributedStringWithImage =
-          [[NSMutableAttributedString alloc] initWithAttributedString:attributedStringWithImage];
+            NSError* error = nil;
+            NSString* mathString =
+              [blockquoteString stringByReplacingOccurrencesOfRegex:@"<blockquote(.*?)style=(.*?)>(.*?)<math(.*?)>(.*?)</math>(.*)</blockquote>"
+                                                         withString:@"<math$4 style=$2>$3$5</math>"
+                                                            options:RKLMultiline|RKLDotAll|RKLCaseless range:blockquoteString.range error:&error];
+            if (error)
+              DebugLog(1, @"error = <%@>", error);
+            /*if (!lazyDataProvider)
+            {
+              [pboard setString:blockquoteString forType:NSHTMLPboardType];
+              [pboard setString:blockquoteString forType:kUTTypeHTML];
+            }//end if (!lazyDataProvider)*/
+            if (!lazyDataProvider)
+            {
+              [pboard setString:(!mathString ? blockquoteString : mathString) forType:NSPasteboardTypeString];
+              [pboard setString:(!mathString ? blockquoteString : mathString) forType:(NSString*)kUTTypeText];
+            }//end if (!lazyDataProvider)
+          }//end if (blockquoteString)
+        }
+        break;
+      case EXPORT_FORMAT_SVG:
+        [pboard addTypes:[NSArray arrayWithObjects:GetMySVGPboardType(), @"public.svg-image", NSPasteboardTypeString, nil] owner:lazyDataProvider];
+        if (!lazyDataProvider)
+        {
+          [pboard setData:data forType:GetMySVGPboardType()];
+          [pboard setData:data forType:@"public.svg-image"];
+          [pboard setData:data forType:NSPasteboardTypeString];
+        }//end if (!lazyDataProvider)
+        break;
+      case EXPORT_FORMAT_TEXT:
+        [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeString, (NSString*)kUTTypeText, nil] owner:lazyDataProvider];
+        if (!lazyDataProvider)
+        {
+          [pboard setData:data forType:NSPasteboardTypeString];
+          [pboard setData:data forType:(NSString*)kUTTypeText];
+        }//end if (!lazyDataProvider)
+        break;
+      case EXPORT_FORMAT_RTFD:
+        [pboard addTypes:[NSArray arrayWithObjects:NSPasteboardTypeRTFD, nil] owner:lazyDataProvider];
+        if (!lazyDataProvider)
+        {
+          CGFloat newBaseline = 0;
+          BOOL useBaseline = YES;
+          if (useBaseline)
+            newBaseline -= self.baseline;
             
-        //changes the baseline of the attachment to align it with the surrounding text
-        [mutableAttributedStringWithImage addAttribute:NSFontSizeAttribute
-                                                 value:@(self.pointSize)
-                                                 range:mutableAttributedStringWithImage.range];
-        [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
-                                                 value:@(newBaseline)
-                                                 range:mutableAttributedStringWithImage.range];
-          
-        //add a space after the image, to restore the baseline of the surrounding text
-        //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
-        //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
-        //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
-        unichar invisibleSpace = 0xFEFF;
-        NSString* invisibleSpaceString = [[NSString alloc] initWithCharacters:&invisibleSpace length:1];
-        NSMutableAttributedString* space = [[NSMutableAttributedString alloc] initWithString:invisibleSpaceString];
-        //[space setAttributes:contextAttributes range:space.range];
-        [space addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline)
-                      range:space.range];
-        [mutableAttributedStringWithImage insertAttributedString:space atIndex:0];
-        [mutableAttributedStringWithImage appendAttributedString:space];
-        //inserts the image in the global string
-        NSData* data = [mutableAttributedStringWithImage dataFromRange:mutableAttributedStringWithImage.range documentAttributes:@{NSDocumentTypeDocumentAttribute:NSRTFDTextDocumentType} error:nil];
-        [pboard setData:data forType:NSPasteboardTypeRTFD];
-        [[NSFileManager defaultManager] removeItemAtURL:attachedFileURL error:nil];
+          NSString* attachedFilePath = nil;
+          NSFileHandle* fileHandle =
+            [[NSFileManager defaultManager] temporaryFileWithTemplate:[NSString stringWithFormat:@"%@-XXXXXXXX", @"latexit-rtfd-attachement"]
+                                                            extension:@"pdf"
+                                                          outFilePath:&attachedFilePath workingDirectory:NSTemporaryDirectory()];
+          NSURL* attachedFileURL = !attachedFilePath ? nil : [NSURL fileURLWithPath:attachedFilePath];
+          NSData* attachedData = pdfData;
+          [fileHandle writeData:attachedData];
+          [fileHandle closeFile];
+          NSFileWrapper* fileWrapperOfImage = !attachedFileURL ? nil :
+            [[NSFileWrapper alloc] initWithURL:attachedFileURL options:0 error:nil];
+          NSTextAttachment*   textAttachmentOfImage     = [[NSTextAttachment alloc] initWithFileWrapper:fileWrapperOfImage];
+          NSAttributedString* attributedStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachmentOfImage];
+          NSMutableAttributedString* mutableAttributedStringWithImage =
+            [[NSMutableAttributedString alloc] initWithAttributedString:attributedStringWithImage];
+              
+          //changes the baseline of the attachment to align it with the surrounding text
+          [mutableAttributedStringWithImage addAttribute:NSFontSizeAttribute
+                                                   value:@(self.pointSize)
+                                                   range:mutableAttributedStringWithImage.range];
+          [mutableAttributedStringWithImage addAttribute:NSBaselineOffsetAttributeName
+                                                   value:@(newBaseline)
+                                                   range:mutableAttributedStringWithImage.range];
+            
+          //add a space after the image, to restore the baseline of the surrounding text
+          //Gee! It works with TextEdit but not with Pages. That is to say, in Pages, if I put this space, the baseline of
+          //the equation is reset. And if do not put this space, the cursor stays in "tuned baseline" mode.
+          //However, it works with Nisus Writer Express, so that I think it is a bug in Pages
+          unichar invisibleSpace = 0xFEFF;
+          NSString* invisibleSpaceString = [[NSString alloc] initWithCharacters:&invisibleSpace length:1];
+          NSMutableAttributedString* space = [[NSMutableAttributedString alloc] initWithString:invisibleSpaceString];
+          //[space setAttributes:contextAttributes range:space.range];
+          [space addAttribute:NSBaselineOffsetAttributeName value:@(newBaseline)
+                        range:space.range];
+          [mutableAttributedStringWithImage insertAttributedString:space atIndex:0];
+          [mutableAttributedStringWithImage appendAttributedString:space];
+          //inserts the image in the global string
+          NSData* data = [mutableAttributedStringWithImage dataFromRange:mutableAttributedStringWithImage.range documentAttributes:@{NSDocumentTypeDocumentAttribute:NSRTFDTextDocumentType} error:nil];
+          [pboard setData:data forType:NSPasteboardTypeRTFD];
+          [[NSFileManager defaultManager] removeItemAtURL:attachedFileURL error:nil];
 #ifndef ARC_ENABLED
-        [fileWrapperOfImage release];
-        [textAttachmentOfImage release];
-        [mutableAttributedStringWithImage release];
-        [invisibleSpaceString release];
-        [space release];
+          [fileWrapperOfImage release];
+          [textAttachmentOfImage release];
+          [mutableAttributedStringWithImage release];
+          [invisibleSpaceString release];
+          [space release];
 #endif
-      }//end if (!lazyDataProvider)
-      break;
-  }//end switch(exportFormat)
+        }//end if (!lazyDataProvider)
+        break;
+    }//end switch(exportFormat)
+  }//end if (!feedRegularData)
   
-  BOOL fillFilenames = [[PreferencesController sharedController] exportAddTempFileCurrentSession];
-  if (fillFilenames)
+  if (feedTempFile)
   {
-    [pboard addTypes:[NSArray arrayWithObjects:NSFileContentsPboardType, NSFilenamesPboardType, (NSString*)kUTTypeURL, nil] owner:lazyDataProvider];
+    if (feedRegularData)
+      [pboard addTypes:[NSArray arrayWithObject:NSFileContentsPboardType] owner:lazyDataProvider];
+    [pboard addTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, (NSString*)kUTTypeURL, (NSString*)kUTTypeFileURL, nil] owner:lazyDataProvider];
     if (!lazyDataProvider)
     {
       NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
@@ -3016,7 +3024,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
         [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
       }//end if (filePath)
     }//end if (!lazyDataProvider)
-  }//end if (fillFilenames)
+  }//end if (feedTempFile)
 }
 //end writeToPasteboard:isLinkBackRefresh:lazyDataProvider:
 
@@ -3120,7 +3128,7 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
   {
     if ([type isEqualToString:NSFileContentsPboardType])
       [pasteboard setData:data forType:NSFileContentsPboardType];
-    else if ([type isEqualToString:(NSString*)kUTTypeFileURL])
+    else if ([type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType] || [type isEqualToString:(NSString*)kUTTypeURL] || [type isEqualToString:(NSString*)kUTTypeFileURL])
     {
       NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
       NSString* filePrefix = [self computeFileName];
@@ -3131,28 +3139,17 @@ static NSMutableArray*      managedObjectContextStackInstance = nil;
       if (filePath)
       {
         [data writeToFile:filePath atomically:YES];
-        [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
+        if ([type isEqualToString:NSFilenamesPboardType])
+          [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
+        else//if (![type isEqualToString:NSFilenamesPboardType])
+        {
+          NSURL* fileURL = !filePath ? nil : [NSURL fileURLWithPath:filePath];
+          [pasteboard writeObjects:@[fileURL]];
+        }//end if (![type isEqualToString:NSFilenamesPboardType])
         FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
         [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
       }//end if (filePath)
-    }//end if ([type isEqualToString:(NSString*)kUTTypeFileURL])
-    else if ([type isEqualToString:(NSString*)kUTTypeURL])
-    {
-      NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
-      NSString* filePrefix = [self computeFileName];
-      if (!filePrefix || [filePrefix isEqualToString:@""])
-        filePrefix = @"latexit-drag";
-      NSString* filePath = !extension ? nil :
-        [[NSFileManager defaultManager] getUnusedFilePathFromPrefix:filePrefix extension:extension folder:folder startSuffix:0];
-      if (filePath)
-      {
-        [data writeToFile:filePath atomically:YES];
-        NSURL* fileURL = !filePath ? nil : [NSURL fileURLWithPath:filePath];
-        [pasteboard writeObjects:@[fileURL]];
-        FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
-        [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
-      }//end if (filePath)
-    }//end if ([type isEqualToString:(NSString*)kUTTypeURL])
+    }//end if ([type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType] || [type isEqualToString:(NSString*)kUTTypeURL] || [type isEqualToString:(NSString*)kUTTypeFileURL])
   }//end if (data)
   
   DebugLog(1, @"<pasteboard:%p provideDataForType:%@", pasteboard, type);

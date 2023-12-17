@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 
 #import "DragFilterWindowController.h"
@@ -38,6 +38,7 @@
   [self->animationStartDate release];
   [self->buttonPalette release];
   [self->addTempFileButton release];
+  [self->onlyTempFileButton release];
   [super dealloc]; 
 }
 //end dealloc
@@ -75,6 +76,7 @@
   [[self->buttonPalette buttonWithTag:EXPORT_FORMAT_TEXT] setTitle:NSLocalizedString(@"Text", @"")];
   
   [self setExportFormat:[[PreferencesController sharedController] exportFormatCurrentSession]];
+  export_temp_file_t exportTempFile = [[PreferencesController sharedController] exportTempFileCurrentSession];
   
   BOOL addTempFile = YES;
   self->addTempFileButton = !addTempFile ? nil : [[DragThroughButton alloc] initWithFrame:NSZeroRect];
@@ -91,7 +93,7 @@
     [self->addTempFileButton setBezelStyle:[templateButton bezelStyle]];
     [self->addTempFileButton setEnabled:YES];
     [self->addTempFileButton setFont:[templateButton font]];
-    [self->addTempFileButton setState:[[PreferencesController sharedController] exportAddTempFileCurrentSession] ? NSOnState : NSOffState];
+    [self->addTempFileButton setState:(exportTempFile == EXPORT_TEMP_FILE_ADD) ? NSOnState : NSOffState];
     [self->addTempFileButton setTitle:NSLocalizedString(@"+temp. file", @"")];
     [self->addTempFileButton sizeToFit];
     NSRect frame = [[self window] frame];
@@ -104,6 +106,35 @@
     [self->addTempFileButton setFrame:buttonFrame];
     [self->dragFilterView addSubview:self->addTempFileButton];
   }//end if (self->addTempFileButton)
+  
+  BOOL onlyTempFile = NO;
+  self->onlyTempFileButton = !onlyTempFile ? nil : [[DragThroughButton alloc] initWithFrame:NSZeroRect];
+  if (self->onlyTempFileButton)
+  {
+    [self->onlyTempFileButton awakeFromNib];
+    [self->onlyTempFileButton setCanSwitchState:YES];
+    DragThroughButton* templateButton = [[self->dragFilterButtonsView subviews] objectAtIndex:0];
+    [[self->onlyTempFileButton cell] setHighlightsBy:[[templateButton cell] highlightsBy]];
+    [[self->onlyTempFileButton cell] setShowsStateBy:[[templateButton cell] showsStateBy]];
+    [self->onlyTempFileButton setAutoresizingMask:[templateButton autoresizingMask]];
+    [self->onlyTempFileButton setAlignment:[templateButton alignment]];
+    [self->onlyTempFileButton setBordered:[templateButton isBordered]];
+    [self->onlyTempFileButton setBezelStyle:[templateButton bezelStyle]];
+    [self->onlyTempFileButton setEnabled:YES];
+    [self->onlyTempFileButton setFont:[templateButton font]];
+    [self->onlyTempFileButton setState:(exportTempFile == EXPORT_TEMP_FILE_ONLY) ? NSOnState : NSOffState];
+    [self->onlyTempFileButton setTitle:NSLocalizedString(@"=temp. file", @"")];
+    [self->onlyTempFileButton sizeToFit];
+    NSRect frame = [[self window] frame];
+    frame.size.width += 16+[self->onlyTempFileButton frame].size.width;
+    [[self window] setFrame:frame display:YES];
+    frame = [self->dragFilterButtonsView frame];
+    NSRect buttonFrame = [self->onlyTempFileButton frame];
+    buttonFrame.origin.x = NSMaxX(frame)+16+(addTempFile ? [self->addTempFileButton frame].size.width : 0);
+    buttonFrame.origin.y = frame.origin.y+(frame.size.height-buttonFrame.size.height)/2;
+    [self->onlyTempFileButton setFrame:buttonFrame];
+    [self->dragFilterView addSubview:self->onlyTempFileButton];
+  }//end if (self->onlyTempFileButton)
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notified:) name:DragThroughButtonStateChangedNotification object:nil];
 }
@@ -200,14 +231,25 @@
   if ([[notification name] isEqualToString:DragThroughButtonStateChangedNotification])
   {
     DragThroughButton* dragThroughButton = [notification object];
-    if (dragThroughButton == self->addTempFileButton)
+    BOOL add = ([self->addTempFileButton state] == NSOnState);
+    BOOL only = ([self->onlyTempFileButton state] == NSOnState);
+    export_temp_file_t newExportTempFile =
+      (!add && !only) ? EXPORT_TEMP_FILE_NONE :
+      (!add && only) ? EXPORT_TEMP_FILE_ONLY :
+      (add && !only) ? EXPORT_TEMP_FILE_ADD :
+      (dragThroughButton == self->addTempFileButton) ? EXPORT_TEMP_FILE_ADD :
+      (dragThroughButton == self->onlyTempFileButton) ? EXPORT_TEMP_FILE_ONLY :
+      [[PreferencesController sharedController] exportTempFileCurrentSession];
+    if ((dragThroughButton == self->addTempFileButton) || (dragThroughButton == self->onlyTempFileButton))
     {
       [dragThroughButton setCanTrackMouse:NO];
-      [[PreferencesController sharedController] setExportAddTempFilePersistent:([dragThroughButton state] == NSOnState)];
-      [[PreferencesController sharedController] setExportAddTempFileCurrentSession:([dragThroughButton state] == NSOnState)];
+      [self->addTempFileButton setState:(newExportTempFile == EXPORT_TEMP_FILE_ADD) ? NSOnState : NSOffState];
+      [self->onlyTempFileButton setState:(newExportTempFile == EXPORT_TEMP_FILE_ONLY) ? NSOnState : NSOffState];
+      [[PreferencesController sharedController] setExportTempFilePersistent:newExportTempFile];
+      [[PreferencesController sharedController] setExportTempFileCurrentSession:newExportTempFile];
       [self dragFilterWindowController:self exportFormatDidChange:[[PreferencesController sharedController] exportFormatCurrentSession]];
       [dragThroughButton performSelector:@selector(setCanTrackMouse:) withObject:@(YES) afterDelay:2];
-    }//end if (dragThroughButton == self->addTempFileButton)
+    }//end if ((dragThroughButton == self->addTempFileButton) || (dragThroughButton == self->onlyTempFileButton))
     else if ([dragThroughButton state] == NSOnState)
     {
       NSInteger tag = [dragThroughButton tag];

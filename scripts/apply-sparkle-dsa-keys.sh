@@ -38,7 +38,7 @@ PUBDATE=$(date +"%a, %d %b %G %T %z")
 PRIKEYFILE="key.pri"
 security find-generic-password -g -s "$KEYCHAIN_PRIVKEY_NAME" 2>&1 1>/dev/null | perl -pe '($_) = /"(.+)"/; s/\\012/\n/g' > $PRIKEYFILE
 cat $PRIKEYFILE
-SIGNATURE=$(openssl dgst -sha1 -binary "${ARCHIVE_FILEPATH}" | openssl dgst -dss1 -sign "$PRIKEYFILE" | openssl enc -base64)
+SIGNATURE=$(openssl dgst -sha1 -binary "${ARCHIVE_FILEPATH}" | openssl dgst -sha1 -sign "$PRIKEYFILE" | openssl enc -base64)
 rm -f $PRIKEYFILE
 
 [ $SIGNATURE ] || { echo Unable to load signing private key with name "'$KEYCHAIN_PRIVKEY_NAME'" from keychain; false; }

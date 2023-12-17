@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 25/09/08.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 //
 
@@ -17,6 +17,7 @@ typedef enum {EXPORT_FORMAT_PDF, EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS,
               EXPORT_FORMAT_TEXT,
               EXPORT_FORMAT_RTFD
              } export_format_t;
+typedef enum {EXPORT_TEMP_FILE_NONE, EXPORT_TEMP_FILE_ADD, EXPORT_TEMP_FILE_ONLY} export_temp_file_t;
 
 typedef enum {COMPOSITION_MODE_PDFLATEX, COMPOSITION_MODE_LATEXDVIPDF, COMPOSITION_MODE_XELATEX, COMPOSITION_MODE_LUALATEX} composition_mode_t;
 typedef enum {SCRIPT_SOURCE_STRING, SCRIPT_SOURCE_FILE} script_source_t;

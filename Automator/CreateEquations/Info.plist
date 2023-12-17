@@ -94,7 +94,9 @@
 		</dict>
 	</array>
 	<key>CFBundleGetInfoString</key>
-	<string>CreateEquations 2.16.5 Copyright © 2005-2021, Pierre Chatelier, All Rights Reserved</string>
+	<string>CreateEquations 2.16.6 Copyright © 2005-2023, Pierre Chatelier, All Rights Reserved</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 </dict>

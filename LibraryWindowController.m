@@ -4,7 +4,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/08/05.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 
 #import "LibraryWindowController.h"
@@ -695,6 +695,8 @@ static int kExportContext = 0;
   [openPanel setDelegate:(id)self];
   [openPanel setTitle:NSLocalizedString(@"Import library...", @"")];
   [openPanel setAccessoryView:[importAccessoryView retain]];
+  if ([openPanel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
+    [openPanel setAccessoryViewDisclosed:NO];
   [openPanel setAllowedFileTypes:@[@"latexlib", @"latexhist", @"library", @"plist", @"tex"]];
   if ([[self window] isVisible])
     [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
@@ -740,6 +742,8 @@ static int kExportContext = 0;
   [self changeLibraryExportFormat:self->exportFormatPopUpButton];
   [self->savePanel setCanSelectHiddenExtension:YES];
   [self->savePanel setAccessoryView:[self->exportAccessoryView retain]];
+  /*if ([self->savePanel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
+    [self->savePanel setAccessoryViewDisclosed:NO];*/
   [self->exportOnlySelectedButton setState:NSOffState];
   [self->exportOnlySelectedButton setEnabled:([self->libraryView selectedRow] >= 0)];
   [self->savePanel setNameFieldStringValue:NSLocalizedString(@"Untitled", @"")];

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -30,7 +30,7 @@ extern NSString* const DragExportTextExportEnvironmentKey;
 extern NSString* const DragExportTextExportBodyKey;
 extern NSString* const DragExportScaleAsPercentKey;
 extern NSString* const DragExportIncludeBackgroundColorKey;
-extern NSString* const DragExportAddTempFileEnabledKey;
+extern NSString* const DragExportTempFileKey;
 
 extern NSString* const DefaultImageViewBackgroundKey;
 extern NSString* const DefaultAutomaticHighContrastedPreviewBackgroundKey;
@@ -169,7 +169,7 @@ extern NSString* const SynchronizationAdditionalScriptsKey;
   SynchronizationAdditionalScriptsController* synchronizationAdditionalScriptsController;
   
   export_format_t exportFormatCurrentSession;
-  BOOL exportAddTempFileCurrentSession;
+  export_temp_file_t exportTempFileCurrentSession;
 }
 
 +(PreferencesController*) sharedController;
@@ -182,10 +182,10 @@ extern NSString* const SynchronizationAdditionalScriptsKey;
 -(void)            setExportFormatPersistent:(export_format_t)value;
 -(export_format_t) exportFormatCurrentSession;
 -(void)            setExportFormatCurrentSession:(export_format_t)value;
--(BOOL)            exportAddTempFilePersistent;
--(void)            setExportAddTempFilePersistent:(BOOL)value;
--(BOOL)            exportAddTempFileCurrentSession;
--(void)            setExportAddTempFileCurrentSession:(BOOL)value;
+-(export_temp_file_t) exportTempFilePersistent;
+-(void)               setExportTempFilePersistent:(export_temp_file_t)value;
+-(export_temp_file_t) exportTempFileCurrentSession;
+-(void)               setExportTempFileCurrentSession:(export_temp_file_t)value;
 
 
 -(NSData*)         exportJpegBackgroundColorData;

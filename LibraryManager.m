@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 2/05/05.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 
 //This file is the library manager, data source of every libraryTableView.
 //It is a singleton, holding a single copy of the library items, that will be shared by all documents.
@@ -1267,7 +1267,10 @@ static LibraryManager* sharedManagerInstance = nil;
   NSMutableArray* texItems = [NSMutableArray array];
   NSFileManager* fileManager = [NSFileManager defaultManager];
   NSString* fileUti = [fileManager UTIFromPath:filename];
-  BOOL conformsToTex = UTTypeConformsTo((CFStringRef)fileUti, CFSTR("public.tex")) || UTTypeConformsTo((CFStringRef)fileUti, kUTTypePlainText);
+  BOOL conformsToTex =
+    UTTypeConformsTo((CFStringRef)fileUti, CFSTR("public.tex")) ||
+    UTTypeConformsTo((CFStringRef)fileUti, CFSTR("public.tikz")) ||
+    UTTypeConformsTo((CFStringRef)fileUti, kUTTypePlainText);
   if (conformsToTex)
   {
     NSError* error = nil;

@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 08/05/10.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -21,6 +21,7 @@
   IBOutlet NSView* dragFilterButtonsView;
   NSButtonPalette* buttonPalette;
   DragThroughButton* addTempFileButton;
+  DragThroughButton* onlyTempFileButton;
   NSTimeInterval animationDurationIn;
   NSTimeInterval animationDurationOut;
   NSDate* animationStartDate;

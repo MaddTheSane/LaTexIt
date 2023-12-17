@@ -40,6 +40,7 @@
 				<string>jpg</string>
 				<string>html</string>
 				<string>svg</string>
+				<string>tikz</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>MyDocumentType</string>

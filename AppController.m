@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 
 //The AppController is a singleton, a unique instance that acts as a bridge between the menu and the documents.
 //It is also responsible for shared operations (like utilities : finding a program)
@@ -1499,6 +1499,8 @@ static NSMutableDictionary* cachePaths = nil;
   [self->openFileTypeOpenPanel setCanCreateDirectories:NO];
   [self->openFileTypeOpenPanel setResolvesAliases:YES];
   [self->openFileTypeOpenPanel setAccessoryView:self->openFileTypeView];
+  if ([self->openFileTypeOpenPanel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
+    [self->openFileTypeOpenPanel setAccessoryViewDisclosed:NO];
   [self->openFileTypeOpenPanel setDelegate:(id)self];//panel:shouldShowFilename:
   NSInteger result = [self->openFileTypeOpenPanel runModal];
   if (result == NSModalResponseOK)
@@ -1530,7 +1532,7 @@ static NSMutableDictionary* cachePaths = nil;
     if (selectedIndex == 0)
       [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:(NSString*)kUTTypePDF, nil]];
     else if (selectedIndex == 1)
-      [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:(NSString*)kUTTypeText, nil]];
+      [self->openFileTypeOpenPanel setAllowedFileTypes:[NSArray arrayWithObjects:(NSString*)kUTTypeText, @"tikz", nil]];
     else if (selectedIndex == 2)
       [self->openFileTypeOpenPanel setAllowedFileTypes:@[@"latexlib"]];
     else if (selectedIndex == 3)
