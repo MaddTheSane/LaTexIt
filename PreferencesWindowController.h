@@ -11,16 +11,16 @@
 #import "LaTeXiTSharedTypes.h"
 #import "PreferencesController.h"
 
-extern NSString* GeneralToolbarItemIdentifier;
-extern NSString* EditionToolbarItemIdentifier;
-extern NSString* TemplatesToolbarItemIdentifier;
-extern NSString* CompositionToolbarItemIdentifier;
-extern NSString* LibraryToolbarItemIdentifier;
-extern NSString* HistoryToolbarItemIdentifier;
-extern NSString* ServiceToolbarItemIdentifier;
-extern NSString* AdvancedToolbarItemIdentifier;
-extern NSString* WebToolbarItemIdentifier;
-extern NSString* PluginsToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const GeneralToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const EditionToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const TemplatesToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const CompositionToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const LibraryToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const HistoryToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const ServiceToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const AdvancedToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const WebToolbarItemIdentifier;
+extern NSToolbarItemIdentifier const PluginsToolbarItemIdentifier;
 
 @class AdditionalFilesTableView;
 @class CompositionConfigurationsProgramArgumentsTableView;

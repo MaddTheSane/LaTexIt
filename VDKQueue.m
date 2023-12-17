@@ -26,13 +26,13 @@
 
 
 
-NSString * VDKQueueRenameNotification = @"VDKQueueFileRenamedNotification";
-NSString * VDKQueueWriteNotification = @"VDKQueueFileWrittenToNotification";
-NSString * VDKQueueDeleteNotification = @"VDKQueueFileDeletedNotification";
-NSString * VDKQueueAttributeChangeNotification = @"VDKQueueFileAttributesChangedNotification";
-NSString * VDKQueueSizeIncreaseNotification = @"VDKQueueFileSizeIncreasedNotification";
-NSString * VDKQueueLinkCountChangeNotification = @"VDKQueueLinkCountChangedNotification";
-NSString * VDKQueueAccessRevocationNotification = @"VDKQueueAccessWasRevokedNotification";
+NSString * const VDKQueueRenameNotification = @"VDKQueueFileRenamedNotification";
+NSString * const VDKQueueWriteNotification = @"VDKQueueFileWrittenToNotification";
+NSString * const VDKQueueDeleteNotification = @"VDKQueueFileDeletedNotification";
+NSString * const VDKQueueAttributeChangeNotification = @"VDKQueueFileAttributesChangedNotification";
+NSString * const VDKQueueSizeIncreaseNotification = @"VDKQueueFileSizeIncreasedNotification";
+NSString * const VDKQueueLinkCountChangeNotification = @"VDKQueueLinkCountChangedNotification";
+NSString * const VDKQueueAccessRevocationNotification = @"VDKQueueAccessWasRevokedNotification";
 
 //  This is a simple model class used to hold info about each path we watch.
 @interface VDKQueuePathEntry : NSObject

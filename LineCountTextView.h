@@ -11,9 +11,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString* LineCountDidChangeNotification;
-extern NSString* FontDidChangeNotification;
-extern NSString* LineCountTextViewDidReceivePDFDataNotification;
+extern NSNotificationName const LineCountDidChangeNotification;
+extern NSNotificationName const FontDidChangeNotification;
+extern NSNotificationName const LineCountTextViewDidReceivePDFDataNotification;
 
 @class LineCountRulerView;
 @class SMLSyntaxColouring;

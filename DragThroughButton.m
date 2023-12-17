@@ -12,9 +12,9 @@
 #import "LibraryManager.h"
 #import "TooltipWindow.h"
 
-NSString* DragThroughButtonStateChangedNotification = @"DragThroughButtonStateChangedNotification";
+NSString* const DragThroughButtonStateChangedNotification = @"DragThroughButtonStateChangedNotification";
 
-@interface DragThroughButton (PrivateAPI)
+@interface DragThroughButton (/*PrivateAPI*/)
 -(void) checkLastMove:(id)object;
 -(void) setStateWrapped:(NSNumber*)number;
 -(void) windowWillCloseNotification:(NSNotification*)notification;

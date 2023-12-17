@@ -32,13 +32,13 @@
 #import "SMLSyntaxColouring.h"
 #import "Utils.h"
 
-NSString* LineCountDidChangeNotification = @"LineCountDidChangeNotification";
-NSString* FontDidChangeNotification      = @"FontDidChangeNotification";
+NSString*const LineCountDidChangeNotification = @"LineCountDidChangeNotification";
+NSString*const FontDidChangeNotification      = @"FontDidChangeNotification";
 
-@interface LineCountTextView (PrivateAPI)
+@interface LineCountTextView (/*PrivateAPI*/)
 +(NSArray*) syntaxColoringKeys;
 -(void) _computeLineRanges;
--(void) _initializeSpellChecker;
+-(void) _initializeSpellChecker:(id)object;
 -(void) replaceCharactersInRange:(NSRange)range withString:(NSString*)string withUndo:(BOOL)withUndo;
 -(void) insertTextAtMousePosition:(id)object;
 -(void) invalidateColors;

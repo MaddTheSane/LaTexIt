@@ -10,7 +10,7 @@
 
 //when the user clicks a line, he will be teleported to the error in the body of the latex source,
 //in another view of the document window. A notification suits well.
-NSString* ClickErrorLineNotification = @"ClickErrorLineNotification";
+NSString* const ClickErrorLineNotification = @"ClickErrorLineNotification";
 
 @implementation LogTableView
 

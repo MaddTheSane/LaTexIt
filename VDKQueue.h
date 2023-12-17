@@ -89,13 +89,13 @@
 //      Object          =   the instance of VDKQueue that was watching for changes
 //      userInfo.path   =   the file path where the change was observed
 //
-extern NSString * VDKQueueRenameNotification;
-extern NSString * VDKQueueWriteNotification;
-extern NSString * VDKQueueDeleteNotification;
-extern NSString * VDKQueueAttributeChangeNotification;
-extern NSString * VDKQueueSizeIncreaseNotification;
-extern NSString * VDKQueueLinkCountChangeNotification;
-extern NSString * VDKQueueAccessRevocationNotification;
+extern NSNotificationName const VDKQueueRenameNotification;
+extern NSNotificationName const VDKQueueWriteNotification;
+extern NSNotificationName const VDKQueueDeleteNotification;
+extern NSNotificationName const VDKQueueAttributeChangeNotification;
+extern NSNotificationName const VDKQueueSizeIncreaseNotification;
+extern NSNotificationName const VDKQueueLinkCountChangeNotification;
+extern NSNotificationName const VDKQueueAccessRevocationNotification;
 
 
 

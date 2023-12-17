@@ -65,16 +65,16 @@
 
 #define NSAppKitVersionNumber10_4 824
 
-NSString* GeneralToolbarItemIdentifier     = @"GeneralToolbarItemIdentifier";
-NSString* EditionToolbarItemIdentifier     = @"EditionToolbarItemIdentifier";
-NSString* TemplatesToolbarItemIdentifier   = @"TemplatesToolbarItemIdentifier";
-NSString* CompositionToolbarItemIdentifier = @"CompositionToolbarItemIdentifier";
-NSString* LibraryToolbarItemIdentifier     = @"LibraryToolbarItemIdentifier";
-NSString* HistoryToolbarItemIdentifier     = @"HistoryToolbarItemIdentifier";
-NSString* ServiceToolbarItemIdentifier     = @"ServiceToolbarItemIdentifier";
-NSString* AdvancedToolbarItemIdentifier    = @"AdvancedToolbarItemIdentifier";
-NSString* WebToolbarItemIdentifier         = @"WebToolbarItemIdentifier";
-NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
+NSString*const GeneralToolbarItemIdentifier     = @"GeneralToolbarItemIdentifier";
+NSString*const EditionToolbarItemIdentifier     = @"EditionToolbarItemIdentifier";
+NSString*const TemplatesToolbarItemIdentifier   = @"TemplatesToolbarItemIdentifier";
+NSString*const CompositionToolbarItemIdentifier = @"CompositionToolbarItemIdentifier";
+NSString*const LibraryToolbarItemIdentifier     = @"LibraryToolbarItemIdentifier";
+NSString*const HistoryToolbarItemIdentifier     = @"HistoryToolbarItemIdentifier";
+NSString*const ServiceToolbarItemIdentifier     = @"ServiceToolbarItemIdentifier";
+NSString*const AdvancedToolbarItemIdentifier    = @"AdvancedToolbarItemIdentifier";
+NSString*const WebToolbarItemIdentifier         = @"WebToolbarItemIdentifier";
+NSString*const PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
 
 @interface PreferencesWindowController (PrivateAPI)
 -(IBAction) nilAction:(id)sender;

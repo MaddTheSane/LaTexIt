@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString* NotifyingScrollViewDidScrollNotification;
+extern NSNotificationName const NotifyingScrollViewDidScrollNotification;
 
 @interface NotifyingScrollView : NSScrollView {
 
