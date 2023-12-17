@@ -3,7 +3,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 03/03/09.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 //
 
 #import "PreferencesController.h"
@@ -57,7 +57,7 @@ NSString* DragExportTextExportEnvironmentKey                  = @"DragExportText
 NSString* DragExportTextExportBodyKey                         = @"DragExportTextExportBodyKey";
 NSString* DragExportScaleAsPercentKey                         = @"DragExportScaleAsPercent";
 NSString* DragExportIncludeBackgroundColorKey                 = @"DragExportIncludeBackgroundColor";
-NSString* DragExportAddTempFileEnabledKey                     = @"DragExportAddTempFileEnabled";
+NSString* DragExportTempFileKey                               = @"DragExportTempFileKey";
 
 NSString* DefaultImageViewBackgroundKey                      = @"DefaultImageViewBackground";
 NSString* DefaultAutomaticHighContrastedPreviewBackgroundKey = @"DefaultAutomaticHighContrastedPreviewBackground";
@@ -289,7 +289,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
              @(YES), DragExportTextExportBodyKey,
              @(100),   DragExportScaleAsPercentKey,
              @(NO), DragExportIncludeBackgroundColorKey,
-             @(NO), DragExportAddTempFileEnabledKey,
+             @(0), DragExportTempFileKey,
              [[NSColor whiteColor] colorAsData],      DefaultImageViewBackgroundKey,
              @(NO),     DefaultAutomaticHighContrastedPreviewBackgroundKey,
              @(NO),     DefaultDoNotClipPreviewKey,
@@ -521,11 +521,11 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
   [self migratePreferences];
   CFPreferencesAppSynchronize((CHBRIDGE CFStringRef)LaTeXiTAppKey);
   self->exportFormatCurrentSession = [self exportFormatPersistent];
-  self->exportAddTempFileCurrentSession = [self exportAddTempFilePersistent];
+  self->exportTempFileCurrentSession = [self exportTempFilePersistent];
   [[NSUserDefaultsController sharedUserDefaultsController]
     addObserver:self forKeyPath:[NSUserDefaultsController adaptedKeyPath:DragExportTypeKey] options:0 context:nil];
   [self observeValueForKeyPath:DragExportTypeKey ofObject:[NSUserDefaultsController sharedUserDefaultsController] change:nil context:nil];
-  [self observeValueForKeyPath:DragExportAddTempFileEnabledKey ofObject:[NSUserDefaultsController sharedUserDefaultsController] change:nil context:nil];
+  [self observeValueForKeyPath:DragExportTempFileKey ofObject:[NSUserDefaultsController sharedUserDefaultsController] change:nil context:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appearanceDidChange:) name:NSAppearanceDidChangeNotification object:nil];
   return self;
 }
@@ -535,7 +535,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   [[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:[NSUserDefaultsController adaptedKeyPath:DragExportTypeKey]];
-  [[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:[NSUserDefaultsController adaptedKeyPath:DragExportAddTempFileEnabledKey]];
+  [[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:[NSUserDefaultsController adaptedKeyPath:DragExportTempFileKey]];
 #ifdef ARC_ENABLED
 #else
   [self->undoManager release];
@@ -555,8 +555,8 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 {
   if ([keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:DragExportTypeKey]])
     [self setExportFormatCurrentSession:[self exportFormatPersistent]];
-  else if ([keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:DragExportAddTempFileEnabledKey]])
-    [self setExportAddTempFileCurrentSession:[self exportAddTempFilePersistent]];
+  else if ([keyPath isEqualToString:[NSUserDefaultsController adaptedKeyPath:DragExportTempFileKey]])
+    [self setExportTempFileCurrentSession:[self exportTempFilePersistent]];
 }
 //end observeValueForKeyPath:ofObject:change:context:
 
@@ -645,46 +645,46 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
 }
 //end setExportFormatCurrentSession:
 
--(BOOL) exportAddTempFilePersistent
+-(export_temp_file_t) exportTempFilePersistent
 {
-  BOOL result = NO;
+  export_temp_file_t result = EXPORT_TEMP_FILE_NONE;
   if (self->isLaTeXiT)
-    result = [[NSUserDefaults standardUserDefaults] boolForKey:DragExportAddTempFileEnabledKey];
+    result = (export_temp_file_t)[[NSUserDefaults standardUserDefaults] integerForKey:DragExportTempFileKey];
   else//if (!self->isLaTeXiT)
   {
     Boolean ok = NO;
-    result = CFPreferencesGetAppBooleanValue((CHBRIDGE CFStringRef)DragExportAddTempFileEnabledKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, &ok);
+    result = (export_temp_file_t)CFPreferencesGetAppIntegerValue((CHBRIDGE CFStringRef)DragExportTempFileKey, (CHBRIDGE CFStringRef)LaTeXiTAppKey, &ok);
   }//end if (!self->isLaTeXiT)
   return result;
 }
 //end exportAddTempFilePersistent
 
--(void) setExportAddTempFilePersistent:(BOOL)value
+-(void) setExportTempFilePersistent:(export_temp_file_t)value
 {
   if (self->isLaTeXiT)
-    [[NSUserDefaults standardUserDefaults] setBool:value forKey:DragExportAddTempFileEnabledKey];
+    [[NSUserDefaults standardUserDefaults] setInteger:(NSInteger)value forKey:DragExportTempFileKey];
   else
     #ifdef ARC_ENABLED
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportAddTempFileEnabledKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTempFileKey, (CHBRIDGE const void*)@(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #else
-    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportAddTempFileEnabledKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
+    CFPreferencesSetAppValue((CHBRIDGE CFStringRef)DragExportTempFileKey, @(value), (CHBRIDGE CFStringRef)LaTeXiTAppKey);
     #endif
-  [self setExportAddTempFileCurrentSession:value];
+  [self setExportTempFileCurrentSession:value];
 }
-//end setExportAddTempFilePersistent:
+//end setExportTempFilePersistent:
 
--(BOOL) exportAddTempFileCurrentSession
+-(export_temp_file_t) exportTempFileCurrentSession
 {
-  BOOL result = self->exportAddTempFileCurrentSession;
+  export_temp_file_t result = self->exportTempFileCurrentSession;
   return result;
 }
-//end exportAddTempFileCurrentSession
+//end exportTempFileCurrentSession
 
--(void) setExportAddTempFileCurrentSession:(BOOL)value
+-(void) setExportTempFileCurrentSession:(export_temp_file_t)value
 {
-  self->exportAddTempFileCurrentSession = value;
+  self->exportTempFileCurrentSession = value;
 }
-//end setExportAddTempFileCurrentSession:
+//end setExportTempFileCurrentSession:
 
 -(NSData*) exportJpegBackgroundColorData
 {

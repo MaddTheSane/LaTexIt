@@ -1206,6 +1206,8 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
       <description><![CDATA[
         <ul>
           <li>Support de pdftocairo pour l'export SVG.</li>
+          <li>correction de la persistance du paramétrage de l'export SVG&nbsp;;</li>
+          <li>corrections diverses.</li>
         </ul>
       ]]></description>
       <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
@@ -1218,6 +1220,27 @@ sparkle:dsaSignature="MCwCFFluV6jzyqJF4mR7vKXbI9vJUH51AhRZZekdaS+nC/8mqtrMLhdX1K
 				type="application/octet-stream"
 				length="11716952"
 				sparkle:dsaSignature="MCwCFEJHfHchqdXUPlPdtnOk91NnQT+MAhRHiqnZDUvU6PVN75aWIkHYYdn4Cg=="
+			/>
+    </item>
+    <item>
+      <guid>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.16.6</guid>
+      <title>Version 2.16.6</title>
+      <description><![CDATA[
+        <ul>
+          <li>Ouverture des fichiers *.tikz comme des fichiers *.tex&nbsp;;</li>
+          <li>correction du menu contextuel empêchant de sélectionner SVG même s'il est disponible via pdftocairo.</li>
+        </ul>
+      ]]></description>
+      <sparkle:minimumSystemVersion>10.9.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://pierre.chachatelier.fr/latexit/downloads/latexit-changelog-fr.html#version-2.16.6</sparkle:releaseNotesLink>
+			<pubDate>Sat, 16 Dec 2023 10:22:01 +0100</pubDate>
+			<enclosure
+				url="https://pierre.chachatelier.fr/latexit/downloads/LaTeXiT-2_16_6.dmg"
+				sparkle:version="2.16.6"
+                   sparkle:shortVersionString="2.16.6"
+				type="application/octet-stream"
+				length="11717601"
+				sparkle:dsaSignature="MCwCFGLKFWrv3xR7JGfIoeBVq7x+Eph0AhRhSpdepmIc199O5O/0vhJ+RJrKkQ=="
 			/>
     </item>
   </channel>

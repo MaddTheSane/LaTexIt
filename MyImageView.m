@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 
 //The view in which the latex image is displayed is a little tuned. It knows its document
 //and stores the full pdfdata (that may contain meta-data like keywords, creator...)
@@ -781,34 +781,14 @@ typedef NSInteger NSDraggingContext;
     [self->transientDragData release];
     self->transientDragData = [data copy];
   }//end if (!hasAlreadyCachedData)
-  if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
+  if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType] || [type isEqualToString:(NSString*)kUTTypeURL] || [type isEqualToString:(NSString*)kUTTypeFileURL])
   {
     NSString* extension = getFileExtensionForExportFormat(exportFormat);
     if (data)
     {
       if ([type isEqualToString:NSFileContentsPboardType])
         [pasteboard setData:data forType:NSFileContentsPboardType];
-      else if ([type isEqualToString:NSFilenamesPboardType])
-      {
-        NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
-        NSString* filePrefix = [self->transientDragEquation computeFileName];
-        if (!filePrefix || [filePrefix isEqualToString:@""])
-          filePrefix = @"latexit-drag";
-        NSString* filePath = !extension ? nil :
-          [[NSFileManager defaultManager] getUnusedFilePathFromPrefix:filePrefix extension:extension folder:folder startSuffix:0];
-
-        if (filePath)
-        {
-          if (!hasAlreadyCachedData)
-          {
-            [data writeToFile:filePath atomically:YES];
-            [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
-            FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
-            [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
-          }//end if (!hasAlreadyCachedData)
-        }//end if (filePath)
-      }//end if ([type isEqualToString:NSFilenamesPboardType])
-      else if ([type isEqualToString:NSURLPboardType])
+      else if ([type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType] || [type isEqualToString:(NSString*)kUTTypeURL] || [type isEqualToString:(NSString*)kUTTypeFileURL])
       {
         NSString* folder = [[NSWorkspace sharedWorkspace] temporaryDirectory];
         NSString* filePrefix = [self->transientDragEquation computeFileName];
@@ -821,15 +801,20 @@ typedef NSInteger NSDraggingContext;
           if (!hasAlreadyCachedData)
           {
             [data writeToFile:filePath atomically:YES];
-            NSURL* fileURL = !filePath ? nil : [NSURL fileURLWithPath:filePath];
-            [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
+            if ([type isEqualToString:NSFilenamesPboardType])
+              [pasteboard setPropertyList:[NSArray arrayWithObjects:filePath, nil] forType:type];
+            else//if (![type isEqualToString:NSFilenamesPboardType])
+            {
+              NSURL* fileURL = !filePath ? nil : [NSURL fileURLWithPath:filePath];
+              [pasteboard writeObjects:[NSArray arrayWithObjects:fileURL, nil]];
+            }//end if (![type isEqualToString:NSFilenamesPboardType])
             FileManagerHelper* fileManagerHelper = [FileManagerHelper defaultManager];
             [fileManagerHelper addSelfDestructingFile:filePath timeInterval:10];
           }//end if (!hasAlreadyCachedData)
         }//end if (filePath)
-      }//end if ([type isEqualToString:NSURLPboardType])
+      }//end if ([type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType] || [type isEqualToString:(NSString*)kUTTypeURL] || [type isEqualToString:(NSString*)kUTTypeFileURL])
     }//end if (data)
-  }//end if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType])
+  }//end if ([type isEqualToString:NSFileContentsPboardType] || [type isEqualToString:NSFilenamesPboardType] || [type isEqualToString:NSURLPboardType] || [type isEqualToString:(NSString*)kUTTypeURL] || [type isEqualToString:(NSString*)kUTTypeFileURL])
   else//if (![type isEqualToString:NSFileContentsPboardType] && ![type isEqualToString:NSFilenamesPboardType] && ![type isEqualToString:NSURLPboardType])
   {
     if (exportFormat != EXPORT_FORMAT_MATHML)
@@ -880,7 +865,9 @@ typedef NSInteger NSDraggingContext;
     NSArray* plist = [[pboard propertyListForType:NSFilenamesPboardType] dynamicCastToClass:[NSArray class]];
     NSString* filepath = !([plist count] == 1) ? nil : [plist lastObject];
     NSString* sourceUTI = [[NSFileManager defaultManager] UTIFromPath:filepath];
-    ok = UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tex")) || [LatexitEquation latexitEquationPossibleWithUTI:sourceUTI];
+    ok = UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tex")) ||
+         UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tikz")) ||
+         [LatexitEquation latexitEquationPossibleWithUTI:sourceUTI];
   }//end if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilenamesPboardType]]))
   else if ((type = [pboard availableTypeFromArray:[NSArray arrayWithObject:NSFilesPromisePboardType]]))
   {
@@ -933,7 +920,7 @@ typedef NSInteger NSDraggingContext;
   else if ([sender tag] == EXPORT_FORMAT_PDF_NOT_EMBEDDED_FONTS)
     ok = [[AppController appController] isGsAvailable] && [[AppController appController] isPsToPdfAvailable];
   else if ([sender tag] == EXPORT_FORMAT_SVG)
-    ok = [[AppController appController] isPdfToSvgAvailable];
+    ok = [[AppController appController] isPdfToSvgAvailable] || [[AppController appController] isPdfToCairoAvailable];
   if ([sender action] == @selector(copy:))
     ok = ok && ([self image] != nil);
   return ok;

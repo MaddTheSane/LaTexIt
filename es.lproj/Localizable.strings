@@ -206,6 +206,7 @@
 "Migrating history to new format" = "Migrando el historial al nuevo formato";
 "Migrating library to new format" = "Migrando la librería al nuevo formato";
 "+temp. file" = "+temp. archivo";
+"=temp. file" = "=temp. archivo";
 "The history cannot be opened" = "No se puede abrir el historial";
 "The library cannot be opened" = "No se puede abrir la biblioteca";
 "The history cannot be opened at path <%@>" = "El historial no se puede abrir en la ruta <%@>";

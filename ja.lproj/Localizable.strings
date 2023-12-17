@@ -205,6 +205,7 @@
 "Migrating history to new format" = "履歴を新しいフォーマットに移行しています";
 "Migrating library to new format" = "ライブラリを新しいフォーマットに移行しています";
 "+temp. file" = "+一時ファイル";
+"=temp. file" = "=一時ファイル";
 "The history cannot be opened" = "履歴を開くことができない";
 "The library cannot be opened" = "ライブラリを開くことができません";
 "The history cannot be opened at path <%@>" = "パス <%@> で履歴を開くことができません。";

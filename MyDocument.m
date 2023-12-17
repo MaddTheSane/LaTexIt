@@ -2,7 +2,7 @@
 //  LaTeXiT
 //
 //  Created by Pierre Chatelier on 19/03/05.
-//  Copyright 2005-2022 Pierre Chatelier. All rights reserved.
+//  Copyright 2005-2023 Pierre Chatelier. All rights reserved.
 
 // The main document of LaTeXiT. There is much to say !
 
@@ -1526,6 +1526,14 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
       [self updateDocumentFromString:string updatePreamble:YES updateEnvironment:YES updateBody:YES];
     [string release];
   }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tex")))
+  else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tikz")))
+  {
+    NSString* string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    ok = (string != nil);
+    if (ok)
+      [self updateDocumentFromString:string updatePreamble:YES updateEnvironment:YES updateBody:YES];
+    [string release];
+  }//end if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.tikz")))
   else if (UTTypeConformsTo((CFStringRef)sourceUTI, CFSTR("public.text")))
   {
     NSString* string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -2871,6 +2879,8 @@ BOOL NSRangeContains(NSRange range, NSUInteger index)
   [panel setAllowsOtherFileTypes:YES];
   [panel setExtensionHidden:NO];
   [panel setAccessoryView:accessoryViewParent];
+  /*if ([panel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
+    [panel setAccessoryViewDisclosed:NO];*/
   panel.nameFieldStringValue = [NSLocalizedString(@"Untitled", @"") stringByAppendingPathExtension:@"tex"];
   [panel beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse result) {
     BOOL synchronizeEnabled =
