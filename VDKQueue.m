@@ -34,19 +34,19 @@ NSString * const VDKQueueSizeIncreaseNotification = @"VDKQueueFileSizeIncreasedN
 NSString * const VDKQueueLinkCountChangeNotification = @"VDKQueueLinkCountChangedNotification";
 NSString * const VDKQueueAccessRevocationNotification = @"VDKQueueAccessWasRevokedNotification";
 
-//  This is a simple model class used to hold info about each path we watch.
+//!  This is a simple model class used to hold info about each path we watch.
 @interface VDKQueuePathEntry : NSObject
 {
 	NSString*		_path;
 	int				_watchedFD;
-	u_int			_subscriptionFlags;
+	VDKQueueNotifyFlag _subscriptionFlags;
 }
 
-- (id) initWithPath:(NSString*)inPath andSubscriptionFlags:(u_int)flags;
+- (id) initWithPath:(NSString*)inPath andSubscriptionFlags:(VDKQueueNotifyFlag)flags;
 
 @property (atomic, copy) NSString *path;
 @property (atomic, assign) int watchedFD;
-@property (atomic, assign) u_int subscriptionFlags;
+@property (atomic, assign) VDKQueueNotifyFlag subscriptionFlags;
 
 @end
 
@@ -54,7 +54,7 @@ NSString * const VDKQueueAccessRevocationNotification = @"VDKQueueAccessWasRevok
 @synthesize path = _path, watchedFD = _watchedFD, subscriptionFlags = _subscriptionFlags;
 
 
-- (id) initWithPath:(NSString*)inPath andSubscriptionFlags:(u_int)flags;
+- (id) initWithPath:(NSString*)inPath andSubscriptionFlags:(VDKQueueNotifyFlag)flags;
 {
     self = [super init];
 	if (self)
@@ -328,7 +328,7 @@ NSString * const VDKQueueAccessRevocationNotification = @"VDKQueueAccessWasRevok
 }
 
 
-- (void) addPath:(NSString *)aPath notifyingAbout:(u_int)flags
+- (void) addPath:(NSString *)aPath notifyingAbout:(VDKQueueNotifyFlag)flags
 {
     if (!aPath) return;
     [aPath retain];
@@ -391,8 +391,4 @@ NSString * const VDKQueueAccessRevocationNotification = @"VDKQueueAccessWasRevok
     return count;
 }
 
-
-
-
 @end
-

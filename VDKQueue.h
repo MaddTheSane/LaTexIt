@@ -66,23 +66,26 @@
 #include <sys/types.h>
 #include <sys/event.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
-//
-//  Logical OR these values into the u_int that you pass in the -addPath:notifyingAbout: method
-//  to specify the types of notifications you're interested in. Pass the default value to receive all of them.
-//
-#define VDKQueueNotifyAboutRename					NOTE_RENAME		// Item was renamed.
-#define VDKQueueNotifyAboutWrite					NOTE_WRITE		// Item contents changed (also folder contents changed).
-#define VDKQueueNotifyAboutDelete					NOTE_DELETE		// item was removed.
-#define VDKQueueNotifyAboutAttributeChange			NOTE_ATTRIB		// Item attributes changed.
-#define VDKQueueNotifyAboutSizeIncrease				NOTE_EXTEND		// Item size increased.
-#define VDKQueueNotifyAboutLinkCountChanged			NOTE_LINK		// Item's link count changed.
-#define VDKQueueNotifyAboutAccessRevocation			NOTE_REVOKE		// Access to item was revoked.
-
-#define VDKQueueNotifyDefault						(VDKQueueNotifyAboutRename | VDKQueueNotifyAboutWrite \
-                                                    | VDKQueueNotifyAboutDelete | VDKQueueNotifyAboutAttributeChange \
-                                                    | VDKQueueNotifyAboutSizeIncrease | VDKQueueNotifyAboutLinkCountChanged \
-                                                    | VDKQueueNotifyAboutAccessRevocation)
+//!
+//!  Logical OR these values into the \c u_int that you pass in the \c -addPath:notifyingAbout: method
+//!  to specify the types of notifications you're interested in. Pass the default value to receive all of them.
+//!
+typedef NS_OPTIONS(u_int, VDKQueueNotifyFlag) {
+	VDKQueueNotifyAboutRename				= NOTE_RENAME,		// Item was renamed.
+	VDKQueueNotifyAboutWrite				= NOTE_WRITE,		// Item contents changed (also folder contents changed).
+	VDKQueueNotifyAboutDelete				= NOTE_DELETE,		// item was removed.
+	VDKQueueNotifyAboutAttributeChange		= NOTE_ATTRIB,		// Item attributes changed.
+	VDKQueueNotifyAboutSizeIncrease			= NOTE_EXTEND,		// Item size increased.
+	VDKQueueNotifyAboutLinkCountChanged		= NOTE_LINK,		// Item's link count changed.
+	VDKQueueNotifyAboutAccessRevocation		= NOTE_REVOKE,		// Access to item was revoked.
+	
+	VDKQueueNotifyDefault					= (VDKQueueNotifyAboutRename | VDKQueueNotifyAboutWrite
+											   | VDKQueueNotifyAboutDelete | VDKQueueNotifyAboutAttributeChange
+											   | VDKQueueNotifyAboutSizeIncrease | VDKQueueNotifyAboutLinkCountChanged
+											   | VDKQueueNotifyAboutAccessRevocation)
+};
 
 //
 //  Notifications that this class sends to the NSWORKSPACE notification center.
@@ -107,7 +110,7 @@ extern NSNotificationName const VDKQueueAccessRevocationNotification;
 @protocol VDKQueueDelegate <NSObject>
 @required
 
--(void) VDKQueue:(VDKQueue *)queue receivedNotification:(NSString*)noteName forPath:(NSString*)fpath;
+-(void) VDKQueue:(VDKQueue *)queue receivedNotification:(NSNotificationName)noteName forPath:(NSString*)fpath;
 
 @end
 
@@ -117,7 +120,7 @@ extern NSNotificationName const VDKQueueAccessRevocationNotification;
 
 @interface VDKQueue : NSObject
 {
-    id<VDKQueueDelegate>    _delegate;
+    __unsafe_unretained id<VDKQueueDelegate>    _delegate;
     BOOL                    _alwaysPostNotifications;               // By default, notifications are posted only if there is no delegate set. Set this value to YES to have notes posted even when there is a delegate.
     
 @private
@@ -126,6 +129,7 @@ extern NSNotificationName const VDKQueueAccessRevocationNotification;
     BOOL                    _keepWatcherThreadRunning;              // Set to NO to cancel the thread that watches _coreQueueFD for kQueue events
 }
 
+- (nullable instancetype)init NS_DESIGNATED_INITIALIZER;
 
 //
 //  Note: there is no need to ask whether a path is already being watched. Just add it or remove it and this class
@@ -134,18 +138,20 @@ extern NSNotificationName const VDKQueueAccessRevocationNotification;
 //  Warning: You must pass full, root-relative paths. Do not pass tilde-abbreviated paths or file URLs. 
 //
 - (void) addPath:(NSString *)aPath;
-- (void) addPath:(NSString *)aPath notifyingAbout:(u_int)flags;     // See note above for values to pass in "flags"
+- (void) addPath:(NSString *)aPath notifyingAbout:(VDKQueueNotifyFlag)flags;     // See note above for values to pass in "flags"
 
 - (void) removePath:(NSString *)aPath;
 - (void) removeAllPaths;
 
+//!  Returns the number of paths that this VDKQueue instance is actively watching.
+@property (readonly) NSUInteger numberOfWatchedPaths;
 
-- (NSUInteger) numberOfWatchedPaths;                                //  Returns the number of paths that this VDKQueue instance is actively watching.
 
 
-
-@property (assign) id<VDKQueueDelegate> delegate;
+@property (assign, nullable) id<VDKQueueDelegate> delegate;
+//! By default, notifications are posted only if there is no delegate set. Set this value to \c YES to have notes posted even when there is a delegate.
 @property (assign) BOOL alwaysPostNotifications;
 
 @end
 
+NS_ASSUME_NONNULL_END

@@ -2025,8 +2025,10 @@
 				938508572517EB5200B2A369 /* VDKQueue.h */,
 				938508582517EB5200B2A369 /* VDKQueue.m */,
 			);
+			indentWidth = 4;
 			name = VDKQueue;
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		938DBD2710BDC2A2002350CF /* LaTeXiT Helper */ = {
 			isa = PBXGroup;
