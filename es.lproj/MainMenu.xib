@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,16 +24,16 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-2" id="142"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Haz una donación…" id="1350">
+                            <menuItem title="Haz una donación…" id="1624">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="makeDonation:" target="210" id="1360"/>
+                                    <action selector="makeDonation:" target="210" id="1625"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Comprobar actualizaciones…" id="1238">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="checkForUpdates:" target="1430" id="1580"/>
+                                    <action selector="checkForUpdates:" target="1465" id="1633"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="202">
@@ -95,7 +95,7 @@
                             </menuItem>
                             <menuItem title="Abrir…" keyEquivalent="o" id="1123">
                                 <connections>
-                                    <action selector="openFile:" target="210" id="1498"/>
+                                    <action selector="openFile:" target="210" id="1510"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Exportar imagen…" keyEquivalent="e" id="231">
@@ -103,48 +103,48 @@
                                     <action selector="exportImage:" target="210" id="233"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Re-exportar imagen" alternate="YES" keyEquivalent="e" id="1460">
+                            <menuItem title="Re-exportar imagen" alternate="YES" keyEquivalent="e" id="1480">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
-                                    <action selector="reexportImage:" target="210" id="1461"/>
+                                    <action selector="reexportImage:" target="210" id="1481"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1608">
+                            <menuItem isSeparatorItem="YES" id="1664">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Close file synchronization" id="1611">
+                            <menuItem title="Close file synchronization" id="1667">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="closeBackSync:" target="210" id="1617"/>
+                                    <action selector="closeBackSync:" target="210" id="1673"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Guardar" keyEquivalent="s" id="1612">
+                            <menuItem title="Guardar" keyEquivalent="s" id="1668">
                                 <connections>
-                                    <action selector="save:" target="210" id="1619"/>
+                                    <action selector="save:" target="210" id="1675"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Guardar como…" keyEquivalent="S" id="1610">
+                            <menuItem title="Guardar como…" keyEquivalent="S" id="1666">
                                 <connections>
-                                    <action selector="saveAs:" target="210" id="1618"/>
+                                    <action selector="saveAs:" target="210" id="1674"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="79">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Cerrar enlace Linkback" keyEquivalent="K" id="1584">
+                            <menuItem title="Cerrar enlace Linkback" keyEquivalent="K" id="73">
                                 <connections>
-                                    <action selector="closeDocumentLinkBackLink:" target="210" id="1585"/>
+                                    <action selector="closeDocumentLinkBackLink:" target="210" id="1639"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Suspender enlace Linkback" alternate="YES" keyEquivalent="K" id="1586">
+                            <menuItem title="Suspender enlace Linkback" alternate="YES" keyEquivalent="K" id="1640">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
-                                    <action selector="toggleDocumentLinkBackLink:" target="210" id="1587"/>
+                                    <action selector="toggleDocumentLinkBackLink:" target="210" id="1642"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Cerrar" keyEquivalent="w" id="73">
+                            <menuItem title="Cerrar" keyEquivalent="w" id="1637">
                                 <connections>
-                                    <action selector="performClose:" target="-1" id="193"/>
+                                    <action selector="performClose:" target="-1" id="1638"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -269,38 +269,38 @@
                                     <action selector="displayLog:" target="210" id="218"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Línea base de la ecuación actual..." id="1648">
+                            <menuItem title="Línea base de la ecuación actual..." id="1704">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="displayBaseline:" target="210" id="1649"/>
+                                    <action selector="displayBaseline:" target="210" id="1706"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1548">
+                            <menuItem isSeparatorItem="YES" id="1595">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Auto" tag="5" keyEquivalent="0" id="1588">
+                            <menuItem title="Auto" tag="5" keyEquivalent="0" id="1643">
                                 <connections>
-                                    <action selector="changeLatexMode:" target="210" id="1589"/>
+                                    <action selector="changeLatexMode:" target="210" id="1644"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Align" tag="1" keyEquivalent="1" id="1549">
+                            <menuItem title="Align" tag="1" keyEquivalent="1" id="1596">
                                 <connections>
-                                    <action selector="changeLatexMode:" target="210" id="1553"/>
+                                    <action selector="changeLatexMode:" target="210" id="1600"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Display" tag="2" keyEquivalent="2" id="1550">
+                            <menuItem title="Display" tag="2" keyEquivalent="2" id="1597">
                                 <connections>
-                                    <action selector="changeLatexMode:" target="210" id="1554"/>
+                                    <action selector="changeLatexMode:" target="210" id="1601"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Inline" tag="3" keyEquivalent="3" id="1551">
+                            <menuItem title="Inline" tag="3" keyEquivalent="3" id="1598">
                                 <connections>
-                                    <action selector="changeLatexMode:" target="210" id="1555"/>
+                                    <action selector="changeLatexMode:" target="210" id="1602"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Texto" tag="4" keyEquivalent="4" id="1552">
+                            <menuItem title="Texto" tag="4" keyEquivalent="4" id="1599">
                                 <connections>
-                                    <action selector="changeLatexMode:" target="210" id="1556"/>
+                                    <action selector="changeLatexMode:" target="210" id="1603"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="224">
@@ -311,79 +311,79 @@
                                     <action selector="makeLatex:" target="210" id="228"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="LaTeX it! y re-exportar" alternate="YES" keyEquivalent="t" id="1476">
+                            <menuItem title="LaTeX it! y re-exportar" alternate="YES" keyEquivalent="t" id="1495">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
-                                    <action selector="makeLatexAndExport:" target="210" id="1477"/>
+                                    <action selector="makeLatexAndExport:" target="210" id="1496"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="LaTeX it! and put into clipboard" tag="2" alternate="YES" keyEquivalent="t" id="1602">
+                            <menuItem title="LaTeX it! and put into clipboard" tag="2" alternate="YES" keyEquivalent="t" id="1657">
                                 <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                 <connections>
-                                    <action selector="makeLatex:" target="-1" id="1603"/>
+                                    <action selector="makeLatex:" target="-1" id="1659"/>
                                 </connections>
                             </menuItem>
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Formato" id="1590">
+                <menuItem title="Formato" id="1645">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="Formato" id="1591">
+                    <menu key="submenu" title="Formato" id="1646">
                         <items>
-                            <menuItem title="Tipo de letra" id="1592">
+                            <menuItem title="Tipo de letra" id="1680">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Tipo de letra" id="1593">
+                                <menu key="submenu" title="Tipo de letra" id="1681">
                                     <items>
-                                        <menuItem title="Más grande" keyEquivalent="+" id="1594">
+                                        <menuItem title="Más grande" keyEquivalent="+" id="1682">
                                             <connections>
-                                                <action selector="fontSizeChange:" target="210" id="1634"/>
+                                                <action selector="fontSizeChange:" target="210" id="1690"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Más pequeño" tag="1" keyEquivalent="-" id="1595">
+                                        <menuItem title="Más pequeño" tag="1" keyEquivalent="-" id="1683">
                                             <connections>
-                                                <action selector="fontSizeChange:" target="210" id="1635"/>
+                                                <action selector="fontSizeChange:" target="210" id="1691"/>
                                             </connections>
                                         </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Texto" id="1624">
+                            <menuItem title="Texto" id="1647">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Texto" id="1625">
+                                <menu key="submenu" title="Texto" id="1648">
                                     <items>
-                                        <menuItem title="Alinear a la izquierda" tag="2" keyEquivalent="{" id="1629">
+                                        <menuItem title="Alinear a la izquierda" tag="2" keyEquivalent="{" id="1652">
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1632"/>
+                                                <action selector="formatChangeAlignment:" target="210" id="1653"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Centrar" tag="3" keyEquivalent="|" id="1628">
+                                        <menuItem title="Centrar" tag="3" keyEquivalent="|" id="1651">
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1630"/>
+                                                <action selector="formatChangeAlignment:" target="210" id="1654"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Alinear a la derecha" tag="4" keyEquivalent="}" id="1627">
+                                        <menuItem title="Alinear a la derecha" tag="4" keyEquivalent="}" id="1650">
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1631"/>
+                                                <action selector="formatChangeAlignment:" target="210" id="1655"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="No alineamiento" tag="1" keyEquivalent="|" id="1626">
+                                        <menuItem title="No alineamiento" tag="1" keyEquivalent="|" id="1649">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
-                                                <action selector="formatChangeAlignment:" target="210" id="1633"/>
+                                                <action selector="formatChangeAlignment:" target="210" id="1656"/>
                                             </connections>
                                         </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Commentar" keyEquivalent="'" id="1604">
+                            <menuItem title="Commentar" keyEquivalent="'" id="1660">
                                 <connections>
-                                    <action selector="formatComment:" target="210" id="1606"/>
+                                    <action selector="formatComment:" target="210" id="1662"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Descommentar" keyEquivalent="'" id="1605">
+                            <menuItem title="Descommentar" keyEquivalent="'" id="1661">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
-                                    <action selector="formatUncomment:" target="210" id="1607"/>
+                                    <action selector="formatUncomment:" target="210" id="1663"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -392,19 +392,19 @@
                 <menuItem title="Librería" id="1131">
                     <menu key="submenu" title="Librería" id="1129">
                         <items>
-                            <menuItem title="Abrir la ecuación" id="1575">
+                            <menuItem title="Abrir la ecuación" id="1629">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="libraryOpenEquation:" target="210" id="1578"/>
+                                    <action selector="libraryOpenEquation:" target="210" id="1631"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Abrir y modificar la ecuación" id="1576">
+                            <menuItem title="Abrir y modificar la ecuación" id="1630">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="libraryOpenLinkedEquation:" target="210" id="1579"/>
+                                    <action selector="libraryOpenLinkedEquation:" target="210" id="1632"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1577">
+                            <menuItem isSeparatorItem="YES" id="1628">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Añadir una carpeta" id="1135">
@@ -441,21 +441,21 @@ CA
                                     <action selector="libraryRefreshItems:" target="210" id="1326"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="latexize selection again" id="1643">
+                            <menuItem title="latexize selection again" id="1699">
                                 <connections>
-                                    <action selector="libraryRelatexizeItems:" target="210" id="1644"/>
+                                    <action selector="libraryRelatexizeItems:" target="210" id="1700"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="1134">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Show comments pane" keyEquivalent="b" id="1621">
+                            <menuItem title="Show comments pane" keyEquivalent="b" id="1677">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
-                                    <action selector="libraryToggleCommentsPane:" target="210" id="1623"/>
+                                    <action selector="libraryToggleCommentsPane:" target="210" id="1679"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1620">
+                            <menuItem isSeparatorItem="YES" id="1676">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Importar…" id="1230">
@@ -473,13 +473,13 @@ CA
                             <menuItem isSeparatorItem="YES" id="1229">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Compacta la base de datos" id="1639">
+                            <menuItem title="Compacta la base de datos" id="1695">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="libraryCompact:" target="210" id="1642"/>
+                                    <action selector="libraryCompact:" target="210" id="1698"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1640">
+                            <menuItem isSeparatorItem="YES" id="1696">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Mostrar librería" keyEquivalent="b" id="1130">
@@ -507,39 +507,39 @@ CA
                                     <action selector="historyClearHistory:" target="210" id="1332"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1564">
+                            <menuItem isSeparatorItem="YES" id="225">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="latexize selection again" id="1645">
+                            <menuItem title="latexize selection again" id="1701">
                                 <connections>
-                                    <action selector="historyRelatexizeItems:" target="210" id="1647"/>
+                                    <action selector="historyRelatexizeItems:" target="210" id="1703"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1646">
+                            <menuItem isSeparatorItem="YES" id="1702">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Importar…" id="1557">
+                            <menuItem title="Importar…" id="1609">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="historyOpen:" target="210" id="1562"/>
+                                    <action selector="historyOpen:" target="210" id="1614"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Exportar…" id="1558">
+                            <menuItem title="Exportar…" id="1610">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="historySaveAs:" target="210" id="1563"/>
+                                    <action selector="historySaveAs:" target="210" id="1615"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1559">
+                            <menuItem isSeparatorItem="YES" id="1611">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Compacta la base de datos" id="1636">
+                            <menuItem title="Compacta la base de datos" id="1692">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="historyCompact:" target="210" id="1638"/>
+                                    <action selector="historyCompact:" target="210" id="1694"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1637">
+                            <menuItem isSeparatorItem="YES" id="1693">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Mostrar historial" keyEquivalent="r" id="212">
@@ -564,13 +564,13 @@ CA
                             <menuItem title="Archivos adicionales" keyEquivalent="a" id="1363">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
-                                    <action selector="showOrHideAdditionalFiles:" target="210" id="1518"/>
+                                    <action selector="showOrHideAdditionalFiles:" target="210" id="1554"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Configuraciones de composición" keyEquivalent="p" id="1517">
+                            <menuItem title="Configuraciones de composición" keyEquivalent="p" id="1536">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
-                                    <action selector="showOrHideCompositionConfiguration:" target="210" id="1519"/>
+                                    <action selector="showOrHideCompositionConfiguration:" target="210" id="1555"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Encapsulaciones" keyEquivalent="e" id="1343">
@@ -607,9 +607,9 @@ CA
                                     <action selector="performMiniaturize:" target="-1" id="37"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Activar mini-ventana" keyEquivalent="M" id="1544">
+                            <menuItem title="Activar mini-ventana" keyEquivalent="M" id="1591">
                                 <connections>
-                                    <action selector="switchMiniWindow:" target="210" id="1547"/>
+                                    <action selector="switchMiniWindow:" target="210" id="1594"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="92">
@@ -654,19 +654,19 @@ CA
         <customObject id="210" userLabel="AppController" customClass="AppController">
             <connections>
                 <outlet property="donationPanel" destination="1351" id="1361"/>
-                <outlet property="editCopyImageAsMenuItem" destination="1365" id="1574"/>
+                <outlet property="editCopyImageAsMenuItem" destination="1365" id="1627"/>
                 <outlet property="readmeTextView" destination="1118" id="1122"/>
                 <outlet property="readmeWindow" destination="1117" id="1119"/>
-                <outlet property="sparkleUpdater" destination="1430" id="1446"/>
-                <outlet property="whiteColorWarningWindow" destination="1404" id="1414"/>
-                <outlet property="whiteColorWarningWindowCheckBox" destination="1407" id="1531"/>
+                <outlet property="sparkleUpdater" destination="1465" id="1466"/>
+                <outlet property="whiteColorWarningWindow" destination="1404" id="1415"/>
+                <outlet property="whiteColorWarningWindowCheckBox" destination="1406" id="1579"/>
             </connections>
         </customObject>
         <window title="Léeme" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1117" userLabel="readmeWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="262" y="100" width="586" height="568"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1129"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1512" height="949"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="1115">
                 <rect key="frame" x="0.0" y="0.0" width="586" height="568"/>
@@ -675,11 +675,11 @@ CA
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1116">
                         <rect key="frame" x="0.0" y="0.0" width="586" height="577"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" ambiguous="YES" id="SfU-gk-N3M">
+                        <clipView key="contentView" id="K5r-Tz-ecf">
                             <rect key="frame" x="1" y="1" width="584" height="575"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView ambiguous="YES" editable="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="1118">
+                                <textView editable="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="1118">
                                     <rect key="frame" x="0.0" y="0.0" width="584" height="575"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -691,47 +691,48 @@ CA
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="1543">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="1590">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="1542">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="1589">
                             <rect key="frame" x="-30" y="1" width="15" height="367"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="-556" y="-60"/>
         </window>
         <customObject id="1204" userLabel="Font Manager" customClass="NSFontManager"/>
         <window title="Haz una Donación…" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1351" userLabel="donationPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="167" y="403" width="354" height="181"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1129"/>
+            <rect key="contentRect" x="456" y="391" width="354" height="167"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1512" height="949"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="1352">
-                <rect key="frame" x="0.0" y="0.0" width="354" height="181"/>
+                <rect key="frame" x="0.0" y="0.0" width="354" height="167"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="316" translatesAutoresizingMaskIntoConstraints="NO" id="1353">
-                        <rect key="frame" x="17" y="20" width="320" height="141"/>
+                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="316" id="1353">
+                        <rect key="frame" x="17" y="20" width="320" height="127"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" id="1534">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" id="1581">
                             <font key="font" metaFont="system"/>
                             <string key="title">si quieres hacer una donación para LaTeXit, puedes acceder a mi cuenta en Paypal desde mi sitio web.
 
 
 
-Pero no existe ninguna obligación para ello, LaTeXiT es gratuito y lo puedes disfrutar así	.</string>
+Pero no existe ninguna obligación para ello, LaTeXiT es gratuito y lo puedes disfrutar así</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="1358">
-                        <rect key="frame" x="78" y="71" width="199" height="29"/>
+                    <button tag="1" id="1358">
+                        <rect key="frame" x="82" y="76" width="190" height="29"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="bevel" title=" Ir al sitio web de LaTeXiT…" bezelStyle="regularSquare" alignment="center" borderStyle="border" tag="1" inset="2" id="1535">
+                        <buttonCell key="cell" type="bevel" title=" Ir al sitio web de LaTeXiT…" bezelStyle="regularSquare" alignment="center" borderStyle="border" tag="1" inset="2" id="1582">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -744,65 +745,87 @@ Pero no existe ninguna obligación para ello, LaTeXiT es gratuito y lo puedes di
             <connections>
                 <outlet property="initialFirstResponder" destination="1358" id="1362"/>
             </connections>
+            <point key="canvasLocation" x="139" y="-24"/>
         </window>
-        <window title="Recordatorio" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1404" userLabel="ColorWarningWindow">
+        <window title="Reminder" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1404" userLabel="ColorWarningWindow">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="299" y="448" width="481" height="195"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1129"/>
+            <rect key="contentRect" x="299" y="465" width="448" height="178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1512" height="949"/>
             <value key="minSize" type="size" width="213" height="107"/>
-            <view key="contentView" id="1405">
-                <rect key="frame" x="0.0" y="0.0" width="481" height="195"/>
-                <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1405">
+                <rect key="frame" x="0.0" y="0.0" width="450" height="176"/>
                 <subviews>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1407">
-                        <rect key="frame" x="18" y="54" width="222" height="18"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="check" title="No mostrar este aviso de nuevo" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="1537">
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="1406">
+                        <rect key="frame" x="118" y="64" width="214" height="16"/>
+                        <buttonCell key="cell" type="check" title="No mostrar este aviso de nuevo" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="1583">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="443" translatesAutoresizingMaskIntoConstraints="NO" id="1406">
-                        <rect key="frame" x="17" y="90" width="447" height="85"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="justified" id="1536">
+                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="410" translatesAutoresizingMaskIntoConstraints="NO" id="1407">
+                        <rect key="frame" x="18" y="88" width="414" height="68"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="68" id="gGo-eM-fzx"/>
+                        </constraints>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="justified" id="1584">
                             <font key="font" metaFont="system"/>
                             <string key="title">Has seleccionado el color blanco para la ecuación. Un error en ghostcript puede hacer que el resultado no se corte correctamente; puedes incrementar los márgenes para evitar este problema (utiliza el menú Paletas &gt; Margenes), o puedes cambiar el color a "casi blanco".</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="1408">
-                        <rect key="frame" x="385" y="12" width="82" height="32"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="1538">
+                    <button tag="1" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1408">
+                        <rect key="frame" x="352" y="20" width="78" height="24"/>
+                        <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="1585">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="68" id="yTd-aa-9CI"/>
+                        </constraints>
+                        <connections>
+                            <action selector="returnFromWhiteColorWarningWindow:" target="210" id="1417"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1409">
+                        <rect key="frame" x="262" y="20" width="78" height="24"/>
+                        <buttonCell key="cell" type="push" title="Cancelar" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1586">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="68" id="a7w-Xc-olY"/>
+                        </constraints>
                         <connections>
                             <action selector="returnFromWhiteColorWarningWindow:" target="210" id="1416"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1409">
-                        <rect key="frame" x="290" y="12" width="95" height="32"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="push" title="Cancelar" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1539">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="returnFromWhiteColorWarningWindow:" target="210" id="1415"/>
-                        </connections>
-                    </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="1407" firstAttribute="leading" secondItem="1405" secondAttribute="leading" constant="20" symbolic="YES" id="0bg-tK-F3B"/>
+                    <constraint firstItem="1409" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1405" secondAttribute="leading" constant="20" symbolic="YES" id="0fm-d0-b1u"/>
+                    <constraint firstItem="1407" firstAttribute="centerX" secondItem="1405" secondAttribute="centerX" id="4vB-T8-yeZ"/>
+                    <constraint firstItem="1406" firstAttribute="centerX" secondItem="1405" secondAttribute="centerX" id="A58-3F-blK"/>
+                    <constraint firstItem="1409" firstAttribute="baseline" secondItem="1408" secondAttribute="baseline" id="Bb8-tP-aUz"/>
+                    <constraint firstItem="1409" firstAttribute="top" secondItem="1406" secondAttribute="bottom" constant="20" symbolic="YES" id="IoT-3c-b5M"/>
+                    <constraint firstItem="1408" firstAttribute="width" secondItem="1409" secondAttribute="width" priority="750" id="LMu-fS-0Gr"/>
+                    <constraint firstAttribute="trailing" secondItem="1408" secondAttribute="trailing" constant="20" symbolic="YES" id="Ldc-41-9MU"/>
+                    <constraint firstItem="1406" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1405" secondAttribute="leading" constant="20" symbolic="YES" id="Qhj-yf-bBO"/>
+                    <constraint firstItem="1407" firstAttribute="top" secondItem="1405" secondAttribute="top" constant="20" symbolic="YES" id="Tyy-AF-sUb"/>
+                    <constraint firstItem="1408" firstAttribute="leading" secondItem="1409" secondAttribute="trailing" constant="12" symbolic="YES" id="rj5-4N-SXQ"/>
+                    <constraint firstAttribute="bottom" secondItem="1409" secondAttribute="bottom" constant="20" symbolic="YES" id="txp-RP-zdu"/>
+                    <constraint firstItem="1406" firstAttribute="top" secondItem="1407" secondAttribute="bottom" constant="8" symbolic="YES" id="xUL-Op-V5T"/>
+                </constraints>
             </view>
+            <point key="canvasLocation" x="778" y="147"/>
         </window>
         <userDefaultsController id="1410" userLabel="User Defaults Controller">
             <declaredKeys>
+                <string>showWhiteColorWarning</string>
                 <string>LaTeXiT_ShowWhiteColorWarningKey</string>
             </declaredKeys>
         </userDefaultsController>
-        <customObject id="1430" userLabel="SparkleUpdater" customClass="SUUpdater"/>
+        <customObject id="1465" userLabel="SparkleUpdater" customClass="SUUpdater"/>
     </objects>
 </document>
