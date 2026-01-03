@@ -154,9 +154,6 @@ static int kExportContext = 0;
   [self->libraryPreviewPanel setAlphaValue:1.0];
   [self->libraryPreviewPanel setOpaque:NO];
   [self->libraryPreviewPanel setHasShadow:YES];
-
-//  [self->actionButton setImage:[NSImage imageNamed:@"action"]];
-//  [self->actionButton setAlternateImage:[NSImage imageNamed:@"action-pressed"]];
   
   [self->libraryRowTypeSegmentedControl bind:NSSelectedTagBinding toObject:[NSUserDefaultsController sharedUserDefaultsController]
     withKeyPath:[NSUserDefaultsController adaptedKeyPath:LibraryViewRowTypeKey] options:nil];
@@ -1242,10 +1239,6 @@ static int kExportContext = 0;
   [[LibraryManager sharedManager] saveLibrary];
 }
 //end windowDidResignKey:
-
-//#pragma mark menu delegate to fix an interface bug
-//-(void) menuWillOpen:(id)sender {[self->actionButton setAlternateImage:[NSImage imageNamed:@"action-pressed"]];}
-//-(void) menuDidClose:(id)sender {[self->actionButton setAlternateImage:[NSImage imageNamed:@"action"]];}
 
 #pragma mark TableViewDelegate
 
