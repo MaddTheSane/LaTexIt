@@ -539,8 +539,8 @@ static NSMutableDictionary* cachePaths = nil;
       DragExportSvgPdfToCairoPathKey,
     nil];
   NSDictionary* configuration = [NSDictionary dictionaryWithObjectsAndKeys:
-    @(YES), @"checkOnlyIfNecessary",
-    @(YES), @"updateGUIfromSystemAvailabilities",
+    @YES, @"checkOnlyIfNecessary",
+    @YES, @"updateGUIfromSystemAvailabilities",
     nil];
   if ((object == NSApp) && [keyPath isEqualToString:@"effectiveAppearance"])
     [[NSNotificationCenter defaultCenter] postNotificationName:NSAppearanceDidChangeNotification object:self];
@@ -1968,7 +1968,7 @@ static NSMutableDictionary* cachePaths = nil;
   {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.messageText = NSLocalizedString(@"Error", @"Error");
-    alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\n You should check your network.", @""),
+    alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"An error occured while trying to reach %@.\nYou should check your network.", @""),
                              [webSiteURL absoluteString]];
     [alert runModal];
     [alert release];
@@ -3930,7 +3930,7 @@ static NSMutableDictionary* cachePaths = nil;
           {
             NSAlert *alert = [[NSAlert alloc] init];
             alert.messageText = NSLocalizedString(@"Installation failed", @"");
-            alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"%@ could not be installed as %@", @""), [palettePath lastPathComponent], destinationPath];
+            alert.informativeText = [NSString localizedStringWithFormat:NSLocalizedString(@"%@ could not be installed as %@", @""), [palettePath lastPathComponent], destinationPath];
             [alert runModal];
             [alert release];
           }

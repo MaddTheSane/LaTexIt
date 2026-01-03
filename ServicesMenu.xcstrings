@@ -1,0 +1,1113 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "LaTeXiT/Detect and typeset equations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Gleichung detektieren und setzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Detect and typeset equations"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Detectar y componer ecuaciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Détecter et créer les équations"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Trova e crea le equazioni"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/数式を検出してタイプセット"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Detect and typeset equations and put result into clipboard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Gleichung detektieren und setzen, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Detect and typeset equations, add to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Detectar y componer ecuaciones, y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Détecter et créer les équations, et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Trova e crea le equazioni, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/数式を検出してタイプセット そして結果をクリップボードにコピー"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Maths align" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Align“ (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Align\" Latexisation (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Align\" (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Align» (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Align\" LaTeXizza (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/align環境でLaTeX変換 (\\begin{align*}…\\end{align*})"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Maths align and put result into clipboard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Align“, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Align\" Latexisation, add to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Align\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Align», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Align\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/align環境でLaTeX変換→クリップボード"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Maths display" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Display“ (\\[…\\])"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Display\" Latexisation (\\[…\\])"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Display\" (\\[…\\])"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Display» (\\[…\\])"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Display\" LaTeXizza (\\[…\\])"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/display環境でLaTeX変換 (\\[…\\])"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Maths display and put result into clipboard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Display“, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Display\" Latexisation, add to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Display\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Display», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Display\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/display環境でLaTeX変換→クリップボード"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Maths eqnarray" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Eqnarray“ (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Eqnarray\" Latexisation (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Eqnarray\" (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Eqnarray» (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Eqnarray\" LaTeXizza (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/eqnarray環境でLaTeX変換 (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Maths eqnarray and put result into clipboard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Eqnarray“, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Eqnarray\" Latexisation, add to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Eqnarray\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Eqnarray», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Eqnarray\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/eqnarray環境でLaTeX変換→クリップボード"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Maths inline" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Inline“ ($…$)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Inline\" Latexisation ($…$)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Inline\" ($…$)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Inline» ($…$)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Inline\" LaTeXizza ($…$)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/インライン数式でLaTeX変換 ($…$)"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Maths inline and put result into clipboard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Inline“, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Inline\" Latexisation, add to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Inline\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Inline», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Inline\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/インライン数式でLaTeX変換→クリップボード"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Text" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Text“"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Text\" Latexisation"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Texto\" LaTeX"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Texte»"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Testo\" LaTeXizza"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/テキストモードでLaTeX変換"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Typeset LaTeX Text and put result into clipboard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/LaTeX als „Text“, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Text\" Latexisation, add to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Componer en \"Texto\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Latexisation «Texte», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/\"Testo\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/テキストモードでLaTeX変換→クリップボード"
+          }
+        }
+      }
+    },
+    "LaTeXiT/Un-latexize the equations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Von der Gleichung zum LaTeX-Kode zurückkehren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Revert equations back to LaTeX code"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Revertir la ecuación a código LaTeX"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Revenir des équations au code LaTeX"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/Riconverte le equazioni al codice LaTeX"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT/数式を LaTeX コードに戻す"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The LaTeXiT service can transform some text to an equation (as image), as processed by a LaTeX engine. It can also revert the equations to their original text source, if the equations have been configured in LaTeXiT to be exported as PDF. The service will work if the requesting application supports replacing some text by an image."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The LaTeXiT service can transform some text to an equation (as image), as processed by a LaTeX engine. It can also revert the equations to their original text source, if the equations have been configured in LaTeXiT to be exported as PDF. The service will work if the requesting application supports replacing some text by an image."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The LaTeXiT service can transform some text to an equation (as image), as processed by a LaTeX engine. It can also revert the equations to their original text source, if the equations have been configured in LaTeXiT to be exported as PDF. The service will work if the requesting application supports replacing some text by an image."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le service LaTeXiT peut transformer du texte en une équation (en tant qu'image), par le biais d'un moteur LaTeX. Il peut aussi revenir de ces équations au texte source, si l'export au sein de LaTeXiT est réglé sur PDF. Le service ne peut fonctionner que si l'application cible peut remplacer du texte par une image."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The LaTeXiT service can transform some text to an equation (as image), as processed by a LaTeX engine. It can also revert the equations to their original text source, if the equations have been configured in LaTeXiT to be exported as PDF. The service will work if the requesting application supports replacing some text by an image."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT サービス機能は LaTeX をエンジンとする処理を行いテキストを数式イメージに変換することができます。また PDF フォーマットで書き出された場合、その数式イメージから元のテキストに戻すこともできます。テキストからイメージへの置換をサポートしているアプリケーションでこのサービス機能を使うことができます。"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_ALIGN" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX als „Align“ (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Align\" Latexisation (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Align\" (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation «Align» (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Align\" LaTeXizza (\\begin{align*}…\\end{align*})"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "align環境でLaTeX変換 (\\begin{align*}…\\end{align*})"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_ALIGN_CLIPBOARD" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX als „Align“, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Align\" Latexisation, add to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Align\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation «Align», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Align\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "align環境でLaTeX変換→クリップボード"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_DELATEXISATION" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von der Gleichung zum LaTeX-Kode zurückkehren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revert equations back to LaTeX code"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revertir la ecuación a código LaTeX"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revenir des équations au code LaTeX"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riconverte le equazioni al codice LaTeX"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数式を LaTeX コードに戻す"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_DISPLAY" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display Latexisation (\\[…\\])"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Display\" Latexisation (\\[…\\])"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Display\" (\\[…\\])"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation «Display» (\\[…\\])"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Display\" LaTeXizza (\\[…\\])"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "display環境でLaTeX変換 (\\[…\\])"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_DISPLAY_CLIPBOARD" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display Latexisation, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Display\" Latexisation, ajout au presse-papier"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Display\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation «Display», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Display\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "display環境でLaTeX変換→クリップボード"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_EQNARRAY" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX als „Eqnarray“ (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Eqnarray\" Latexisation (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Eqnarray\" (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation «Eqnarray» (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Eqnarray\" LaTeXizza (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "eqnarray環境でLaTeX変換 (\\begin{eqnarray*}…\\end{eqnarray*})"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_EQNARRAY_CLIPBOARD" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX als „Eqnarray“, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Eqnarray\" Latexisation, add to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Eqnarray\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation «Eqnarray», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Eqnarray\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "eqnarray環境でLaTeX変換→クリップボード"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_INLINE" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX als „Inline“ ($…$)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Inline\" Latexisation ($…$)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Inline\" ($…$)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation «Inline» ($…$)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Inline\" LaTeXizza ($…$)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インライン数式でLaTeX変換 ($…$)"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_INLINE_CLIPBOARD" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX als „Inline“, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Inline\" Latexisation, ajout au presse-papier"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Inline\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation Inline», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Inline\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インライン数式でLaTeX変換→クリップボード"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_MULTIPLE" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gleichung detektieren und setzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detect and typeset equations"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detectar y componer ecuaciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détecter et créer les équations"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trova e crea le equazioni"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数式を検出してタイプセット"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_MULTIPLE_CLIPBOARD" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gleichung detektieren und setzen, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detect and typeset equations, add to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detectar y componer ecuaciones, y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détecter et créer les équations, et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trova e crea le equazioni, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数式を検出してタイプセット そして結果をクリップボードにコピー"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_TEXT" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX als „Text“"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Text\" Latexisation"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Texto\""
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation «Texte»"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Testo\" LaTeXizza"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テキストモードでLaTeX変換"
+          }
+        }
+      }
+    },
+    "SERVICE_DESCRIPTION_TEXT_CLIPBOARD" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX als „Text“, kopiere in die Zwischenablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Text\" Latexisation, ajout au presse-papier"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Componer en \"Texto\", y colocar en el portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latexisation «Texte», et ajout au presse-papier"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Testo\" LaTeXizza, aggiungi alla clipboard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テキストモードでLaTeX変換→クリップボード"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

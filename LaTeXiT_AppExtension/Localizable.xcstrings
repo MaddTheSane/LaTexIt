@@ -1,0 +1,334 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "__EXPLAIN_CHANGE_SHORTCUTS__" : {
+
+    },
+    "An error occured while trying to create the file :\n%@" : {
+
+    },
+    "An error occured while trying to create the file with command:\n%@" : {
+
+    },
+    "Apply preferences" : {
+
+    },
+    "Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle" : {
+
+    },
+    "Body" : {
+
+    },
+    "bounding box computation" : {
+
+    },
+    "Cancel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancella"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
+          }
+        }
+      }
+    },
+    "Color :" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couleur :"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colore :"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カラー :"
+          }
+        }
+      }
+    },
+    "Content" : {
+
+    },
+    "Copy of %@" : {
+
+    },
+    "default" : {
+
+    },
+    "Display the error message" : {
+
+    },
+    "Error" : {
+
+    },
+    "Error message" : {
+
+    },
+    "error while processing" : {
+
+    },
+    "executing" : {
+
+    },
+    "File" : {
+
+    },
+    "Font size :" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schriftgröße:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Font size:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille :"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dimensioni carattere :"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォントサイズ :"
+          }
+        }
+      }
+    },
+    "Ignore" : {
+
+    },
+    "LaTeX it!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX it!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX it!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiser"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX it!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeX it!"
+          }
+        }
+      }
+    },
+    "Middle-processing" : {
+
+    },
+    "New Service shortcuts could not be set" : {
+
+    },
+    "none" : {
+
+    },
+    "OK" : {
+
+    },
+    "Open with LaTeXiT" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnen mit LaTeXiT"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir con LaTeXiT"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir avec LaTeXiT"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri con LaTeXiT"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiTで開く"
+          }
+        }
+      }
+    },
+    "Post-processing" : {
+
+    },
+    "Pre-processing" : {
+
+    },
+    "processing" : {
+
+    },
+    "Script failed" : {
+
+    },
+    "Script too long : timeout reached" : {
+
+    },
+    "Send" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senden"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envíe"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inviare"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "送る"
+          }
+        }
+      }
+    },
+    "Shell" : {
+
+    },
+    "The current Service shortcuts of LaTeXiT do not match the ones defined in the preferences" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die jetzigen Tastaturkürzel der Dienste decken sich nicht mit denen in den Einstellungen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El menú de Servicios de LaTeXiT no concuerda con el definido en las preferencias"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les raccourcis claviers pour les Services de LaTeXiT ne correspondent pas à ceux définis dans les préférences."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の LaTeXiT サービスのショートカットは環境設定で定義されたものと一致しません"
+          }
+        }
+      }
+    },
+    "Update preferences" : {
+
+    }
+  },
+  "version" : "1.1"
+}

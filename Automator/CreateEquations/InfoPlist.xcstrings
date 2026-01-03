@@ -1,0 +1,496 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "AMDInput" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLs und Dateien werden nach ihrem Textinhalt durchsucht. Ordner erster Ordnung werden durchsucht. So gut wie möglich wird nur das als Eingabe verwendet, was als Text erkannt wurde."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLs and file paths are read for their text content. Top-level folders are explored. As much as possible, only files considered as text are kept for input."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se leerán os archivos especificados por una URLs o ruta en busca de texto. Las carpetas de primer nivel se explorarán en busca de archivos. En la medida de lo posible, sólo los archivos considerados de texto se usaran como entrada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLs et fichiers sont lus pour transmettre leur contenu textuel. Les dossiers de premier niveau sont parcourus. Dans la mesure du possible, seuls les fichiers reconnus comme du texte sont considérés."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLs and file paths are read for their text content. Top-level folders are explored. As much as possible, only files considered as text are kept for input."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLやパスで指定されたファイルは内容をテキストとして読み込みます。フォルダは、その階層のファイルを探索し、テキストファイルと見なされるものを可能な限り読み込みます。"
+          }
+        }
+      }
+    },
+    "AMDNote" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text kann direkt als Eingabe verwendet werden. Der Text wird von der LaTeXiT-Engine bearbeitet um eine Gleichung daraus zu machen. Es muss als LaTeX-Syntax geschrieben sein. Die Einleitung und \\begin{document}... \n\\end{document} werden automatisch um den Text gelegt, damit Sie sich ganz auf die Formulierung der Gleichung konzentrieren können. Der <mode> Parameter meldet ob es zusätzlich noch mit einem $...$ (inline), $$...$$ (display) oder \n\\begin{eqnarray}...\\end{eqnarray} eingeschlossen werden muss. Enthält der Text schon eine Einleitung wird dies verwendet, ansonsten wird die Einleitung aus den LaTeXiT Einstellungen angewendet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text can be directly used as input. The text is processed by the LaTeXiT engine to make an equation with it. It must be written using a LaTeX syntax. The preamble, and \\begin{document}...\\end{document}, are automaticaly added around the text, that can thus focus on the equation formula. The \"mode\" parameter tells if it must additionnaly be enclosed within $...$ (inline), $$...$$ (display), \\begin{eqnarray}...\\end{eqnarray}, or not. If the input text already contains a preambule, this one is used; otherwise, the preamble is taken from the LaTeXiT's preferences."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se puede usar texto directamente como entrada. El motor de LaTeXiT procesa el texto para hacer una ecuación con él. El texto ha de estar escrito siguiendo la sitaxis de LaTeX. El preámbulo y el entorno \\begin{document} ... \\end{document} se añaden automáticamente alrededor del texto, de manera que el texto ha de centrarse sólo en el contenido. El parámetro <mode> dice si el texto a de rodearse también de $...$ (inline), $$...$$ (display), \\begin{eqnarray}...\\end{eqnarray} o de nada. Si el archivo ya contiene un preámbulo, se usa éste. En caso contrario se utiliza el de las preferecias de LaTeXiT."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'entrée peut être un simple texte. Ce texte est interprété par le moteur de LaTeXiT pour le transformer en une équation. Il doit être écrit en respectant la syntaxe LaTeX. Le préambule, ainsi que \\begin{document}...\\end{document} est automatiquement ajouté autour du texte, qui peut ainsi ne spécifier que la formule de l'équation. Le paramètre \"mode\" indique si elle doit en outre être enrobée de $...$ (inline), $$...$$ (display), \\begin{eqnarray}...\\end{eqnarray}, ou rien de cela. Si le texte d'entrée contient déjà un préambule, il est utilisé; sinon, c'est le préambule par défaut spécifié dans les préférences de LaTeXiT qui est ajouté."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text can be directly used as input. The text is processed by the LaTeXiT engine to make an equation with it. It must be written using a LaTeX syntax. The preamble, and \\begin{document}...\\end{document}, are automaticaly added around the text, that can thus focus on the equation formula. The \"mode\" parameter tells if it must additionnaly be enclosed within $...$ (inline), $$...$$ (display), \\begin{eqnarray}...\\end{eqnarray}, or not. If the input text already contains a preambule, this one is used; otherwise, the preamble is taken from the LaTeXiT's preferences."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テキストを入力として使うことができます。LaTeXiTは、この入力テキストから数式を作成するための処理を行います。テキストは LaTeX のシンタックスで書かれている必要があります。「モード」パラメータにしたがって、$...$（インライン）や $$...$$（ディスプレイ）や eqnarray 環境に囲むかそのままの状態で、プリアンブルと document 環境が追加されます。もし入力テキストにプリアンブルが含まれる場合は、それがそのまま使われるか、あるいは LaTeXiT の環境設定にあるものを使うか選ぶことができます。"
+          }
+        }
+      }
+    },
+    "AMDOptions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
+    },
+    "AMDRelatedActions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
+    },
+    "AMDRequires" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT muss zuvor einmal gestartet werden um seine Einstellungen zu initialisieren, besonders die Pfade der Ausführdateien in der Zusammensetzungs-Palette."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT must have been run once to initialize its preferences, particularly the paths to executables in the Composition pane."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debe haber ejecutado LaTeXiT una vez para inicializar sus preferencias, en particular las rutas a los ejecutables en el panel de Composición."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT doit avoir été lancé une fois pour initialiser ses préférences, notamment les chemins vers les éxecutables du panneau Compositions."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT must have been run once to initialize its preferences, particularly the paths to executables in the Composition pane."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT は環境設定、特に「コマンド構成」パネルのコマンドのパスを初期化するために一度実行されなければいけません。"
+          }
+        }
+      }
+    },
+    "AMDResult" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien der erstellten Gleichungen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Files of the generated equations."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivos con las ecuaciones generadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fichiers des équations générées."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Files of the generated equations."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生成された数式の ファイル"
+          }
+        }
+      }
+    },
+    "AMDSummary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Aktion generiert eng geschnittene PDFs der Gleichungen aus der Eingabe unter Verwendung der LaTeX-Engine."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This action creates tight cropped PDF equations with the input, using a LaTeX engine."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta acción crear ecuaciones en formato PDF apartir de la entrada usando LaTeX."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette action crée des équations finement découpées à partir du texte d'entrée, en utilisant un moteur LaTeX."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This action creates tight cropped PDF equations with the input, using a LaTeX engine."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このアクションは入力から LaTeX エンジンを使って数式 PDF ファイルを作成します。"
+          }
+        }
+      }
+    },
+    "AMDWebsite" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://pierre.chachatelier.fr/programmation/latexit_en.php"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://pierre.chachatelier.fr/latexit/index.php?lang=en"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://pierre.chachatelier.fr/latexit/index.php?lang=en"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://pierre.chachatelier.fr/latexit/index.php?lang=fr"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://pierre.chachatelier.fr/latexit/index.php?lang=en"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://pierre.chachatelier.fr/latexit/index.php?lang=en"
+          }
+        }
+      }
+    },
+    "AMName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstelle Gleichungen mit LaTeXiT"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create equations with LaTeXiT"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crear ecuaciones con LaTeXiT"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer des équations avec LaTeXiT"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create equations with LaTeXiT"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT で数式を作成"
+          }
+        }
+      }
+    },
+    "CFBundleGetInfoString" : {
+      "comment" : "Get Info string",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "CreateEquations 2.16.6 Copyright © 2005-2023, Pierre Chatelier, All Rights Reserved"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "CreateEquations"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "equation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gleichung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "equation"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ecuación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "équation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "equation"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数式"
+          }
+        }
+      }
+    },
+    "LaTeXiT" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LaTeXiT"
+          }
+        }
+      }
+    },
+    "NSHumanReadableCopyright" : {
+      "comment" : "Copyright (human-readable)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Copyright © 2005-2023, Pierre Chatelier, All Rights Reserved."
+          }
+        }
+      },
+      "shouldTranslate" : false
+    }
+  },
+  "version" : "1.1"
+}

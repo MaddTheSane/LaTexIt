@@ -3435,20 +3435,28 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
           [alert addButtonWithTitle:NSLocalizedString(@"Update preferences", @"")];
           [alert addButtonWithTitle:NSLocalizedString(@"Ignore", @"")];
           alert.informativeText = NSLocalizedString(@"__EXPLAIN_CHANGE_SHORTCUTS__", @"");
-          [[[alert buttons] objectAtIndex:2] setKeyEquivalent:[NSString stringWithFormat:@"%c", '\033']];//escape
+          [[[alert buttons] objectAtIndex:2] setKeyEquivalent:@"\033"];//escape
           NSInteger result = [alert runModal];
 #ifndef ARC_ENABLED
           [alert release];
 #endif
           if (result == NSAlertFirstButtonReturn)
+          {
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_APPLY_USERDEFAULTS;
+          }
           else if (result == NSAlertSecondButtonReturn)
+          {
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS;
+          }
           else if (result == NSAlertThirdButtonReturn)
+          {
             discrepancyFallback = CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE;
+          }
         }
         if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_IGNORE)
+        {
           ok = NO;
+        }
         else if (discrepancyFallback == CHANGE_SERVICE_SHORTCUTS_FALLBACK_REPLACE_USERDEFAULTS)
         {
           [self setServiceShortcuts:equivalentUserDefaultsToCurrentServicesInInfoPlist];
@@ -3505,7 +3513,7 @@ static NSMutableArray* factoryDefaultsBodyTemplates = nil;
               alert.informativeText = NSLocalizedString(@"Authentication failed or did not allow to rewrite the <Info.plist> file inside the LaTeXiT.app bundle", @"");
               [alert addButtonWithTitle:NSLocalizedString(@"Update preferences", @"")];
               [alert addButtonWithTitle:NSLocalizedString(@"Ignore", @"")];
-              [[alert.buttons objectAtIndex:1] setKeyEquivalent:[NSString stringWithFormat:@"%c",'\033']];
+              [[alert.buttons objectAtIndex:1] setKeyEquivalent:@"\033"];
               NSInteger result = [alert runModal];
 #ifndef ARC_ENABLED
           [alert release];
