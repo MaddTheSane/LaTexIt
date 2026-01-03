@@ -926,7 +926,7 @@ du texte &amp; $des maths$ \\
                                     <button toolTip="ajouter un élément" id="4436">
                                         <rect key="frame" x="9" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9379">
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9379">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
@@ -937,7 +937,7 @@ du texte &amp; $des maths$ \\
                                     <button toolTip="supprimer l'élément sélectionné" id="4435">
                                         <rect key="frame" x="31" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9378">
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9378">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
@@ -975,7 +975,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" id="913">
-                                                    <rect key="frame" x="307.5" y="15" width="212" height="32"/>
+                                                    <rect key="frame" x="308" y="15" width="212" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Appliquer à la bibliothèque" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9380">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1020,7 +1020,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="Uyy-Ie-b5H">
                                             <rect key="frame" x="1" y="1" width="407" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="916" customClass="LineCountTextView">
                                                     <rect key="frame" x="0.0" y="0.0" width="407" height="132"/>
@@ -1065,7 +1065,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="80x-Mj-nwG">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="1810" customClass="PreamblesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="155" height="132"/>
@@ -1115,7 +1115,7 @@ du texte &amp; $des maths$ \\
                                     <button id="9429">
                                         <rect key="frame" x="9" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9444">
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9444">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
@@ -1126,7 +1126,7 @@ du texte &amp; $des maths$ \\
                                     <button id="9430">
                                         <rect key="frame" x="31" y="108" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9443">
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9443">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
@@ -1188,10 +1188,10 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="Akx-bW-ZSy">
                                             <rect key="frame" x="1" y="1" width="407" height="65"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="9436" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-6.01171875" width="407" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="-6" width="407" height="96"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1221,7 +1221,7 @@ du texte &amp; $des maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9435">
-                                            <rect key="frame" x="393" y="1" width="15" height="65"/>
+                                            <rect key="frame" x="391" y="1" width="17" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <connections>
@@ -1233,10 +1233,10 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="Yh8-1V-c8G">
                                             <rect key="frame" x="1" y="1" width="407" height="66"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" smartInsertDelete="YES" id="9474" customClass="LineCountTextView">
-                                                    <rect key="frame" x="0.0" y="-6.01171875" width="407" height="96.5"/>
+                                                    <rect key="frame" x="0.0" y="-6" width="407" height="96"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1266,7 +1266,7 @@ du texte &amp; $des maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9475">
-                                            <rect key="frame" x="393" y="1" width="15" height="66"/>
+                                            <rect key="frame" x="391" y="1" width="17" height="66"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <connections>
@@ -1278,7 +1278,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         <clipView key="contentView" drawsBackground="NO" id="xT8-OB-Hca">
                                             <rect key="frame" x="1" y="1" width="126" height="132"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9440" customClass="BodyTemplatesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="155" height="132"/>
@@ -1962,9 +1962,9 @@ du texte &amp; $des maths$ \\
                                 </textFieldCell>
                             </textField>
                             <button toolTip="supprimer l'élément sélectionné" id="9536">
-                                <rect key="frame" x="104" y="16" width="23" height="20"/>
+                                <rect key="frame" x="104" y="15" width="23" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9549">
+                                <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9549">
                                     <behavior key="behavior" lightByContents="YES"/>
                                     <font key="font" size="18" name="Monaco"/>
                                 </buttonCell>
@@ -1973,9 +1973,9 @@ du texte &amp; $des maths$ \\
                                 </connections>
                             </button>
                             <button toolTip="ajouter un élément" id="9537">
-                                <rect key="frame" x="82" y="16" width="23" height="20"/>
+                                <rect key="frame" x="82" y="15" width="23" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9548">
+                                <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9548">
                                     <behavior key="behavior" lightByContents="YES"/>
                                     <font key="font" size="13" name="Monaco"/>
                                 </buttonCell>
@@ -1984,11 +1984,11 @@ du texte &amp; $des maths$ \\
                                 </connections>
                             </button>
                             <scrollView focusRingType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="9538">
-                                <rect key="frame" x="82.5" y="35" width="399" height="154"/>
+                                <rect key="frame" x="82" y="35" width="399" height="154"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" id="6tQ-zj-YDi">
                                     <rect key="frame" x="1" y="1" width="397" height="152"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" id="9545" customClass="EncapsulationsTableView">
                                             <rect key="frame" x="0.0" y="0.0" width="406" height="152"/>
@@ -2314,7 +2314,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="fFL-WE-2L8">
                                             <rect key="frame" x="1" y="1" width="526" height="130"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9410" id="1030" customClass="ServiceShortcutsTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="536" height="105"/>
@@ -2361,7 +2361,7 @@ du texte &amp; $des maths$ \\
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
-                                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="imageCell:1032:image" id="1032"/>
+                                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="NSApplicationIcon" id="1032"/>
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
@@ -2418,17 +2418,17 @@ du texte &amp; $des maths$ \\
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button toolTip="supprimer l'élément sélectionné" id="9619">
-                                        <rect key="frame" x="42" y="88" width="23" height="20"/>
+                                        <rect key="frame" x="42" y="87" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9637">
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9637">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
                                     </button>
                                     <button toolTip="ajouter un élément" id="9620">
-                                        <rect key="frame" x="20" y="88" width="23" height="20"/>
+                                        <rect key="frame" x="20" y="87" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9636">
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9636">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
@@ -2441,7 +2441,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="5hu-Uk-kwS">
                                             <rect key="frame" x="1" y="1" width="512" height="92"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" headerView="9624" id="9627" customClass="ServiceRegularExpressionFiltersTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="522" height="67"/>
@@ -2496,7 +2496,7 @@ du texte &amp; $des maths$ \\
                                             <rect key="frame" x="446" y="17" width="15" height="265"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <tableHeaderView key="headerView" id="9624">
+                                        <tableHeaderView key="headerView" wantsLayer="YES" id="9624">
                                             <rect key="frame" x="0.0" y="0.0" width="522" height="25"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
@@ -2527,7 +2527,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="YhM-Us-eo1">
                                             <rect key="frame" x="1" y="1" width="251" height="61"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="9666" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="251" height="61"/>
@@ -2555,7 +2555,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask"/>
                                         <clipView key="contentView" id="xNH-Tc-rg7">
                                             <rect key="frame" x="1" y="1" width="251" height="61"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="9668" customClass="TextViewWithPlaceHolder">
                                                     <rect key="frame" x="0.0" y="0.0" width="251" height="61"/>
@@ -2620,7 +2620,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <clipView key="contentView" id="dil-bv-RjO">
                                             <rect key="frame" x="1" y="1" width="397" height="454"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" id="7744" customClass="AdditionalFilesTableView">
                                                     <rect key="frame" x="0.0" y="0.0" width="406" height="454"/>
@@ -2666,7 +2666,7 @@ du texte &amp; $des maths$ \\
                                     <button toolTip="supprimer l'élément sélectionné" id="7740">
                                         <rect key="frame" x="99" y="16" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9363">
+                                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9363">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" size="18" name="Monaco"/>
                                         </buttonCell>
@@ -2674,7 +2674,7 @@ du texte &amp; $des maths$ \\
                                     <button toolTip="ajouter un élément" id="7741">
                                         <rect key="frame" x="77" y="16" width="23" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9364">
+                                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9364">
                                             <behavior key="behavior" lightByContents="YES"/>
                                             <font key="font" size="13" name="Monaco"/>
                                         </buttonCell>
@@ -3107,7 +3107,7 @@ du texte &amp; $des maths$ \\
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="b2M-92-gmv">
                             <rect key="frame" x="1" y="1" width="238" height="167"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9423" id="1130" customClass="CompositionConfigurationsTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="238" height="142"/>
@@ -3140,7 +3140,7 @@ du texte &amp; $des maths$ \\
                             <rect key="frame" x="-22" y="17" width="11" height="151"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <tableHeaderView key="headerView" id="9423">
+                        <tableHeaderView key="headerView" wantsLayer="YES" id="9423">
                             <rect key="frame" x="0.0" y="0.0" width="238" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
@@ -3148,7 +3148,7 @@ du texte &amp; $des maths$ \\
                     <button id="1132">
                         <rect key="frame" x="42" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9384">
+                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9384">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" size="18" name="Monaco"/>
                         </buttonCell>
@@ -3159,7 +3159,7 @@ du texte &amp; $des maths$ \\
                     <button id="1135">
                         <rect key="frame" x="20" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9385">
+                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9385">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" size="13" name="Monaco"/>
                         </buttonCell>
@@ -3168,7 +3168,7 @@ du texte &amp; $des maths$ \\
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="1153">
-                        <rect key="frame" x="184" y="1" width="82" height="32"/>
+                        <rect key="frame" x="178" y="1" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9386">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3208,7 +3208,7 @@ du texte &amp; $des maths$ \\
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="IkO-wj-wyO">
                             <rect key="frame" x="1" y="1" width="238" height="167"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9426" id="8060" customClass="CompositionConfigurationsProgramArgumentsTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="238" height="142"/>
@@ -3241,7 +3241,7 @@ du texte &amp; $des maths$ \\
                             <rect key="frame" x="-22" y="17" width="11" height="151"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <tableHeaderView key="headerView" id="9426">
+                        <tableHeaderView key="headerView" wantsLayer="YES" id="9426">
                             <rect key="frame" x="0.0" y="0.0" width="238" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
@@ -3249,7 +3249,7 @@ du texte &amp; $des maths$ \\
                     <button id="8055">
                         <rect key="frame" x="42" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="remove" imagePosition="only" alignment="center" alternateImage="remove-pressed" inset="2" id="9389">
+                        <buttonCell key="cell" type="square" title="-" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9389">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" size="18" name="Monaco"/>
                         </buttonCell>
@@ -3260,7 +3260,7 @@ du texte &amp; $des maths$ \\
                     <button id="8054">
                         <rect key="frame" x="20" y="9" width="23" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="add" imagePosition="only" alignment="center" alternateImage="add-pressed" inset="2" id="9388">
+                        <buttonCell key="cell" type="square" title="+" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9388">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" size="13" name="Monaco"/>
                         </buttonCell>
@@ -3269,7 +3269,7 @@ du texte &amp; $des maths$ \\
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="8053">
-                        <rect key="frame" x="184" y="1" width="82" height="32"/>
+                        <rect key="frame" x="178" y="1" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9387">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3299,165 +3299,8 @@ du texte &amp; $des maths$ \\
     <resources>
         <image name="NSActionTemplate" width="20" height="20"/>
         <image name="NSAddTemplate" width="18" height="17"/>
+        <image name="NSApplicationIcon" width="32" height="32"/>
         <image name="NSCaution" width="32" height="32"/>
         <image name="NSRemoveTemplate" width="18" height="5"/>
-        <image name="add" width="23" height="22"/>
-        <image name="add-pressed" width="23" height="22"/>
-        <image name="imageCell:1032:image" width="17" height="17">
-            <mutableData key="keyedArchiveRepresentation">
-YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05T
-S2V5ZWRBcmNoaXZlctEICVRyb290gAGuCwwbHCEaJissMzY5P0JVJG51bGzXDQ4PEBESExQVFhcYGRpW
-TlNTaXplViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzW05TVGludENvbG9yV05TQ29sb3JeTlNSZXNp
-emluZ01vZGWAAoANEiDAAACAA4AAgAsQAFh7MTcsIDE3fdIdDh4gWk5TLm9iamVjdHOhH4AEgArSHQ4i
-JaIjJIAFgAaACdMOJygpKhpfEBROU1RJRkZSZXByZXNlbnRhdGlvbl8QGU5TSW50ZXJuYWxMYXlvdXRE
-aXJlY3Rpb26ACIAHTxEgbk1NACoAAASM0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/1JSUv9SUlP/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/Xl5e/15eX//Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P8gICH/JSUl/ygoKP9wcHD/bm5u/ygoKP8lJSX/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/1JSUv9jY2T/a2ts/3Z2dv92dnb/ampr/2NjZP/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/6e3x/+nt8f/p7fH/b29v/3Bwcf/p7fH/
-6e3x/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P9ubm7/
-bm5v/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/15eXv9dXV7/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/6u3x/+nt8f/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P+yuL/Z0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/25ydobQ2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/KCosMZ6kqsHQ2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P8AAAAAKCkrMG90eIixt77Y0Njg/9DY4P/Q2OD/
-0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/9DY4P/Q2OD/0Njg/wAQAQAAAwAAAAEAEQAAAQEAAwAA
-AAEAEQAAAQIAAwAAAAQAAAVSAQMAAwAAAAEAAQAAAQYAAwAAAAEAAgAAAQoAAwAAAAEAAQAAAREABAAA
-AAEAAAAIARIAAwAAAAEAAQAAARUAAwAAAAEABAAAARYAAwAAAAEAEQAAARcABAAAAAEAAASEARwAAwAA
-AAEAAQAAASgAAwAAAAEAAgAAAVIAAwAAAAEAAQAAAVMAAwAAAAQAAAVah3MABwAAGwwAAAViAAAAAAAI
-AAgACAAIAAEAAQABAAEAABsMYXBwbAIQAABtbnRyUkdCIFhZWiAH4wABAAQAEwAuADdhY3NwQVBQTAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9tYAAQAAAADTLWFwcGwAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABFkZXNjAAABUAAAAGJkc2NtAAABtAAABA5jcHJ0AAAFxAAA
-ACN3dHB0AAAF6AAAABRyWFlaAAAF/AAAABRnWFlaAAAGEAAAABRiWFlaAAAGJAAAABRyVFJDAAAGOAAA
-CAxhYXJnAAAORAAAACB2Y2d0AAAOZAAABhJuZGluAAAUeAAABj5jaGFkAAAauAAAACxtbW9kAAAa5AAA
-AChiVFJDAAAGOAAACAxnVFJDAAAGOAAACAxhYWJnAAAORAAAACBhYWdnAAAORAAAACBkZXNjAAAAAAAA
-AAhEaXNwbGF5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbWx1YwAAAAAAAAAhAAAADGhySFIAAAAUAAABnGtv
-S1IAAAAMAAABsG5iTk8AAAASAAABvGlkAAAAAAASAAABzmh1SFUAAAAUAAAB4GNzQ1oAAAAWAAAB9GRh
-REsAAAAcAAACCnVrVUEAAAAcAAACJmFyAAAAAAAUAAACQml0SVQAAAAUAAACVnJvUk8AAAASAAACam5s
-TkwAAAAWAAACfGhlSUwAAAAWAAACkmVzRVMAAAASAAACamZpRkkAAAAQAAACqHpoVFcAAAAMAAACuHZp
-Vk4AAAAOAAACxHNrU0sAAAAWAAAC0npoQ04AAAAMAAACuHJ1UlUAAAAkAAAC6GZyRlIAAAAWAAADDG1z
-AAAAAAASAAADImNhRVMAAAAYAAADNHRoVEgAAAAMAAADTGRlREUAAAAQAAADWGVuVVMAAAASAAADaHB0
-QlIAAAAYAAADenBsUEwAAAASAAADkmVsR1IAAAAiAAADpHN2U0UAAAAQAAADxnRyVFIAAAAUAAAD1mph
-SlAAAAAOAAAD6nB0UFQAAAAWAAAD+ABMAEMARAAgAHUAIABiAG8AagBpzuy37AAgAEwAQwBEAEYAYQBy
-AGcAZQAtAEwAQwBEAEwAQwBEACAAVwBhAHIAbgBhAFMAegDtAG4AZQBzACAATABDAEQAQgBhAHIAZQB2
-AG4A/QAgAEwAQwBEAEwAQwBEAC0AZgBhAHIAdgBlAHMAawDmAHIAbQQaBD4EOwRMBD4EQAQ+BDIEOAQ5
-ACAATABDAEQgDwBMAEMARAAgBkUGRAZIBkYGKQBMAEMARAAgAGMAbwBsAG8AcgBpAEwAQwBEACAAYwBv
-AGwAbwByAEsAbABlAHUAcgBlAG4ALQBMAEMARCAPAEwAQwBEACAF5gXRBeIF1QXgBdkAVgDkAHIAaQAt
-AEwAQwBEX2mCcgAgAEwAQwBEAEwAQwBEACAATQDgAHUARgBhAHIAZQBiAG4A6QAgAEwAQwBEBCYEMgQ1
-BEIEPQQ+BDkAIAQWBBoALQQ0BDgEQQQ/BDsENQQ5AEwAQwBEACAAYwBvAHUAbABlAHUAcgBXAGEAcgBu
-AGEAIABMAEMARABMAEMARAAgAGUAbgAgAGMAbwBsAG8AcgBMAEMARAAgDioONQBGAGEAcgBiAC0ATABD
-AEQAQwBvAGwAbwByACAATABDAEQATABDAEQAIABDAG8AbABvAHIAaQBkAG8ASwBvAGwAbwByACAATABD
-AEQDiAOzA8cDwQPJA7wDtwAgA78DuAPMA70DtwAgAEwAQwBEAEYA5AByAGcALQBMAEMARABSAGUAbgBr
-AGwAaQAgAEwAQwBEMKsw6TD8ACAATABDAEQATABDAEQAIABhACAAQwBvAHIAZQBzAAB0ZXh0AAAAAENv
-cHlyaWdodCBBcHBsZSBJbmMuLCAyMDE5AABYWVogAAAAAAAA81IAAQAAAAEWz1hZWiAAAAAAAABhnAAA
-NoQAAAdNWFlaIAAAAAAAAG2WAACv/AAAGI5YWVogAAAAAAAAJ6MAABmAAACzUmN1cnYAAAAAAAAEAAAA
-AAUACgAPABQAGQAeACMAKAAtADIANgA7AEAARQBKAE8AVABZAF4AYwBoAG0AcgB3AHwAgQCGAIsAkACV
-AJoAnwCjAKgArQCyALcAvADBAMYAywDQANUA2wDgAOUA6wDwAPYA+wEBAQcBDQETARkBHwElASsBMgE4
-AT4BRQFMAVIBWQFgAWcBbgF1AXwBgwGLAZIBmgGhAakBsQG5AcEByQHRAdkB4QHpAfIB+gIDAgwCFAId
-AiYCLwI4AkECSwJUAl0CZwJxAnoChAKOApgCogKsArYCwQLLAtUC4ALrAvUDAAMLAxYDIQMtAzgDQwNP
-A1oDZgNyA34DigOWA6IDrgO6A8cD0wPgA+wD+QQGBBMEIAQtBDsESARVBGMEcQR+BIwEmgSoBLYExATT
-BOEE8AT+BQ0FHAUrBToFSQVYBWcFdwWGBZYFpgW1BcUF1QXlBfYGBgYWBicGNwZIBlkGagZ7BowGnQav
-BsAG0QbjBvUHBwcZBysHPQdPB2EHdAeGB5kHrAe/B9IH5Qf4CAsIHwgyCEYIWghuCIIIlgiqCL4I0gjn
-CPsJEAklCToJTwlkCXkJjwmkCboJzwnlCfsKEQonCj0KVApqCoEKmAquCsUK3ArzCwsLIgs5C1ELaQuA
-C5gLsAvIC+EL+QwSDCoMQwxcDHUMjgynDMAM2QzzDQ0NJg1ADVoNdA2ODakNww3eDfgOEw4uDkkOZA5/
-DpsOtg7SDu4PCQ8lD0EPXg96D5YPsw/PD+wQCRAmEEMQYRB+EJsQuRDXEPURExExEU8RbRGMEaoRyRHo
-EgcSJhJFEmQShBKjEsMS4xMDEyMTQxNjE4MTpBPFE+UUBhQnFEkUahSLFK0UzhTwFRIVNBVWFXgVmxW9
-FeAWAxYmFkkWbBaPFrIW1hb6Fx0XQRdlF4kXrhfSF/cYGxhAGGUYihivGNUY+hkgGUUZaxmRGbcZ3RoE
-GioaURp3Gp4axRrsGxQbOxtjG4obshvaHAIcKhxSHHscoxzMHPUdHh1HHXAdmR3DHeweFh5AHmoelB6+
-HukfEx8+H2kflB+/H+ogFSBBIGwgmCDEIPAhHCFIIXUhoSHOIfsiJyJVIoIiryLdIwojOCNmI5QjwiPw
-JB8kTSR8JKsk2iUJJTglaCWXJccl9yYnJlcmhya3JugnGCdJJ3onqyfcKA0oPyhxKKIo1CkGKTgpaymd
-KdAqAio1KmgqmyrPKwIrNitpK50r0SwFLDksbiyiLNctDC1BLXYtqy3hLhYuTC6CLrcu7i8kL1ovkS/H
-L/4wNTBsMKQw2zESMUoxgjG6MfIyKjJjMpsy1DMNM0YzfzO4M/E0KzRlNJ402DUTNU01hzXCNf02NzZy
-Nq426TckN2A3nDfXOBQ4UDiMOMg5BTlCOX85vDn5OjY6dDqyOu87LTtrO6o76DwnPGU8pDzjPSI9YT2h
-PeA+ID5gPqA+4D8hP2E/oj/iQCNAZECmQOdBKUFqQaxB7kIwQnJCtUL3QzpDfUPARANER0SKRM5FEkVV
-RZpF3kYiRmdGq0bwRzVHe0fASAVIS0iRSNdJHUljSalJ8Eo3Sn1KxEsMS1NLmkviTCpMcky6TQJNSk2T
-TdxOJU5uTrdPAE9JT5NP3VAnUHFQu1EGUVBRm1HmUjFSfFLHUxNTX1OqU/ZUQlSPVNtVKFV1VcJWD1Zc
-VqlW91dEV5JX4FgvWH1Yy1kaWWlZuFoHWlZaplr1W0VblVvlXDVchlzWXSddeF3JXhpebF69Xw9fYV+z
-YAVgV2CqYPxhT2GiYfViSWKcYvBjQ2OXY+tkQGSUZOllPWWSZedmPWaSZuhnPWeTZ+loP2iWaOxpQ2ma
-afFqSGqfavdrT2una/9sV2yvbQhtYG25bhJua27Ebx5veG/RcCtwhnDgcTpxlXHwcktypnMBc11zuHQU
-dHB0zHUodYV14XY+dpt2+HdWd7N4EXhueMx5KnmJeed6RnqlewR7Y3vCfCF8gXzhfUF9oX4BfmJ+wn8j
-f4R/5YBHgKiBCoFrgc2CMIKSgvSDV4O6hB2EgITjhUeFq4YOhnKG14c7h5+IBIhpiM6JM4mZif6KZIrK
-izCLlov8jGOMyo0xjZiN/45mjs6PNo+ekAaQbpDWkT+RqJIRknqS45NNk7aUIJSKlPSVX5XJljSWn5cK
-l3WX4JhMmLiZJJmQmfyaaJrVm0Kbr5wcnImc951kndKeQJ6unx2fi5/6oGmg2KFHobaiJqKWowajdqPm
-pFakx6U4pammGqaLpv2nbqfgqFKoxKk3qamqHKqPqwKrdavprFys0K1ErbiuLa6hrxavi7AAsHWw6rFg
-sdayS7LCszizrrQltJy1E7WKtgG2ebbwt2i34LhZuNG5SrnCuju6tbsuu6e8IbybvRW9j74KvoS+/796
-v/XAcMDswWfB48JfwtvDWMPUxFHEzsVLxcjGRsbDx0HHv8g9yLzJOsm5yjjKt8s2y7bMNcy1zTXNtc42
-zrbPN8+40DnQutE80b7SP9LB00TTxtRJ1MvVTtXR1lXW2Ndc1+DYZNjo2WzZ8dp22vvbgNwF3IrdEN2W
-3hzeot8p36/gNuC94UThzOJT4tvjY+Pr5HPk/OWE5g3mlucf56noMui86Ubp0Opb6uXrcOv77IbtEe2c
-7ijutO9A78zwWPDl8XLx//KM8xnzp/Q09ML1UPXe9m32+/eK+Bn4qPk4+cf6V/rn+3f8B/yY/Sn9uv5L
-/tz/bf//cGFyYQAAAAAAAwAAAAJmZgAA8qcAAA1ZAAAT0AAACg52Y2d0AAAAAAAAAAAAAwEAAAIAAAAF
-ABUAMgBfAJsA6AE1AYkB7AJcAtoDYwP5BKQFXgYnBvgH2AjICcgK0AvcDPYODQ83EF0RhRKsE9IU9RYS
-FyUYORlAGkUbQhwwHRceAh7qH9QgvSGqIpgjiiR+JXImaSdfKFcpVypXK1csWy1lLm0veTCJMZoyrDPD
-NN81+zcXODw5Wzp8O5A8nT2rPrg/wkDPQd9C7kP8RQ1GHkcxSEFJUUpnS3tMj02lTrhPy1DjUfpTEVQn
-VT9WWFd1WJhZwFrvXB1dSl52X6Ng0GIAYzJkYmWYZtNoC2lJaoxr1G0abmlvu3EScm1zynUqdo5303ju
-egB7EHwkfTR+RX9QgF6BZ4Jqg3KEcIVqhmWHWYhKiTWKH4sEi+eMyY2ljoCPXZBBkSqSEpL6k+OUy5W0
-lpuXg5htmVeaQ5svnBudCZ35nuuf36DUocyixaO9pLqlpaaGp2yoU6k4qiCrCKvvrNitw66ur5uwhrFy
-sl+zTbQ7tSq2GbcFt/K437nLuqe7f7xWvS++Cr7lv8LAnsF+wl7DQMQlxQ3F9cbhx8/IvsmwyqXLnMyT
-zYjOd89l0FHRPdIq0xrUB9T11ebW1tfJ2LzZsdqn25/cl92T3o3fi+CI4YbijOOR5JDlieZ953Poaelh
-6mHrZ+x47Zzu0vAi8ZbzKvTk9tb4+/tv/ib//wAAAAcAIQBQAJYA9gE6AYgB5AJIArgDOQPMBGYFCwXF
-BokHWwg5CSAKFgsbDBwNKw5AD14QeRGYErYT1BTvFgAXDhgZGSEaHhsWHAIc5x3PHrkfoSCJIXMiYSNS
-JEUlMyYoJx0oDykNKggrASwBLQUuCS8NMBUxGzImMzY0RjVaNmo3gjiXOao6sjuwPK49rT6pP6dAqUGq
-QqpDrESuRbFGs0e2SLpJwErFS8lMzk3RTthP31DkUepS8VP5VQVWFlcuWEtZaFqEW6BcvV3bXvpgG2E7
-YmBji2SzZd9nEGhFaXhqs2vybTVuem/BcQtyWHOMdKF1r3a7d8p413njeu57+X0Cfgd/DYARgRKCEoMQ
-hA2FBYX9hvSH6Ijdic6Kv4uujJaNgo5oj1OQPpEqkheTBJPylOWV2JbNl8OYu5mzmrCbrpyunbGetZ+8
-oMGhyKK7o52kh6Vzpl+nTag8qSyqHqsSrAis/q3zrumv4LDYscyyxbO7tKy1nraQt4O4eLlrul27ULxD
-vTa+Kb8cwBDBA8H2wuvD4cTUxczGw8e6yLPJrcqqy6bMqc2/ztrP8tEH0hzTMdRC1VPWZdd22IjZm9qw
-28bc4d363xrgO+Fg4ofjr+TZ5grnOuhs6abq5Owj7WjusvAC8VbyqvQE9WT2xfgn+Y769fxb/b7/F///
-AAAABgAOACEAPgBmAJgA1QEXAVYBnQHuAksCsQMhA5gEGgSlBTsF2wZ/ByoH3AiRCU0KDwrKC4sMTg0Q
-Dc0OhA86D+8QnRFIEe0SiBMkE70UVxTxFYsWJxbEF2MYBBijGUUZ6RqOGzUb3RyGHTId4x6TH0Qf+SCs
-IWMiHyLbI5ckVCUYJdgmlSdLJ/QooClMKfcqpCtTLAMstS1nLhwu0S+HMD8w+jG1MnEzMDPsNKo1aTYs
-Nus3qzhuOTE59Tq3O3s8Qz0KPdI+mj9iQCtA9kHBQo1DXEQuRP1Fz0akR3tIT0kpSgNK30u8TJpNeE5Z
-Ty9P/lDMUZxSblNBVBlU8FXLVqhXhlhqWU1aNVsgXA1c/F3sXt5f02DIYcBit2OuZKRlk2aCZ29oYGlT
-akZrO2wvbSZuIG8acBdxFXITcxJ0E3UWdhp3HngleSx6MXszfBl88X3Ifp9/coBHgRmB6YK7g46EYYU0
-hgeG24eyiIuJYoo/ixyL+ozZjbuOnI9xkESRF5HuksmTp5SIlWuWVpdEmDWZL5osmy2cM50+nkyfXqB0
-oY+iq6O9pMOlxKbGp8iozqnXquCr7Kz8rguvHrAzsUiyX7N2tI21p7a+t9i477oIu0G8o736v0rAn8H+
-w2jE4MZtyBLJ28u/zdLQKNLC1anZDt0O4iLowPMc//8AAG5kaW4AAAAAAAAGNgAAmQIAAFbIAABVBAAA
-kbAAACdzAAAXCgAAUA0AAFQ5AAIKPQAB+uEAASZmAAMBAAACAAAAEwAsAEUAXwB4AJEAqwDFAN8A+QEU
-ATABTAFqAYcBpgHGAecCCgIuAlQCfAKnAtMDAwM1A2oDpQPkBCQEZwSsBPMFOwWFBc8GHAZqBroHDAdd
-B7AIBQhbCLAJCAlhCboKFApxCs0LKguHC+YMRwymDQkNbA3VDkQOtQ8mD5wQFBCLEQQRfxH9EnoS+hN7
-E/8UhRUKFZEWGxalFzIXwhhTGOIZdhoLGqIbOhvTHGwdBB2cHjEexx9gH/oglyE0IdQidCMUI7YkWiT9
-JZ0mQibnJ4soLijPKXUqGSq7K14sACyiLUQt5i6LLywvzjB6MUQyHTL5M9c0szWYNns3ZzhROUM6PTsz
-PDY9Pz5KP2BAe0GiQsxEAkU5Rn5HyEkSSlFLkEzUThlPYlCtUf5TT1ShVfdXSlijWf1bVVytXgZfX2C3
-Yg9jbGTDZjdnwWlCashsU23ab2lw+HKFdBV1pXc8eNF6anwDfaB/O4DhgomEMoXgh7GJj4tzjVKPM5EU
-kvuU2pa9mJ6aeJxXnjCgCKHfo7SlhqdWqSmrB6zyruOw2LLStMS2wri/urm8uL61wLLCr8StxqrIqcqh
-zKPOnNCe0p3UitaH2JLarNzS3u/hGeMz5ULnR+kw6v/su+5b7+HxS/Km8/D1KfZK92L4bvlo+lf7NvwQ
-/N79pP6X//8AAAAMACMAPABUAG4AhwChALsA1gDxAQwBKQFGAWQBggGiAcMB5QIJAi4CVQJ/AqsC2QMJ
-Az0DdAOwA/AEMQR0BLoFAgVLBZUF4AYvBn4GzwcjB3UHyggiCHkI0QkrCYcJ4wpCCqELAAthC8IMJwyK
-DPANWA3DDjgOsA8oD6QQIxChESERpBIoEq4TNhPAFEwU2hVoFfkWjBchF7kYUxjrGYkaKBrJG2scDhyx
-HVId8R6QHzEf1CB5IR8hxyJwIxojxSRyJR4lyCZ2JyQn0ih9KSop2iqHKzMr4CyMLTkt5S6WL0Ev8DCt
-MYEyXjM+NB81ATXpNtE3vjirOaA6mDuQPJE9kz6bP6VAtUHOQuREBUUkRkxHd0imSeNLHkxiTaNO5lAr
-UXFSvVQBVUpWkVfaWSJablu0XPxeRF+MYNNiGWNlZKxmEmeZaRRqkGwRbYxvDnCOcgxzjHUJdo94FHmb
-eyN8tH5Af9OBcIMQhLKGVYf3iaCLT4z8jq2QYJIak9GVjJdOmQyazJyTnlagHKHko6yldKc6qQWqwqxj
-rgKvp7FSswK0r7ZpuCW54bufvWS/JMDowqrEbsYrx+/JqMtjzR3O0tCL0kDT99Wm11fZDNq53GDeBd+t
-4U/i7eSK5iDnsulK6t/scO3774jxFvKl9DD1uPdH+Nb6ZPv9/Y7//wAAAB0ARABqAJEAuADfAQgBMgFe
-AYsBvAHuAiQCXgKeAuIDLAN/A9wEPgSmBRIFgQXzBmoG4wdfB94IYAjhCWcJ7gp5CwMLjwwgDK8NQw3h
-DpIPRQ/+ELgRdBIzEvQTtxR+FUMWDRbYF6gYehlMGiUa/xvbHLodnx6CH2ggUSE+Ii0jHSQRJQUl+Cbx
-J+ko3yndKtcr1CzRLc8u0i/TMOQyBDMnNEg1azaLN684zjnyOw48Lz1NPmk/hUCiQcJC3UP+RRpGPUdg
-SIVJuErtTClNYU6aT9VREFJRU4xUyVYJV0RYhVnGWwhcSV2MXtBgFWFaYqBj7mVCZtFocmoPa7xtZm8f
-cNlylHRSdhR32Xmce1x9In7egKGCZIQkheaHx4mwi5uNe49YkTCTBpTOlpWYVpoHm7qdZ58OoLKiUqPv
-pYinHqi0qlmsFa3er6ixdLM9tQC2ybiPulC8Er3Yv5TBV8MYxNrGnshlyijL9M27z4vRXtMi1JTWCdeJ
-2RPantwk3aPfG+CL4fHjTOSd5ePnGOhA6WLqe+uD7IXtcu5d7zfwD/DX8Z/yV/MO87v0WPT29Yv2F/aj
-9yj3nPgP+IP48flS+bT6Fvp4+sr7E/tc+6X77vw3/Hb8pvzV/QX9NP1k/ZP9w/3z/iL+T/56/qX+0P77
-/yf/Uv99/6j/1P//AABzZjMyAAAAAAABDEIAAAXe///zJgAAB5IAAP2R///7ov///aMAAAPcAADAbG1t
-b2QAAAAAAAAGEAAAnIEAAAAAwb3zoQAAAAAAAAAAAAAAAAAAAADSLS4vMFokY2xhc3NuYW1lWCRjbGFz
-c2VzXxAQTlNCaXRtYXBJbWFnZVJlcKMvMTJaTlNJbWFnZVJlcFhOU09iamVjdNItLjQ1V05TQXJyYXmi
-NDLSLS43OF5OU011dGFibGVBcnJheaM3NDLTOjsOPD0+V05TV2hpdGVcTlNDb2xvclNwYWNlRDAgMAAQ
-A4AM0i0uQEFXTlNDb2xvcqJAMtItLkNEV05TSW1hZ2WiQzIACAARABoAJAApADIANwBJAEwAUQBTAGIA
-aAB3AH4AhQCSAJkApQCtALwAvgDAAMUAxwDJAMsAzQDWANsA5gDoAOoA7ADxAPQA9gD4APoBAQEYATQB
-NgE4IaohryG6IcMh1iHaIeUh7iHzIfsh/iIDIhIiFiIdIiUiMiI3IjkiOyJAIkgiSyJQIlgAAAAAAAAC
-AQAAAAAAAABFAAAAAAAAAAAAAAAAAAAiWw
-</mutableData>
-        </image>
-        <image name="remove" width="23" height="22"/>
-        <image name="remove-pressed" width="23" height="22"/>
     </resources>
 </document>
