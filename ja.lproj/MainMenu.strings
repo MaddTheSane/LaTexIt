@@ -1,0 +1,381 @@
+
+/* Class = "NSMenuItem"; title = "すべてを最前面に表示"; ObjectID = "5"; */
+"5.title" = "すべてを最前面に表示";
+
+/* Class = "NSMenuItem"; title = "ウインドウ"; ObjectID = "19"; */
+"19.title" = "ウインドウ";
+
+/* Class = "NSMenuItem"; title = "ウインドウをしまう"; ObjectID = "23"; */
+"23.title" = "ウインドウをしまう";
+
+/* Class = "NSMenu"; title = "ウインドウ"; ObjectID = "24"; */
+"24.title" = "ウインドウ";
+
+/* Class = "NSMenu"; title = "MainMenu"; ObjectID = "29"; */
+"29.title" = "MainMenu";
+
+/* Class = "NSMenuItem"; title = "NewApplication"; ObjectID = "56"; */
+"56.title" = "NewApplication";
+
+/* Class = "NSMenu"; title = "NewApplication"; ObjectID = "57"; */
+"57.title" = "NewApplication";
+
+/* Class = "NSMenuItem"; title = "LaTeXiT について…"; ObjectID = "58"; */
+"58.title" = "LaTeXiT について…";
+
+/* Class = "NSMenuItem"; title = "LinkBackのリンクを切断する"; ObjectID = "73"; */
+"73.title" = "LinkBackのリンクを切断する";
+
+/* Class = "NSMenu"; title = "ファイル"; ObjectID = "81"; */
+"81.title" = "ファイル";
+
+/* Class = "NSMenuItem"; title = "新規"; ObjectID = "82"; */
+"82.title" = "新規";
+
+/* Class = "NSMenuItem"; title = "ファイル"; ObjectID = "83"; */
+"83.title" = "ファイル";
+
+/* Class = "NSMenuItem"; title = "ヘルプ"; ObjectID = "103"; */
+"103.title" = "ヘルプ";
+
+/* Class = "NSMenu"; title = "ヘルプ"; ObjectID = "106"; */
+"106.title" = "ヘルプ";
+
+/* Class = "NSMenuItem"; title = "LaTeXiT ヘルプ"; ObjectID = "111"; */
+"111.title" = "LaTeXiT ヘルプ";
+
+/* Class = "NSMenuItem"; title = "環境設定…"; ObjectID = "129"; */
+"129.title" = "環境設定…";
+
+/* Class = "NSMenu"; title = "サービス"; ObjectID = "130"; */
+"130.title" = "サービス";
+
+/* Class = "NSMenuItem"; title = "サービス"; ObjectID = "131"; */
+"131.title" = "サービス";
+
+/* Class = "NSMenuItem"; title = "LaTeXiT を隠す"; ObjectID = "134"; */
+"134.title" = "LaTeXiT を隠す";
+
+/* Class = "NSMenuItem"; title = "LaTeXiT を終了"; ObjectID = "136"; */
+"136.title" = "LaTeXiT を終了";
+
+/* Class = "NSMenuItem"; title = "ほかを隠す"; ObjectID = "145"; */
+"145.title" = "ほかを隠す";
+
+/* Class = "NSMenuItem"; title = "全て表示"; ObjectID = "150"; */
+"150.title" = "全て表示";
+
+/* Class = "NSMenuItem"; title = "検索…"; ObjectID = "154"; */
+"154.title" = "検索…";
+
+/* Class = "NSMenuItem"; title = "選択部分へジャンプ"; ObjectID = "155"; */
+"155.title" = "選択部分へジャンプ";
+
+/* Class = "NSMenuItem"; title = "コピー"; ObjectID = "157"; */
+"157.title" = "コピー";
+
+/* Class = "NSMenuItem"; title = "取消"; ObjectID = "158"; */
+"158.title" = "取消";
+
+/* Class = "NSMenu"; title = "検索"; ObjectID = "159"; */
+"159.title" = "検索";
+
+/* Class = "NSMenuItem"; title = "カット"; ObjectID = "160"; */
+"160.title" = "カット";
+
+/* Class = "NSMenuItem"; title = "選択部分を検索に使用"; ObjectID = "161"; */
+"161.title" = "選択部分を検索に使用";
+
+/* Class = "NSMenuItem"; title = "前を検索"; ObjectID = "162"; */
+"162.title" = "前を検索";
+
+/* Class = "NSMenuItem"; title = "編集"; ObjectID = "163"; */
+"163.title" = "編集";
+
+/* Class = "NSMenuItem"; title = "削除"; ObjectID = "164"; */
+"164.title" = "削除";
+
+/* Class = "NSMenuItem"; title = "次を検索"; ObjectID = "167"; */
+"167.title" = "次を検索";
+
+/* Class = "NSMenuItem"; title = "検索"; ObjectID = "168"; */
+"168.title" = "検索";
+
+/* Class = "NSMenu"; title = "編集"; ObjectID = "169"; */
+"169.title" = "編集";
+
+/* Class = "NSMenuItem"; title = "ペースト"; ObjectID = "171"; */
+"171.title" = "ペースト";
+
+/* Class = "NSMenuItem"; title = "すべてを選択"; ObjectID = "172"; */
+"172.title" = "すべてを選択";
+
+/* Class = "NSMenuItem"; title = "やり直し"; ObjectID = "173"; */
+"173.title" = "やり直し";
+
+/* Class = "NSMenuItem"; title = "スペルと文法"; ObjectID = "184"; */
+"184.title" = "スペルと文法";
+
+/* Class = "NSMenu"; title = "スペルと文法"; ObjectID = "185"; */
+"185.title" = "スペルと文法";
+
+/* Class = "NSMenuItem"; title = "スペルと文法を表示…"; ObjectID = "187"; */
+"187.title" = "スペルと文法を表示…";
+
+/* Class = "NSMenuItem"; title = "書類を今すぐチェック"; ObjectID = "189"; */
+"189.title" = "書類を今すぐチェック";
+
+/* Class = "NSMenuItem"; title = "入力中にスペルチェック"; ObjectID = "191"; */
+"191.title" = "入力中にスペルチェック";
+
+/* Class = "NSMenuItem"; title = "拡大／縮小"; ObjectID = "203"; */
+"203.title" = "拡大／縮小";
+
+/* Class = "NSMenuItem"; title = "履歴"; ObjectID = "211"; */
+"211.title" = "履歴";
+
+/* Class = "NSMenuItem"; title = "履歴を表示"; ObjectID = "212"; */
+"212.title" = "履歴を表示";
+
+/* Class = "NSMenu"; title = "履歴"; ObjectID = "213"; */
+"213.title" = "履歴";
+
+/* Class = "NSMenu"; title = "LaTeX"; ObjectID = "215"; */
+"215.title" = "LaTeX";
+
+/* Class = "NSMenuItem"; title = "LaTeX"; ObjectID = "216"; */
+"216.title" = "LaTeX";
+
+/* Class = "NSMenuItem"; title = "最後のログを表示..."; ObjectID = "217"; */
+"217.title" = "最後のログを表示...";
+
+/* Class = "NSMenuItem"; title = "LaTeX it!"; ObjectID = "223"; */
+"223.title" = "LaTeX it!";
+
+/* Class = "NSMenuItem"; title = "履歴を削除"; ObjectID = "226"; */
+"226.title" = "履歴を削除";
+
+/* Class = "NSMenuItem"; title = "選択項目を削除"; ObjectID = "229"; */
+"229.title" = "選択項目を削除";
+
+/* Class = "NSMenuItem"; title = "イメージを書き出す…"; ObjectID = "231"; */
+"231.title" = "イメージを書き出す…";
+
+/* Class = "NSWindow"; title = "Readme"; ObjectID = "1117"; */
+"1117.title" = "Readme";
+
+/* Class = "NSMenuItem"; title = "開く…"; ObjectID = "1123"; */
+"1123.title" = "開く…";
+
+/* Class = "NSMenu"; title = "ライブラリ"; ObjectID = "1129"; */
+"1129.title" = "ライブラリ";
+
+/* Class = "NSMenuItem"; title = "ライブラリを表示"; ObjectID = "1130"; */
+"1130.title" = "ライブラリを表示";
+
+/* Class = "NSMenuItem"; title = "ライブラリ"; ObjectID = "1131"; */
+"1131.title" = "ライブラリ";
+
+/* Class = "NSMenuItem"; title = "フォルダを追加"; ObjectID = "1135"; */
+"1135.title" = "フォルダを追加";
+
+/* Class = "NSMenuItem"; title = "現在の数式を追加"; ObjectID = "1136"; */
+"1136.title" = "現在の数式を追加";
+
+/* Class = "NSMenuItem"; title = "選択項目を削除"; ObjectID = "1137"; */
+"1137.title" = "選択項目を削除";
+
+/* Class = "NSMenuItem"; title = "現在の数式に置き換え"; ObjectID = "1145"; */
+"1145.title" = "現在の数式に置き換え";
+
+/* Class = "NSMenuItem"; title = "インポート…"; ObjectID = "1230"; */
+"1230.title" = "インポート…";
+
+/* Class = "NSMenuItem"; title = "エクスポート…"; ObjectID = "1231"; */
+"1231.title" = "エクスポート…";
+
+/* Class = "NSMenuItem"; title = "プリアンブルを表示"; ObjectID = "1235"; */
+"1235.title" = "プリアンブルを表示";
+
+/* Class = "NSMenuItem"; title = "アップデートを確認…"; ObjectID = "1238"; */
+"1238.title" = "アップデートを確認…";
+
+/* Class = "NSMenuItem"; title = "パレット"; ObjectID = "1338"; */
+"1338.title" = "パレット";
+
+/* Class = "NSMenu"; title = "パレット"; ObjectID = "1339"; */
+"1339.title" = "パレット";
+
+/* Class = "NSMenuItem"; title = "余白"; ObjectID = "1340"; */
+"1340.title" = "余白";
+
+/* Class = "NSMenuItem"; title = "LaTeX パネル"; ObjectID = "1341"; */
+"1341.title" = "LaTeX パネル";
+
+/* Class = "NSMenuItem"; title = "カラーパネルを表示"; ObjectID = "1342"; */
+"1342.title" = "カラーパネルを表示";
+
+/* Class = "NSMenuItem"; title = "カプセル化"; ObjectID = "1343"; */
+"1343.title" = "カプセル化";
+
+/* Class = "NSWindow"; title = "Make a Donation…"; ObjectID = "1351"; */
+"1351.title" = "Make a Donation…";
+
+/* Class = "NSMenuItem"; title = "補足ファイル"; ObjectID = "1363"; */
+"1363.title" = "補足ファイル";
+
+/* Class = "NSMenuItem"; title = "イメージをコピー"; ObjectID = "1365"; */
+"1365.title" = "イメージをコピー";
+
+/* Class = "NSMenu"; title = "イメージをコピー"; ObjectID = "1366"; */
+"1366.title" = "イメージをコピー";
+
+/* Class = "NSMenuItem"; title = "クリップボードから新規作成"; ObjectID = "1385"; */
+"1385.title" = "クリップボードから新規作成";
+
+/* Class = "NSMenuItem"; title = "選択項目を名称変更"; ObjectID = "1390"; */
+"1390.title" = "選択項目を名称変更";
+
+/* Class = "NSMenuItem"; title = "入力エリアを小さく"; ObjectID = "1402"; */
+"1402.title" = "入力エリアを小さく";
+
+/* Class = "NSWindow"; title = "Reminder"; ObjectID = "1404"; */
+"1404.title" = "Reminder";
+
+/* Class = "NSMenuItem"; title = "もう一度イメージを書き出す…"; ObjectID = "1480"; */
+"1480.title" = "もう一度イメージを書き出す…";
+
+/* Class = "NSMenuItem"; title = "LaTeX it! と再書き出し"; ObjectID = "1495"; */
+"1495.title" = "LaTeX it! と再書き出し";
+
+/* Class = "NSMenuItem"; title = "プログラム構成"; ObjectID = "1536"; */
+"1536.title" = "プログラム構成";
+
+/* Class = "NSTextFieldCell"; title = "LaTeXiT のために寄付をして頂けるなら、ウェブサイトから私の Paypal アカウントにアクセスしてください。\n\n\n\nLaTeXiT はフリーウェアソフトですのでもちろん寄付は義務ではありません。"; ObjectID = "1581"; */
+"1581.title" = "LaTeXiT のために寄付をして頂けるなら、ウェブサイトから私の Paypal アカウントにアクセスしてください。\n\n\n\nLaTeXiT はフリーウェアソフトですのでもちろん寄付は義務ではありません。";
+
+/* Class = "NSButtonCell"; title = "LaTeXiT ウェブサイトへ…"; ObjectID = "1582"; */
+"1582.title" = "LaTeXiT ウェブサイトへ…";
+
+/* Class = "NSButtonCell"; title = "今後この警告を提示しない。"; ObjectID = "1583"; */
+"1583.title" = "今後この警告を提示しない。";
+
+/* Class = "NSTextFieldCell"; title = "数式の色が白に設定されていますが、Ghostcript の不具合で適切に処理されない可能性があります。余白を大きめに設定（パレットメニューの余白）するか、色を「ほとんど白」にすることで問題を回避できます。"; ObjectID = "1584"; */
+"1584.title" = "数式の色が白に設定されていますが、Ghostcript の不具合で適切に処理されない可能性があります。余白を大きめに設定（パレットメニューの余白）するか、色を「ほとんど白」にすることで問題を回避できます。";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "1585"; */
+"1585.title" = "OK";
+
+/* Class = "NSButtonCell"; title = "キャンセル"; ObjectID = "1586"; */
+"1586.title" = "キャンセル";
+
+/* Class = "NSMenuItem"; title = "ミニウインドウモード"; ObjectID = "1591"; */
+"1591.title" = "ミニウインドウモード";
+
+/* Class = "NSMenuItem"; title = "Align"; ObjectID = "1596"; */
+"1596.title" = "Align";
+
+/* Class = "NSMenuItem"; title = "Display"; ObjectID = "1597"; */
+"1597.title" = "Display";
+
+/* Class = "NSMenuItem"; title = "Inline"; ObjectID = "1598"; */
+"1598.title" = "Inline";
+
+/* Class = "NSMenuItem"; title = "Text"; ObjectID = "1599"; */
+"1599.title" = "Text";
+
+/* Class = "NSMenuItem"; title = "インポート…"; ObjectID = "1609"; */
+"1609.title" = "インポート…";
+
+/* Class = "NSMenuItem"; title = "エクスポート…"; ObjectID = "1610"; */
+"1610.title" = "エクスポート…";
+
+/* Class = "NSMenuItem"; title = "寄付…"; ObjectID = "1624"; */
+"1624.title" = "寄付…";
+
+/* Class = "NSMenuItem"; title = "数式を開く"; ObjectID = "1629"; */
+"1629.title" = "数式を開く";
+
+/* Class = "NSMenuItem"; title = "数式を開いて編集"; ObjectID = "1630"; */
+"1630.title" = "数式を開いて編集";
+
+/* Class = "NSMenuItem"; title = "閉じる"; ObjectID = "1637"; */
+"1637.title" = "閉じる";
+
+/* Class = "NSMenuItem"; title = "LinkBackのリンクを停止する"; ObjectID = "1640"; */
+"1640.title" = "LinkBackのリンクを停止する";
+
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "1643"; */
+"1643.title" = "Auto";
+
+/* Class = "NSMenuItem"; title = "フォーマット"; ObjectID = "1645"; */
+"1645.title" = "フォーマット";
+
+/* Class = "NSMenu"; title = "フォーマット"; ObjectID = "1646"; */
+"1646.title" = "フォーマット";
+
+/* Class = "NSMenuItem"; title = "テキスト"; ObjectID = "1647"; */
+"1647.title" = "テキスト";
+
+/* Class = "NSMenu"; title = "テキスト"; ObjectID = "1648"; */
+"1648.title" = "テキスト";
+
+/* Class = "NSMenuItem"; title = "揃えなし"; ObjectID = "1649"; */
+"1649.title" = "揃えなし";
+
+/* Class = "NSMenuItem"; title = "右揃え"; ObjectID = "1650"; */
+"1650.title" = "右揃え";
+
+/* Class = "NSMenuItem"; title = "中央揃え"; ObjectID = "1651"; */
+"1651.title" = "中央揃え";
+
+/* Class = "NSMenuItem"; title = "左揃え"; ObjectID = "1652"; */
+"1652.title" = "左揃え";
+
+/* Class = "NSMenuItem"; title = "LaTeX it! and put into clipboard"; ObjectID = "1657"; */
+"1657.title" = "LaTeX it! and put into clipboard";
+
+/* Class = "NSMenuItem"; title = "コメント"; ObjectID = "1660"; */
+"1660.title" = "コメント";
+
+/* Class = "NSMenuItem"; title = "コメントを外す"; ObjectID = "1661"; */
+"1661.title" = "コメントを外す";
+
+/* Class = "NSMenuItem"; title = "別名で保存…"; ObjectID = "1666"; */
+"1666.title" = "別名で保存…";
+
+/* Class = "NSMenuItem"; title = "ファイル同期を終了する"; ObjectID = "1667"; */
+"1667.title" = "ファイル同期を終了する";
+
+/* Class = "NSMenuItem"; title = "保存"; ObjectID = "1668"; */
+"1668.title" = "保存";
+
+/* Class = "NSMenuItem"; title = "Show comments pane"; ObjectID = "1677"; */
+"1677.title" = "Show comments pane";
+
+/* Class = "NSMenuItem"; title = "フォント"; ObjectID = "1680"; */
+"1680.title" = "フォント";
+
+/* Class = "NSMenu"; title = "フォント"; ObjectID = "1681"; */
+"1681.title" = "フォント";
+
+/* Class = "NSMenuItem"; title = "大きく"; ObjectID = "1682"; */
+"1682.title" = "大きく";
+
+/* Class = "NSMenuItem"; title = "小さく"; ObjectID = "1683"; */
+"1683.title" = "小さく";
+
+/* Class = "NSMenuItem"; title = "データベースを圧縮する"; ObjectID = "1692"; */
+"1692.title" = "データベースを圧縮する";
+
+/* Class = "NSMenuItem"; title = "データベースを圧縮する"; ObjectID = "1695"; */
+"1695.title" = "データベースを圧縮する";
+
+/* Class = "NSMenuItem"; title = "latexize selection again"; ObjectID = "1699"; */
+"1699.title" = "latexize selection again";
+
+/* Class = "NSMenuItem"; title = "latexize selection again"; ObjectID = "1701"; */
+"1701.title" = "latexize selection again";
+
+/* Class = "NSMenuItem"; title = "現在の方程式のベースライン..."; ObjectID = "1704"; */
+"1704.title" = "現在の方程式のベースライン...";

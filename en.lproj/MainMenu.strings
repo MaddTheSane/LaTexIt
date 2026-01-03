@@ -1,0 +1,381 @@
+
+/* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "5"; */
+"5.title" = "Bring All to Front";
+
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "19"; */
+"19.title" = "Window";
+
+/* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "23"; */
+"23.title" = "Minimize";
+
+/* Class = "NSMenu"; title = "Window"; ObjectID = "24"; */
+"24.title" = "Window";
+
+/* Class = "NSMenu"; title = "MainMenu"; ObjectID = "29"; */
+"29.title" = "MainMenu";
+
+/* Class = "NSMenuItem"; title = "NewApplication"; ObjectID = "56"; */
+"56.title" = "NewApplication";
+
+/* Class = "NSMenu"; title = "NewApplication"; ObjectID = "57"; */
+"57.title" = "NewApplication";
+
+/* Class = "NSMenuItem"; title = "About LaTeXiT"; ObjectID = "58"; */
+"58.title" = "About LaTeXiT";
+
+/* Class = "NSMenuItem"; title = "Close Linkback link"; ObjectID = "73"; */
+"73.title" = "Close Linkback link";
+
+/* Class = "NSMenu"; title = "File"; ObjectID = "81"; */
+"81.title" = "File";
+
+/* Class = "NSMenuItem"; title = "New"; ObjectID = "82"; */
+"82.title" = "New";
+
+/* Class = "NSMenuItem"; title = "File"; ObjectID = "83"; */
+"83.title" = "File";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "103"; */
+"103.title" = "Help";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "106"; */
+"106.title" = "Help";
+
+/* Class = "NSMenuItem"; title = "LaTeXiT Help"; ObjectID = "111"; */
+"111.title" = "LaTeXiT Help";
+
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "129"; */
+"129.title" = "Preferences…";
+
+/* Class = "NSMenu"; title = "Services"; ObjectID = "130"; */
+"130.title" = "Services";
+
+/* Class = "NSMenuItem"; title = "Services"; ObjectID = "131"; */
+"131.title" = "Services";
+
+/* Class = "NSMenuItem"; title = "Hide LaTeXiT"; ObjectID = "134"; */
+"134.title" = "Hide LaTeXiT";
+
+/* Class = "NSMenuItem"; title = "Quit LaTeXiT"; ObjectID = "136"; */
+"136.title" = "Quit LaTeXiT";
+
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "145"; */
+"145.title" = "Hide Others";
+
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "150"; */
+"150.title" = "Show All";
+
+/* Class = "NSMenuItem"; title = "Find…"; ObjectID = "154"; */
+"154.title" = "Find…";
+
+/* Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "155"; */
+"155.title" = "Jump to Selection";
+
+/* Class = "NSMenuItem"; title = "Copy"; ObjectID = "157"; */
+"157.title" = "Copy";
+
+/* Class = "NSMenuItem"; title = "Undo"; ObjectID = "158"; */
+"158.title" = "Undo";
+
+/* Class = "NSMenu"; title = "Find"; ObjectID = "159"; */
+"159.title" = "Find";
+
+/* Class = "NSMenuItem"; title = "Cut"; ObjectID = "160"; */
+"160.title" = "Cut";
+
+/* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "161"; */
+"161.title" = "Use Selection for Find";
+
+/* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "162"; */
+"162.title" = "Find Previous";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "163"; */
+"163.title" = "Edit";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "164"; */
+"164.title" = "Delete";
+
+/* Class = "NSMenuItem"; title = "Find Next"; ObjectID = "167"; */
+"167.title" = "Find Next";
+
+/* Class = "NSMenuItem"; title = "Find"; ObjectID = "168"; */
+"168.title" = "Find";
+
+/* Class = "NSMenu"; title = "Edit"; ObjectID = "169"; */
+"169.title" = "Edit";
+
+/* Class = "NSMenuItem"; title = "Paste"; ObjectID = "171"; */
+"171.title" = "Paste";
+
+/* Class = "NSMenuItem"; title = "Select All"; ObjectID = "172"; */
+"172.title" = "Select All";
+
+/* Class = "NSMenuItem"; title = "Redo"; ObjectID = "173"; */
+"173.title" = "Redo";
+
+/* Class = "NSMenuItem"; title = "Spelling and Grammar"; ObjectID = "184"; */
+"184.title" = "Spelling and Grammar";
+
+/* Class = "NSMenu"; title = "Spelling and Grammar"; ObjectID = "185"; */
+"185.title" = "Spelling and Grammar";
+
+/* Class = "NSMenuItem"; title = "Show Spelling and Grammar"; ObjectID = "187"; */
+"187.title" = "Show Spelling and Grammar";
+
+/* Class = "NSMenuItem"; title = "Check Document Now"; ObjectID = "189"; */
+"189.title" = "Check Document Now";
+
+/* Class = "NSMenuItem"; title = "Check Spelling While Typing"; ObjectID = "191"; */
+"191.title" = "Check Spelling While Typing";
+
+/* Class = "NSMenuItem"; title = "Zoom"; ObjectID = "203"; */
+"203.title" = "Zoom";
+
+/* Class = "NSMenuItem"; title = "History"; ObjectID = "211"; */
+"211.title" = "History";
+
+/* Class = "NSMenuItem"; title = "Show History"; ObjectID = "212"; */
+"212.title" = "Show History";
+
+/* Class = "NSMenu"; title = "History"; ObjectID = "213"; */
+"213.title" = "History";
+
+/* Class = "NSMenu"; title = "LaTeX"; ObjectID = "215"; */
+"215.title" = "LaTeX";
+
+/* Class = "NSMenuItem"; title = "LaTeX"; ObjectID = "216"; */
+"216.title" = "LaTeX";
+
+/* Class = "NSMenuItem"; title = "Display last log..."; ObjectID = "217"; */
+"217.title" = "Display last log...";
+
+/* Class = "NSMenuItem"; title = "LaTeX it!"; ObjectID = "223"; */
+"223.title" = "LaTeX it!";
+
+/* Class = "NSMenuItem"; title = "Clear History"; ObjectID = "226"; */
+"226.title" = "Clear History";
+
+/* Class = "NSMenuItem"; title = "Remove selection"; ObjectID = "229"; */
+"229.title" = "Remove selection";
+
+/* Class = "NSMenuItem"; title = "Export image…"; ObjectID = "231"; */
+"231.title" = "Export image…";
+
+/* Class = "NSWindow"; title = "Readme"; ObjectID = "1117"; */
+"1117.title" = "Readme";
+
+/* Class = "NSMenuItem"; title = "Open…"; ObjectID = "1123"; */
+"1123.title" = "Open…";
+
+/* Class = "NSMenu"; title = "Library"; ObjectID = "1129"; */
+"1129.title" = "Library";
+
+/* Class = "NSMenuItem"; title = "Show Library"; ObjectID = "1130"; */
+"1130.title" = "Show Library";
+
+/* Class = "NSMenuItem"; title = "Library"; ObjectID = "1131"; */
+"1131.title" = "Library";
+
+/* Class = "NSMenuItem"; title = "Add a folder"; ObjectID = "1135"; */
+"1135.title" = "Add a folder";
+
+/* Class = "NSMenuItem"; title = "Add current equation"; ObjectID = "1136"; */
+"1136.title" = "Add current equation";
+
+/* Class = "NSMenuItem"; title = "Remove selection"; ObjectID = "1137"; */
+"1137.title" = "Remove selection";
+
+/* Class = "NSMenuItem"; title = "Replace current equation"; ObjectID = "1145"; */
+"1145.title" = "Replace current equation";
+
+/* Class = "NSMenuItem"; title = "Import…"; ObjectID = "1230"; */
+"1230.title" = "Import…";
+
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "1231"; */
+"1231.title" = "Export…";
+
+/* Class = "NSMenuItem"; title = "Show preamble"; ObjectID = "1235"; */
+"1235.title" = "Show preamble";
+
+/* Class = "NSMenuItem"; title = "Check for updates…"; ObjectID = "1238"; */
+"1238.title" = "Check for updates…";
+
+/* Class = "NSMenuItem"; title = "Palettes"; ObjectID = "1338"; */
+"1338.title" = "Palettes";
+
+/* Class = "NSMenu"; title = "Palettes"; ObjectID = "1339"; */
+"1339.title" = "Palettes";
+
+/* Class = "NSMenuItem"; title = "Margins"; ObjectID = "1340"; */
+"1340.title" = "Margins";
+
+/* Class = "NSMenuItem"; title = "LaTeX"; ObjectID = "1341"; */
+"1341.title" = "LaTeX";
+
+/* Class = "NSMenuItem"; title = "Colors"; ObjectID = "1342"; */
+"1342.title" = "Colors";
+
+/* Class = "NSMenuItem"; title = "Encapsulations"; ObjectID = "1343"; */
+"1343.title" = "Encapsulations";
+
+/* Class = "NSWindow"; title = "Make a Donation…"; ObjectID = "1351"; */
+"1351.title" = "Make a Donation…";
+
+/* Class = "NSMenuItem"; title = "Additional Files"; ObjectID = "1363"; */
+"1363.title" = "Additional Files";
+
+/* Class = "NSMenuItem"; title = "Copy the image as"; ObjectID = "1365"; */
+"1365.title" = "Copy the image as";
+
+/* Class = "NSMenu"; title = "Copy the image as"; ObjectID = "1366"; */
+"1366.title" = "Copy the image as";
+
+/* Class = "NSMenuItem"; title = "New From Clipboard"; ObjectID = "1385"; */
+"1385.title" = "New From Clipboard";
+
+/* Class = "NSMenuItem"; title = "Rename selection"; ObjectID = "1390"; */
+"1390.title" = "Rename selection";
+
+/* Class = "NSMenuItem"; title = "Reduce text area"; ObjectID = "1402"; */
+"1402.title" = "Reduce text area";
+
+/* Class = "NSWindow"; title = "Reminder"; ObjectID = "1404"; */
+"1404.title" = "Reminder";
+
+/* Class = "NSMenuItem"; title = "Re-export image"; ObjectID = "1480"; */
+"1480.title" = "Re-export image";
+
+/* Class = "NSMenuItem"; title = "LaTeX it! and re-export"; ObjectID = "1495"; */
+"1495.title" = "LaTeX it! and re-export";
+
+/* Class = "NSMenuItem"; title = "Composition configurations"; ObjectID = "1536"; */
+"1536.title" = "Composition configurations";
+
+/* Class = "NSTextFieldCell"; title = "If you want to make a donation for LaTeXiT, you can access my Paypal account from my web site.\n\n\n\nYou have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it that way"; ObjectID = "1581"; */
+"1581.title" = "If you want to make a donation for LaTeXiT, you can access my Paypal account from my web site.\n\n\n\nYou have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it that way";
+
+/* Class = "NSButtonCell"; title = " Go to LaTeXiT web site…"; ObjectID = "1582"; */
+"1582.title" = " Go to LaTeXiT web site…";
+
+/* Class = "NSButtonCell"; title = "Do not show that warning again"; ObjectID = "1583"; */
+"1583.title" = "Do not show that warning again";
+
+/* Class = "NSTextFieldCell"; title = "You have selected White color for the equation. Please know that a bug of ghostcript may prevent the result from being cropped properly; you can increase the margins to fix it (use the menu Palettes > Margins), or use an \"almost white\" color instead."; ObjectID = "1584"; */
+"1584.title" = "You have selected White color for the equation. Please know that a bug of ghostcript may prevent the result from being cropped properly; you can increase the margins to fix it (use the menu Palettes > Margins), or use an \"almost white\" color instead.";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "1585"; */
+"1585.title" = "OK";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "1586"; */
+"1586.title" = "Cancel";
+
+/* Class = "NSMenuItem"; title = "Switch to mini-window"; ObjectID = "1591"; */
+"1591.title" = "Switch to mini-window";
+
+/* Class = "NSMenuItem"; title = "Align"; ObjectID = "1596"; */
+"1596.title" = "Align";
+
+/* Class = "NSMenuItem"; title = "Display"; ObjectID = "1597"; */
+"1597.title" = "Display";
+
+/* Class = "NSMenuItem"; title = "Inline"; ObjectID = "1598"; */
+"1598.title" = "Inline";
+
+/* Class = "NSMenuItem"; title = "Text"; ObjectID = "1599"; */
+"1599.title" = "Text";
+
+/* Class = "NSMenuItem"; title = "Import…"; ObjectID = "1609"; */
+"1609.title" = "Import…";
+
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "1610"; */
+"1610.title" = "Export…";
+
+/* Class = "NSMenuItem"; title = "Make a donation…"; ObjectID = "1624"; */
+"1624.title" = "Make a donation…";
+
+/* Class = "NSMenuItem"; title = "Open the equation"; ObjectID = "1629"; */
+"1629.title" = "Open the equation";
+
+/* Class = "NSMenuItem"; title = "Open and modify the equation"; ObjectID = "1630"; */
+"1630.title" = "Open and modify the equation";
+
+/* Class = "NSMenuItem"; title = "Close"; ObjectID = "1637"; */
+"1637.title" = "Close";
+
+/* Class = "NSMenuItem"; title = "Suspend Linkback link"; ObjectID = "1640"; */
+"1640.title" = "Suspend Linkback link";
+
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "1643"; */
+"1643.title" = "Auto";
+
+/* Class = "NSMenuItem"; title = "Format"; ObjectID = "1645"; */
+"1645.title" = "Format";
+
+/* Class = "NSMenu"; title = "Format"; ObjectID = "1646"; */
+"1646.title" = "Format";
+
+/* Class = "NSMenuItem"; title = "Text"; ObjectID = "1647"; */
+"1647.title" = "Text";
+
+/* Class = "NSMenu"; title = "Text"; ObjectID = "1648"; */
+"1648.title" = "Text";
+
+/* Class = "NSMenuItem"; title = "No alignment"; ObjectID = "1649"; */
+"1649.title" = "No alignment";
+
+/* Class = "NSMenuItem"; title = "Align Right"; ObjectID = "1650"; */
+"1650.title" = "Align Right";
+
+/* Class = "NSMenuItem"; title = "Center"; ObjectID = "1651"; */
+"1651.title" = "Center";
+
+/* Class = "NSMenuItem"; title = "Align Left"; ObjectID = "1652"; */
+"1652.title" = "Align Left";
+
+/* Class = "NSMenuItem"; title = "LaTeX it! and put into clipboard"; ObjectID = "1657"; */
+"1657.title" = "LaTeX it! and put into clipboard";
+
+/* Class = "NSMenuItem"; title = "Comment"; ObjectID = "1660"; */
+"1660.title" = "Comment";
+
+/* Class = "NSMenuItem"; title = "Uncomment"; ObjectID = "1661"; */
+"1661.title" = "Uncomment";
+
+/* Class = "NSMenuItem"; title = "Save as…"; ObjectID = "1666"; */
+"1666.title" = "Save as…";
+
+/* Class = "NSMenuItem"; title = "Close file synchronization"; ObjectID = "1667"; */
+"1667.title" = "Close file synchronization";
+
+/* Class = "NSMenuItem"; title = "Save"; ObjectID = "1668"; */
+"1668.title" = "Save";
+
+/* Class = "NSMenuItem"; title = "Show comments pane"; ObjectID = "1677"; */
+"1677.title" = "Show comments pane";
+
+/* Class = "NSMenuItem"; title = "Font"; ObjectID = "1680"; */
+"1680.title" = "Font";
+
+/* Class = "NSMenu"; title = "Font"; ObjectID = "1681"; */
+"1681.title" = "Font";
+
+/* Class = "NSMenuItem"; title = "Bigger"; ObjectID = "1682"; */
+"1682.title" = "Bigger";
+
+/* Class = "NSMenuItem"; title = "Smaller"; ObjectID = "1683"; */
+"1683.title" = "Smaller";
+
+/* Class = "NSMenuItem"; title = "Compact database"; ObjectID = "1692"; */
+"1692.title" = "Compact database";
+
+/* Class = "NSMenuItem"; title = "Compact database"; ObjectID = "1695"; */
+"1695.title" = "Compact database";
+
+/* Class = "NSMenuItem"; title = "latexize selection again"; ObjectID = "1699"; */
+"1699.title" = "latexize selection again";
+
+/* Class = "NSMenuItem"; title = "latexize selection again"; ObjectID = "1701"; */
+"1701.title" = "latexize selection again";
+
+/* Class = "NSMenuItem"; title = "Baseline of current equation..."; ObjectID = "1704"; */
+"1704.title" = "Baseline of current equation...";

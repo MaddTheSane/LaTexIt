@@ -73,7 +73,7 @@
 }
 //end buttonWithTag:
 
--(NSButton*) buttonWithState:(NSInteger)state
+-(NSButton*) buttonWithState:(NSControlStateValue)state
 {
   NSButton* result = nil;
   NSEnumerator* enumerator = [self->buttons objectEnumerator];

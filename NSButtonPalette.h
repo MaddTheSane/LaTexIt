@@ -10,7 +10,7 @@
 
 
 @interface NSButtonPalette : NSObject {
-  NSMutableArray* buttons;
+  NSMutableArray<NSButton*>* buttons;
   BOOL isExclusive;
   id delegate;
 }
@@ -20,7 +20,7 @@
 -(void) add:(NSButton*)button;
 -(void) remove:(NSButton*)button;
 -(NSButton*) buttonWithTag:(NSInteger)tag;
--(NSButton*) buttonWithState:(NSInteger)state;
+-(NSButton*) buttonWithState:(NSControlStateValue)state;
 -(NSInteger) selectedTag;
 -(void) setSelectedTag:(NSInteger)tag;
 
