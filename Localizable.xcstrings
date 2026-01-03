@@ -1091,52 +1091,18 @@
         }
       }
     },
-    "An error occured while saving" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fehler beim Sichern"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "An error occured while saving"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Error al Guardar"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Une erreur est survenue lors de l'enregistrement"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Errore durante il Salvataggio"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存するときにエラーが発生しました"
-          }
-        }
-      }
-    },
     "An error occured while saving." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fehler beim Sichern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occured while saving."
           }
         },
         "es" : {
@@ -1241,16 +1207,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "次のコマンドを用いてファイルを作成するときにエラーが発生しました :\n%@"
-          }
-        }
-      }
-    },
-    "An error occured while trying to reach %@.\n You should check your network." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "An error occured while trying to reach %@.\n You should check your network."
           }
         }
       }
