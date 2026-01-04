@@ -206,7 +206,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="532" height="174"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="115" id="881">
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="115" id="881">
                                 <rect key="frame" x="206" y="152" width="119" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Marges par défaut" id="9292">
@@ -222,7 +222,7 @@
                                     <rect key="frame" x="1" y="1" width="218" height="138"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" id="683">
+                                        <textField verticalHuggingPriority="750" id="683">
                                             <rect key="frame" x="149" y="59" width="62" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="0" drawsBackground="YES" id="9294">
@@ -234,7 +234,7 @@
                                                 <outlet property="nextKeyView" destination="688" id="703"/>
                                             </connections>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" id="691">
+                                        <textField verticalHuggingPriority="750" id="691">
                                             <rect key="frame" x="7" y="59" width="62" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="0" drawsBackground="YES" id="9296">
@@ -243,7 +243,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" id="688">
+                                        <textField verticalHuggingPriority="750" id="688">
                                             <rect key="frame" x="78" y="7" width="62" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="0" drawsBackground="YES" id="9295">
@@ -255,7 +255,7 @@
                                                 <outlet property="nextKeyView" destination="691" id="705"/>
                                             </connections>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" id="682">
+                                        <textField verticalHuggingPriority="750" id="682">
                                             <rect key="frame" x="78" y="109" width="62" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="0" drawsBackground="YES" id="9293">
@@ -305,7 +305,7 @@
                     <rect key="frame" x="34" y="277" width="532" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                 </box>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="52" id="1164">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="52" id="1164">
                     <rect key="frame" x="233" y="415" width="56" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Échelle :" id="9290">
@@ -314,7 +314,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField focusRingType="none" verticalHuggingPriority="750" id="1162">
+                <textField verticalHuggingPriority="750" id="1162">
                     <rect key="frame" x="294" y="413" width="69" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="9289">
@@ -333,7 +333,7 @@
                         <outlet property="nextKeyView" destination="591" id="1167"/>
                     </connections>
                 </textField>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="189" id="593">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="189" id="593">
                     <rect key="frame" x="38" y="452" width="193" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Format d'export des images :" id="9288">
@@ -342,7 +342,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="436" id="592">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="436" id="592">
                     <rect key="frame" x="49" y="327" width="440" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Couleur par défaut de l'arrière-plan de l'aperçu (blanc pour aucune) :" id="9287">
@@ -359,7 +359,7 @@
                         <outlet property="nextKeyView" destination="1213" id="9277"/>
                     </connections>
                 </colorWell>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="113" id="590">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="113" id="590">
                     <rect key="frame" x="61" y="249" width="117" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Mode par défaut :" id="9286">
@@ -375,7 +375,7 @@
                     <rect key="frame" x="34" y="353" width="532" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                 </box>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="127" id="586">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="127" id="586">
                     <rect key="frame" x="346" y="212" width="131" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Couleur par défaut :" id="9285">
@@ -384,7 +384,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="112" id="585">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="112" id="585">
                     <rect key="frame" x="61" y="209" width="116" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Taille par défaut :" id="9284">
@@ -393,7 +393,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField focusRingType="none" verticalHuggingPriority="750" id="584">
+                <textField verticalHuggingPriority="750" id="584">
                     <rect key="frame" x="183" y="207" width="68" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="36" drawsBackground="YES" id="9283">
@@ -451,7 +451,7 @@
                     </connections>
                 </button>
                 <popUpButton verticalHuggingPriority="750" id="574">
-                    <rect key="frame" x="231" y="446" width="233" height="26"/>
+                    <rect key="frame" x="231" y="446" width="224" height="26"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="9280">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -516,7 +516,7 @@
                                             <outlet property="nextKeyView" destination="613" id="1225"/>
                                         </connections>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="290" id="621">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="290" id="621">
                                         <rect key="frame" x="142" y="387" width="294" height="17"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Police par défaut" id="9300">
@@ -525,7 +525,7 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="119" id="619">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="119" id="619">
                                         <rect key="frame" x="17" y="387" width="123" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Police par défaut :" id="9298">
@@ -577,7 +577,7 @@ du texte &amp; $des maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="126" id="962">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="126" id="962">
                                         <rect key="frame" x="17" y="168" width="130" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Échantillon de texte" id="9301">
@@ -609,7 +609,7 @@ du texte &amp; $des maths$ \\
                                                         <outlet property="nextKeyView" destination="1208" id="1227"/>
                                                     </connections>
                                                 </colorWell>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="111" id="615">
+                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="111" id="615">
                                                     <rect key="frame" x="91" y="124" width="115" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Couleur du texte" id="9307">
@@ -618,7 +618,7 @@ du texte &amp; $des maths$ \\
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="107" id="616">
+                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="107" id="616">
                                                     <rect key="frame" x="91" y="96" width="111" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Couleur du fond" id="9308">
@@ -662,7 +662,7 @@ du texte &amp; $des maths$ \\
                                                         <outlet property="nextKeyView" destination="1220" id="1233"/>
                                                     </connections>
                                                 </colorWell>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="83" id="604">
+                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="83" id="604">
                                                     <rect key="frame" x="376" y="124" width="87" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Commandes" id="9303">
@@ -671,7 +671,7 @@ du texte &amp; $des maths$ \\
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="72" id="603">
+                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="72" id="603">
                                                     <rect key="frame" x="376" y="96" width="76" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Mots-clefs" id="9302">
@@ -680,7 +680,7 @@ du texte &amp; $des maths$ \\
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="96" id="607">
+                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="96" id="607">
                                                     <rect key="frame" x="376" y="40" width="100" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Commentaires" id="9306">
@@ -689,7 +689,7 @@ du texte &amp; $des maths$ \\
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="101" id="606">
+                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="101" id="606">
                                                     <rect key="frame" x="376" y="68" width="105" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Mathématiques" id="9305">
@@ -706,7 +706,7 @@ du texte &amp; $des maths$ \\
                                                         <outlet property="nextKeyView" destination="610" id="1232"/>
                                                     </connections>
                                                 </colorWell>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="130" id="960">
+                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="130" id="960">
                                                     <rect key="frame" x="51" y="156" width="134" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Couleurs par défaut" id="9309">
@@ -727,7 +727,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </button>
                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9600">
-                                                    <rect key="frame" x="219" y="61" width="19" height="27"/>
+                                                    <rect key="frame" x="228" y="61" width="19" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9601"/>
                                                 </stepper>
@@ -739,7 +739,7 @@ du texte &amp; $des maths$ \\
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                 </button>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" id="9604">
+                                                <textField verticalHuggingPriority="750" id="9604">
                                                     <rect key="frame" x="188" y="64" width="32" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="9605">
@@ -751,8 +751,8 @@ du texte &amp; $des maths$ \\
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" id="9606">
-                                                    <rect key="frame" x="238" y="66" width="54" height="17"/>
+                                                <textField verticalHuggingPriority="750" id="9606">
+                                                    <rect key="frame" x="247" y="66" width="54" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="espaces" id="9607">
                                                         <font key="font" metaFont="system"/>
@@ -777,7 +777,7 @@ du texte &amp; $des maths$ \\
                                     <button id="1220">
                                         <rect key="frame" x="18" y="18" width="246" height="18"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <buttonCell key="cell" type="check" title="Réduire la taille de la zone de texte" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9311">
+                                        <buttonCell key="cell" type="check" title="Réduire la taille de la zone de texte" bezelStyle="regularSquare" imagePosition="left" inset="2" id="9311">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -888,7 +888,7 @@ du texte &amp; $des maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
                                     </scrollView>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="516" id="1207">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="516" id="1207">
                                         <rect key="frame" x="17" y="371" width="520" height="51"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="justified" id="9314">
@@ -1003,7 +1003,7 @@ du texte &amp; $des maths$ \\
                                                         <outlet property="nextKeyView" destination="920" id="4610"/>
                                                     </connections>
                                                 </popUpButton>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" id="4168">
+                                                <textField verticalHuggingPriority="750" id="4168">
                                                     <rect key="frame" x="96" y="63" width="179" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Préambule des documents :" id="9383">
@@ -1171,7 +1171,7 @@ du texte &amp; $des maths$ \\
                                                         <outlet property="nextKeyView" destination="920" id="9470"/>
                                                     </connections>
                                                 </popUpButton>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" id="9445">
+                                                <textField verticalHuggingPriority="750" id="9445">
                                                     <rect key="frame" x="42" y="63" width="286" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Modèle de corps par défaut des documents :" id="9456">
@@ -1329,7 +1329,7 @@ du texte &amp; $des maths$ \\
             <rect key="frame" x="0.0" y="0.0" width="600" height="457"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="81" id="1145">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="81" id="1145">
                     <rect key="frame" x="163" y="392" width="85" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Configuration :" id="9348">
@@ -1355,7 +1355,7 @@ du texte &amp; $des maths$ \\
                         </menu>
                     </popUpButtonCell>
                 </popUpButton>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="259" id="1067">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="259" id="1067">
                     <rect key="frame" x="168" y="423" width="263" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Appels aux programmes sous-jacents" id="9346">
@@ -1375,7 +1375,7 @@ du texte &amp; $des maths$ \\
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" id="638">
-                                        <rect key="frame" x="438" y="257" width="105" height="32"/>
+                                        <rect key="frame" x="438" y="259" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="9315">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1385,7 +1385,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="648" id="846"/>
                                         </connections>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" id="639">
+                                    <textField verticalHuggingPriority="750" id="639">
                                         <rect key="frame" x="109" y="264" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9316">
@@ -1397,7 +1397,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="638" id="659"/>
                                         </connections>
                                     </textField>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="59" id="640">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="59" id="640">
                                         <rect key="frame" x="43" y="266" width="63" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="pdfLaTeX" id="9317">
@@ -1410,14 +1410,14 @@ du texte &amp; $des maths$ \\
                                         </connections>
                                     </textField>
                                     <button tag="4" verticalHuggingPriority="750" id="641">
-                                        <rect key="frame" x="438" y="87" width="105" height="32"/>
+                                        <rect key="frame" x="438" y="89" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="4" inset="2" id="9318">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" id="642">
+                                    <textField verticalHuggingPriority="750" id="642">
                                         <rect key="frame" x="109" y="94" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9319">
@@ -1429,7 +1429,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="641" id="662"/>
                                         </connections>
                                     </textField>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="100" id="643">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="100" id="643">
                                         <rect key="frame" x="2" y="96" width="104" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Ghostscript (gs)" id="9320">
@@ -1442,7 +1442,7 @@ du texte &amp; $des maths$ \\
                                         </connections>
                                     </textField>
                                     <button tag="3" verticalHuggingPriority="750" id="644">
-                                        <rect key="frame" x="438" y="120" width="105" height="32"/>
+                                        <rect key="frame" x="438" y="123" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="3" inset="2" id="9321">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1452,7 +1452,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="642" id="665"/>
                                         </connections>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" id="645">
+                                    <textField verticalHuggingPriority="750" id="645">
                                         <rect key="frame" x="109" y="128" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9322">
@@ -1464,7 +1464,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="644" id="661"/>
                                         </connections>
                                     </textField>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="40" id="646">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="40" id="646">
                                         <rect key="frame" x="62" y="130" width="44" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="dvipdf" id="9323">
@@ -1477,7 +1477,7 @@ du texte &amp; $des maths$ \\
                                         </connections>
                                     </textField>
                                     <button tag="1" verticalHuggingPriority="750" id="647">
-                                        <rect key="frame" x="438" y="223" width="105" height="32"/>
+                                        <rect key="frame" x="438" y="225" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="9324">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1487,7 +1487,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="651" id="847"/>
                                         </connections>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" id="648">
+                                    <textField verticalHuggingPriority="750" id="648">
                                         <rect key="frame" x="109" y="230" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9325">
@@ -1499,7 +1499,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="647" id="664"/>
                                         </connections>
                                     </textField>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="54" id="649">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="54" id="649">
                                         <rect key="frame" x="48" y="232" width="58" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="XeLaTeX" id="9326">
@@ -1512,7 +1512,7 @@ du texte &amp; $des maths$ \\
                                         </connections>
                                     </textField>
                                     <button tag="2" verticalHuggingPriority="750" id="650">
-                                        <rect key="frame" x="438" y="155" width="105" height="32"/>
+                                        <rect key="frame" x="438" y="157" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="2" inset="2" id="9327">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1522,7 +1522,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="645" id="848"/>
                                         </connections>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" id="651">
+                                    <textField verticalHuggingPriority="750" id="651">
                                         <rect key="frame" x="109" y="162" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9328">
@@ -1534,7 +1534,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="650" id="663"/>
                                         </connections>
                                     </textField>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="38" id="652">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="38" id="652">
                                         <rect key="frame" x="64" y="164" width="42" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="LaTeX" id="9329">
@@ -1547,14 +1547,14 @@ du texte &amp; $des maths$ \\
                                         </connections>
                                     </textField>
                                     <button tag="5" verticalHuggingPriority="750" id="1054">
-                                        <rect key="frame" x="438" y="53" width="105" height="32"/>
+                                        <rect key="frame" x="438" y="55" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="5" inset="2" id="9330">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" id="1055">
+                                    <textField verticalHuggingPriority="750" id="1055">
                                         <rect key="frame" x="109" y="60" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9331">
@@ -1566,7 +1566,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="1054" id="1058"/>
                                         </connections>
                                     </textField>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="45" id="1056">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="45" id="1056">
                                         <rect key="frame" x="57" y="62" width="49" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="ps2pdf" id="9332">
@@ -1611,7 +1611,7 @@ du texte &amp; $des maths$ \\
                                         </buttonCell>
                                     </button>
                                     <button tag="1" verticalHuggingPriority="750" id="9772">
-                                        <rect key="frame" x="438" y="189" width="105" height="32"/>
+                                        <rect key="frame" x="438" y="191" width="105" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="push" title="Modifier..." bezelStyle="rounded" alignment="center" borderStyle="border" tag="1" inset="2" id="9779">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1621,7 +1621,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="651" id="9782"/>
                                         </connections>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" id="9773">
+                                    <textField verticalHuggingPriority="750" id="9773">
                                         <rect key="frame" x="109" y="196" width="298" height="22"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9778">
@@ -1633,7 +1633,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="9772" id="9781"/>
                                         </connections>
                                     </textField>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="60" id="9774">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="60" id="9774">
                                         <rect key="frame" x="42" y="198" width="64" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="LuaLaTeX" id="9777">
@@ -1714,7 +1714,7 @@ du texte &amp; $des maths$ \\
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <clipView key="contentView" id="zaI-wA-ykX">
                                             <rect key="frame" x="1" y="1" width="306" height="73"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9402" id="1069">
                                                     <rect key="frame" x="0.0" y="0.0" width="316" height="48"/>
@@ -1757,7 +1757,7 @@ du texte &amp; $des maths$ \\
                                             <rect key="frame" x="-100" y="-100" width="15" height="89"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <tableHeaderView key="headerView" id="9402">
+                                        <tableHeaderView key="headerView" wantsLayer="YES" id="9402">
                                             <rect key="frame" x="0.0" y="0.0" width="316" height="25"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
@@ -1769,7 +1769,7 @@ du texte &amp; $des maths$ \\
                                             <rect key="frame" x="0.0" y="0.0" width="474" height="176"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" id="1076">
+                                                <textField verticalHuggingPriority="750" id="1076">
                                                     <rect key="frame" x="46" y="146" width="412" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="/bin/sh" drawsBackground="YES" id="9340">
@@ -1783,7 +1783,7 @@ du texte &amp; $des maths$ \\
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="QG6-H1-cpx">
                                                         <rect key="frame" x="1" y="1" width="440" height="106"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="1078">
                                                                 <rect key="frame" x="0.0" y="0.0" width="440" height="106"/>
@@ -1806,7 +1806,7 @@ du texte &amp; $des maths$ \\
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="29" id="1085">
+                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="29" id="1085">
                                                     <rect key="frame" x="13" y="148" width="33" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Shell:" id="9341">
@@ -1820,7 +1820,7 @@ du texte &amp; $des maths$ \\
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="oHf-Wy-CyC">
                                                         <rect key="frame" x="1" y="1" width="440" height="15"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9407" id="1082">
                                                                 <rect key="frame" x="0.0" y="0.0" width="440" height="19"/>
@@ -1853,7 +1853,7 @@ du texte &amp; $des maths$ \\
                                                         <rect key="frame" x="-100" y="-100" width="15" height="37"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
-                                                    <tableHeaderView key="headerView" id="9407">
+                                                    <tableHeaderView key="headerView" wantsLayer="YES" id="9407">
                                                         <rect key="frame" x="0.0" y="0.0" width="440" height="25"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </tableHeaderView>
@@ -1876,7 +1876,7 @@ du texte &amp; $des maths$ \\
                                                         <font key="font" metaFont="message" size="11"/>
                                                     </buttonCell>
                                                 </button>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" id="1089">
+                                                <textField verticalHuggingPriority="750" id="1089">
                                                     <rect key="frame" x="16" y="20" width="363" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9343">
@@ -1943,7 +1943,7 @@ du texte &amp; $des maths$ \\
                         <rect key="frame" x="0.0" y="0.0" width="566" height="243"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="73" id="9534">
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="73" id="9534">
                                 <rect key="frame" x="406" y="19" width="77" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="# : code latex" id="9551">
@@ -1952,7 +1952,7 @@ du texte &amp; $des maths$ \\
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="112" id="9535">
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="112" id="9535">
                                 <rect key="frame" x="274" y="19" width="116" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="@ : titre de l'élément" id="9550">
@@ -2025,7 +2025,7 @@ du texte &amp; $des maths$ \\
                                     <outlet property="nextKeyView" destination="9537" id="9564"/>
                                 </connections>
                             </scrollView>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="470" id="9539">
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="470" id="9539">
                                 <rect key="frame" x="46" y="197" width="474" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" id="9542">
@@ -2056,7 +2056,7 @@ du texte &amp; $des maths$ \\
                 <button id="9491">
                     <rect key="frame" x="23" y="96" width="252" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Enregistrer les résultats des services" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9492">
+                    <buttonCell key="cell" type="check" title="Enregistrer les résultats des services" bezelStyle="regularSquare" imagePosition="left" inset="2" id="9492">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -2067,7 +2067,7 @@ du texte &amp; $des maths$ \\
                 <button id="9494">
                     <rect key="frame" x="23" y="70" width="278" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Supprimer les éléments vieux de plus de" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9495">
+                    <buttonCell key="cell" type="check" title="Supprimer les éléments vieux de plus de" bezelStyle="regularSquare" imagePosition="left" inset="2" id="9495">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -2076,15 +2076,15 @@ du texte &amp; $des maths$ \\
                     </connections>
                 </button>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="9497">
-                    <rect key="frame" x="338" y="65" width="19" height="27"/>
+                    <rect key="frame" x="351" y="65" width="19" height="27"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9498"/>
                     <connections>
                         <action selector="takeIntValueFrom:" target="9499" id="9507"/>
                     </connections>
                 </stepper>
-                <textField focusRingType="none" verticalHuggingPriority="750" id="9499">
-                    <rect key="frame" x="306" y="68" width="34" height="22"/>
+                <textField verticalHuggingPriority="750" id="9499">
+                    <rect key="frame" x="309" y="68" width="34" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="9500">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="9508">
@@ -2098,8 +2098,8 @@ du texte &amp; $des maths$ \\
                         <action selector="takeIntValueFrom:" target="9497" id="9506"/>
                     </connections>
                 </textField>
-                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9501">
-                    <rect key="frame" x="359" y="71" width="38" height="17"/>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9501">
+                    <rect key="frame" x="376" y="71" width="38" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="jours" id="9502">
                         <font key="font" metaFont="system"/>
@@ -2110,7 +2110,7 @@ du texte &amp; $des maths$ \\
                 <button id="9503">
                     <rect key="frame" x="23" y="44" width="553" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Historique intelligente (enregistre les éléments lorsqu'ils sont effectivement utilisés)" bezelStyle="regularSquare" imagePosition="left" alignment="center" inset="2" id="9504">
+                    <buttonCell key="cell" type="check" title="Historique intelligente (enregistre les éléments lorsqu'ils sont effectivement utilisés)" bezelStyle="regularSquare" imagePosition="left" inset="2" id="9504">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -2123,7 +2123,7 @@ du texte &amp; $des maths$ \\
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Compact database" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9799">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="message" size="11"/>
+                        <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                 </button>
             </subviews>
@@ -2147,7 +2147,7 @@ du texte &amp; $des maths$ \\
                                         <rect key="frame" x="80" y="8" width="394" height="236"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <subviews>
-                                            <textField focusRingType="none" verticalHuggingPriority="750" id="2495">
+                                            <textField verticalHuggingPriority="750" id="2495">
                                                 <rect key="frame" x="92" y="215" width="79" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Préambule :" id="9359">
@@ -2178,7 +2178,7 @@ du texte &amp; $des maths$ \\
                                                     <font key="font" metaFont="message" size="11"/>
                                                 </stepperCell>
                                             </stepper>
-                                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1502">
+                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1502">
                                                 <rect key="frame" x="316" y="165" width="12" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="x" id="9357">
@@ -2187,7 +2187,7 @@ du texte &amp; $des maths$ \\
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField focusRingType="none" verticalHuggingPriority="750" id="1500">
+                                            <textField verticalHuggingPriority="750" id="1500">
                                                 <rect key="frame" x="329" y="163" width="33" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="10,0" drawsBackground="YES" id="9356">
@@ -2207,7 +2207,7 @@ du texte &amp; $des maths$ \\
                                                     <outlet property="nextKeyView" destination="677" id="859"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="119" id="675">
+                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="119" id="675">
                                                 <rect key="frame" x="15" y="185" width="123" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Taille de la police :" id="9352">
@@ -2242,7 +2242,7 @@ du texte &amp; $des maths$ \\
                                                     </column>
                                                 </cells>
                                             </matrix>
-                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="58" id="671">
+                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="58" id="671">
                                                 <rect key="frame" x="76" y="131" width="62" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Couleur :" id="9351">
@@ -2383,7 +2383,7 @@ du texte &amp; $des maths$ \\
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
                                     </scrollView>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="467" id="1038">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="467" id="1038">
                                         <rect key="frame" x="41" y="221" width="471" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Ces raccourcis sont toujours précédés de Majuscule et Commande (⇧⌘)." id="9360">
@@ -2400,7 +2400,7 @@ du texte &amp; $des maths$ \\
                                             <font key="font" metaFont="message" size="11"/>
                                         </buttonCell>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="468" id="1366">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="468" id="1366">
                                         <rect key="frame" x="41" y="184" width="472" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="MacOS 10.4 : les changements ne sont effectifs qu'après un redémarrage de LaTeXiT." id="9362">
@@ -2504,7 +2504,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="9620" id="9657"/>
                                         </connections>
                                     </scrollView>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="516" id="9622">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="516" id="9622">
                                         <rect key="frame" x="17" y="209" width="520" height="34"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="justified" id="9623">
@@ -2586,7 +2586,7 @@ du texte &amp; $des maths$ \\
                         <outlet property="nextKeyView" destination="2494" id="4776"/>
                     </connections>
                 </tabView>
-                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="322" id="666">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="322" id="666">
                     <rect key="frame" x="137" y="308" width="326" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Utilisation de LaTeXiT à travers le menu Service" id="9349">
@@ -2682,7 +2682,7 @@ du texte &amp; $des maths$ \\
                                             <outlet property="nextKeyView" destination="7740" id="7749"/>
                                         </connections>
                                     </button>
-                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="501" id="7752">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="501" id="7752">
                                         <rect key="frame" x="24" y="494" width="505" height="34"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="LaTeXiT considère que les fichiers et dossiers référencés ici font partie de son répertoire de travail." id="9366">
@@ -2714,7 +2714,7 @@ du texte &amp; $des maths$ \\
                                                         <font key="font" metaFont="system"/>
                                                     </buttonCell>
                                                 </button>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" id="9744">
+                                                <textField verticalHuggingPriority="750" id="9744">
                                                     <rect key="frame" x="15" y="21" width="109" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Dans le dossier :" id="9745">
@@ -2723,7 +2723,7 @@ du texte &amp; $des maths$ \\
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField focusRingType="none" verticalHuggingPriority="750" id="9740">
+                                                <textField verticalHuggingPriority="750" id="9740">
                                                     <rect key="frame" x="126" y="16" width="299" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="truncatingHead" truncatesLastVisibleLine="YES" selectable="YES" sendsActionOnEndEditing="YES" state="on" id="9741">
@@ -2779,7 +2779,7 @@ du texte &amp; $des maths$ \\
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <clipView key="contentView" id="Cye-lj-5mh">
                                                         <rect key="frame" x="1" y="1" width="464" height="92"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="9710" id="9713">
                                                                 <rect key="frame" x="0.0" y="0.0" width="464" height="67"/>
@@ -2822,7 +2822,7 @@ du texte &amp; $des maths$ \\
                                                         <rect key="frame" x="-100" y="-100" width="15" height="89"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
-                                                    <tableHeaderView key="headerView" id="9710">
+                                                    <tableHeaderView key="headerView" wantsLayer="YES" id="9710">
                                                         <rect key="frame" x="0.0" y="0.0" width="464" height="25"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </tableHeaderView>
@@ -2834,7 +2834,7 @@ du texte &amp; $des maths$ \\
                                                         <rect key="frame" x="0.0" y="0.0" width="472" height="211"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" id="9698">
+                                                            <textField verticalHuggingPriority="750" id="9698">
                                                                 <rect key="frame" x="46" y="181" width="410" height="19"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="/bin/sh" drawsBackground="YES" id="9699">
@@ -2848,7 +2848,7 @@ du texte &amp; $des maths$ \\
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" id="db1-aC-UdK">
                                                                     <rect key="frame" x="1" y="1" width="438" height="141"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" smartInsertDelete="YES" id="9700">
                                                                             <rect key="frame" x="0.0" y="0.0" width="438" height="141"/>
@@ -2871,7 +2871,7 @@ du texte &amp; $des maths$ \\
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                             </scrollView>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="29" translatesAutoresizingMaskIntoConstraints="NO" id="9696">
+                                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="29" translatesAutoresizingMaskIntoConstraints="NO" id="9696">
                                                                 <rect key="frame" x="13" y="183" width="33" height="14"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Shell:" id="9703">
@@ -2885,7 +2885,7 @@ du texte &amp; $des maths$ \\
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <clipView key="contentView" id="SkF-7V-e53">
                                                                     <rect key="frame" x="1" y="1" width="438" height="15"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="9707" id="9704">
                                                                             <rect key="frame" x="0.0" y="0.0" width="438" height="19"/>
@@ -2918,7 +2918,7 @@ du texte &amp; $des maths$ \\
                                                                     <rect key="frame" x="-100" y="-100" width="15" height="37"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
-                                                                <tableHeaderView key="headerView" id="9707">
+                                                                <tableHeaderView key="headerView" wantsLayer="YES" id="9707">
                                                                     <rect key="frame" x="0.0" y="0.0" width="438" height="25"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </tableHeaderView>
@@ -2938,7 +2938,7 @@ du texte &amp; $des maths$ \\
                                                     </connections>
                                                 </button>
                                                 <popUpButton verticalHuggingPriority="750" id="9690">
-                                                    <rect key="frame" x="181.5" y="235" width="174" height="22"/>
+                                                    <rect key="frame" x="182" y="235" width="174" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <popUpButtonCell key="cell" type="push" title="Définition d'un script" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="9693" id="9691">
                                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -2966,7 +2966,7 @@ du texte &amp; $des maths$ \\
                                                                     <font key="font" metaFont="message" size="11"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <textField focusRingType="none" verticalHuggingPriority="750" id="9718">
+                                                            <textField verticalHuggingPriority="750" id="9718">
                                                                 <rect key="frame" x="16" y="20" width="361" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="9721">
@@ -3051,7 +3051,7 @@ du texte &amp; $des maths$ \\
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" id="Jw1-YZ-NSh">
                         <rect key="frame" x="1" y="1" width="194" height="258"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" rowHeight="32" id="9592">
                                 <rect key="frame" x="0.0" y="0.0" width="204" height="258"/>
@@ -3280,21 +3280,6 @@ du texte &amp; $des maths$ \\
             </view>
             <point key="canvasLocation" x="358" y="1028"/>
         </window>
-        <view id="589">
-            <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <point key="canvasLocation" x="-586" y="1357"/>
-        </view>
-        <view id="1212">
-            <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <point key="canvasLocation" x="-394" y="798"/>
-        </view>
-        <view id="7737">
-            <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <point key="canvasLocation" x="-586" y="695"/>
-        </view>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="20" height="20"/>
