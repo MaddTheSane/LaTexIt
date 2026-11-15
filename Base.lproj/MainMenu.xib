@@ -713,7 +713,7 @@ CA
         <window title="Make a Donation…" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1351" userLabel="donationPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="456" y="391" width="354" height="167"/>
+            <rect key="contentRect" x="456" y="391" width="360" height="167"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1512" height="949"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="1352">
@@ -746,11 +746,14 @@ You have absolutely no obligation, LaTeXiT is a freeware and you can enjoy it th
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="1358" firstAttribute="centerX" secondItem="1352" secondAttribute="centerX" id="4vB-T8-yea"/>
+                </constraints>
             </view>
             <connections>
                 <outlet property="initialFirstResponder" destination="1358" id="1362"/>
             </connections>
-            <point key="canvasLocation" x="139" y="-24"/>
+            <point key="canvasLocation" x="203" y="-22.5"/>
         </window>
         <window title="Reminder" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="1404" userLabel="ColorWarningWindow">
             <windowStyleMask key="styleMask" titled="YES"/>

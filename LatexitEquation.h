@@ -14,7 +14,7 @@ extern const NSPasteboardType LatexitEquationsPboardType NS_SWIFT_NAME(latexitEq
 
 @class CHExportPrefetcher;
 
-@interface LatexitEquation : NSManagedObject <NSCopying, NSCoding, NSSecureCoding> {
+@interface LatexitEquation : NSManagedObject <NSCopying, NSCoding, NSSecureCoding, NSPasteboardTypeOwner> {
   //NSData*             pdfData;     //pdf data representing the image. It may contain advanced PDF features like meta-data keywords, creator...
   //NSAttributedString* preamble;    //the user preamble of the latex source code
   //NSAttributedString* sourceText;  //the user body of the latex source code

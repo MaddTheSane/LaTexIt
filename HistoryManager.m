@@ -15,7 +15,7 @@
 #import "Compressor.h"
 #import "HistoryItem.h"
 #import "LatexitEquation.h"
-#import "LaTeXProcessor.h"
+#import "LatexProcessor.h"
 #import "NSArrayExtended.h"
 #import "NSColorExtended.h"
 #import "NSFileManagerExtended.h"

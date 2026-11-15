@@ -2590,6 +2590,7 @@
     },
     "Could not find the syntax file to match this document" : {
       "comment" : "Indicate that the program could not find the syntax file to match this document in Could-not-find-syntax-file sheet",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -8088,6 +8089,7 @@
     },
     "Please check the installation of the application and the preferences" : {
       "comment" : "Indicate that they should Please check the installation of the application and the preferences in Could-not-find-syntax-file sheet",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

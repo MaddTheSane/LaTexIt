@@ -8,7 +8,7 @@
 
 #import "LatexitEquationData.h"
 
-#import "LaTeXProcessor.h"
+#import "LatexProcessor.h"
 
 static NSEntityDescription* cachedEntity = nil;
 

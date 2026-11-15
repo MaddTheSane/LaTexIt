@@ -74,7 +74,7 @@ NS_INLINE         double Clip_d(double inf, double x, double sup) {return (x<inf
 NSString* GetMySVGPboardType(void);
 NSPasteboardType GetWebURLsWithTitlesPboardType(void);
 latex_mode_t validateLatexMode(latex_mode_t mode);
-NSString* getUTIForExportFormat(export_format_t exportFormat);
+NSString* getUTIForExportFormat(export_format_t exportFormat) API_DEPRECATED("Use getContentTypeForExportFormat() instead.", ios(3.0, 15.0), macos(10.4, 12.0), tvos(9.0, 15.0), watchos(1.0, 8.0));
 UTType* getContentTypeForExportFormat(export_format_t exportFormat) API_AVAILABLE(macos(11.0));
 NSString* getFileExtensionForExportFormat(export_format_t exportFormat);
 

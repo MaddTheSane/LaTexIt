@@ -20,7 +20,7 @@
 #import "HistoryItem.h"
 #import "HistoryManager.h"
 #import "LatexitEquation.h"
-#import "LaTeXProcessor.h"
+#import "LatexProcessor.h"
 #import "LibraryEquation.h"
 #import "LibraryManager.h"
 #import "LineCountTextView.h"

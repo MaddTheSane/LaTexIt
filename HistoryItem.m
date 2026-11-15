@@ -11,7 +11,7 @@
 #import "LatexitEquation.h"
 #import "LatexitEquationData.h"
 #import "LatexitEquationWrapper.h"
-#import "LaTeXProcessor.h"
+#import "LatexProcessor.h"
 #import "NSManagedObjectContextExtended.h"
 #import "NSStringExtended.h"
 #import "NSWorkspaceExtended.h"
